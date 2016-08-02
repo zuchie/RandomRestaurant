@@ -56,6 +56,34 @@ class RestaurantBrain {
         }
     }
     
+    private func sortBusinesses(businesses: NSArray) -> NSArray {
+        return businesses.sort({$0["rating"] as! Double == $1["rating"] as! Double ?
+            $0["review_count"] as! Int > $1["review_count"] as! Int : $0["rating"] as! Double > $1["rating"] as! Double})
+    }
+    
+    private var ratingBar = 0.0
+    
+    func setRatingBar(rating: Double) {
+        ratingBar = rating
+        print("rating bar: \(ratingBar)")
+    }
+    
+    private func pickRandomBusiness(sortedBusinesses: NSArray) -> NSDictionary {
+        var index = 0
+        for business in sortedBusinesses {
+            let businessRating = business["rating"] as! Double
+            if businessRating < ratingBar {
+                index = sortedBusinesses.indexOfObject(business)
+                //print("\(index)")
+                break
+            }
+        }
+        // Randomly pick one business from all qualified businesses(pick one from element < index).
+        let randomNumber = Int(arc4random_uniform(UInt32(index)))
+        print("random no. \(randomNumber)")
+        return sortedBusinesses[randomNumber] as! NSDictionary
+    }
+    
     func makeUrlRequest(token: String) {
         
         let urlObj = NSURL(string: bizSearchUrl)
@@ -84,30 +112,26 @@ class RestaurantBrain {
                     // Print out dictionary
                     //print(convertedJsonIntoDict)
                     let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
-                    let sortedBusinesses: NSArray = businesses.sort({$0["rating"] as! Double == $1["rating"] as! Double ?
-                        $0["review_count"] as! Int > $1["review_count"] as! Int : $0["rating"] as! Double > $1["rating"] as! Double})
-                    print("\(sortedBusinesses)")
-                    
+                    let sortedBusinesses = self.sortBusinesses(businesses)
+                    //print("\(sortedBusinesses)")
+
                     //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 }) // TODO: Why this not work?
                     //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
-                    
-                    var index = 0
-                    for business in sortedBusinesses {
-                        let businessRating = business["rating"] as! Double
-                        if businessRating < 4 {
-                            index = sortedBusinesses.indexOfObject(business)
-                            //print("\(index)")
-                            break
-                        }
-                    }
-                    // Randomly pick one business from all qualified businesses(pick one from element < index).
-                    let randomNumber = Int(arc4random_uniform(UInt32(index)))
-                    print("random no. \(randomNumber), business: \(sortedBusinesses[randomNumber])")
+                    self.pickedBusiness = self.pickRandomBusiness(sortedBusinesses)
+                    print("business: \(self.pickedBusiness)")
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
         }
         task.resume()
+    }
+    
+    private var pickedBusiness: NSDictionary = [:]
+    var result: NSDictionary {
+        get {
+            print("picked business: \(self.pickedBusiness)")
+            return pickedBusiness
+        }
     }
 }

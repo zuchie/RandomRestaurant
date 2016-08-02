@@ -44,6 +44,16 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ux-ls-TtN">
+                                <rect key="frame" x="30" y="341" width="326" height="32"/>
+                                <color key="backgroundColor" red="0.64847646853372765" green="0.74959262081668943" blue="0.88751636125654454" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fDc-J1-Z4E">
+                                <rect key="frame" x="30" y="404" width="328" height="100"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -54,6 +64,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bizPicked" destination="1ux-ls-TtN" id="wkA-2b-9xs"/>
+                        <outlet property="termPicker" destination="fDc-J1-Z4E" id="2bx-Ho-mIa"/>
                         <outlet property="token" destination="caZ-dh-VSD" id="d2E-P5-h0n"/>
                     </connections>
                 </viewController>
