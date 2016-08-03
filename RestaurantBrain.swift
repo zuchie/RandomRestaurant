@@ -72,9 +72,10 @@ class RestaurantBrain {
         var index = 0
         for business in sortedBusinesses {
             let businessRating = business["rating"] as! Double
-            if businessRating < ratingBar {
+            // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
+            if businessRating < ratingBar || business as! NSObject == sortedBusinesses.lastObject as! NSObject {
                 index = sortedBusinesses.indexOfObject(business)
-                //print("\(index)")
+                print("index: \(index)")
                 break
             }
         }
@@ -113,12 +114,12 @@ class RestaurantBrain {
                     //print(convertedJsonIntoDict)
                     let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
                     let sortedBusinesses = self.sortBusinesses(businesses)
-                    //print("\(sortedBusinesses)")
+                    print("sorted biz: \(sortedBusinesses)")
 
                     //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 }) // TODO: Why this not work?
                     //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
                     self.pickedBusiness = self.pickRandomBusiness(sortedBusinesses)
-                    print("business: \(self.pickedBusiness)")
+                    //print("picked biz: \(self.pickedBusiness)")
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
@@ -132,6 +133,9 @@ class RestaurantBrain {
         get {
             print("picked business: \(self.pickedBusiness)")
             return pickedBusiness
+        }
+        set {
+            pickedBusiness = newValue
         }
     }
 }

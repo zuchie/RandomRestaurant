@@ -65,7 +65,7 @@
                     </view>
                     <connections>
                         <outlet property="bizPicked" destination="1ux-ls-TtN" id="wkA-2b-9xs"/>
-                        <outlet property="termPicker" destination="fDc-J1-Z4E" id="2bx-Ho-mIa"/>
+                        <outlet property="paramPicker" destination="fDc-J1-Z4E" id="CQq-3U-cee"/>
                         <outlet property="token" destination="caZ-dh-VSD" id="d2E-P5-h0n"/>
                     </connections>
                 </viewController>
