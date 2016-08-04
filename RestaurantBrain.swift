@@ -68,7 +68,7 @@ class RestaurantBrain {
         print("rating bar: \(ratingBar)")
     }
     
-    private func pickRandomBusiness(sortedBusinesses: NSArray) -> NSDictionary {
+    private func pickRandomBusiness(sortedBusinesses: NSArray) -> NSDictionary? {
         var index = 0
         for business in sortedBusinesses {
             let businessRating = business["rating"] as! Double
@@ -82,10 +82,13 @@ class RestaurantBrain {
             //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 })
             //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
         }
-        // Randomly pick one business from all qualified businesses(pick one from element < index).
+        // Randomly pick one business from all qualified businesses(pick one from element < index). If no qualified biz, return [:]
+        if index == 0 {
+            return nil
+        }
         let randomNumber = Int(arc4random_uniform(UInt32(index)))
         print("random no. \(randomNumber)")
-        return sortedBusinesses[randomNumber] as! NSDictionary
+        return sortedBusinesses[randomNumber] as? NSDictionary
     }
     
     // Make own completionHandler function.
@@ -134,10 +137,10 @@ class RestaurantBrain {
         task.resume()
     }
     
-    private var pickedBusiness: NSDictionary = [:]
-    var result: NSDictionary {
+    private var pickedBusiness: NSDictionary? = [:]
+    var result: NSDictionary? {
         get {
-            print("picked business: \(self.pickedBusiness)")
+            //print("picked business: \(self.pickedBusiness)")
             return pickedBusiness
         }
         set {

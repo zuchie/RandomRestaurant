@@ -30,11 +30,20 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         brain.setRatingBar(rating)
         brain.makeUrlRequest(access_token) { success in
             if success {
-                var pickedBiz = self.brain.result
-                //print("name: \(pickedBiz["name"]!)")
-                self.bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
+                print("brain.result: \(self.brain.result)")
+                if let pickedBiz = self.brain.result {
+                    //print("name: \(pickedBiz["name"]!)")
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.bizPicked.text = "No found, change search parameters"
+                    })
+                }
+                
                 self.brain.result = [:] // Clear result
-                pickedBiz = [:]
+                //pickedBiz = [:]
                 print("Biz picked!!")
             } else {
                 print("Biz not picked yet")
