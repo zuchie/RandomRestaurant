@@ -78,6 +78,9 @@ class RestaurantBrain {
                 print("index: \(index)")
                 break
             }
+            // TODO: Another way to sort, but not work, why?
+            //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 })
+            //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
         }
         // Randomly pick one business from all qualified businesses(pick one from element < index).
         let randomNumber = Int(arc4random_uniform(UInt32(index)))
@@ -85,7 +88,10 @@ class RestaurantBrain {
         return sortedBusinesses[randomNumber] as! NSDictionary
     }
     
-    func makeUrlRequest(token: String) {
+    // Make own completionHandler function.
+    typealias completion = (success: Bool) -> Void
+    
+    func makeUrlRequest(token: String, completionHanlder: completion) {
         
         let urlObj = NSURL(string: bizSearchUrl)
         let request = NSMutableURLRequest(URL: urlObj!)
@@ -93,7 +99,7 @@ class RestaurantBrain {
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
+            data, _, error in
             
             // Check for error
             if error != nil
@@ -114,16 +120,16 @@ class RestaurantBrain {
                     //print(convertedJsonIntoDict)
                     let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
                     let sortedBusinesses = self.sortBusinesses(businesses)
-                    print("sorted biz: \(sortedBusinesses)")
+                    //print("sorted biz: \(sortedBusinesses)")
 
-                    //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 }) // TODO: Why this not work?
-                    //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
                     self.pickedBusiness = self.pickRandomBusiness(sortedBusinesses)
                     //print("picked biz: \(self.pickedBusiness)")
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
+            let flag = true
+            completionHanlder(success: flag)
         }
         task.resume()
     }

@@ -28,9 +28,21 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
 
         brain.setRatingBar(rating)
-        brain.makeUrlRequest(access_token)
-        
+        brain.makeUrlRequest(access_token) { success in
+            if success {
+                var pickedBiz = self.brain.result
+                //print("name: \(pickedBiz["name"]!)")
+                self.bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
+                self.brain.result = [:] // Clear result
+                pickedBiz = [:]
+                print("Biz picked!!")
+            } else {
+                print("Biz not picked yet")
+            }
+        }
+/*
         var pickedBiz: NSDictionary = [:]
+
         //TODO: Use event interrupt instead of polling
         repeat {
             pickedBiz = brain.result
@@ -40,8 +52,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
         print("name: \(pickedBiz["name"]!)")
         bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
+ */
     }
-    
+
     private var term = ""
     private var rating = 0.0
     
