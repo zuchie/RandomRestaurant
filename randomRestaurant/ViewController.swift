@@ -16,6 +16,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     private var brain = RestaurantBrain()
     
+    private var term = ""
+    private var rating: Float = 0.0
+    
+    private var paramPickerData = [
+        ["Mexican", "Chinese", "Italian", "American"],
+        ["4", "4.5", "5"]
+    ]
+    
+    enum pickerComponent: Int {
+        case term = 0
+        case rating = 1
+    }
+    
     @IBAction func start() {
     
         bizPicked.text = nil // Reset for following queries
@@ -42,9 +55,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     })
                 }
                 
-                self.brain.result = [:] // Clear result
+                self.brain.result = nil // Clear result
                 //pickedBiz = [:]
-                print("Biz picked!!")
+                //print("Biz picked!!")
             } else {
                 print("Biz not picked yet")
             }
@@ -64,18 +77,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
  */
     }
 
-    private var term = ""
-    private var rating = 0.0
-    
-    private var paramPickerData = [
-                                    ["Mexican", "Chinese", "Italian", "American"],
-                                    ["4", "4.5", "5"]
-                                ]
-    
-    enum pickerComponent: Int {
-        case term = 0
-        case rating = 1
-    }
     
     // The number of columns of data
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
@@ -99,7 +100,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let termComponent = pickerComponent.term.rawValue
         let ratingComponent = pickerComponent.rating.rawValue
         term = paramPickerData[termComponent][paramPicker.selectedRowInComponent(termComponent)] // Can't use paramPickerData[0][row], picker would be inaccurate.
-        rating = Double(paramPickerData[ratingComponent][paramPicker.selectedRowInComponent(ratingComponent)])!
+        rating = Float(paramPickerData[ratingComponent][paramPicker.selectedRowInComponent(ratingComponent)])!
         print("term: \(term), rating: \(rating)")
     }
     // Catpure the picker view selection

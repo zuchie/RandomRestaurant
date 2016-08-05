@@ -10,14 +10,27 @@ import Foundation
 
 class RestaurantBrain {
     
+    private var pickedBusiness: NSDictionary? = nil
+    private var urlParams = urlParameters()
+    private var bizSearchUrl = ""
+    private var ratingBar: Float?
+
+    var result: NSDictionary? {
+        get {
+            //print("picked business: \(self.pickedBusiness)")
+            return pickedBusiness
+        }
+        set {
+            pickedBusiness = newValue
+        }
+    }
+    
     private struct urlParameters {
         var term: String?
         var latitude: Double?
         var longitude: Double?
         var limit: Int?
     }
-
-    private var urlParams = urlParameters()
     
     func getUrlParameters(term: String?, latitude: Double?, longitude: Double?, limit: Int?) {
         //urlParams = urlParameters(term: term!, latitude: latitude!, longitude: longitude!, limit: limit!)
@@ -37,7 +50,6 @@ class RestaurantBrain {
         }
     }
     
-    private var bizSearchUrl = ""
     
     func makeBizSearchUrl(baseUrl: String) {
         bizSearchUrl = baseUrl
@@ -61,17 +73,15 @@ class RestaurantBrain {
             $0["review_count"] as! Int > $1["review_count"] as! Int : $0["rating"] as! Double > $1["rating"] as! Double})
     }
     
-    private var ratingBar = 0.0
-    
-    func setRatingBar(rating: Double) {
+    func setRatingBar(rating: Float?) {
         ratingBar = rating
-        print("rating bar: \(ratingBar)")
+        //print("rating bar: \(ratingBar)")
     }
     
     private func pickRandomBusiness(sortedBusinesses: NSArray) -> NSDictionary? {
         var index = 0
         for business in sortedBusinesses {
-            let businessRating = business["rating"] as! Double
+            let businessRating = business["rating"] as! Float
             // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
             if businessRating < ratingBar || business as! NSObject == sortedBusinesses.lastObject as! NSObject {
                 index = sortedBusinesses.indexOfObject(business)
@@ -89,6 +99,15 @@ class RestaurantBrain {
         let randomNumber = Int(arc4random_uniform(UInt32(index)))
         print("random no. \(randomNumber)")
         return sortedBusinesses[randomNumber] as? NSDictionary
+    }
+    
+    private func sortAndRandomlyPickBiz(businesses: NSDictionary) -> Void {
+        //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
+        let sortedBusinesses = sortBusinesses(businesses["businesses"] as! NSArray)
+        //print("sorted biz: \(sortedBusinesses)")
+        
+        pickedBusiness = pickRandomBusiness(sortedBusinesses)
+        //print("picked biz: \(self.pickedBusiness)")
     }
     
     // Make own completionHandler function.
@@ -121,12 +140,7 @@ class RestaurantBrain {
                     
                     // Print out dictionary
                     //print(convertedJsonIntoDict)
-                    let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
-                    let sortedBusinesses = self.sortBusinesses(businesses)
-                    //print("sorted biz: \(sortedBusinesses)")
-
-                    self.pickedBusiness = self.pickRandomBusiness(sortedBusinesses)
-                    //print("picked biz: \(self.pickedBusiness)")
+                    self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
@@ -135,16 +149,5 @@ class RestaurantBrain {
             completionHanlder(success: flag)
         }
         task.resume()
-    }
-    
-    private var pickedBusiness: NSDictionary? = [:]
-    var result: NSDictionary? {
-        get {
-            //print("picked business: \(self.pickedBusiness)")
-            return pickedBusiness
-        }
-        set {
-            pickedBusiness = newValue
-        }
     }
 }
