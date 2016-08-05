@@ -101,19 +101,20 @@ class RestaurantBrain {
         return sortedBusinesses[randomNumber] as? NSDictionary
     }
     
-    private func sortAndRandomlyPickBiz(businesses: NSDictionary) -> Void {
+    func sortAndRandomlyPickBiz(completionHanlder: completion) -> Void {
         //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
-        let sortedBusinesses = sortBusinesses(businesses["businesses"] as! NSArray)
         //print("sorted biz: \(sortedBusinesses)")
         
         pickedBusiness = pickRandomBusiness(sortedBusinesses)
         //print("picked biz: \(self.pickedBusiness)")
+        let flag = true
+        completionHanlder(success: flag)
     }
-    
+    private var sortedBusinesses: NSArray = []
     // Make own completionHandler function.
     typealias completion = (success: Bool) -> Void
     
-    func makeUrlRequest(token: String, completionHanlder: completion) {
+    func makeUrlRequest(token: String) {
         
         let urlObj = NSURL(string: bizSearchUrl)
         let request = NSMutableURLRequest(URL: urlObj!)
@@ -140,13 +141,12 @@ class RestaurantBrain {
                     
                     // Print out dictionary
                     //print(convertedJsonIntoDict)
-                    self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
+                    self.sortedBusinesses = self.sortBusinesses(convertedJsonIntoDict["businesses"] as! NSArray)
+                    //self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
-            let flag = true
-            completionHanlder(success: flag)
         }
         task.resume()
     }
