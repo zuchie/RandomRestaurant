@@ -41,8 +41,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
 
         brain.setRatingBar(rating)
-        brain.makeUrlRequest(access_token)
-        brain.sortAndRandomlyPickBiz() { success in
+        brain.makeUrlRequest(access_token) { success in
             if success {
                 print("brain.result: \(self.brain.result)")
                 if let pickedBiz = self.brain.result {

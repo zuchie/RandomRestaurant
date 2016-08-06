@@ -85,7 +85,7 @@ class RestaurantBrain {
             // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
             if businessRating < ratingBar || business as! NSObject == sortedBusinesses.lastObject as! NSObject {
                 index = sortedBusinesses.indexOfObject(business)
-                print("index: \(index)")
+                //print("index: \(index)")
                 break
             }
             // TODO: Another way to sort, but not work, why?
@@ -97,24 +97,23 @@ class RestaurantBrain {
             return nil
         }
         let randomNumber = Int(arc4random_uniform(UInt32(index)))
-        print("random no. \(randomNumber)")
+        print("total qualified biz: \(index), random no. \(randomNumber)")
         return sortedBusinesses[randomNumber] as? NSDictionary
     }
     
-    func sortAndRandomlyPickBiz(completionHanlder: completion) -> Void {
+    private func sortAndRandomlyPickBiz(businesses: NSDictionary) -> Void {
         //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
-        //print("sorted biz: \(sortedBusinesses)")
+        let sortedBusinesses = sortBusinesses(businesses["businesses"] as! NSArray)
+        print("sorted biz: \(sortedBusinesses)")
         
         pickedBusiness = pickRandomBusiness(sortedBusinesses)
         //print("picked biz: \(self.pickedBusiness)")
-        let flag = true
-        completionHanlder(success: flag)
     }
-    private var sortedBusinesses: NSArray = []
+    
     // Make own completionHandler function.
     typealias completion = (success: Bool) -> Void
     
-    func makeUrlRequest(token: String) {
+    func makeUrlRequest(token: String, completionHanlder: completion) {
         
         let urlObj = NSURL(string: bizSearchUrl)
         let request = NSMutableURLRequest(URL: urlObj!)
@@ -141,12 +140,13 @@ class RestaurantBrain {
                     
                     // Print out dictionary
                     //print(convertedJsonIntoDict)
-                    self.sortedBusinesses = self.sortBusinesses(convertedJsonIntoDict["businesses"] as! NSArray)
-                    //self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
+                    self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
+            let flag = true
+            completionHanlder(success: flag)
         }
         task.resume()
     }
