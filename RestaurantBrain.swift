@@ -104,7 +104,7 @@ class RestaurantBrain {
     private func sortAndRandomlyPickBiz(businesses: NSDictionary) -> Void {
         //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
         let sortedBusinesses = sortBusinesses(businesses["businesses"] as! NSArray)
-        print("sorted biz: \(sortedBusinesses)")
+        //print("sorted biz: \(sortedBusinesses)")
         
         pickedBusiness = pickRandomBusiness(sortedBusinesses)
         //print("picked biz: \(self.pickedBusiness)")
@@ -119,24 +119,48 @@ class RestaurantBrain {
         let request = NSMutableURLRequest(URL: urlObj!)
         request.HTTPMethod = "GET"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataElseLoad
+        request.timeoutInterval = 120
         
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, _, error in
-            
-            // Check for error
-            if error != nil
-            {
-                print("error=\(error)")
-                return
+        let cachedURLResponse = NSURLCache.sharedURLCache().cachedResponseForRequest(request)
+        if cachedURLResponse == nil {
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                data, response, error in
+                
+                // Check for error
+                if error != nil
+                {
+                    print("error=\(error)")
+                    return
+                }
+                
+                // Print out response string
+                //let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                //print("responseString = \(responseString)")
+                let cacheResponse = NSCachedURLResponse(response: response!, data: data!)
+                NSURLCache.sharedURLCache().storeCachedResponse(cacheResponse, forRequest: request)
+                
+                // Convert server json response to NSDictionary
+                do {
+                    if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                        
+                        // Print out dictionary
+                        //print(convertedJsonIntoDict)
+                        self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
+                    }
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+                print("non-cached response data")
+                print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
+                let flag = true
+                completionHanlder(success: flag)
             }
-            
-            // Print out response string
-            //let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            //print("responseString = \(responseString)")
-            
+            task.resume()
+        } else {
             // Convert server json response to NSDictionary
             do {
-                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData((cachedURLResponse?.data)!, options: []) as? NSDictionary {
                     
                     // Print out dictionary
                     //print(convertedJsonIntoDict)
@@ -145,9 +169,10 @@ class RestaurantBrain {
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
+            print("cached response data")
+            print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
             let flag = true
             completionHanlder(success: flag)
         }
-        task.resume()
     }
 }

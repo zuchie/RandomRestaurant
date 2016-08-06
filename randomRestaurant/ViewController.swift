@@ -118,11 +118,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         paramPicker.selectRow(1, inComponent: pickerComponent.term.rawValue, animated: false)
         paramPicker.selectRow(1, inComponent: pickerComponent.rating.rawValue, animated: false)
         updateLabel()
+        
+        let cacheSizeMemory = 1 * 1024 * 1024
+        let cacheSizeDisk = 2 * 1024 * 1024
+        let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
+        NSURLCache.setSharedURLCache(urlCache)
 
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        NSURLCache.sharedURLCache().removeAllCachedResponses()
     }
 }
 
