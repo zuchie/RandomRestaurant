@@ -62,19 +62,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 print("Biz not picked yet")
             }
         }
-/*
-        var pickedBiz: NSDictionary = [:]
-
-        //TODO: Use event interrupt instead of polling
-        repeat {
-            pickedBiz = brain.result
-        } while pickedBiz["name"] == nil
-        
-        brain.result = [:] // Clear result
-
-        print("name: \(pickedBiz["name"]!)")
-        bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
- */
     }
 
     

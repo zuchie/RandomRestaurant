@@ -101,13 +101,26 @@ class RestaurantBrain {
         return sortedBusinesses[randomNumber] as? NSDictionary
     }
     
-    private func sortAndRandomlyPickBiz(businesses: NSDictionary) -> Void {
-        //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
-        let sortedBusinesses = sortBusinesses(businesses["businesses"] as! NSArray)
-        //print("sorted biz: \(sortedBusinesses)")
-        
-        pickedBusiness = pickRandomBusiness(sortedBusinesses)
-        //print("picked biz: \(self.pickedBusiness)")
+    private func sortAndRandomlyPickBiz(data: NSData?) -> Void {
+        // Convert server json response to NSDictionary
+        do {
+            if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                
+                // Print out dictionary
+                //print(convertedJsonIntoDict)
+                //self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
+                
+                //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
+                let sortedBusinesses = sortBusinesses(convertedJsonIntoDict["businesses"] as! NSArray)
+                //print("sorted biz: \(sortedBusinesses)")
+                
+                pickedBusiness = pickRandomBusiness(sortedBusinesses)
+                //print("picked biz: \(self.pickedBusiness)")
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+
     }
     
     // Make own completionHandler function.
@@ -140,17 +153,7 @@ class RestaurantBrain {
                 let cacheResponse = NSCachedURLResponse(response: response!, data: data!)
                 NSURLCache.sharedURLCache().storeCachedResponse(cacheResponse, forRequest: request)
                 
-                // Convert server json response to NSDictionary
-                do {
-                    if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
-                        
-                        // Print out dictionary
-                        //print(convertedJsonIntoDict)
-                        self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
-                    }
-                } catch let error as NSError {
-                    print(error.localizedDescription)
-                }
+                self.sortAndRandomlyPickBiz(data)
                 print("non-cached response data")
                 print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
                 let flag = true
@@ -158,17 +161,7 @@ class RestaurantBrain {
             }
             task.resume()
         } else {
-            // Convert server json response to NSDictionary
-            do {
-                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData((cachedURLResponse?.data)!, options: []) as? NSDictionary {
-                    
-                    // Print out dictionary
-                    //print(convertedJsonIntoDict)
-                    self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
-                }
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
+            self.sortAndRandomlyPickBiz(cachedURLResponse?.data)
             print("cached response data")
             print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
             let flag = true
