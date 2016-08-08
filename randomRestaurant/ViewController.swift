@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var token: UITextField!
     @IBOutlet weak var paramPicker: UIPickerView!
@@ -18,6 +19,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     private var term = ""
     private var rating: Float = 0.0
+    private let locationManager = CLLocationManager()
+    private struct currentLocation {
+        var latitude: Double?
+        var longitude: Double?
+    }
+    
+    private var myLocation: currentLocation? = currentLocation(latitude: nil, longitude: nil)
     
     private var paramPickerData = [
         ["Mexican", "Chinese", "Italian", "American"],
@@ -33,7 +41,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
         bizPicked.text = nil // Reset for following queries
         // TODO: make params come from button/list
-        brain.getUrlParameters(term, latitude: 37.786882, longitude: -122.399972, limit: 20)
+        print("latitude: \(myLocation!.latitude!), longitude: \(myLocation!.longitude!)")
+        //brain.getUrlParameters(term, latitude: 37.786882, longitude: -122.399972, limit: 20)
+        brain.getUrlParameters(term, latitude: myLocation?.latitude, longitude: myLocation?.longitude, limit: 20)
+
         brain.makeBizSearchUrl("https://api.yelp.com/v3/businesses/search?")
 
         // Use this in production
@@ -97,6 +108,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         updateLabel()
     }
     
+    // Get current location.
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        manager.stopUpdatingLocation()
+        if let location = locations.last {
+            myLocation!.latitude = location.coordinate.latitude
+            myLocation!.longitude = location.coordinate.longitude
+        }
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error updating location: \(error.localizedDescription)")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -110,7 +134,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let cacheSizeDisk = 2 * 1024 * 1024
         let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
         NSURLCache.setSharedURLCache(urlCache)
-
+        
+        // Get location info.
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestAlwaysAuthorization()
+            locationManager.startUpdatingLocation()
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
