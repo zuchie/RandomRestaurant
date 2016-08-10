@@ -35,7 +35,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="cgs-uf-Fb3" kind="show" id="gS2-WV-Mxh"/>
+                                    <segue destination="cgs-uf-Fb3" kind="show" identifier="map" id="gS2-WV-Mxh"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Input token" textAlignment="natural" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="caZ-dh-VSD">
@@ -112,8 +112,22 @@
                     <view key="view" contentMode="scaleToFill" id="B5b-Ek-b6L">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
+                                <rect key="frame" x="20" y="69" width="560" height="526"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="3HT-hl-Psk" firstAttribute="top" secondItem="xdo-PX-O9X" secondAttribute="bottom" constant="5" id="6DZ-DR-ac9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="xdo-PX-O9X" secondAttribute="trailing" id="ZmM-C4-Wf5"/>
+                            <constraint firstItem="xdo-PX-O9X" firstAttribute="top" secondItem="6Tz-ER-9rw" secondAttribute="bottom" constant="5" id="hYj-bV-pB5"/>
+                            <constraint firstItem="xdo-PX-O9X" firstAttribute="leading" secondItem="B5b-Ek-b6L" secondAttribute="leadingMargin" id="p9r-MA-UWq"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="map" destination="xdo-PX-O9X" id="woR-79-6gR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aEl-Fw-Zhq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

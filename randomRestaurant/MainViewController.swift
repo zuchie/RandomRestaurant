@@ -36,6 +36,28 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         case term = 0
         case rating = 1
     }
+
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        var destinationVC = segue.destinationViewController
+        if let navCon = destinationVC as? UINavigationController {
+            destinationVC = navCon.visibleViewController ?? destinationVC
+        }
+        if let mapVC = destinationVC as? MapViewController {
+            if let id = segue.identifier {
+                if id == "map" {
+                    if myLocation != nil {
+                        mapVC.setLocation(myLocation!.latitude!, longitude: myLocation!.longitude!)
+                    }
+                }
+            }
+        }
+    }
     
     @IBAction func start() {
     
