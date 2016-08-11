@@ -39,7 +39,24 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     private var mapBrain = MapBrain()
     
-    private var mapHasBeenRendered = false
+    //private var mapHasBeenRendered = false
+    func mapViewDidFinishLoadingMap(mapView: MKMapView) {
+        print("map has been fully loaded")
+        if myLocation != nil {
+            print("show my location")
+            mapBrain.setMyLocationBrain(myLocation!)
+            mapBrain.drawLocation("my")
+            map.setRegion(mapBrain.region, animated: true)
+        }
+        if bizLocation != nil {
+            print("pin biz location")
+            mapBrain.setBizLocationBrain(bizLocation!)
+            mapBrain.drawLocation("biz")
+            let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
+            map.addAnnotation(annotation)
+        }
+    }
+    /*
     func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
         if fullyRendered {
             print("map has been fully rendered")
@@ -62,6 +79,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             print("map has NOT been fully rendered")
         }
     }
+    */
+    
     // Referenced to: https://www.raywenderlich.com/90971/introduction-mapkit-swift-tutorial & http://stackoverflow.com/questions/24523702/stuck-on-using-mkpinannotationview-within-swift-and-mapkit/24532551#24532551
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         print("into mapView")
@@ -84,7 +103,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         else {
             pinView!.annotation = annotation
         }
-        
+        print("annotation returned pin view")
         return pinView
         
         /*

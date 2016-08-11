@@ -51,9 +51,9 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                 if id == "map" {
                     if myLocation != nil {
                         mapVC.setMyLocation(CLLocationCoordinate2D(latitude: myLocation!.latitude, longitude: myLocation!.longitude))
-                        if bizLocation != nil {
-                            mapVC.setBizLocation(CLLocationCoordinate2D(latitude: bizLocation!.latitude, longitude: bizLocation!.longitude))
-                        }
+                    }
+                    if bizLocation != nil {
+                        mapVC.setBizLocation(CLLocationCoordinate2D(latitude: bizLocation!.latitude, longitude: bizLocation!.longitude))
                     }
                 }
             }
@@ -90,6 +90,7 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                 } else {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.bizPicked.text = "No found, change search parameters"
+                        self.bizLocation = nil
                     })
                 }
                 
