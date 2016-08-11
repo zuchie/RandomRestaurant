@@ -45,11 +45,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if myLocation != nil {
                 mapBrain.setMyLocation(myLocation!)
                 mapBrain.drawLocation("my")
-                //map.setRegion(mapBrain.region, animated: true)
+                map.setRegion(mapBrain.region, animated: true)
             }
             if bizLocation != nil {
                 print("pin biz")
-                mapBrain.setMyLocation(bizLocation!)
+                mapBrain.setBizLocation(bizLocation!)
                 mapBrain.drawLocation("biz")
                 let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
                 map.addAnnotation(annotation)
