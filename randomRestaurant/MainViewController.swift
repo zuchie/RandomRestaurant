@@ -16,23 +16,21 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var bizPicked: UILabel!
     
     private var brain = RestaurantBrain()
+    //private var map = MapViewController()
     
     private var term = ""
     private var rating: Float = 0.0
     private let locationManager = CLLocationManager()
-    private struct currentLocation {
-        var latitude: Double?
-        var longitude: Double?
-    }
     
-    private var myLocation: currentLocation? = currentLocation(latitude: nil, longitude: nil)
+    private var myLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D()
+    private var bizLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D()
     
     private var paramPickerData = [
         ["Mexican", "Chinese", "Italian", "American"],
         ["4", "4.5", "5"]
     ]
     
-    enum pickerComponent: Int {
+    enum PickerComponent: Int {
         case term = 0
         case rating = 1
     }
@@ -52,7 +50,10 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
             if let id = segue.identifier {
                 if id == "map" {
                     if myLocation != nil {
-                        mapVC.setLocation(myLocation!.latitude!, longitude: myLocation!.longitude!)
+                        mapVC.setMyLocation(CLLocationCoordinate2D(latitude: myLocation!.latitude, longitude: myLocation!.longitude))
+                        if bizLocation != nil {
+                            mapVC.setBizLocation(CLLocationCoordinate2D(latitude: bizLocation!.latitude, longitude: bizLocation!.longitude))
+                        }
                     }
                 }
             }
@@ -63,7 +64,7 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     
         bizPicked.text = nil // Reset for following queries
         // TODO: make params come from button/list
-        print("latitude: \(myLocation!.latitude!), longitude: \(myLocation!.longitude!)")
+        print("latitude: \(myLocation!.latitude), longitude: \(myLocation!.longitude)")
         //brain.getUrlParameters(term, latitude: 37.786882, longitude: -122.399972, limit: 20)
         brain.getUrlParameters(term, latitude: myLocation?.latitude, longitude: myLocation?.longitude, limit: 20)
 
@@ -73,12 +74,16 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         let access_token = token.text!
 
 
+
         brain.setRatingBar(rating)
         brain.makeUrlRequest(access_token) { success in
             if success {
                 print("brain.result: \(self.brain.result)")
                 if let pickedBiz = self.brain.result {
                     //print("name: \(pickedBiz["name"]!)")
+                    let coordinates = pickedBiz["coordinates"] as! NSDictionary
+                    self.bizLocation!.latitude = (coordinates["latitude"] as? Double)!
+                    self.bizLocation!.longitude = (coordinates["longitude"] as? Double)!
                     dispatch_async(dispatch_get_main_queue(), {
                         self.bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
                     })
@@ -117,8 +122,8 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     }
     
     private func updateLabel(){
-        let termComponent = pickerComponent.term.rawValue
-        let ratingComponent = pickerComponent.rating.rawValue
+        let termComponent = PickerComponent.term.rawValue
+        let ratingComponent = PickerComponent.rating.rawValue
         term = paramPickerData[termComponent][paramPicker.selectedRowInComponent(termComponent)] // Can't use paramPickerData[0][row], picker would be inaccurate.
         rating = Float(paramPickerData[ratingComponent][paramPicker.selectedRowInComponent(ratingComponent)])!
         print("term: \(term), rating: \(rating)")
@@ -148,8 +153,8 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         // Do any additional setup after loading the view, typically from a nib.
         paramPicker.delegate = self
         paramPicker.dataSource = self
-        paramPicker.selectRow(1, inComponent: pickerComponent.term.rawValue, animated: false)
-        paramPicker.selectRow(1, inComponent: pickerComponent.rating.rawValue, animated: false)
+        paramPicker.selectRow(1, inComponent: PickerComponent.term.rawValue, animated: false)
+        paramPicker.selectRow(1, inComponent: PickerComponent.rating.rawValue, animated: false)
         updateLabel()
         
         let cacheSizeMemory = 1 * 1024 * 1024

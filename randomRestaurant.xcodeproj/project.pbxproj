@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B906DB5B1D5C5F880021B025 /* MapBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB5A1D5C5F880021B025 /* MapBrain.swift */; };
+		B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB5C1D5C8E490021B025 /* Annotation.swift */; };
 		B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8561D4EAC4600B0476E /* AppDelegate.swift */; };
 		B91AC8591D4EAC4600B0476E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8581D4EAC4600B0476E /* MainViewController.swift */; };
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B906DB5A1D5C5F880021B025 /* MapBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBrain.swift; sourceTree = "<group>"; };
+		B906DB5C1D5C8E490021B025 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		B91AC8531D4EAC4600B0476E /* randomRestaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = randomRestaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91AC8561D4EAC4600B0476E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B91AC8581D4EAC4600B0476E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 				B91AC8561D4EAC4600B0476E /* AppDelegate.swift */,
 				B91AC8581D4EAC4600B0476E /* MainViewController.swift */,
 				B91AC85A1D4EAC4600B0476E /* Main.storyboard */,
+				B906DB5A1D5C5F880021B025 /* MapBrain.swift */,
+				B906DB5C1D5C8E490021B025 /* Annotation.swift */,
 				B91AC85D1D4EAC4600B0476E /* Assets.xcassets */,
 				B91AC85F1D4EAC4600B0476E /* LaunchScreen.storyboard */,
 				B91AC8621D4EAC4600B0476E /* Info.plist */,
@@ -141,9 +147,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B906DB5B1D5C5F880021B025 /* MapBrain.swift in Sources */,
 				B91AC8591D4EAC4600B0476E /* MainViewController.swift in Sources */,
 				B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */,
 				B91AC8691D4FE19C00B0476E /* RestaurantBrain.swift in Sources */,
+				B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */,
 				B9850F211D591ABF0063FC0F /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
