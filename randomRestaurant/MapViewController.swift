@@ -39,26 +39,31 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     private var mapBrain = MapBrain()
     
-    //private var mapHasBeenRendered = false
+    private var mapHasBeenLoaded = false
     func mapViewDidFinishLoadingMap(mapView: MKMapView) {
-        print("map has been fully loaded")
-        if myLocation != nil {
-            print("show my location")
-            mapBrain.setMyLocationBrain(myLocation!)
-            mapBrain.drawLocation("my")
-            map.setRegion(mapBrain.region, animated: true)
-        }
-        if bizLocation != nil {
-            print("pin biz location")
-            mapBrain.setBizLocationBrain(bizLocation!)
-            mapBrain.drawLocation("biz")
-            let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
-            map.addAnnotation(annotation)
+        print("map has been loaded")
+        if !mapHasBeenLoaded {
+            if myLocation != nil {
+                print("show my location")
+                mapBrain.setMyLocationBrain(myLocation!)
+                mapBrain.drawLocation("my")
+                map.setRegion(mapBrain.region, animated: true)
+            }
+            if bizLocation != nil {
+                print("pin biz location")
+                mapBrain.setBizLocationBrain(bizLocation!)
+                mapBrain.drawLocation("biz")
+                let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
+                map.addAnnotation(annotation)
+            }
+            mapHasBeenLoaded = true
         }
     }
+    
     /*
+    private var mapHasBeenRendered = false
     func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
-        if fullyRendered {
+        //if fullyRendered {
             print("map has been fully rendered")
             if !mapHasBeenRendered {
                 if myLocation != nil {
@@ -75,9 +80,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
                 mapHasBeenRendered = true
             }
-        } else {
-            print("map has NOT been fully rendered")
-        }
+        //} else {
+            //print("map has NOT been fully rendered")
+        //}
     }
     */
     
