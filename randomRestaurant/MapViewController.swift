@@ -42,8 +42,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     private var mapHasBeenRendered = false
     func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
         if fullyRendered {
+            print("map has been fully rendered")
             if !mapHasBeenRendered {
-                print("map has been fully rendered")
                 if myLocation != nil {
                     mapBrain.setMyLocationBrain(myLocation!)
                     mapBrain.drawLocation("my")

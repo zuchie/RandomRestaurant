@@ -73,7 +73,6 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         // Use this in production
         let access_token = token.text!
 
-        
 
         brain.setRatingBar(rating)
         brain.makeUrlRequest(access_token) { success in
@@ -82,8 +81,9 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                 if let pickedBiz = self.brain.result {
                     //print("name: \(pickedBiz["name"]!)")
                     let coordinates = pickedBiz["coordinates"] as! NSDictionary
-                    self.bizLocation!.latitude = (coordinates["latitude"] as? Double)!
-                    self.bizLocation!.longitude = (coordinates["longitude"] as? Double)!
+                    self.bizLocation = CLLocationCoordinate2D(latitude: (coordinates["latitude"] as? Double)!, longitude: (coordinates["longitude"] as? Double)!)
+                    //self.bizLocation!.latitude = (coordinates["latitude"] as? Double)!
+                    //self.bizLocation!.longitude = (coordinates["longitude"] as? Double)!
                     dispatch_async(dispatch_get_main_queue(), {
                         self.bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
                     })
