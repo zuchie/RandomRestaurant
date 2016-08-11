@@ -22,8 +22,8 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     private var rating: Float = 0.0
     private let locationManager = CLLocationManager()
     
-    private var myLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D()
-    private var bizLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D()
+    private var myLocation: CLLocationCoordinate2D? = nil
+    private var bizLocation: CLLocationCoordinate2D? = nil
     
     private var paramPickerData = [
         ["Mexican", "Chinese", "Italian", "American"],
@@ -72,6 +72,7 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
 
         // Use this in production
         let access_token = token.text!
+
 
         brain.setRatingBar(rating)
         brain.makeUrlRequest(access_token) { success in
@@ -137,8 +138,9 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         manager.stopUpdatingLocation()
         if let location = locations.last {
-            myLocation!.latitude = location.coordinate.latitude
-            myLocation!.longitude = location.coordinate.longitude
+            myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            //myLocation!.latitude = location.coordinate.latitude
+            //myLocation!.longitude = location.coordinate.longitude
         }
     }
     

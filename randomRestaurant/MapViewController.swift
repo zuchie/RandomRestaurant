@@ -39,22 +39,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     private var mapBrain = MapBrain()
     
+    private var mapHasBeenRendered = false
     func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
         if fullyRendered {
-            print("map has been fully rendered")
-            if myLocation != nil {
-                mapBrain.setMyLocation(myLocation!)
-                mapBrain.drawLocation("my")
-                map.setRegion(mapBrain.region, animated: true)
+            if !mapHasBeenRendered {
+                print("map has been fully rendered")
+                if myLocation != nil {
+                    mapBrain.setMyLocationBrain(myLocation!)
+                    mapBrain.drawLocation("my")
+                    map.setRegion(mapBrain.region, animated: true)
+                }
+                if bizLocation != nil {
+                    print("pin biz")
+                    mapBrain.setBizLocationBrain(bizLocation!)
+                    mapBrain.drawLocation("biz")
+                    let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
+                    map.addAnnotation(annotation)
+                }
+                mapHasBeenRendered = true
             }
-            if bizLocation != nil {
-                print("pin biz")
-                mapBrain.setBizLocation(bizLocation!)
-                mapBrain.drawLocation("biz")
-                let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
-                map.addAnnotation(annotation)
-            }
-
         } else {
             print("map has NOT been fully rendered")
         }
@@ -65,6 +68,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         if annotation is MKUserLocation {
             //return nil so map view draws "blue dot" for standard user location
+            print("annotation returned nil")
             return nil
         }
         

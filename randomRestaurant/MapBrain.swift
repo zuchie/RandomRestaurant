@@ -16,10 +16,10 @@ class MapBrain: NSObject, MKMapViewDelegate {
     private var myRegion = MKCoordinateRegion()
     private var bizCenter = CLLocationCoordinate2D()
     
-    func setMyLocation(myLoc: CLLocationCoordinate2D) {
+    func setMyLocationBrain(myLoc: CLLocationCoordinate2D) {
         myLocation = myLoc
     }
-    func setBizLocation(bizLoc: CLLocationCoordinate2D) {
+    func setBizLocationBrain(bizLoc: CLLocationCoordinate2D) {
         bizLocation = bizLoc
     }
     
