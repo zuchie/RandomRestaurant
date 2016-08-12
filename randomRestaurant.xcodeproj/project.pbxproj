@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B906DB5B1D5C5F880021B025 /* MapBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB5A1D5C5F880021B025 /* MapBrain.swift */; };
 		B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB5C1D5C8E490021B025 /* Annotation.swift */; };
+		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
 		B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8561D4EAC4600B0476E /* AppDelegate.swift */; };
 		B91AC8591D4EAC4600B0476E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8581D4EAC4600B0476E /* MainViewController.swift */; };
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		B906DB5A1D5C5F880021B025 /* MapBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBrain.swift; sourceTree = "<group>"; };
 		B906DB5C1D5C8E490021B025 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
+		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		B91AC8531D4EAC4600B0476E /* randomRestaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = randomRestaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91AC8561D4EAC4600B0476E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B91AC8581D4EAC4600B0476E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -28,7 +30,7 @@
 		B91AC85D1D4EAC4600B0476E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B91AC8601D4EAC4600B0476E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B91AC8621D4EAC4600B0476E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B91AC8681D4FE19C00B0476E /* RestaurantBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaurantBrain.swift; sourceTree = "<group>"; };
+		B91AC8681D4FE19C00B0476E /* RestaurantBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RestaurantBrain.swift; path = ../RestaurantBrain.swift; sourceTree = "<group>"; };
 		B9850F201D591ABF0063FC0F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -43,10 +45,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B91AC84A1D4EAC4600B0476E = {
+		B906DB751D5D80B10021B025 /* MainView */ = {
 			isa = PBXGroup;
 			children = (
 				B91AC8681D4FE19C00B0476E /* RestaurantBrain.swift */,
+				B91AC8581D4EAC4600B0476E /* MainViewController.swift */,
+			);
+			name = MainView;
+			sourceTree = "<group>";
+		};
+		B906DB761D5D80F20021B025 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				B906DB5A1D5C5F880021B025 /* MapBrain.swift */,
+				B9850F201D591ABF0063FC0F /* MapViewController.swift */,
+				B906DB5C1D5C8E490021B025 /* Annotation.swift */,
+			);
+			name = MapView;
+			sourceTree = "<group>";
+		};
+		B91AC84A1D4EAC4600B0476E = {
+			isa = PBXGroup;
+			children = (
 				B91AC8551D4EAC4600B0476E /* randomRestaurant */,
 				B91AC8541D4EAC4600B0476E /* Products */,
 			);
@@ -63,15 +83,14 @@
 		B91AC8551D4EAC4600B0476E /* randomRestaurant */ = {
 			isa = PBXGroup;
 			children = (
+				B906DB761D5D80F20021B025 /* MapView */,
+				B906DB751D5D80B10021B025 /* MainView */,
 				B91AC8561D4EAC4600B0476E /* AppDelegate.swift */,
-				B91AC8581D4EAC4600B0476E /* MainViewController.swift */,
 				B91AC85A1D4EAC4600B0476E /* Main.storyboard */,
-				B906DB5A1D5C5F880021B025 /* MapBrain.swift */,
-				B906DB5C1D5C8E490021B025 /* Annotation.swift */,
+				B906DB731D5D80170021B025 /* Default-568h@2x.png */,
 				B91AC85D1D4EAC4600B0476E /* Assets.xcassets */,
 				B91AC85F1D4EAC4600B0476E /* LaunchScreen.storyboard */,
 				B91AC8621D4EAC4600B0476E /* Info.plist */,
-				B9850F201D591ABF0063FC0F /* MapViewController.swift */,
 			);
 			path = randomRestaurant;
 			sourceTree = "<group>";
@@ -135,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */,
+				B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */,
 				B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */,
 				B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */,
 			);

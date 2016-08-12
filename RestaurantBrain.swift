@@ -32,6 +32,58 @@ class RestaurantBrain {
         var limit: Int?
     }
     
+    private enum OperationTypes {
+        case GetStrByKey((NSDictionary, String) -> String)
+        case GetIntByKey((NSDictionary, String) -> String)
+        case GetDoubleByKey((NSDictionary, String) -> String)
+    }
+    // Get value by key and convert value into string or empty string if key doesn't exist.
+    private var operations: [String: OperationTypes] = [
+        "name": OperationTypes.GetStrByKey {
+            let val = $0[$1] as? String
+            return val ?? ""
+        },
+        "price": OperationTypes.GetStrByKey {
+            let val = $0[$1] as? String
+            return val ?? ""
+        },
+        "rating": OperationTypes.GetDoubleByKey {
+            if let val = $0[$1] as? Double {
+                return String(val)
+            } else {
+                return ""
+            }
+        },
+        "review_count": OperationTypes.GetIntByKey {
+            if let val = $0[$1] as? Int {
+                return String(val)
+            } else {
+                return ""
+            }
+        }
+    ]
+    /*
+    private var bizParamValue: String?
+    
+    func getBizParamValue() -> String? {
+        return bizParamValue
+    }
+    */
+    func performOperations(dic: NSDictionary, key: String) -> String {
+        var bizParam = ""
+        if let op = operations[key] {
+            switch op {
+            case .GetStrByKey(let function):
+                bizParam = function(dic, key)
+            case .GetDoubleByKey(let function):
+                bizParam = function(dic, key)
+            case .GetIntByKey(let function):
+                bizParam = function(dic, key)
+            }
+        }
+        return bizParam
+    }
+    
     func getUrlParameters(term: String?, latitude: Double?, longitude: Double?, limit: Int?) {
         //urlParams = urlParameters(term: term!, latitude: latitude!, longitude: longitude!, limit: limit!)
         //urlParams = urlParameters()

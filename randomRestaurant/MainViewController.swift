@@ -59,6 +59,14 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
             }
         }
     }
+    /*
+    // Get value by key and convert value into string or empty string if key doesn't exist.
+    private func getValueStrByKey(dic: NSDictionary, key: String) -> String {
+        let optionalVal = dic[key] as? String
+        return optionalVal ?? ""
+    }
+    */
+
     
     @IBAction func start() {
     
@@ -81,17 +89,27 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                 if let pickedBiz = self.brain.result {
                     //print("name: \(pickedBiz["name"]!)")
                     let coordinates = pickedBiz["coordinates"] as! NSDictionary
-                    self.bizLocation = CLLocationCoordinate2D(latitude: (coordinates["latitude"] as? Double)!, longitude: (coordinates["longitude"] as? Double)!)
-                    //self.bizLocation!.latitude = (coordinates["latitude"] as? Double)!
-                    //self.bizLocation!.longitude = (coordinates["longitude"] as? Double)!
+                    self.bizLocation = CLLocationCoordinate2D(
+                        latitude: (coordinates["latitude"] as? Double)!,
+                        longitude: (coordinates["longitude"] as? Double)!)
+                    /*
+                    let bizName = self.getValueStrByKey(pickedBiz, key: "name")
+                    let bizPrice = self.getValueStrByKey(pickedBiz, key: "price")
+                    let bizRating = self.getValueStrByKey(pickedBiz, key: "rating")
+                    let bizReveiwCount = self.getValueStrByKey(pickedBiz, key: "review_count")
+                    */
+                    let bizName = self.brain.performOperations(pickedBiz, key: "name")
+                    let bizPrice = self.brain.performOperations(pickedBiz, key: "price")
+                    let bizRating = self.brain.performOperations(pickedBiz, key: "rating")
+                    let bizReviewCount = self.brain.performOperations(pickedBiz, key: "review_count")
                     dispatch_async(dispatch_get_main_queue(), {
-                        self.bizPicked.text = "\(pickedBiz["name"]!), \(pickedBiz["price"]!), \(pickedBiz["review_count"]!), \(pickedBiz["rating"]!)"
+                        self.bizPicked.text = "\(bizName), \(bizPrice), \(bizRating), \(bizReviewCount)"
                     })
                 } else {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.bizPicked.text = "No found, change search parameters"
-                        self.bizLocation = nil
                     })
+                    self.bizLocation = nil
                 }
                 
                 self.brain.result = nil // Clear result
@@ -164,11 +182,11 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
         NSURLCache.setSharedURLCache(urlCache)
         
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
         // Get location info.
         if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.requestAlwaysAuthorization()
             locationManager.startUpdatingLocation()
         }
     }
