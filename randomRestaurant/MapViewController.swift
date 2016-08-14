@@ -12,7 +12,8 @@ import MapKit
 class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var map: MKMapView!
-
+    @IBOutlet weak var distanceAndETA: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,9 +26,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    /*
-    var region = MKCoordinateRegion()
-    */
+
     private var myLocation: CLLocationCoordinate2D? = nil
     private var bizLocation: CLLocationCoordinate2D? = nil
     func setMyLocation(coordinates: CLLocationCoordinate2D) {
@@ -55,38 +54,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 mapBrain.drawLocation("biz")
                 let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
                 map.addAnnotation(annotation)
+                calculateETAAndPlotRoute()
             }
             mapHasBeenLoaded = true
         }
     }
     
-    /*
-    private var mapHasBeenRendered = false
-    func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
-        //if fullyRendered {
-            print("map has been fully rendered")
-            if !mapHasBeenRendered {
-                if myLocation != nil {
-                    mapBrain.setMyLocationBrain(myLocation!)
-                    mapBrain.drawLocation("my")
-                    map.setRegion(mapBrain.region, animated: true)
-                }
-                if bizLocation != nil {
-                    print("pin biz")
-                    mapBrain.setBizLocationBrain(bizLocation!)
-                    mapBrain.drawLocation("biz")
-                    let annotation = BizAnnotation(title: "My", locationName: "biz", coordinate: mapBrain.center)
-                    map.addAnnotation(annotation)
-                }
-                mapHasBeenRendered = true
-            }
-        //} else {
-            //print("map has NOT been fully rendered")
-        //}
-    }
-    */
-    
-    // Referenced to: https://www.raywenderlich.com/90971/introduction-mapkit-swift-tutorial & http://stackoverflow.com/questions/24523702/stuck-on-using-mkpinannotationview-within-swift-and-mapkit/24532551#24532551
+    // Referenced to: http://stackoverflow.com/questions/24523702/stuck-on-using-mkpinannotationview-within-swift-and-mapkit/24532551#24532551
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         print("into mapView")
         
@@ -110,33 +84,58 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         print("annotation returned pin view")
         return pinView
+    }
+    
+    private func calculateETAAndPlotRoute() {
+        let request = MKDirectionsRequest()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: myLocation!, addressDictionary: nil ))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: bizLocation!, addressDictionary: nil ))
+        request.requestsAlternateRoutes = false
+        request.transportType = .Automobile
+        request.departureDate = NSDate()
         
-        /*
-        if let annotation = annotation as? BizAnnotation {
-            let identifier = "pin"
-            var view: MKPinAnnotationView
-            if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
-                as? MKPinAnnotationView {
-                dequeuedView.annotation = annotation
-                view = dequeuedView
-            } else {
-                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                view.canShowCallout = true
-                view.calloutOffset = CGPoint(x: -5, y: 5)
-                //view.rightCalloutAccessoryView = UIButton.buttonWithType(.DetailDisclosure) as UIView
+        let directions = MKDirections(request: request)
+        directions.calculateDirectionsWithCompletionHandler {
+            response, error in
+            print("plot route")
+            if error != nil {
+                print("error while calculating directions: \(error) ")
             }
-            return view
+            if let unwrappedResponse = response {
+                for route in unwrappedResponse.routes {
+                    // Show distance & ETA.
+                    let distanceInMi = Int(route.distance / 1609.344)
+                    let etaInMinutes = Int(route.expectedTravelTime / 60)
+                    self.distanceAndETA.text = "\(distanceInMi) mi, \(etaInMinutes) min"
+                    // Plot route.
+                    self.map.addOverlay(route.polyline)
+                    // Adjust visible area.
+                    let mapRect = route.polyline.boundingMapRect
+                    var edgeInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+                    if route.polyline.intersectsMapRect(mapRect) {
+                        print("map intersects")
+                        edgeInsets.top = 40
+                        edgeInsets.bottom = 40
+                        edgeInsets.left = 40
+                        edgeInsets.right = 40
+                    }
+                    self.map.setVisibleMapRect(mapRect, edgePadding: edgeInsets, animated: true)
+                    
+                }
+            } else {
+                print("response for calculate direction is nil")
+            }
         }
-        return nil
-        */
     }
-    /*
-    func mapViewDidFinishLoadingMap(mapView: MKMapView) {
-        //mapView.showsUserLocation = true
-        print("map has been fully loaded")
-        map.setRegion(region, animated: true)
+    
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+        renderer.strokeColor = UIColor.blueColor()
+        renderer.lineWidth = 5
+        renderer.alpha = 0.5
+        return renderer
     }
-    */
+    
     /*
     // MARK: - Navigation
 

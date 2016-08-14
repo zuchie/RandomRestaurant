@@ -144,7 +144,7 @@ class RestaurantBrain {
             //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 })
             //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
         }
-        // Randomly pick one business from all qualified businesses(pick one from element < index). If no qualified biz, return [:]
+        // Randomly pick one business from all qualified businesses(pick one from element < index). If no qualified biz, return nil.
         if index == 0 {
             return nil
         }
@@ -195,7 +195,7 @@ class RestaurantBrain {
                 // Check for error
                 if error != nil
                 {
-                    print("error=\(error)")
+                    print("error while retrieving URL response: \(error)")
                     return
                 }
                 

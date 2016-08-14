@@ -113,19 +113,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
-                                <rect key="frame" x="20" y="69" width="560" height="526"/>
-                            </mapView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DhV-hI-hxV">
+                                <rect key="frame" x="20" y="69" width="560" height="527"/>
+                                <subviews>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="491"/>
+                                    </mapView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-XW-9uC">
+                                        <rect key="frame" x="0.0" y="491" width="560" height="36"/>
+                                        <color key="backgroundColor" red="0.87031659029999997" green="0.87031659029999997" blue="0.87031659029999997" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="3HT-hl-Psk" firstAttribute="top" secondItem="xdo-PX-O9X" secondAttribute="bottom" constant="5" id="6DZ-DR-ac9"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="xdo-PX-O9X" secondAttribute="trailing" id="ZmM-C4-Wf5"/>
-                            <constraint firstItem="xdo-PX-O9X" firstAttribute="top" secondItem="6Tz-ER-9rw" secondAttribute="bottom" constant="5" id="hYj-bV-pB5"/>
-                            <constraint firstItem="xdo-PX-O9X" firstAttribute="leading" secondItem="B5b-Ek-b6L" secondAttribute="leadingMargin" id="p9r-MA-UWq"/>
+                            <constraint firstItem="DhV-hI-hxV" firstAttribute="trailing" secondItem="B5b-Ek-b6L" secondAttribute="trailingMargin" id="Ah2-fD-ge6"/>
+                            <constraint firstItem="3HT-hl-Psk" firstAttribute="top" secondItem="DhV-hI-hxV" secondAttribute="bottom" constant="4" id="Zqq-Rb-RzH"/>
+                            <constraint firstItem="DhV-hI-hxV" firstAttribute="leading" secondItem="B5b-Ek-b6L" secondAttribute="leadingMargin" id="k7F-sm-3eV"/>
+                            <constraint firstItem="DhV-hI-hxV" firstAttribute="top" secondItem="6Tz-ER-9rw" secondAttribute="bottom" constant="5" id="pey-yy-lOR"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="distanceAndETA" destination="lBd-XW-9uC" id="0Wi-9B-fEI"/>
                         <outlet property="map" destination="xdo-PX-O9X" id="woR-79-6gR"/>
                     </connections>
                 </viewController>

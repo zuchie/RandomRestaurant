@@ -44,7 +44,7 @@ class MapBrain: NSObject, MKMapViewDelegate {
     private var locations: Dictionary<String, LocationTypes> = [
         "my" : LocationTypes.my {
                 let center = CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
-                let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+                let span = MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
                 return MKCoordinateRegion(center: center, span: span)
             },
         "biz" : LocationTypes.biz {
@@ -52,14 +52,6 @@ class MapBrain: NSObject, MKMapViewDelegate {
             }
     ]
     
-    /*
-    private var locInfo: LocationInfo?
-    
-    private struct LocationInfo {
-        private var getLocation: (CLLocationCoordinate2D) -> MKCoordinateRegion
-        private var myLoc: CLLocationCoordinate2D
-    }
-    */
     private enum LocationTypes {
         case my((CLLocationCoordinate2D) -> MKCoordinateRegion)
         case biz((CLLocationCoordinate2D) -> CLLocationCoordinate2D)
@@ -70,10 +62,6 @@ class MapBrain: NSObject, MKMapViewDelegate {
             switch location {
             case .my(let function):
                 region = function(myLocation)
-                /*
-                locInfo = LocationInfo(getLocation: function, myLoc: myLocation)
-                region = (locInfo?.getLocation(locInfo!.myLoc))!
-                */
             case .biz(let function):
                 center = function(bizLocation)
             }

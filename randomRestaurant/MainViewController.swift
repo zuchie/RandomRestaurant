@@ -81,7 +81,6 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         // Use this in production
         let access_token = token.text!
 
-
         brain.setRatingBar(rating)
         brain.makeUrlRequest(access_token) { success in
             if success {
@@ -159,8 +158,6 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         manager.stopUpdatingLocation()
         if let location = locations.last {
             myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            //myLocation!.latitude = location.coordinate.latitude
-            //myLocation!.longitude = location.coordinate.longitude
         }
     }
     
