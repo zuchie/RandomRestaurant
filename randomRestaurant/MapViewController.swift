@@ -111,14 +111,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.map.addOverlay(route.polyline)
                     // Adjust visible area.
                     let mapRect = route.polyline.boundingMapRect
-                    var edgeInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-                    if route.polyline.intersectsMapRect(mapRect) {
-                        print("map intersects")
-                        edgeInsets.top = 40
-                        edgeInsets.bottom = 40
-                        edgeInsets.left = 40
-                        edgeInsets.right = 40
-                    }
+                    let edgeInsets = UIEdgeInsetsMake(40, 40, 40, 40)
                     self.map.setVisibleMapRect(mapRect, edgePadding: edgeInsets, animated: true)
                     
                 }
