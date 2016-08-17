@@ -9,18 +9,18 @@
 import UIKit
 import CoreLocation
 
-class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var token: UITextField!
     @IBOutlet weak var paramPicker: UIPickerView!
     @IBOutlet weak var bizPicked: UILabel!
     
-    @IBOutlet weak var bizSearchLocation: UITextField!
+    @IBOutlet weak var bizSearchLocation: UISearchBar!
     @IBOutlet weak var possibleLocations: UITableView!
     
     private var brain = RestaurantBrain()
     
-    private var term = ""
+    private var term = String()
     private var rating: Float = 0.0
     private let locationManager = CLLocationManager()
     
@@ -32,7 +32,7 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         ["4", "4.5", "5"]
     ]
     
-    private var locations = ["San Jose", "Sunnyvale", "Milpitas", "Cupertino"]
+    private var locations = ["San Jose", "Sunnyvale", "Milpitas", "Cupertino", "San Mateo"]
     private var autocompleteLocations = [String]()
     private var inputString = String()
     private var stringFound = false
@@ -41,36 +41,30 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         case term = 0
         case rating = 1
     }
-
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        print("user typed string: \(string) at location: \(range.location) with length: \(range.length)")
-        possibleLocations.hidden = false
-        let subString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
-        stringFound = searchAutoCompleteEntriesWithSubString(subString)
-        // Save string which is not already in table.
-        if !stringFound && !subString.isEmpty {
-            inputString = subString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-            print("string \(inputString) not found, save")
-        }
-        return true
-    }
     
-    private func searchAutoCompleteEntriesWithSubString(subString: String) -> Bool {
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        let inputText = searchText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        print("user typed string: \(inputText)")
+        possibleLocations.hidden = false
         autocompleteLocations.removeAll(keepCapacity: false)
-        var strFound = false
+        stringFound = false
         for location in locations {
             let myString = location as NSString
-            let subStringRange: NSRange = myString.rangeOfString(subString)
+            let subStringRange: NSRange = myString.rangeOfString(inputText, options: NSStringCompareOptions.CaseInsensitiveSearch)
             if subStringRange.location == 0 {
-                print("found \(location) from substring \(subString), append \(location) to table view")
-                strFound = true
+                print("found \(location) from substring \(inputText), append \(location) to table view")
+                stringFound = true
                 autocompleteLocations.append(location)
             }
         }
         possibleLocations.reloadData()
-        return strFound
+        // Save string which is not already in table.
+        if !stringFound && !inputText.isEmpty {
+            inputString = inputText
+            print("string \(inputString) not found, save")
+        }
     }
-    
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("table row count: \(autocompleteLocations.count)")
         return autocompleteLocations.count
@@ -131,6 +125,7 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         if !stringFound && !inputString.isEmpty {
             print("input location not in table, add \(inputString) to list")
             locations.append(inputString)
+            inputString = ""
         }
         
         bizPicked.text = nil // Reset for following queries
