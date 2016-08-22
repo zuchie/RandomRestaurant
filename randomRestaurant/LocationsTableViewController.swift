@@ -13,7 +13,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var inputLocation: UISearchBar!
     @IBOutlet weak var locationsTable: UITableView!
     
-    private var allLocations = ["San Jose, CA", "Sunnyvale, CA", "Milpitas, CA", "Cupertino, CA", "San Mateo, CA"]
+    private var locationsBrain = LocationsBrain()
+    
+    private var allLocations = [String]()
     private var filteredLocations = [String]()
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -37,6 +39,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         inputLocation.delegate = self
         locationsTable.hidden = false
         locationsTable.scrollEnabled = true
+        
+        locationsBrain.loadLocations()
+        if let locations = locationsBrain.allLoadedLocations {
+            allLocations = locations
+        } else {
+            print("locations not loaded")
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
