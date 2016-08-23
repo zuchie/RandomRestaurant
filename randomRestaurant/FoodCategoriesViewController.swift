@@ -9,15 +9,26 @@
 import UIKit
 
 class FoodCategoriesViewController: UITableViewController {
+    
+    // MARK: Properties
+    var foodCategories = [FoodCategories]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadFoodCategories()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    func loadFoodCategories() {
+        let mexicanPhoto = UIImage(named: "filledStar")!
+        let mexicanFood = FoodCategories(name: "Mexican", photo: mexicanPhoto, rating: 4)!
+        foodCategories += [mexicanFood]
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,24 +39,31 @@ class FoodCategoriesViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        
+        return foodCategories.count
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cellIdentifier = "FoodCategoriesTableViewCell"
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! FoodCategoriesTableViewCell
+        
+        let foodCategory = foodCategories[indexPath.row]
 
         // Configure the cell...
+        cell.nameLabel.text = foodCategory.name
+        cell.photoImageView.image = foodCategory.photo
+        //cell.ratingControl.rating = foodCategory.rating
+        
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.

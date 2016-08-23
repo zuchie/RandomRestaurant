@@ -9,19 +9,51 @@
         <!--What to eat?-->
         <scene sceneID="My6-R5-PoK">
             <objects>
-                <tableViewController id="H1W-kT-6DQ" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="KgB-v6-waj">
+                <tableViewController id="H1W-kT-6DQ" customClass="FoodCategoriesViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="28" sectionFooterHeight="28" id="KgB-v6-waj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="MTR-O0-3up">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FoodCategoriesTableViewCell" rowHeight="90" id="MTR-O0-3up" customClass="FoodCategoriesTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="122" width="600" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MTR-O0-3up" id="QMC-Hs-nKV">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="90"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Default.png" translatesAutoresizingMaskIntoConstraints="NO" id="eGN-xb-64B">
+                                            <rect key="frame" x="0.0" y="0.0" width="99" height="90"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nxg-Wh-x2q">
+                                            <rect key="frame" x="107" y="8" width="485" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vTz-j8-psf" customClass="RatingControl" customModule="randomRestaurant" customModuleProvider="target">
+                                            <rect key="frame" x="107" y="38" width="280" height="44"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="vTz-j8-psf" secondAttribute="bottom" constant="-0.5" id="2T9-Kf-V30"/>
+                                        <constraint firstItem="vTz-j8-psf" firstAttribute="leading" secondItem="QMC-Hs-nKV" secondAttribute="leading" constant="107" id="6vB-Yk-xPh"/>
+                                        <constraint firstItem="vTz-j8-psf" firstAttribute="top" secondItem="QMC-Hs-nKV" secondAttribute="top" constant="38" id="9ov-3X-JtG"/>
+                                        <constraint firstItem="vTz-j8-psf" firstAttribute="leading" secondItem="Nxg-Wh-x2q" secondAttribute="leading" id="AZl-6J-YBj"/>
+                                        <constraint firstItem="eGN-xb-64B" firstAttribute="centerY" secondItem="QMC-Hs-nKV" secondAttribute="centerY" id="BR1-gl-c9P"/>
+                                        <constraint firstItem="eGN-xb-64B" firstAttribute="top" secondItem="QMC-Hs-nKV" secondAttribute="top" id="BZU-jj-f7k"/>
+                                        <constraint firstAttribute="trailing" secondItem="vTz-j8-psf" secondAttribute="trailing" constant="213" id="EQa-nU-aWI"/>
+                                        <constraint firstItem="eGN-xb-64B" firstAttribute="leading" secondItem="QMC-Hs-nKV" secondAttribute="leading" id="jo9-rS-5K9"/>
+                                        <constraint firstItem="vTz-j8-psf" firstAttribute="leading" secondItem="eGN-xb-64B" secondAttribute="trailing" constant="8" symbolic="YES" id="l8B-lP-574"/>
+                                        <constraint firstItem="vTz-j8-psf" firstAttribute="top" secondItem="Nxg-Wh-x2q" secondAttribute="bottom" constant="9" id="nIb-wP-bTc"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="Nxg-Wh-x2q" id="3mm-mt-59d"/>
+                                    <outlet property="photoImageView" destination="eGN-xb-64B" id="4eJ-PY-xZM"/>
+                                    <outlet property="ratingControl" destination="vTz-j8-psf" id="d0h-kG-sbA"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -265,4 +297,7 @@
             <point key="canvasLocation" x="1890" y="360"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Default.png" width="16" height="16"/>
+    </resources>
 </document>

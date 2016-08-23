@@ -32,7 +32,11 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         }
         locationsTable.reloadData()
     }
-    
+    /*
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+
+    }
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +46,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         locationsBrain.loadLocations()
         if let locations = locationsBrain.allLoadedLocations {
+            print("all locations loaded")
             allLocations = locations
         } else {
             print("locations not loaded")
@@ -125,14 +130,15 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        // TODO: Pass inputLocation.text to FoodCategoriesViewController then to BizPickerViewController
     }
-    */
+    
 
 }
