@@ -13,10 +13,10 @@ class FoodCategories {
     
     var name: String
     var photo: UIImage?
-    var rating: Float
+    var rating: Double
     
     // MARK: Initialization
-    init?(name: String, photo: UIImage?, rating: Float) {
+    init?(name: String, photo: UIImage?, rating: Double) {
         self.name = name
         self.photo = photo
         self.rating = rating

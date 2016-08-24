@@ -26,8 +26,8 @@ class FoodCategoriesViewController: UITableViewController {
     }
     
     func loadFoodCategories() {
-        let mexicanPhoto = UIImage(named: "filledStar")!
-        let mexicanFood = FoodCategories(name: "Mexican", photo: mexicanPhoto, rating: 4)!
+        let mexicanPhoto = UIImage(named: "mexican")!
+        let mexicanFood = FoodCategories(name: "Mexican", photo: mexicanPhoto, rating: 3.5)!
         foodCategories += [mexicanFood]
     }
 
@@ -58,8 +58,7 @@ class FoodCategoriesViewController: UITableViewController {
         // Configure the cell...
         cell.nameLabel.text = foodCategory.name
         cell.photoImageView.image = foodCategory.photo
-        //cell.ratingControl.rating = foodCategory.rating
-        
+        cell.ratingControl.setRating(foodCategory.rating)
 
         return cell
     }
