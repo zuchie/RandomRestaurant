@@ -11,7 +11,7 @@ import UIKit
 class RatingControl: UIView {
     
     // MARK: Properties
-    private var rating = 0.0
+    private var rating: Double?
     private var ratingButtons = [UIButton]()
     private var spacing = 5
     private var starCount = 5
@@ -61,9 +61,9 @@ class RatingControl: UIView {
         
         for _ in 0..<starCount {
             let button = UIButton()
-            if let image = getImage(rating) {
+            if let image = getImage(rating!) {
                 button.setImage(image, forState: .Normal)
-                rating -= 1
+                rating! -= 1.0
             }
             
             button.adjustsImageWhenHighlighted = false
@@ -72,11 +72,12 @@ class RatingControl: UIView {
             addSubview(button)
         }
     }
-    
-    func setRating(myRating: Double) {
-        rating = myRating
-        print("rating: \(rating)")
-        // Load stars after rating has been got.
-        setImages()
+    var bizRating: Double? {
+        didSet {
+            rating = bizRating
+            print("rating: \(rating!)")
+            // Load stars after rating has been got.
+            setImages()
+        }
     }
 }
