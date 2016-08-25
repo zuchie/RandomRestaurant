@@ -76,13 +76,18 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        print("table row count: \(filteredLocations.count)")
-        return filteredLocations.count
+        if section == 0 {
+            print("section 0")
+            return 1
+        } else {
+            print("section 1, table row count: \(filteredLocations.count)")
+            return filteredLocations.count
+        }
     }
 
     
@@ -92,7 +97,11 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
         // Configure the cell...
-        cell.textLabel!.text = filteredLocations[indexPath.row]
+        if indexPath.section == 0 {
+            cell.textLabel!.text = "Current place"
+        } else {
+            cell.textLabel!.text = filteredLocations[indexPath.row]
+        }
         print("cell got")
         return cell
     }
