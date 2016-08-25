@@ -27,7 +27,7 @@ class FoodCategoriesViewController: UITableViewController {
     
     func loadFoodCategories() {
         let mexicanPhoto = UIImage(named: "mexican")!
-        let mexicanFood = FoodCategories(name: "Mexican", photo: mexicanPhoto, rating: 2.0)!
+        let mexicanFood = FoodCategories(name: "Mexican", photo: mexicanPhoto, rating: 1.5)!
         foodCategories += [mexicanFood]
     }
 

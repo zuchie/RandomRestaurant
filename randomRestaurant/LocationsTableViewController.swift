@@ -14,6 +14,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var locationsTable: UITableView!
     
     private var locationsBrain = LocationsBrain()
+    private var currentPlace: CurrentPlace? = nil
     
     private var allLocations = [String]()
     private var filteredLocations = [String]()
@@ -50,6 +51,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
             allLocations = locations
         } else {
             print("locations not loaded")
+        }
+        
+        currentPlace = CurrentPlace() // Have to do initialization first.
+        currentPlace!.getCurrentPlace() {
+            let currentPlaceName = self.currentPlace!.currentPlaceName
+            let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
+            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
         }
         
         // Uncomment the following line to preserve selection between presentations
