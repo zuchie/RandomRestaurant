@@ -7,22 +7,28 @@
 //
 
 import UIKit
+import GooglePlaces
 
 class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 
+    // MARK: Properties
+    
     @IBOutlet weak var inputLocation: UISearchBar!
     @IBOutlet weak var locationsTable: UITableView!
     
-    private var locationsBrain = LocationsBrain()
+    //private var locationsBrain = LocationsBrain()
     private var currentPlace: CurrentPlace? = nil
     
     private var allLocations = [String]()
     private var filteredLocations = [String]()
     
+    private var fetcher: GMSAutocompleteFetcher?
+    
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         let inputText = searchText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         print("user typed string: \(inputText)")
         filteredLocations.removeAll(keepCapacity: false)
+        /*
         for location in allLocations {
             let myString = location as NSString
             let subStringRange: NSRange = myString.rangeOfString(inputText, options: NSStringCompareOptions.CaseInsensitiveSearch)
@@ -31,7 +37,8 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
                 filteredLocations.append(location)
             }
         }
-        locationsTable.reloadData()
+        */
+        fetcher?.sourceTextHasChanged(inputText)
     }
     /*
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
@@ -45,13 +52,15 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         locationsTable.hidden = false
         locationsTable.scrollEnabled = true
         
-        locationsBrain.loadLocations()
+        //locationsBrain.loadLocations()
+        /*
         if let locations = locationsBrain.allLoadedLocations {
             print("all locations loaded")
             allLocations = locations
         } else {
             print("locations not loaded")
         }
+        */
         
         currentPlace = CurrentPlace() // Have to do initialization first.
         currentPlace!.getCurrentPlace() {
@@ -59,6 +68,19 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
             let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
             print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
         }
+        
+        // Fetcher
+        let neBoundsCorner = CLLocationCoordinate2D(latitude: 50.090308, longitude: -66.966982)
+        let swBoundsCorner = CLLocationCoordinate2D(latitude: 22.567078, longitude: -125.75968)
+        let bounds = GMSCoordinateBounds(coordinate: neBoundsCorner, coordinate: swBoundsCorner)
+        
+        // Set up the autocomplete filter.
+        let filter = GMSAutocompleteFilter()
+        filter.type = .Establishment
+        
+        // Create the fetcher.
+        fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
+        fetcher?.delegate = self
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -159,3 +181,21 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     
 
 }
+
+extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
+    func didAutocompleteWithPredictions(predictions: [GMSAutocompletePrediction]) {
+        //var resultsStr = NSMutableString()
+        for prediction in predictions {
+            //resultsStr.appendFormat("%@\n", prediction.attributedPrimaryText)
+            let resultsStr = prediction.attributedFullText.string
+            filteredLocations.append(resultsStr)
+            locationsTable.reloadData()
+        }
+        
+    }
+    
+    func didFailAutocompleteWithError(error: NSError) {
+        print("autocomplete error: \(error.localizedDescription)")
+    }
+}
+
