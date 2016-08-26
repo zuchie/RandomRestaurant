@@ -76,7 +76,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         // Set up the autocomplete filter.
         let filter = GMSAutocompleteFilter()
-        filter.type = .Establishment
+        filter.type = .City
         
         // Create the fetcher.
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
