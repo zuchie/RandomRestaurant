@@ -75,7 +75,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Go!" id="Y89-jd-B1e">
                             <color key="tintColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" id="eTj-5H-yXj"/>
+                                <segue destination="BYZ-38-t0r" kind="show" identifier="" id="eTj-5H-yXj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -229,7 +229,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Next" id="2Gz-t5-hFn">
                             <color key="tintColor" red="0.90085078529999996" green="0.053155081107927042" blue="0.033352433886469912" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="H1W-kT-6DQ" kind="show" id="Bqz-sQ-159"/>
+                                <segue destination="H1W-kT-6DQ" kind="show" identifier="foodCategories" id="Bqz-sQ-159"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

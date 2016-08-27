@@ -11,7 +11,17 @@ import UIKit
 class FoodCategoriesViewController: UITableViewController {
     
     // MARK: Properties
-    var foodCategories = [FoodCategories]()
+    private var foodCategories = [FoodCategories]()
+    //private var nearbyBusiness = GetNearbyBusinesses()
+    private var foodCategory = ""
+    private var avgRating = 0.0
+    
+    func setAvgRating(rating: Double) {
+        avgRating = rating
+    }
+    func setFoodCategory(category: String) {
+        foodCategory = category
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +37,7 @@ class FoodCategoriesViewController: UITableViewController {
     
     func loadFoodCategories() {
         let mexicanPhoto = UIImage(named: "mexican")!
-        let mexicanFood = FoodCategories(name: "Mexican", photo: mexicanPhoto, rating: 1.5)!
+        let mexicanFood = FoodCategories(name: foodCategory, photo: mexicanPhoto, rating: avgRating)!
         foodCategories += [mexicanFood]
     }
 

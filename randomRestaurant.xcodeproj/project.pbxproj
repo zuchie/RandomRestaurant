@@ -12,8 +12,7 @@
 		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
 		B906DB7B1D66DD8D0021B025 /* FoodCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB7A1D66DD8D0021B025 /* FoodCategoriesViewController.swift */; };
 		B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB821D6990A60021B025 /* LocationsTableViewController.swift */; };
-		B906DB891D6AD0530021B025 /* LocationsBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB881D6AD0530021B025 /* LocationsBrain.swift */; };
-		B906DB8B1D6AE3E90021B025 /* gazetteer.txt in Resources */ = {isa = PBXBuildFile; fileRef = B906DB8A1D6AE3E90021B025 /* gazetteer.txt */; };
+		B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */; };
 		B906DB8F1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB8E1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift */; };
 		B906DB971D6C37260021B025 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB961D6C37260021B025 /* RatingControl.swift */; };
 		B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB981D6C3DBC0021B025 /* FoodCategories.swift */; };
@@ -36,8 +35,7 @@
 		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		B906DB7A1D66DD8D0021B025 /* FoodCategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesViewController.swift; sourceTree = "<group>"; };
 		B906DB821D6990A60021B025 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
-		B906DB881D6AD0530021B025 /* LocationsBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsBrain.swift; sourceTree = "<group>"; };
-		B906DB8A1D6AE3E90021B025 /* gazetteer.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gazetteer.txt; sourceTree = "<group>"; };
+		B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetNearbyBusinesses.swift; sourceTree = "<group>"; };
 		B906DB8E1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		B906DB961D6C37260021B025 /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		B906DB981D6C3DBC0021B025 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
@@ -106,9 +104,8 @@
 		B906DB7F1D698E630021B025 /* Locations */ = {
 			isa = PBXGroup;
 			children = (
-				B906DB8A1D6AE3E90021B025 /* gazetteer.txt */,
 				B906DB821D6990A60021B025 /* LocationsTableViewController.swift */,
-				B906DB881D6AD0530021B025 /* LocationsBrain.swift */,
+				B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */,
 			);
 			name = Locations;
 			sourceTree = "<group>";
@@ -230,7 +227,6 @@
 			files = (
 				B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */,
 				B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */,
-				B906DB8B1D6AE3E90021B025 /* gazetteer.txt in Resources */,
 				B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */,
 				B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */,
 			);
@@ -302,7 +298,7 @@
 				B91AC8691D4FE19C00B0476E /* RestaurantBrain.swift in Sources */,
 				B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */,
 				B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */,
-				B906DB891D6AD0530021B025 /* LocationsBrain.swift in Sources */,
+				B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */,
 				B9850F211D591ABF0063FC0F /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

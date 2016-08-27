@@ -15,11 +15,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var inputLocation: UISearchBar!
     @IBOutlet weak var locationsTable: UITableView!
-    
-    //private var locationsBrain = LocationsBrain()
+
     private var currentPlace: CurrentPlace? = nil
-    
-    //private var allLocations = [String]()
+
     private var filteredLocations = [[String](), [String]()]
     
     private var fetcher: GMSAutocompleteFetcher?
@@ -28,28 +26,35 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         case current, other
     }
     
+    private var nearbyBusinesses = GetNearbyBusinesses()
+    private var avgRating = 0.0
+    private var category = ""
+    
+    var rating: Double {
+        get {
+            return avgRating
+        }
+    }
+    
+    var foodCategory: String {
+        get {
+            return category
+        }
+    }
+    
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         let inputText = searchText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-        print("user typed string: \(inputText)")
+        //print("user typed string: \(inputText)")
         // Clear all other places appended.
         filteredLocations[places.other.rawValue].removeAll(keepCapacity: false)
-        /*
-        for location in allLocations {
-            let myString = location as NSString
-            let subStringRange: NSRange = myString.rangeOfString(inputText, options: NSStringCompareOptions.CaseInsensitiveSearch)
-            if subStringRange.location == 0 {
-                print("found \(location) from substring \(inputText), append \(location) to table view")
-                filteredLocations.append(location)
-            }
-        }
-        */
         fetcher?.sourceTextHasChanged(inputText)
     }
-    /*
+
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        
 
     }
-    */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,16 +63,6 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         locationsTable.scrollEnabled = true
         
         filteredLocations[places.current.rawValue].append("Current place")
-        
-        //locationsBrain.loadLocations()
-        /*
-        if let locations = locationsBrain.allLoadedLocations {
-            print("all locations loaded")
-            allLocations = locations
-        } else {
-            print("locations not loaded")
-        }
-        */
         
         currentPlace = CurrentPlace() // Have to do initialization first.
         currentPlace!.getCurrentPlace() {
@@ -89,6 +84,11 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
         fetcher?.delegate = self
         
+        let cacheSizeMemory = 1 * 1024 * 1024
+        let cacheSizeDisk = 2 * 1024 * 1024
+        let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
+        NSURLCache.setSharedURLCache(urlCache)
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -99,13 +99,14 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        NSURLCache.sharedURLCache().removeAllCachedResponses()
     }
 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        print("sections count: \(filteredLocations.count)")
+        //print("sections count: \(filteredLocations.count)")
         return filteredLocations.count
     }
 
@@ -116,22 +117,45 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        print("asking for a cell")
+        //print("asking for a cell")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
         // Configure the cell...
-        print("section: \(indexPath.section), row: \(indexPath.row)")
+        //print("section: \(indexPath.section), row: \(indexPath.row)")
         cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]
 
-        print("cell got")
+        //print("cell got")
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("touch to select cell")
+        //print("touch to select cell")
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
         inputLocation.text = selectedCell.textLabel!.text
+        
+        if inputLocation.text! == "Current place" {
+            nearbyBusinesses.place = currentPlace!.currentPlaceAddress
+        } else {
+            nearbyBusinesses.place = inputLocation.text
+        }
+        
+        // Get businesses from Yelp API v3.
+        nearbyBusinesses.getUrlParameters(nearbyBusinesses.place, categories: "mexican", radius: 40000, limit: 20, open_at: Int(NSDate().dateByAddingTimeInterval(12 * 3600).timeIntervalSince1970))
+        
+        nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
+        
+        // Use this in production
+        //let access_token = token.text!
+        
+        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g"
+        
+        nearbyBusinesses.makeUrlRequest(access_token) {
+            self.avgRating = self.nearbyBusinesses.rating
+            self.category = self.nearbyBusinesses.category
+            print("rating: \(self.avgRating)")
+            print("category: \(self.category)")
+        }
     }
     
     /*
@@ -176,7 +200,20 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        // TODO: Pass inputLocation.text to FoodCategoriesViewController then to BizPickerViewController
+        var destinationVC = segue.destinationViewController
+        if let navCtrl = destinationVC as? UINavigationController {
+            destinationVC = navCtrl.visibleViewController ?? destinationVC
+        }
+        if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
+            if let id = segue.identifier {
+                if id == "foodCategories" {
+                    print("avg rating: \(self.avgRating), category: \(self.category)")
+                    foodCategoriesVC.setAvgRating(self.avgRating)
+                    foodCategoriesVC.setFoodCategory(self.category)
+                }
+            }
+        }
+
     }
     
 
