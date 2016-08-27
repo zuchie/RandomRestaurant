@@ -19,15 +19,20 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     //private var locationsBrain = LocationsBrain()
     private var currentPlace: CurrentPlace? = nil
     
-    private var allLocations = [String]()
-    private var filteredLocations = [String]()
+    //private var allLocations = [String]()
+    private var filteredLocations = [[String](), [String]()]
     
     private var fetcher: GMSAutocompleteFetcher?
+    
+    private enum places: Int {
+        case current, other
+    }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         let inputText = searchText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         print("user typed string: \(inputText)")
-        filteredLocations.removeAll(keepCapacity: false)
+        // Clear all other places appended.
+        filteredLocations[places.other.rawValue].removeAll(keepCapacity: false)
         /*
         for location in allLocations {
             let myString = location as NSString
@@ -51,6 +56,8 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         inputLocation.delegate = self
         locationsTable.hidden = false
         locationsTable.scrollEnabled = true
+        
+        filteredLocations[places.current.rawValue].append("Current place")
         
         //locationsBrain.loadLocations()
         /*
@@ -98,18 +105,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        print("sections count: \(filteredLocations.count)")
+        return filteredLocations.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if section == 0 {
-            print("section 0")
-            return 1
-        } else {
-            print("section 1, table row count: \(filteredLocations.count)")
-            return filteredLocations.count
-        }
+        return filteredLocations[section].count
     }
 
     
@@ -119,11 +121,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
         // Configure the cell...
-        if indexPath.section == 0 {
-            cell.textLabel!.text = "Current place"
-        } else {
-            cell.textLabel!.text = filteredLocations[indexPath.row]
-        }
+        print("section: \(indexPath.section), row: \(indexPath.row)")
+        cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]
+
         print("cell got")
         return cell
     }
@@ -188,7 +188,7 @@ extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
         for prediction in predictions {
             //resultsStr.appendFormat("%@\n", prediction.attributedPrimaryText)
             let resultsStr = prediction.attributedFullText.string
-            filteredLocations.append(resultsStr)
+            filteredLocations[places.other.rawValue].append(resultsStr)
             locationsTable.reloadData()
         }
         
