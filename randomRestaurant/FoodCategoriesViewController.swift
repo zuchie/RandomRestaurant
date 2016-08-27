@@ -16,10 +16,8 @@ class FoodCategoriesViewController: UITableViewController {
     private var foodCategory = ""
     private var avgRating = 0.0
     
-    func setAvgRating(rating: Double) {
+    func setAvgRatingAndCategory(rating: Double, category: String) {
         avgRating = rating
-    }
-    func setFoodCategory(category: String) {
         foodCategory = category
     }
 

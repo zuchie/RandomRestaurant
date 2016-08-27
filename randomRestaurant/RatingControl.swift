@@ -75,7 +75,7 @@ class RatingControl: UIView {
     var bizRating: Double? {
         didSet {
             rating = bizRating
-            print("rating: \(rating!)")
+            //print("rating: \(rating!)")
             // Load stars after rating has been got.
             setImages()
         }

@@ -122,7 +122,7 @@ class GetNearbyBusinesses {
     func makeBusinessesSearchUrl(baseUrl: String) {
         businessesSearchUrl = baseUrl
         
-        businessesSearchUrl += urlParams.location != nil ? "&location=\(urlParams.location!)" : ""
+        businessesSearchUrl += urlParams.location != nil ? "location=\(urlParams.location!)" : ""
         businessesSearchUrl += urlParams.categories != nil ? "&categories=\(urlParams.categories!)" : ""
         businessesSearchUrl += urlParams.radius != nil ? "&radius=\(urlParams.radius!)" : ""
         businessesSearchUrl += urlParams.limit != nil ? "&limit=\(urlParams.limit!)" : ""
@@ -146,11 +146,6 @@ class GetNearbyBusinesses {
                     ratingSum += biz["rating"] as! Double
                 }
                 avgRating = ratingSum / Double(businesses.count)
-                //let sortedBusinesses = sortBusinesses(convertedJsonIntoDict["businesses"] as! NSArray)
-                //print("sorted biz: \(sortedBusinesses)")
-                
-                //pickedBusiness = pickRandomBusiness(sortedBusinesses)
-                //print("picked biz: \(self.pickedBusiness)")
             }
         } catch let error as NSError {
             print(error.localizedDescription)

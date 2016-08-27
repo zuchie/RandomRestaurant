@@ -145,9 +145,6 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
         
-        // Use this in production
-        //let access_token = token.text!
-        
         let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g"
         
         nearbyBusinesses.makeUrlRequest(access_token) {
@@ -208,8 +205,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
             if let id = segue.identifier {
                 if id == "foodCategories" {
                     print("avg rating: \(self.avgRating), category: \(self.category)")
-                    foodCategoriesVC.setAvgRating(self.avgRating)
-                    foodCategoriesVC.setFoodCategory(self.category)
+                    foodCategoriesVC.setAvgRatingAndCategory(self.avgRating, category: self.category)
                 }
             }
         }
