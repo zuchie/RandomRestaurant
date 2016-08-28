@@ -15,13 +15,13 @@ class FoodCategoriesViewController: UITableViewController {
     
     private var foodCategoriesName = ["Mexican", "Chinese", "Italian", "American", "French"]
     
-    private var location = ""
     private var category = ""
     
-    func setLocation(place: String) {
-        location = place
+    var urlQueryParameters: UrlQueryParameters?
+    func setUrlQueryParameters(urlParam: UrlQueryParameters) {
+        urlQueryParameters = urlParam
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,11 +71,10 @@ class FoodCategoriesViewController: UITableViewController {
         
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as! FoodCategoriesTableViewCell
         category = selectedCell.nameLabel.text!
-        print("category: \(category), location: \(location)")
     }
     
     // MARK: - Navigation
-    /*
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         var destinationVC = segue.destinationViewController
@@ -85,12 +84,12 @@ class FoodCategoriesViewController: UITableViewController {
         if let timeVC = destinationVC as? TimeViewController {
             if let id = segue.identifier {
                 if id == "time" {
-                    timeVC.setLocationAndCategory(location, category: category)
+                    urlQueryParameters?.category = category
+                    timeVC.setUrlQueryParameters(urlQueryParameters!)
                 }
             }
         }
         
     }
-    */
 
 }

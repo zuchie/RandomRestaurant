@@ -15,6 +15,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var inputLocation: UISearchBar!
     @IBOutlet weak var locationsTable: UITableView!
+    
+    // Search radius: 40000 meters(25 mi), return 20 businesses.
+    var urlQueryParameters = UrlQueryParameters(location: "", category: "", radius: 40000, limit: 20, openAt: 0)
 
     private var currentPlace: CurrentPlace? = nil
 
@@ -114,7 +117,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
         
-        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g"
+        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU"
         
         nearbyBusinesses.makeUrlRequest(access_token) {
             self.avgRating = self.nearbyBusinesses.rating
@@ -138,14 +141,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
                 if id == "foodCategories" {
                     // If no input in place search bar, use current place.
                     place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
-                    foodCategoriesVC.setLocation(place!)
+                    
+                    urlQueryParameters?.location = place!
+                    foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
                 }
             }
         }
-
     }
-    
-
 }
 
 extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {

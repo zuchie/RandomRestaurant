@@ -70,10 +70,10 @@
             </objects>
             <point key="canvasLocation" x="3326" y="360"/>
         </scene>
-        <!--View Controller-->
+        <!--When to eat?-->
         <scene sceneID="aoh-3M-TKJ">
             <objects>
-                <viewController id="rZU-dN-vl8" sceneMemberID="viewController">
+                <viewController id="rZU-dN-vl8" customClass="TimeViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="KHU-kh-F4x"/>
                         <viewControllerLayoutGuide type="bottom" id="VwK-fL-ycL"/>
@@ -82,7 +82,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="13E-fX-soO">
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="13E-fX-soO">
                                 <rect key="frame" x="0.0" y="192" width="600" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="494037125.498281">
                                     <!--2016-08-28 00:32:05 +0000-->
@@ -90,11 +90,55 @@
                             </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="13E-fX-soO" firstAttribute="leading" secondItem="oZA-Jl-2yQ" secondAttribute="leading" id="0Q2-0N-LeR"/>
+                            <constraint firstItem="13E-fX-soO" firstAttribute="centerY" secondItem="oZA-Jl-2yQ" secondAttribute="centerY" id="7tO-Ho-LxN"/>
+                            <constraint firstAttribute="trailing" secondItem="13E-fX-soO" secondAttribute="trailing" id="n2i-Nj-n12"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="When to eat?" prompt="Now? 30min later?" id="ylx-Ub-Xio">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="tCZ-5d-hgi"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="Pkb-5k-wu1">
+                            <connections>
+                                <segue destination="vAp-XE-6Pg" kind="show" identifier="rating" id="WhQ-fi-JyS"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="datePicker" destination="13E-fX-soO" id="c2p-pR-tOb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ct-75-3qT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4034" y="360"/>
+        </scene>
+        <!--How good to eat?-->
+        <scene sceneID="oRf-90-amh">
+            <objects>
+                <viewController id="vAp-XE-6Pg" customClass="RatingViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GxQ-I6-m89"/>
+                        <viewControllerLayoutGuide type="bottom" id="OWJ-eP-SFb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zhQ-xk-Sj0">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bkZ-uR-jmD" customClass="RatingControl" customModule="randomRestaurant" customModuleProvider="target">
+                                <rect key="frame" x="180" y="236" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="How good to eat?" prompt="5? Above 3.5? " id="7m8-at-NRV">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="AmP-7y-wdY"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="IOq-mL-h8d"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZET-NZ-dcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4682" y="351"/>
         </scene>
         <!--Slot machine-->
         <scene sceneID="tne-QT-ifu">
@@ -206,7 +250,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4701" y="340"/>
+            <point key="canvasLocation" x="5341" y="350"/>
         </scene>
         <!--Where to eat?-->
         <scene sceneID="C3e-TK-HNr">
@@ -269,10 +313,10 @@
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DhV-hI-hxV">
                                 <rect key="frame" x="20" y="69" width="560" height="571"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
                                         <rect key="frame" x="0.0" y="0.0" width="560" height="535"/>
                                     </mapView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-XW-9uC">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-XW-9uC">
                                         <rect key="frame" x="0.0" y="535" width="560" height="36"/>
                                         <color key="backgroundColor" red="0.87031659029999997" green="0.87031659029999997" blue="0.87031659029999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
@@ -297,7 +341,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aEl-Fw-Zhq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5384" y="340"/>
+            <point key="canvasLocation" x="6009" y="350"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5NY-LU-9Bf">
