@@ -13,16 +13,14 @@ class FoodCategories {
     
     var name: String
     var photo: UIImage?
-    var rating: Double
     
     // MARK: Initialization
-    init?(name: String, photo: UIImage?, rating: Double) {
+    init?(name: String, photo: UIImage?) {
         self.name = name
         self.photo = photo
-        self.rating = rating
         
         // Initialization should fail if there is no name or if the rating is negative.
-        if name.isEmpty || rating < 0 {
+        if name.isEmpty {
             return nil
         }
     }
