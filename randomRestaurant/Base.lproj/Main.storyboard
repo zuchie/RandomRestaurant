@@ -124,17 +124,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bkZ-uR-jmD" customClass="RatingControl" customModule="randomRestaurant" customModuleProvider="target">
-                                <rect key="frame" x="180" y="236" width="240" height="128"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ICx-Fm-f9c">
+                                <rect key="frame" x="40" y="275" width="520" height="50"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bkZ-uR-jmD" customClass="RatingControl" customModule="randomRestaurant" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="3" width="240" height="44"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="centerX" secondItem="zhQ-xk-Sj0" secondAttribute="centerX" id="4MG-uE-IjM"/>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="top" secondItem="GxQ-I6-m89" secondAttribute="bottom" constant="181" id="EP3-QE-Ojl"/>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leadingMargin" constant="20" id="gR2-I1-TGI"/>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="centerY" secondItem="zhQ-xk-Sj0" secondAttribute="centerY" id="nRU-hO-2E4"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="How good to eat?" prompt="5? Above 3.5? " id="7m8-at-NRV">
+                    <navigationItem key="navigationItem" title="How good to eat?" prompt="rating = 5? rating &gt; 3.5? " id="7m8-at-NRV">
                         <barButtonItem key="backBarButtonItem" title="Back" id="AmP-7y-wdY"/>
                         <barButtonItem key="rightBarButtonItem" title="Next" id="IOq-mL-h8d"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="rating" destination="bkZ-uR-jmD" id="raT-bH-n8b"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZET-NZ-dcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

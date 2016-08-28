@@ -23,6 +23,7 @@ class RatingControl: UIView {
     // MARK: Initialization
     override func layoutSubviews() {
         let buttonSize = Int(frame.size.height)
+        print("button size: \(buttonSize)")
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         
         for (index, button) in ratingButtons.enumerate() {

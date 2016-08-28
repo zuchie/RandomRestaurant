@@ -11,6 +11,7 @@ import UIKit
 class RatingViewController: UIViewController {
 
     // MARK: Properties
+    @IBOutlet weak var rating: RatingControl!
     
     var urlQueryParameters: UrlQueryParameters?
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
@@ -21,7 +22,7 @@ class RatingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        rating.bizRating = 3.5
     }
 
     override func didReceiveMemoryWarning() {
