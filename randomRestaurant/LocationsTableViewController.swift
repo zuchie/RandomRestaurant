@@ -64,7 +64,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         // Create the fetcher.
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
         fetcher?.delegate = self
-        
+    
         /*
         // Create cache to save URL query data.
         let cacheSizeMemory = 1 * 1024 * 1024
@@ -136,11 +136,8 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
             if let id = segue.identifier {
                 if id == "foodCategories" {
-                    if inputLocation.text! == "Current place" {
-                        place = currentPlace!.currentPlaceAddress
-                    } else {
-                        place = inputLocation.text
-                    }
+                    // If no input in place search bar, use current place.
+                    place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
                     foodCategoriesVC.setLocation(place!)
                 }
             }
