@@ -16,13 +16,12 @@ class RatingViewController: UIViewController {
     var urlQueryParameters: UrlQueryParameters?
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
-        print("category: \(urlQueryParameters?.category), location: \(urlQueryParameters?.location), radius: \(urlQueryParameters?.radius), limit: \(urlQueryParameters?.limit), time: \(urlQueryParameters?.openAt)")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        rating.bizRating = 3.5
+        //rating.bizRating = 3.5
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,14 +30,23 @@ class RatingViewController: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        let destinationVC = segue.destinationViewController
+        
+        if let slotMachineVC = destinationVC as? MainViewController {
+            if let id = segue.identifier {
+                if id == "slotMachine" {
+                    slotMachineVC.getRatingBar(rating.getRating())
+                    slotMachineVC.setUrlQueryParameters(urlQueryParameters!)
+                }
+            }
+        }
     }
-    */
+    
 
 }

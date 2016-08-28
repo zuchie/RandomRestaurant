@@ -145,7 +145,11 @@
                     </view>
                     <navigationItem key="navigationItem" title="How good to eat?" prompt="rating = 5? rating &gt; 3.5? " id="7m8-at-NRV">
                         <barButtonItem key="backBarButtonItem" title="Back" id="AmP-7y-wdY"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="IOq-mL-h8d"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="IOq-mL-h8d">
+                            <connections>
+                                <segue destination="BYZ-38-t0r" kind="show" identifier="slotMachine" id="YmZ-fa-QkO"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="rating" destination="bkZ-uR-jmD" id="raT-bH-n8b"/>
@@ -326,13 +330,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DhV-hI-hxV">
-                                <rect key="frame" x="20" y="69" width="560" height="571"/>
+                                <rect key="frame" x="20" y="69" width="560" height="497"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="535"/>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="497"/>
                                     </mapView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-XW-9uC">
-                                        <rect key="frame" x="0.0" y="535" width="560" height="36"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-XW-9uC">
+                                        <rect key="frame" x="0.0" y="497" width="560" height="0.0"/>
                                         <color key="backgroundColor" red="0.87031659029999997" green="0.87031659029999997" blue="0.87031659029999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

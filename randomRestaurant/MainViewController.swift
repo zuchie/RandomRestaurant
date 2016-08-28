@@ -42,6 +42,19 @@ class MainViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         case rating = 1
     }
     
+    private var ratingBar = 0.0
+    
+    var urlQueryParameters: UrlQueryParameters?
+    func setUrlQueryParameters(urlParam: UrlQueryParameters) {
+        urlQueryParameters = urlParam
+        print("category: \(urlQueryParameters?.category), location: \(urlQueryParameters?.location), radius: \(urlQueryParameters?.radius), limit: \(urlQueryParameters?.limit), time: \(urlQueryParameters?.openAt)")
+    }
+    
+    func getRatingBar(rating: Double) {
+        ratingBar = rating
+        print("rating bar: \(ratingBar)")
+    }
+    
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         let inputText = searchText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         print("user typed string: \(inputText)")
