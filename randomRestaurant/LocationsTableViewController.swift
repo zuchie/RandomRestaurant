@@ -42,6 +42,12 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Allocate cache here for URL responses so that cache data won't get lost when view is backed. 
+        let cacheSizeMemory = 1 * 1024 * 1024
+        let cacheSizeDisk = 2 * 1024 * 1024
+        let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
+        NSURLCache.setSharedURLCache(urlCache)
+        
         inputLocation.delegate = self
         locationsTable.hidden = false
         locationsTable.scrollEnabled = true
@@ -72,7 +78,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
+        NSURLCache.sharedURLCache().removeAllCachedResponses()
     }
 
     // MARK: - Table view data source

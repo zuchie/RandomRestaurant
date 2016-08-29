@@ -28,18 +28,18 @@ class SlotMachineViewController: UIViewController {
     
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
-        print("category: \(urlQueryParameters?.category), location: \(urlQueryParameters?.location), radius: \(urlQueryParameters?.radius), limit: \(urlQueryParameters?.limit), time: \(urlQueryParameters?.openAt)")
+        print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
     }
     
     func getRatingBar(rating: Double) {
         ratingBar = rating
-        print("rating bar: \(ratingBar)")
+        //print("rating bar: \(ratingBar)")
     }
 
     
     @IBAction func start() {
         
-        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g"
+        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU"
         
         bizPicked.text = nil // Reset for following queries
         
@@ -51,7 +51,7 @@ class SlotMachineViewController: UIViewController {
         nearbyBusinesses.makeUrlRequest(access_token) {
             
             if let returnedBusiness = self.nearbyBusinesses.result {
-                print("business picked: \(returnedBusiness)")
+                //print("business picked: \(returnedBusiness)")
                 
                 self.bizName = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "name")
                 self.bizPrice = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "price")
@@ -75,17 +75,10 @@ class SlotMachineViewController: UIViewController {
         super.viewDidLoad()
 
         nearbyBusinesses.setRatingBar(ratingBar)
-        
-        let cacheSizeMemory = 1 * 1024 * 1024
-        let cacheSizeDisk = 2 * 1024 * 1024
-        let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
-        NSURLCache.setSharedURLCache(urlCache)
-        
+
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-        NSURLCache.sharedURLCache().removeAllCachedResponses()
     }
     
     /*
