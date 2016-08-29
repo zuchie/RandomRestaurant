@@ -21,7 +21,6 @@ class RatingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //rating.bizRating = 3.5
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,12 +32,11 @@ class RatingViewController: UIViewController {
     
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let destinationVC = segue.destinationViewController
         
-        if let slotMachineVC = destinationVC as? MainViewController {
+        if let slotMachineVC = destinationVC as? SlotMachineViewController {
             if let id = segue.identifier {
                 if id == "slotMachine" {
                     slotMachineVC.getRatingBar(rating.getRating())

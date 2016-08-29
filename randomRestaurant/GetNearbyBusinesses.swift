@@ -11,32 +11,7 @@ import Foundation
 class GetNearbyBusinesses {
     
     // MARK: Properties
-    private var location: String?
-    private var avgRating = 0.0
-    
-    var rating: Double {
-        get {
-            //print("average rating: \(avgRating)")
-            return avgRating
-        }
-    }
-    var category: String {
-        get {
-            return urlParams.categories ?? "No food category found"
-        }
-    }
-    
-    var place: String? {
 
-        didSet {
-            if let loc = place {
-                print("search businesses near: \(loc)")
-                location = loc
-            } else {
-                print("No place has been input")
-            }
-        }
-    }
     private var urlParams = UrlParameters()
     private var businessesSearchUrl = String()
     
@@ -47,14 +22,30 @@ class GetNearbyBusinesses {
         var limit: Int?
         var open_at: Int?
     }
-    /*
+    
+    private var pickedBusiness: NSDictionary? = nil
+    private var ratingBar: Double?
+
+    var result: NSDictionary? {
+        get {
+            //print("picked business: \(self.pickedBusiness)")
+            return pickedBusiness
+        }
+        set {
+            pickedBusiness = newValue
+        }
+    }
+    
+    func setRatingBar(ratingBar: Double) {
+        self.ratingBar = ratingBar
+    }
+    
     private enum OperationTypes {
         case GetStrByKey((NSDictionary, String) -> String)
         case GetIntByKey((NSDictionary, String) -> String)
         case GetDoubleByKey((NSDictionary, String) -> String)
     }
-    */
-    /*
+
     // Get value by key and convert value into string or empty string if key doesn't exist.
     private var operations: [String: OperationTypes] = [
         "name": OperationTypes.GetStrByKey {
@@ -80,9 +71,8 @@ class GetNearbyBusinesses {
             }
         }
     ]
-    */
-    /*
-    func performOperations(dic: NSDictionary, key: String) -> String {
+
+    func getReturnedBusiness(dic: NSDictionary, key: String) -> String {
         var bizParam = ""
         if let op = operations[key] {
             switch op {
@@ -96,7 +86,6 @@ class GetNearbyBusinesses {
         }
         return bizParam
     }
-    */
     
     // MARK: Helper functions
     func getUrlParameters(location: String?, categories: String?, radius: Int?, limit: Int?, open_at: Int?) {
@@ -122,7 +111,7 @@ class GetNearbyBusinesses {
     func makeBusinessesSearchUrl(baseUrl: String) {
         businessesSearchUrl = baseUrl
         
-        businessesSearchUrl += urlParams.location != nil ? "location=\(urlParams.location!)" : ""
+        businessesSearchUrl += urlParams.location != nil ? "&location=\(urlParams.location!)" : ""
         businessesSearchUrl += urlParams.categories != nil ? "&categories=\(urlParams.categories!)" : ""
         businessesSearchUrl += urlParams.radius != nil ? "&radius=\(urlParams.radius!)" : ""
         businessesSearchUrl += urlParams.limit != nil ? "&limit=\(urlParams.limit!)" : ""
@@ -130,29 +119,6 @@ class GetNearbyBusinesses {
         // Convert string to URL query allowed string to escape spaces.
         businessesSearchUrl = businessesSearchUrl.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
     }
-
-    private func getAvgRating(data: NSData?) -> Void {
-        // Convert server json response to NSDictionary
-        do {
-            if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
-                
-                // Print out dictionary
-                //print(convertedJsonIntoDict)
-                //self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
-                var ratingSum = 0.0
-                let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
-                for business in businesses.enumerate() {
-                    let biz = business.element as! NSDictionary
-                    ratingSum += biz["rating"] as! Double
-                }
-                avgRating = ratingSum / Double(businesses.count)
-            }
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-        
-    }
-
     
     // Make own completionHandler function.
     typealias completion = () -> Void
@@ -181,21 +147,72 @@ class GetNearbyBusinesses {
                 // Print out response string
                 //let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 //print("responseString = \(responseString)")
+                
                 let cacheResponse = NSCachedURLResponse(response: response!, data: data!)
                 NSURLCache.sharedURLCache().storeCachedResponse(cacheResponse, forRequest: request)
                 
-                self.getAvgRating(data)
+                self.sortAndRandomlyPickBiz(data)
                 print("non-cached response data")
                 print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
                 completionHanlder()
             }
             task.resume()
         } else {
-            self.getAvgRating(cachedURLResponse?.data)
+            self.sortAndRandomlyPickBiz(cachedURLResponse?.data)
             print("cached response data")
             print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
             completionHanlder()
         }
+    }
+
+    private func pickRandomBusiness(sortedBusinesses: NSArray) -> NSDictionary? {
+        var index = 0
+        for business in sortedBusinesses {
+            let businessRating = business["rating"] as! Double
+            // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
+            if businessRating < ratingBar! || business as! NSObject == sortedBusinesses.lastObject as! NSObject {
+                index = sortedBusinesses.indexOfObject(business)
+                //print("index: \(index)")
+                break
+            }
+            // TODO: Another way to sort, but not work, why?
+            //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 })
+            //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
+        }
+        // Randomly pick one business from all qualified businesses(pick one from element < index). If no qualified biz, return nil.
+        if index == 0 {
+            return nil
+        }
+        let randomNumber = Int(arc4random_uniform(UInt32(index)))
+        print("total qualified biz: \(index), random no. \(randomNumber)")
+        return sortedBusinesses[randomNumber] as? NSDictionary
+    }
+    
+    private func sortAndRandomlyPickBiz(data: NSData?) -> Void {
+        // Convert server json response to NSDictionary
+        do {
+            if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                
+                // Print out dictionary
+                //print(convertedJsonIntoDict)
+                //self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
+                
+                //let businesses = convertedJsonIntoDict["businesses"]! as! NSArray
+                let sortedBusinesses = sortBusinesses(convertedJsonIntoDict["businesses"] as! NSArray)
+                //print("sorted biz: \(sortedBusinesses)")
+                
+                pickedBusiness = pickRandomBusiness(sortedBusinesses)
+                //print("picked biz: \(self.pickedBusiness)")
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+        
+    }
+
+    private func sortBusinesses(businesses: NSArray) -> NSArray {
+        return businesses.sort({$0["rating"] as! Double == $1["rating"] as! Double ?
+            $0["review_count"] as! Int > $1["review_count"] as! Int : $0["rating"] as! Double > $1["rating"] as! Double})
     }
 
     

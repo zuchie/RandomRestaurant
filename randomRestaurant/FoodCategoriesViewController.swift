@@ -70,7 +70,8 @@ class FoodCategoriesViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as! FoodCategoriesTableViewCell
-        category = selectedCell.nameLabel.text!
+        // Food category has to be lower case for API to recognize.
+        category = selectedCell.nameLabel.text!.lowercaseString
     }
     
     // MARK: - Navigation

@@ -67,21 +67,12 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         // Create the fetcher.
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
         fetcher?.delegate = self
-    
-        /*
-        // Create cache to save URL query data.
-        let cacheSizeMemory = 1 * 1024 * 1024
-        let cacheSizeDisk = 2 * 1024 * 1024
-        let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
-        NSURLCache.setSharedURLCache(urlCache)
-        */
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
-        // Dispose of any resources that can be recreated.
-        //NSURLCache.sharedURLCache().removeAllCachedResponses()
+
     }
 
     // MARK: - Table view data source
@@ -110,22 +101,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
         inputLocation.text = selectedCell.textLabel!.text
-        
-        /*
-        // Get businesses from Yelp API v3.
-        nearbyBusinesses.getUrlParameters(nearbyBusinesses.place, categories: "mexican", radius: 40000, limit: 20, open_at: Int(NSDate().dateByAddingTimeInterval(12 * 3600).timeIntervalSince1970))
-        
-        nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
-        
-        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU"
-        
-        nearbyBusinesses.makeUrlRequest(access_token) {
-            self.avgRating = self.nearbyBusinesses.rating
-            self.category = self.nearbyBusinesses.category
-            print("rating: \(self.avgRating)")
-            print("category: \(self.category)")
-        }
-        */
+
     }
     
     // MARK: - Navigation
