@@ -20,6 +20,8 @@
 		B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA01D72729A0021B025 /* TimeViewController.swift */; };
 		B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */; };
 		B906DBA61D728CAC0021B025 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA51D728CAC0021B025 /* RatingViewController.swift */; };
+		B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */; };
+		B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */; };
 		B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8561D4EAC4600B0476E /* AppDelegate.swift */; };
 		B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */; };
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
@@ -45,6 +47,8 @@
 		B906DBA01D72729A0021B025 /* TimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeViewController.swift; sourceTree = "<group>"; };
 		B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlQueryParameters.swift; sourceTree = "<group>"; };
 		B906DBA51D728CAC0021B025 /* RatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
+		B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickedBusinessLocation.swift; sourceTree = "<group>"; };
+		B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapViewController.swift; sourceTree = "<group>"; };
 		B91AC8531D4EAC4600B0476E /* randomRestaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = randomRestaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91AC8561D4EAC4600B0476E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +85,7 @@
 			children = (
 				B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */,
 				B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */,
+				B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -91,6 +96,7 @@
 				B906DB5A1D5C5F880021B025 /* MapBrain.swift */,
 				B9850F201D591ABF0063FC0F /* MapViewController.swift */,
 				B906DB5C1D5C8E490021B025 /* Annotation.swift */,
+				B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -317,10 +323,12 @@
 				B906DB7B1D66DD8D0021B025 /* FoodCategoriesViewController.swift in Sources */,
 				B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */,
 				B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */,
+				B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */,
 				B906DB9E1D6ED7A60021B025 /* CurrentPlace.swift in Sources */,
 				B906DBA61D728CAC0021B025 /* RatingViewController.swift in Sources */,
 				B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */,
 				B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */,
+				B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */,
 				B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */,
 				B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */,
 				B9850F211D591ABF0063FC0F /* MapViewController.swift in Sources */,

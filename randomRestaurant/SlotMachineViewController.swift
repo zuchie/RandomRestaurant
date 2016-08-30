@@ -11,7 +11,6 @@ import CoreLocation
 
 class SlotMachineViewController: UIViewController {
 
-    @IBOutlet weak var token: UITextField!
     @IBOutlet weak var bizPicked: UILabel!
     
     private var nearbyBusinesses = GetNearbyBusinesses()
@@ -22,6 +21,8 @@ class SlotMachineViewController: UIViewController {
     private var bizPrice = ""
     private var bizRating = ""
     private var bizReviewCount = ""
+    private var bizLocationObj: PickedBusinessLocation?
+    private var bizAddress = ""
     
     
     var urlQueryParameters: UrlQueryParameters?
@@ -33,7 +34,6 @@ class SlotMachineViewController: UIViewController {
     
     func getRatingBar(rating: Double) {
         ratingBar = rating
-        //print("rating bar: \(ratingBar)")
     }
 
     
@@ -58,6 +58,16 @@ class SlotMachineViewController: UIViewController {
                 self.bizRating = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "rating")
                 self.bizReviewCount = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "review_count")
                 
+                // Get picked business location object and convert to address string.
+                if let pickedBizLocationObj = returnedBusiness["location"] as? NSDictionary {
+                        self.bizLocationObj = PickedBusinessLocation(businessObj: pickedBizLocationObj)
+                    
+                        self.bizAddress = self.bizLocationObj!.getBizAddressString()
+                        print("biz location: \(self.bizAddress)")
+                } else {
+                    print("No location information of picked business")
+                }
+                
                 dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName), \(self.bizPrice), \(self.bizRating), \(self.bizReviewCount)"
                 })
@@ -81,28 +91,22 @@ class SlotMachineViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    /*
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        var destinationVC = segue.destinationViewController
-        if let navCon = destinationVC as? UINavigationController {
-            destinationVC = navCon.visibleViewController ?? destinationVC
-        }
-        if let mapVC = destinationVC as? MapViewController {
+        let destinationVC = segue.destinationViewController
+        
+        if let mapVC = destinationVC as? GoogleMapViewController {
             if let id = segue.identifier {
-                if id == "map" {
-                    if myLocation != nil {
-                        mapVC.setMyLocation(CLLocationCoordinate2D(latitude: myLocation!.latitude, longitude: myLocation!.longitude))
-                    }
-                    if bizLocation != nil {
-                        mapVC.setBizLocation(CLLocationCoordinate2D(latitude: bizLocation!.latitude, longitude: bizLocation!.longitude))
+                if id == "googleMap" {
+                    if !bizAddress.isEmpty {
+                        mapVC.setBizLocation(bizAddress)
                     }
                 }
             }
         }
     }
-    */
+    
 }
 
