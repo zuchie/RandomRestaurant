@@ -23,6 +23,7 @@ class SlotMachineViewController: UIViewController {
     private var bizReviewCount = ""
     private var bizLocationObj: PickedBusinessLocation?
     private var bizAddress = ""
+    private var bizCoordinate2D: CLLocationCoordinate2D?
     
     
     var urlQueryParameters: UrlQueryParameters?
@@ -68,6 +69,11 @@ class SlotMachineViewController: UIViewController {
                     print("No location information of picked business")
                 }
                 
+                if let pickedBusinessCoordinatesObj = returnedBusiness["coordinates"] as? NSDictionary {
+                    self.bizCoordinate2D = CLLocationCoordinate2DMake((pickedBusinessCoordinatesObj["latitude"] as? CLLocationDegrees)!, (pickedBusinessCoordinatesObj["longitude"] as? CLLocationDegrees)!)
+                    print("biz latitude: \(self.bizCoordinate2D!.latitude), longitude: \(self.bizCoordinate2D!.longitude)")
+                }
+                
                 dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName), \(self.bizPrice), \(self.bizRating), \(self.bizReviewCount)"
                 })
@@ -100,8 +106,10 @@ class SlotMachineViewController: UIViewController {
         if let mapVC = destinationVC as? GoogleMapViewController {
             if let id = segue.identifier {
                 if id == "googleMap" {
-                    if !bizAddress.isEmpty {
+                    if !bizAddress.isEmpty && bizCoordinate2D != nil {
                         mapVC.setBizLocation(bizAddress)
+                        mapVC.setBizCoordinate2D(bizCoordinate2D!)
+                        mapVC.setBizName(bizName)
                     }
                 }
             }
