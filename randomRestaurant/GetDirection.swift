@@ -11,8 +11,19 @@ import GoogleMaps
 
 class GetDirection {
     
+    // MARK: Properties.
+    
     private var googleDirectionUrl: String?
     private var routesPoints = [String]()
+    private var distances = [String]()
+    private var durations = [String]()
+    struct Bounds {
+        var northeast: CLLocationCoordinate2D?
+        var southwest: CLLocationCoordinate2D?
+    }
+    
+    private var viewport = Bounds()
+    
     // MARK: Helper functions.
     
     func makeGoogleDirectionsUrl(baseUrl: String, origin: CLLocationCoordinate2D, dest: CLLocationCoordinate2D, key: String) {
@@ -30,7 +41,34 @@ class GetDirection {
         }
     }
     
-    func makeUrlRequest(completionHandler: (routesPoints: [String]) -> Void) {
+    private func getDistancesAndDurations(routes: NSArray) {
+        for route in routes {
+            if let legs = route["legs"] as? NSArray {
+                for leg in legs {
+                    if let distance = leg["distance"] as? NSDictionary {
+                        distances.append(distance["text"] as! String)
+                    }
+                    if let duration = leg["duration"] as? NSDictionary {
+                        durations.append(duration["text"] as! String)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func getViewport(routes: NSArray) {
+        for route in routes {
+            if let bounds = route["bounds"] as? NSDictionary {
+                if let northeast = bounds["northeast"] as? NSDictionary,
+                    southwest = bounds["southwest"] as? NSDictionary {
+                        viewport.northeast = CLLocationCoordinate2DMake(northeast["lat"] as! CLLocationDegrees, northeast["lng"] as! CLLocationDegrees)
+                        viewport.southwest = CLLocationCoordinate2DMake(southwest["lat"] as! CLLocationDegrees, southwest["lng"] as! CLLocationDegrees)
+                }
+            }
+        }
+    }
+    
+    func makeUrlRequest(completionHandler: (routesPoints: [String], distances: [String], durations: [String], viewport: Bounds) -> Void) {
         
         let urlObj = NSURL(string: googleDirectionUrl!)
         let request = NSMutableURLRequest(URL: urlObj!)
@@ -54,7 +92,9 @@ class GetDirection {
                     
                     if status == "OK" {
                         self.getRoutesPoints(routes!)
-                        completionHandler(routesPoints: self.routesPoints)
+                        self.getDistancesAndDurations(routes!)
+                        self.getViewport(routes!)
+                        completionHandler(routesPoints: self.routesPoints, distances: self.distances, durations: self.durations, viewport: self.viewport)
                     } else {
                         print("Google Directions returned status: \(status)")
                     }
