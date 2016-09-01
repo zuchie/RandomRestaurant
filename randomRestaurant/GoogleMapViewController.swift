@@ -18,7 +18,7 @@ class GoogleMapViewController: UIViewController {
     private var drawRoute = GetDirection()
     private var mapView: GMSMapView!
     
-    //private var label = UILabel()
+    private var label = UILabel()
     
     
     func setBizLocation(location: String) {
@@ -66,6 +66,7 @@ class GoogleMapViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue(), {
                         let path = GMSMutablePath(fromEncodedPath: points)
                         let polyline = GMSPolyline(path: path)
+                        polyline.strokeWidth = 3
                         
                         polyline.map = self.mapView
                     })
@@ -74,7 +75,7 @@ class GoogleMapViewController: UIViewController {
                 print("distance: \(distances.first!), duration: \(durations.first!), viewport: \(viewport.northeast!), \(viewport.southwest!)")
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    //self.distanceAndDuration.text = "\(distances.first!), \(durations.first!)"
+                    self.label.text = "\(distances.first!), \(durations.first!)"
                     //self.label.text = "Hello"
                 })
                 
@@ -118,10 +119,18 @@ class GoogleMapViewController: UIViewController {
         
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        // Add label.
+        let labelWidth: CGFloat = 180.0
+        let labelHeight: CGFloat = 20.0
+        let screenBounds = UIScreen.mainScreen().bounds
+        label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
+        label.backgroundColor = UIColor.lightGrayColor()
+        label.textAlignment = .Center
+        label.textColor = UIColor.whiteColor()
+        view.addSubview(label)
     }
     
     override func didReceiveMemoryWarning() {
