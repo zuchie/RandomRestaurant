@@ -15,6 +15,7 @@ class GoogleMapViewController: UIViewController {
     private var location: String?
     private var bizCoordinate2D: CLLocationCoordinate2D?
     private var bizName: String?
+    private var departureTime: Int?
     private var drawRoute = GetDirection()
     private var mapView: GMSMapView!
     
@@ -33,21 +34,22 @@ class GoogleMapViewController: UIViewController {
         self.bizName = name
     }
 
+    func setDepartureTime(time: Int) {
+        self.departureTime = time
+    }
+    
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(animated: Bool) {
-        print("view will appear")
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
     }
     
     // Deregister observer.
     override func viewWillDisappear(animated: Bool) {
-        print("view will disappear")
         view.removeObserver(self, forKeyPath: "myLocation")
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         
-        print("mylocation changed")
         if keyPath == "myLocation" && (object?.isKindOfClass(GMSMapView))! {
             
             // Draw route.
@@ -55,10 +57,11 @@ class GoogleMapViewController: UIViewController {
                 "https://maps.googleapis.com/maps/api/directions/json?",
                 origin: mapView.myLocation!.coordinate,
                 dest: bizCoordinate2D!,
+                depart: departureTime!,
                 key: "AIzaSyA-vPWnAEHdO3V4TwUbedRuJO1mDEgIjr0"
             )
             
-            drawRoute.makeUrlRequest() { routesPoints, distances, durations, viewport in
+            drawRoute.makeUrlRequest() { routesPoints, distances, durationInTraffic, viewport in
                 
                 // Draw from returned polyline.
                 for points in routesPoints {
@@ -67,16 +70,17 @@ class GoogleMapViewController: UIViewController {
                         let path = GMSMutablePath(fromEncodedPath: points)
                         let polyline = GMSPolyline(path: path)
                         polyline.strokeWidth = 3
+                        polyline.title = "\(distances.first!), \(durationInTraffic)"
                         
                         polyline.map = self.mapView
                     })
                 }
                 
-                print("distance: \(distances.first!), duration: \(durations.first!), viewport: \(viewport.northeast!), \(viewport.southwest!)")
+                print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.label.text = "\(distances.first!), \(durations.first!)"
-                    //self.label.text = "Hello"
+                    self.label.text = "\(distances.first!), \(durationInTraffic)"
+                    
                 })
                 
                 // Update camera to new bounds.
@@ -94,20 +98,14 @@ class GoogleMapViewController: UIViewController {
     override func loadView() {
         // Create a GMSCameraPosition that tells the map to display the
         // business position at zoom level 12.
-        //let camera = GMSCameraPosition.cameraWithTarget(bizCoordinate2D!, zoom: 12.0)
-        //mapView = GMSMapView.mapWithFrame(CGRect.zero, camera: camera)
+        let camera = GMSCameraPosition.cameraWithTarget(bizCoordinate2D!, zoom: 10.0)
+        mapView = GMSMapView.mapWithFrame(CGRect.zero, camera: camera)
         
-        //label.frame = CGRect(x: 40, y: 20, width: 120, height: 40)
-        //let map = GMSMapView(frame: self.mapView.bounds)
-        //mapView = GMSMapView.mapWithFrame(CGRect.zero, camera: camera)
-        
-        mapView = GMSMapView()
+        //mapView = GMSMapView()
 
         mapView.myLocationEnabled = true
         mapView.settings.myLocationButton = true
-        //mapView!.addSubview(label)
-        //view.addSubview(mapView)
-        //view.addSubview(label)
+
         view = mapView
         
         // Creates a marker in the center of the map.
@@ -130,6 +128,8 @@ class GoogleMapViewController: UIViewController {
         label.backgroundColor = UIColor.lightGrayColor()
         label.textAlignment = .Center
         label.textColor = UIColor.whiteColor()
+        label.adjustsFontSizeToFitWidth = true
+        
         view.addSubview(label)
     }
     

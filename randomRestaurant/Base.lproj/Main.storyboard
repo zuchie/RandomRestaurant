@@ -230,7 +230,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0U0-lH-xuv">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationTableViewCell" id="0U0-lH-xuv">
                                 <rect key="frame" x="0.0" y="166" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0U0-lH-xuv" id="wAF-lt-Nne">
@@ -279,54 +279,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tA0-Tj-M8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6098" y="350"/>
-        </scene>
-        <!--Map View Controller-->
-        <scene sceneID="93N-uM-pMh">
-            <objects>
-                <viewController id="cgs-uf-Fb3" customClass="MapViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="6Tz-ER-9rw"/>
-                        <viewControllerLayoutGuide type="bottom" id="3HT-hl-Psk"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="B5b-Ek-b6L">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DhV-hI-hxV">
-                                <rect key="frame" x="20" y="69" width="560" height="497"/>
-                                <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xdo-PX-O9X">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="497"/>
-                                    </mapView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-XW-9uC">
-                                        <rect key="frame" x="0.0" y="497" width="560" height="0.0"/>
-                                        <color key="backgroundColor" red="0.87031659029999997" green="0.87031659029999997" blue="0.87031659029999997" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="xdo-PX-O9X" firstAttribute="bottom" secondItem="lBd-XW-9uC" secondAttribute="bottom" id="Ns7-Qo-i9N"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="DhV-hI-hxV" firstAttribute="leading" secondItem="B5b-Ek-b6L" secondAttribute="leadingMargin" id="8dX-1a-j9W"/>
-                            <constraint firstItem="DhV-hI-hxV" firstAttribute="top" secondItem="B5b-Ek-b6L" secondAttribute="topMargin" constant="69" id="bIW-EO-S8Z"/>
-                            <constraint firstItem="DhV-hI-hxV" firstAttribute="trailing" secondItem="B5b-Ek-b6L" secondAttribute="trailingMargin" id="kKo-dq-uQt"/>
-                            <constraint firstItem="3HT-hl-Psk" firstAttribute="top" secondItem="DhV-hI-hxV" secondAttribute="bottom" constant="34" id="qBB-E0-6mi"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="distanceAndETA" destination="lBd-XW-9uC" id="0Wi-9B-fEI"/>
-                        <outlet property="map" destination="xdo-PX-O9X" id="woR-79-6gR"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aEl-Fw-Zhq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6771" y="360"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5NY-LU-9Bf">

@@ -70,6 +70,8 @@ class TimeViewController: UIViewController {
         let seconds = calendar.component(NSCalendarUnit.Second, fromDate: date)
         
         time = Int(date.timeIntervalSince1970) - seconds
+        
+        print("picker changed, date in unix, min precision: \(time)")
     }
 
     

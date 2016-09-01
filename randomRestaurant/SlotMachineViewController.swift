@@ -110,6 +110,7 @@ class SlotMachineViewController: UIViewController {
                         mapVC.setBizLocation(bizAddress)
                         mapVC.setBizCoordinate2D(bizCoordinate2D!)
                         mapVC.setBizName(bizName)
+                        mapVC.setDepartureTime(urlQueryParameters!.openAt)
                     }
                 }
             }

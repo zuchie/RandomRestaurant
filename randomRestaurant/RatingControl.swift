@@ -94,7 +94,7 @@ class RatingControl: UIView {
         if ratingMinusPointFive {
             rating! -= 0.5
         }
-        //print("rating: \(rating!)")
+        print("rating: \(rating!)")
         
         updateButtonSelectionStates()
     }

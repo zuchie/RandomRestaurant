@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B906DB5B1D5C5F880021B025 /* MapBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB5A1D5C5F880021B025 /* MapBrain.swift */; };
-		B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB5C1D5C8E490021B025 /* Annotation.swift */; };
 		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
 		B906DB7B1D66DD8D0021B025 /* FoodCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB7A1D66DD8D0021B025 /* FoodCategoriesViewController.swift */; };
 		B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB821D6990A60021B025 /* LocationsTableViewController.swift */; };
@@ -28,15 +26,12 @@
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
 		B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85D1D4EAC4600B0476E /* Assets.xcassets */; };
 		B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85F1D4EAC4600B0476E /* LaunchScreen.storyboard */; };
-		B9850F211D591ABF0063FC0F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9850F201D591ABF0063FC0F /* MapViewController.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A5CEEFFD83C11D5C4928E23A /* Pods-randomRestaurant.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-randomRestaurant.release.xcconfig"; path = "Pods/Target Support Files/Pods-randomRestaurant/Pods-randomRestaurant.release.xcconfig"; sourceTree = "<group>"; };
 		B253D8D0E02E0864ACF7B4A8 /* Pods-randomRestaurant.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-randomRestaurant.debug.xcconfig"; path = "Pods/Target Support Files/Pods-randomRestaurant/Pods-randomRestaurant.debug.xcconfig"; sourceTree = "<group>"; };
-		B906DB5A1D5C5F880021B025 /* MapBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBrain.swift; sourceTree = "<group>"; };
-		B906DB5C1D5C8E490021B025 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		B906DB7A1D66DD8D0021B025 /* FoodCategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesViewController.swift; sourceTree = "<group>"; };
 		B906DB821D6990A60021B025 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
@@ -58,7 +53,6 @@
 		B91AC85D1D4EAC4600B0476E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B91AC8601D4EAC4600B0476E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B91AC8621D4EAC4600B0476E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B9850F201D591ABF0063FC0F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -95,9 +89,6 @@
 		B906DB761D5D80F20021B025 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				B906DB5A1D5C5F880021B025 /* MapBrain.swift */,
-				B9850F201D591ABF0063FC0F /* MapViewController.swift */,
-				B906DB5C1D5C8E490021B025 /* Annotation.swift */,
 				B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */,
 				B906DBAB1D76BAF80021B025 /* GetDirection.swift */,
 			);
@@ -320,7 +311,6 @@
 			files = (
 				B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */,
 				B906DB971D6C37260021B025 /* RatingControl.swift in Sources */,
-				B906DB5B1D5C5F880021B025 /* MapBrain.swift in Sources */,
 				B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */,
 				B906DB8F1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift in Sources */,
 				B906DB7B1D66DD8D0021B025 /* FoodCategoriesViewController.swift in Sources */,
@@ -330,12 +320,10 @@
 				B906DB9E1D6ED7A60021B025 /* CurrentPlace.swift in Sources */,
 				B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */,
 				B906DBA61D728CAC0021B025 /* RatingViewController.swift in Sources */,
-				B906DB5D1D5C8E490021B025 /* Annotation.swift in Sources */,
 				B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */,
 				B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */,
 				B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */,
 				B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */,
-				B9850F211D591ABF0063FC0F /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

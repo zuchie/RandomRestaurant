@@ -94,9 +94,12 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        
+        let cellID = "LocationTableViewCell"
+        
+        //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
+    
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
 
         cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]
 
