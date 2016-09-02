@@ -70,7 +70,6 @@ class GoogleMapViewController: UIViewController {
                         let path = GMSMutablePath(fromEncodedPath: points)
                         let polyline = GMSPolyline(path: path)
                         polyline.strokeWidth = 3
-                        polyline.title = "\(distances.first!), \(durationInTraffic)"
                         
                         polyline.map = self.mapView
                     })
@@ -79,17 +78,16 @@ class GoogleMapViewController: UIViewController {
                 print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.label.text = "\(distances.first!), \(durationInTraffic)"
                     
+                    // Update camera to new bounds.
+                    let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
+                    let edges = UIEdgeInsetsMake(120, 40, 40, 40)
+                    let camera = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: edges)
+                    
+                    self.mapView.animateWithCameraUpdate(camera)
+                    
+                    self.label.text = "\(distances.first!), \(durationInTraffic)"
                 })
-                
-                // Update camera to new bounds.
-                let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
-                let edges = UIEdgeInsetsMake(120, 40, 40, 40)
-                let camera = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: edges)
-                
-                self.mapView.animateWithCameraUpdate(camera)
-                
             }
 
         }

@@ -43,8 +43,8 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         
         // Allocate cache here for URL responses so that cache data won't get lost when view is backed. 
-        let cacheSizeMemory = 1 * 1024 * 1024
-        let cacheSizeDisk = 2 * 1024 * 1024
+        let cacheSizeMemory = 5 * 1024 * 1024
+        let cacheSizeDisk = 10 * 1024 * 1024
         let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
         NSURLCache.setSharedURLCache(urlCache)
         
