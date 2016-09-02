@@ -13,7 +13,7 @@ class FoodCategoriesViewController: UITableViewController {
     // MARK: Properties
     private var foodCategories = [FoodCategories]()
     
-    private var foodCategoriesName = ["Mexican", "Chinese", "Italian", "American", "French"]
+    private var foodCategoriesName = ["Chinese", "Mexican", "Italian", "NewAmerican", "TradAmerican", "French"]
     
     private var category = ""
     
@@ -24,7 +24,7 @@ class FoodCategoriesViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         for categoryName in foodCategoriesName.enumerate() {
             loadFoodCategories(categoryName.element)
         }

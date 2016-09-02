@@ -14,6 +14,8 @@ class RatingControl: UIView {
     private var rating: Double? {
         didSet {
             setNeedsLayout()
+            //setNeedsDisplay()
+            //layoutIfNeeded()
         }
     }
     
@@ -32,6 +34,8 @@ class RatingControl: UIView {
     override func layoutSubviews() {
         let buttonSize = Int(frame.size.height)
 
+        print("buttonSize: \(buttonSize)")
+        
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         
         for (index, button) in ratingButtons.enumerate() {

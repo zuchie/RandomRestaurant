@@ -20,6 +20,7 @@ class GoogleMapViewController: UIViewController {
     private var mapView: GMSMapView!
     
     private var label = UILabel()
+    private var button = UIButton()
     
     
     func setBizLocation(location: String) {
@@ -122,6 +123,7 @@ class GoogleMapViewController: UIViewController {
         let labelWidth: CGFloat = 180.0
         let labelHeight: CGFloat = 20.0
         let screenBounds = UIScreen.mainScreen().bounds
+        
         label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
         label.backgroundColor = UIColor.lightGrayColor()
         label.textAlignment = .Center
@@ -129,6 +131,35 @@ class GoogleMapViewController: UIViewController {
         label.adjustsFontSizeToFitWidth = true
         
         view.addSubview(label)
+        
+        // Add button.
+        let buttonSize: CGFloat = 30.0
+        let buttonYPosition: CGFloat = 65.0 // TODO: Don't use hardcoded.
+        button.frame = CGRect(x: screenBounds.width - buttonSize, y: buttonYPosition, width: buttonSize, height: buttonSize)
+        button.backgroundColor = UIColor.cyanColor()
+        button.showsTouchWhenHighlighted = true
+        button.setTitle("G", forState: .Normal)
+        button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        
+        button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: .TouchDown)
+        
+        view.addSubview(button)
+    }
+    
+    // Open Google Maps app for navigation. Need to add "comgooglemaps", and "comgooglemaps-x-callback" into plist "LSApplicationQueriesSchemes" array.
+    func buttonTapped(button: UIButton) {
+        let bizLat = bizCoordinate2D?.latitude
+        let bizlng = bizCoordinate2D?.longitude
+        let testURL = NSURL(string: "comgooglemaps-x-callback://")
+        let app = UIApplication.sharedApplication()
+        if app.canOpenURL(testURL!) {
+            let directionsRequest = "comgooglemaps-x-callback://" +
+                "?daddr=\(bizLat!),\(bizlng!)" + "&x-success=sourceapp://?resume=true&x-source=AirApp";
+            let directionsURL = NSURL(string: directionsRequest)
+            UIApplication.sharedApplication().openURL(directionsURL!)
+        } else {
+            NSLog("Can't use comgooglemaps-x-callback:// on this device.");
+        }
     }
     
     override func didReceiveMemoryWarning() {

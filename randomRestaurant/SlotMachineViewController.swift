@@ -75,7 +75,7 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.bizPicked.text = "\(self.bizName), \(self.bizPrice), \(self.bizRating), \(self.bizReviewCount)"
+                    self.bizPicked.text = "\(self.bizName), \(self.bizPrice), \(self.bizRating), \(self.bizReviewCount), \(self.bizAddress)"
                 })
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
