@@ -25,6 +25,8 @@ class GetNearbyBusinesses {
     
     private var pickedBusiness: NSDictionary? = nil
     private var ratingBar: Double?
+    private var totalSortedBiz = 0
+    private var randomNo = 0
 
     var result: NSDictionary? {
         get {
@@ -121,7 +123,7 @@ class GetNearbyBusinesses {
     }
     
     // Make own completionHandler function.
-    typealias completion = () -> Void
+    typealias completion = (totalBiz: Int, randomNo: Int) -> Void
     
     func makeUrlRequest(token: String, completionHanlder: completion) {
         
@@ -154,14 +156,14 @@ class GetNearbyBusinesses {
                 self.sortAndRandomlyPickBiz(data)
                 print("non-cached response data")
                 print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
-                completionHanlder()
+                completionHanlder(totalBiz: self.totalSortedBiz, randomNo: self.randomNo)
             }
             task.resume()
         } else {
             self.sortAndRandomlyPickBiz(cachedURLResponse?.data)
             print("cached response data")
             print("current disk usage: \(NSURLCache.sharedURLCache().currentDiskUsage), mem usage: \(NSURLCache.sharedURLCache().currentMemoryUsage)")
-            completionHanlder()
+            completionHanlder(totalBiz: totalSortedBiz, randomNo: randomNo)
         }
     }
 
@@ -184,7 +186,9 @@ class GetNearbyBusinesses {
             return nil
         }
         let randomNumber = Int(arc4random_uniform(UInt32(index)))
-        print("total qualified biz: \(index), random no. \(randomNumber)")
+        totalSortedBiz = index
+        randomNo = randomNumber
+        print("total qualified biz: \(totalSortedBiz), random no. \(randomNo)")
         return sortedBusinesses[randomNumber] as? NSDictionary
     }
     

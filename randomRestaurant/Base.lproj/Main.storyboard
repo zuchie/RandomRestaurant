@@ -189,11 +189,52 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KK6-Bj-szm">
+                                <rect key="frame" x="20" y="228" width="560" height="110"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Restaurant Information" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="1ux-ls-TtN">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="60"/>
+                                        <color key="backgroundColor" red="0.64847646853372765" green="0.74959262081668943" blue="0.88751636125654454" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" id="Jn8-Uk-hvj"/>
+                                            <constraint firstAttribute="height" constant="60" id="h9g-sF-lMk"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Jn8-Uk-hvj"/>
+                                            </mask>
+                                        </variation>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Restaurant Address" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="dnY-Ex-bqz">
+                                        <rect key="frame" x="0.0" y="70" width="560" height="40"/>
+                                        <color key="backgroundColor" red="0.64847646849999996" green="0.7495926208" blue="0.8875163613" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="60" id="0PQ-de-TOY"/>
+                                            <constraint firstAttribute="height" constant="40" id="Dzn-cE-aID"/>
+                                            <constraint firstAttribute="width" id="TyN-NM-YtI"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="qrm-cV-h9D"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="0PQ-de-TOY"/>
+                                                <exclude reference="TyN-NM-YtI"/>
+                                                <exclude reference="qrm-cV-h9D"/>
+                                            </mask>
+                                        </variation>
+                                    </label>
+                                </subviews>
+                            </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HyB-Jj-k9x">
                                 <rect key="frame" x="20" y="112" width="80" height="80"/>
                                 <color key="backgroundColor" red="0.88751636125654454" green="0.88751636125654454" blue="0.88751636125654454" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="rDX-ZW-In5"/>
+                                    <constraint firstAttribute="width" constant="80" id="jwh-7O-G8Y"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Start"/>
@@ -201,31 +242,15 @@
                                     <action selector="start" destination="BYZ-38-t0r" eventType="touchUpInside" id="oyE-Cb-SoH"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Restaurant Information" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="1ux-ls-TtN">
-                                <rect key="frame" x="20" y="208" width="560" height="60"/>
-                                <color key="backgroundColor" red="0.64847646853372765" green="0.74959262081668943" blue="0.88751636125654454" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" id="Jn8-Uk-hvj"/>
-                                    <constraint firstAttribute="height" constant="60" id="h9g-sF-lMk"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="Jn8-Uk-hvj"/>
-                                    </mask>
-                                </variation>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="1ux-ls-TtN" secondAttribute="bottom" constant="332" id="3yf-Zq-7ln"/>
-                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="18" id="92F-VU-sek"/>
-                            <constraint firstItem="1ux-ls-TtN" firstAttribute="top" secondItem="HyB-Jj-k9x" secondAttribute="bottom" constant="16" id="NbT-hW-rAL"/>
-                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="cdG-IJ-hhU"/>
-                            <constraint firstItem="1ux-ls-TtN" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="nFM-nm-mLB"/>
-                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="leading" secondItem="1ux-ls-TtN" secondAttribute="leading" id="yJW-wl-9fJ"/>
+                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="4BI-YJ-4IG"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KK6-Bj-szm" secondAttribute="bottom" constant="262" id="5Qe-eE-D0K"/>
+                            <constraint firstItem="KK6-Bj-szm" firstAttribute="top" secondItem="HyB-Jj-k9x" secondAttribute="bottom" constant="36" id="8Pf-ZR-qX3"/>
+                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="leading" secondItem="KK6-Bj-szm" secondAttribute="leading" id="Iwo-MW-dky"/>
+                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="18" id="JaX-3y-hP8"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="KK6-Bj-szm" secondAttribute="trailing" id="lOw-Rw-DtN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Slot machine" prompt="Our recommendation" id="XlR-a6-ido">
@@ -238,6 +263,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bizPicked" destination="1ux-ls-TtN" id="wkA-2b-9xs"/>
+                        <outlet property="pickedBizAddress" destination="dnY-Ex-bqz" id="FQK-WW-7K8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

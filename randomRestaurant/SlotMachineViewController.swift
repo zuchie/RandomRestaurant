@@ -12,6 +12,7 @@ import CoreLocation
 class SlotMachineViewController: UIViewController {
 
     @IBOutlet weak var bizPicked: UILabel!
+    @IBOutlet weak var pickedBizAddress: UILabel!
     
     private var nearbyBusinesses = GetNearbyBusinesses()
     
@@ -42,14 +43,14 @@ class SlotMachineViewController: UIViewController {
         
         let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU"
         
-        bizPicked.text = nil // Reset for following queries
+        //bizPicked.text = nil // Reset for following queries
         
         // Get businesses from Yelp API v3.
         nearbyBusinesses.getUrlParameters(urlQueryParameters?.location, categories: urlQueryParameters?.category, radius: urlQueryParameters?.radius, limit: urlQueryParameters?.limit, open_at: urlQueryParameters?.openAt)
         
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
         
-        nearbyBusinesses.makeUrlRequest(access_token) {
+        nearbyBusinesses.makeUrlRequest(access_token) { totalBiz, randomNo in
             
             if let returnedBusiness = self.nearbyBusinesses.result {
                 //print("business picked: \(returnedBusiness)")
@@ -75,7 +76,8 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.bizPicked.text = "\(self.bizName), \(self.bizPrice), \(self.bizRating), \(self.bizReviewCount), \(self.bizAddress)"
+                    self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
+                    self.pickedBizAddress.text = "\(self.bizAddress)"
                 })
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
