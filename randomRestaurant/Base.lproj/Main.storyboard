@@ -16,7 +16,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FoodCategoriesTableViewCell" rowHeight="90" id="MTR-O0-3up" customClass="FoodCategoriesTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="122" width="600" height="90"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MTR-O0-3up" id="QMC-Hs-nKV">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="89.5"/>
@@ -56,10 +56,9 @@
                             <outlet property="delegate" destination="H1W-kT-6DQ" id="bTg-8j-Abm"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="What to eat?" prompt="Chinese? American?" id="dxM-VT-CMx">
+                    <navigationItem key="navigationItem" title="What to eat?" id="dxM-VT-CMx">
                         <barButtonItem key="backBarButtonItem" title="Back" id="3Cp-ZU-6EL"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="Y89-jd-B1e">
-                            <color key="tintColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="Y89-jd-B1e">
                             <connections>
                                 <segue destination="rZU-dN-vl8" kind="show" identifier="time" id="fBK-fO-ShV"/>
                             </connections>
@@ -96,9 +95,9 @@
                             <constraint firstAttribute="trailing" secondItem="13E-fX-soO" secondAttribute="trailing" id="n2i-Nj-n12"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="When to eat?" prompt="Now? 30min later?" id="ylx-Ub-Xio">
+                    <navigationItem key="navigationItem" title="When to eat?" id="ylx-Ub-Xio">
                         <barButtonItem key="backBarButtonItem" title="Back" id="tCZ-5d-hgi"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="Pkb-5k-wu1">
+                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="Pkb-5k-wu1">
                             <connections>
                                 <segue destination="vAp-XE-6Pg" kind="show" identifier="rating" id="WhQ-fi-JyS"/>
                             </connections>
@@ -112,7 +111,7 @@
             </objects>
             <point key="canvasLocation" x="4034" y="360"/>
         </scene>
-        <!--How good to eat?-->
+        <!--What's the rating?-->
         <scene sceneID="oRf-90-amh">
             <objects>
                 <viewController id="vAp-XE-6Pg" customClass="RatingViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
@@ -135,13 +134,13 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="2" id="8Ol-UT-qOd"/>
-                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" id="ERl-dM-H1S"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="2" id="JSR-gG-kDF"/>
                                     <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" id="MDd-LU-20z"/>
-                                    <constraint firstAttribute="bottom" secondItem="bkZ-uR-jmD" secondAttribute="bottom" constant="2" id="N5X-87-T8q"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" id="OJm-ZP-Aei"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="centerX" secondItem="ICx-Fm-f9c" secondAttribute="centerX" id="QRZ-lZ-szQ"/>
                                     <constraint firstAttribute="bottom" secondItem="bkZ-uR-jmD" secondAttribute="bottom" constant="2" id="T3d-JG-30A"/>
                                     <constraint firstAttribute="trailing" secondItem="bkZ-uR-jmD" secondAttribute="trailing" constant="20" id="a5e-UI-sPj"/>
-                                    <constraint firstAttribute="trailing" secondItem="bkZ-uR-jmD" secondAttribute="trailing" constant="20" id="t55-VD-wpT"/>
-                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="2" id="x1d-lt-DA0"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="centerY" secondItem="ICx-Fm-f9c" secondAttribute="centerY" id="cIp-AT-alA"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -155,15 +154,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="top" secondItem="GxQ-I6-m89" secondAttribute="bottom" constant="181" id="75l-HU-jyU"/>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="top" secondItem="GxQ-I6-m89" secondAttribute="bottom" constant="211" id="75l-HU-jyU"/>
                             <constraint firstAttribute="trailing" secondItem="ICx-Fm-f9c" secondAttribute="trailing" id="D8g-gX-Ovt"/>
                             <constraint firstItem="OWJ-eP-SFb" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="bottom" constant="235" id="McS-GG-TMo"/>
                             <constraint firstItem="ICx-Fm-f9c" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" id="wc0-Uc-1V9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="How good to eat?" prompt="rating = 5? rating &gt; 3.5? " id="7m8-at-NRV">
+                    <navigationItem key="navigationItem" title="What's the rating?" id="7m8-at-NRV">
                         <barButtonItem key="backBarButtonItem" title="Back" id="AmP-7y-wdY"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="IOq-mL-h8d">
+                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="IOq-mL-h8d">
                             <connections>
                                 <segue destination="BYZ-38-t0r" kind="show" identifier="slotMachine" id="YmZ-fa-QkO"/>
                             </connections>
@@ -177,7 +176,7 @@
             </objects>
             <point key="canvasLocation" x="4682" y="351"/>
         </scene>
-        <!--Slot machine-->
+        <!--Our recommendation-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="SlotMachineViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
@@ -249,13 +248,13 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KK6-Bj-szm" secondAttribute="bottom" constant="262" id="5Qe-eE-D0K"/>
                             <constraint firstItem="KK6-Bj-szm" firstAttribute="top" secondItem="HyB-Jj-k9x" secondAttribute="bottom" constant="36" id="8Pf-ZR-qX3"/>
                             <constraint firstItem="HyB-Jj-k9x" firstAttribute="leading" secondItem="KK6-Bj-szm" secondAttribute="leading" id="Iwo-MW-dky"/>
-                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="18" id="JaX-3y-hP8"/>
+                            <constraint firstItem="HyB-Jj-k9x" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="48" id="JaX-3y-hP8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="KK6-Bj-szm" secondAttribute="trailing" id="lOw-Rw-DtN"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Slot machine" prompt="Our recommendation" id="XlR-a6-ido">
+                    <navigationItem key="navigationItem" title="Our recommendation" id="XlR-a6-ido">
                         <barButtonItem key="backBarButtonItem" title="Back" id="sRo-nl-ZUZ"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="wM5-2O-zNb">
+                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="wM5-2O-zNb">
                             <connections>
                                 <segue destination="dqH-Fl-zN4" kind="show" identifier="googleMap" id="NGr-Qk-RFA"/>
                             </connections>
@@ -279,13 +278,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Current place" id="siD-Ne-3g2">
-                            <rect key="frame" x="0.0" y="94" width="600" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationTableViewCell" id="0U0-lH-xuv">
-                                <rect key="frame" x="0.0" y="166" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="LocationTableViewCell" id="0U0-lH-xuv">
+                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0U0-lH-xuv" id="wAF-lt-Nne">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -298,10 +297,9 @@
                             <outlet property="delegate" destination="6BY-rH-MSK" id="yaP-wE-rO9"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Where to eat?" prompt="San Jose? The City?" id="jKj-Xl-gKT">
+                    <navigationItem key="navigationItem" title="Where to eat?" id="jKj-Xl-gKT">
                         <barButtonItem key="backBarButtonItem" title="Back" id="CfQ-yP-5qD"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="2Gz-t5-hFn">
-                            <color key="tintColor" red="0.90085078529999996" green="0.053155081107927042" blue="0.033352433886469912" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="2Gz-t5-hFn">
                             <connections>
                                 <segue destination="H1W-kT-6DQ" kind="show" identifier="foodCategories" id="Bqz-sQ-159"/>
                             </connections>

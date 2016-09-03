@@ -111,6 +111,11 @@ class RatingControl: UIView {
     }
     
     func getRating() -> Double {
-        return rating!
+        // When no rating has been chosen, use 0.5 as default value.
+        if rating != nil {
+            return rating!
+        } else {
+            return 0.5
+        }
     }
 }

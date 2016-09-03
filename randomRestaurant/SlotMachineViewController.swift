@@ -100,16 +100,35 @@ class SlotMachineViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    private func alert() {
+        
+        // Create the alert.
+        let alert = UIAlertController(title: "Alert", message: "Please push \"Start\" button.", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // Add an action(button).
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
+            
+        }))
+        
+        // Show the alert.
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let destinationVC = segue.destinationViewController
         
-        if let mapVC = destinationVC as? GoogleMapViewController {
-            if let id = segue.identifier {
-                if id == "googleMap" {
-                    if !bizAddress.isEmpty && bizCoordinate2D != nil {
+        if bizAddress.isEmpty || bizCoordinate2D == nil {
+            
+            alert()
+            
+        } else {
+            if let mapVC = destinationVC as? GoogleMapViewController {
+                if let id = segue.identifier {
+                    if id == "googleMap" {
                         mapVC.setBizLocation(bizAddress)
                         mapVC.setBizCoordinate2D(bizCoordinate2D!)
                         mapVC.setBizName(bizName)

@@ -53,13 +53,17 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         locationsTable.scrollEnabled = true
         
         filteredLocations[places.current.rawValue].append("Current place")
-        
         currentPlace = CurrentPlace() // Have to do initialization first.
+        
+        /*
         currentPlace!.getCurrentPlace() {
+            /*
             let currentPlaceName = self.currentPlace!.currentPlaceName
             let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
             print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
+            */
         }
+        */
         
         // Fetcher
         let neBoundsCorner = CLLocationCoordinate2D(latitude: 50.090308, longitude: -66.966982)
@@ -80,7 +84,18 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         super.didReceiveMemoryWarning()
         NSURLCache.sharedURLCache().removeAllCachedResponses()
     }
-
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        currentPlace!.getCurrentPlace() {
+            /*
+            let currentPlaceName = self.currentPlace!.currentPlaceName
+            let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
+            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
+            */
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -110,9 +125,25 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
         inputLocation.text = selectedCell.textLabel!.text
+        view.endEditing(true) // Hide keyboard.
 
     }
     
+    private func alert() {
+        
+        // Create the alert.
+        let alert = UIAlertController(title: "Alert", message: "Waiting for loading current location...", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // Add an action(button).
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
+
+        }))
+        
+        // Show the alert.
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -121,15 +152,20 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         if let navCtrl = destinationVC as? UINavigationController {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }
-        if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
-            if let id = segue.identifier {
-                if id == "foodCategories" {
-                    // If no input in place search bar, use current place.
-                    //print("current place: \(currentPlace!.currentPlaceAddress)")
-                    place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
-                    
-                    urlQueryParameters?.location = place!
-                    foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
+        // If no input in place search bar, use current place.
+        place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
+        
+        if place == nil {
+            
+            alert()
+            
+        } else {
+            if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
+                if let id = segue.identifier {
+                    if id == "foodCategories" {
+                        urlQueryParameters?.location = place!
+                        foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
+                    }
                 }
             }
         }

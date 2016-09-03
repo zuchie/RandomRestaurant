@@ -36,19 +36,20 @@ class GoogleMapViewController: UIViewController {
     }
 
     func setDepartureTime(time: Int) {
-        self.departureTime = time
+        // Convert back from local time to UTC for Google Maps API departure_time use.
+        self.departureTime = time - NSTimeZone.localTimeZone().secondsFromGMT
     }
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(animated: Bool) {
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
     }
-    
+    /*
     // Deregister observer.
     override func viewWillDisappear(animated: Bool) {
         view.removeObserver(self, forKeyPath: "myLocation")
     }
-    
+    */
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         
         if keyPath == "myLocation" && (object?.isKindOfClass(GMSMapView))! {
@@ -85,6 +86,7 @@ class GoogleMapViewController: UIViewController {
                     let edges = UIEdgeInsetsMake(120, 40, 40, 40)
                     let camera = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: edges)
                     
+                    print("update camera")
                     self.mapView.animateWithCameraUpdate(camera)
                     
                     self.label.text = "\(distances.first!), \(durationInTraffic)"
@@ -92,6 +94,8 @@ class GoogleMapViewController: UIViewController {
             }
 
         }
+        // Deregister observer, to stop myLocation from updating.
+        view.removeObserver(self, forKeyPath: "myLocation")
     }
     
     override func loadView() {
@@ -133,12 +137,12 @@ class GoogleMapViewController: UIViewController {
         view.addSubview(label)
         
         // Add button.
-        let buttonSize: CGFloat = 30.0
+        let buttonSize: CGFloat = 40.0
         let buttonYPosition: CGFloat = 65.0 // TODO: Don't use hardcoded.
         button.frame = CGRect(x: screenBounds.width - buttonSize, y: buttonYPosition, width: buttonSize, height: buttonSize)
-        button.backgroundColor = UIColor.cyanColor()
+        button.backgroundColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
         button.showsTouchWhenHighlighted = true
-        button.setTitle("G", forState: .Normal)
+        button.setTitle("Nav", forState: .Normal)
         button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         
         button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: .TouchDown)
