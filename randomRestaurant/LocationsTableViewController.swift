@@ -17,7 +17,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var locationsTable: UITableView!
     
     // Search radius: 40000 meters(25 mi), return 20 businesses.
-    var urlQueryParameters = UrlQueryParameters(location: "", category: "", radius: 40000, limit: 20, openAt: 0)
+    var urlQueryParameters = UrlQueryParameters(location: "", category: "", radius: 40000, limit: 50, openAt: 0)
 
     private var currentPlace: CurrentPlace? = nil
 
@@ -125,6 +125,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
             if let id = segue.identifier {
                 if id == "foodCategories" {
                     // If no input in place search bar, use current place.
+                    //print("current place: \(currentPlace!.currentPlaceAddress)")
                     place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
                     
                     urlQueryParameters?.location = place!

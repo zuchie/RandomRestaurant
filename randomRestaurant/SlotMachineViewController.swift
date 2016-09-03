@@ -52,6 +52,7 @@ class SlotMachineViewController: UIViewController {
         
         nearbyBusinesses.makeUrlRequest(access_token) { totalBiz, randomNo in
             
+            //print("total biz: \(totalBiz), random no.: \(randomNo)")
             if let returnedBusiness = self.nearbyBusinesses.result {
                 //print("business picked: \(returnedBusiness)")
                 

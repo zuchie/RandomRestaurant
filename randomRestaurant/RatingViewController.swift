@@ -40,6 +40,7 @@ class RatingViewController: UIViewController {
             if let id = segue.identifier {
                 if id == "slotMachine" {
                     slotMachineVC.getRatingBar(rating.getRating())
+                    print("url params: \(urlQueryParameters!)")
                     slotMachineVC.setUrlQueryParameters(urlQueryParameters!)
                 }
             }

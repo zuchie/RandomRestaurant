@@ -34,8 +34,8 @@ class CurrentPlace {
             self.address = ""
             
             if let placeLikelihoodList = placeLikelihoodList {
-                let place = placeLikelihoodList.likelihoods.first?.place
-                if let place = place {
+                let firstPlace = placeLikelihoodList.likelihoods.first?.place
+                if let place = firstPlace {
                     self.name = place.name
                     self.address = place.formattedAddress!.componentsSeparatedByString(", ")
                         .joinWithSeparator(", ")
