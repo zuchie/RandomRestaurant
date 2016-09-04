@@ -88,11 +88,12 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewWillAppear(animated: Bool) {
         
         currentPlace!.getCurrentPlace() {
-            /*
+            
             let currentPlaceName = self.currentPlace!.currentPlaceName
             let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
+            print("view will appear")
             print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
-            */
+            
         }
     }
     

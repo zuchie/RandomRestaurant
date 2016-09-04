@@ -45,7 +45,11 @@ class TimeViewController: UIViewController {
         
         let secondsFromUTC = NSTimeZone.localTimeZone().secondsFromGMT
 
-        // Convert to local time.
+        /*
+         * Yelp API v3 is using unixTime(business.literalHours) to compare with open_at.
+         * So users have to offset unixTime(date) with secondsFromUTC(userTimeZone) to make it work.
+         * e.g. User is querying date=4pm PDT, unixTime(date) is actually 11pm UTC, comparing with literal business hours 3pm - 9pm which would give false. So user has to offset with seconds from PDT to UTC, which is (-7 * 3600) to get 4pm comparing with 3pm - 9pm which would give true then.
+        */
         pickerDate = Int(dateForPicker.timeIntervalSince1970) + secondsFromUTC - secondsForPicker
         currentDate = Int(dateForCurrent.timeIntervalSince1970) + secondsFromUTC - secondsForCurrent
         
@@ -57,7 +61,7 @@ class TimeViewController: UIViewController {
         let curDate = dateFormatter.stringFromDate(dateForCurrent)
         
         print("picked date: \(picDate), current date: \(curDate)")
-        print("picked unix: \(pickerDate), current unix: \(currentDate)")
+        print("offset picked date unix: \(pickerDate), offset current date unix: \(currentDate)")
         
     }
     /*
