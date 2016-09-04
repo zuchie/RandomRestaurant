@@ -40,6 +40,13 @@ class SlotMachineViewController: UIViewController {
     
     var urlQueryParameters: UrlQueryParameters?
     
+    private var imageViewFrameWidth: CGFloat = 0.0
+    private var imageViewFrameHeight: CGFloat = 0.0
+    private var imageViewFrameX: CGFloat = 0.0
+    private var imageViewFrameY: CGFloat = 0.0
+    
+    private var imagesFrameY = [CGFloat]()
+    
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
         print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
@@ -50,22 +57,33 @@ class SlotMachineViewController: UIViewController {
     }
  
     private func scrollImages(index: Int, imageView: UIImageView) {
-        UIView.animateWithDuration(4.0, delay: 0.0, options: .CurveEaseInOut, animations: {
-            
+        
+        UIView.animateWithDuration(4.0, delay: 0.0, options: [.CurveEaseInOut], animations: {
+ 
+            //print("image Y: \(imageView.frame.origin.y)")
             //imageView.image = self.animationImages[index]
             
             //self.view.addSubview(imageView)
-            
+            self.view.bringSubviewToFront(imageView)
             var frame = imageView.frame
             
             //print("frame origin y: \(frame.origin.y), frame height: \(frame.height)")
-            
-            frame.origin.y += frame.height * CGFloat(self.imageViews.count)
-            
+            //print("imageviews count: \(self.imageViews.count)")
+            frame.origin.y += frame.height * CGFloat(self.imageViews.count - 1)
+            print("1 index: \(index), frame Y: \(frame.origin.y)")
             imageView.frame = frame
             
-            }, completion: { finished in
-                print("image \(index) moved")
+        }, completion: { finished in
+            if finished {
+                //self.view.sendSubviewToBack(imageView)
+                self.view.sendSubviewToBack(imageView)
+                // Reuse this image view.
+                //imageView.frame.origin.y = -(CGFloat(index) * self.imageViewFrameHeight)
+                //self.imageViews[index] = imageView
+                print("image \(index), Y: \(imageView.frame.origin.y)")
+            } else {
+                print("animation is still running...")
+            }
         })
     }
     
@@ -73,29 +91,29 @@ class SlotMachineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("view did load")
         nearbyBusinesses.setRatingBar(ratingBar)
         
-        let imageViewFrameWidth = self.view.frame.width
-        let imageViewFrameHeight = self.view.frame.height
-        let imageViewFrameX: CGFloat = 0.0
-        let imageViewFrameY: CGFloat = 0.0
+        imageViewFrameWidth = self.view.frame.width
+        imageViewFrameHeight = self.view.frame.height
+        imageViewFrameX = self.view.frame.origin.x
+        imageViewFrameY = self.view.frame.origin.y
         
         // Init image views.
         for index in 0..<animationImages.count {
             let imageView = UIImageView()
             imageView.image = self.animationImages[index]
             imageView.frame = CGRect(x: imageViewFrameX, y: imageViewFrameY - CGFloat(index) * imageViewFrameHeight, width: imageViewFrameWidth, height: imageViewFrameHeight)
-            imageViews.append(imageView)
-            self.view.addSubview(imageViews[index])
+            
+            imagesFrameY.append(imageView.frame.origin.y)
+
+            self.view.addSubview(imageView)
             // Don't allow images block button.
-            self.view.sendSubviewToBack(imageViews[index])
+            self.view.sendSubviewToBack(imageView)
+            imageViews.append(imageView)
             
             print("image view x: \(imageView.frame.origin.x), y: \(imageView.frame.origin.y), height: \(imageView.frame.height), width: \(imageView.frame.width)")
         }
-
-        // Show 1st image view.
-        //imageViews.first?.image = animationImages.first
-        //view.addSubview(imageViews.first!)
     }
     
     @IBAction func start() {
@@ -104,6 +122,17 @@ class SlotMachineViewController: UIViewController {
         
         // Start animation.
         for (index, imageView) in imageViews.enumerate() {
+            
+            print("0 index: \(index), Y: \(imageView.frame.origin.y)")
+            
+            //imageViews.removeAtIndex(index)
+            //self.view.addSubview(imageView)
+            // Don't allow images block button.
+            //self.view.sendSubviewToBack(imageView)
+            
+            // Reset Y.
+            imageView.frame.origin.y = imagesFrameY[index]
+            
             scrollImages(index, imageView: imageView)
         }
         
@@ -119,11 +148,6 @@ class SlotMachineViewController: UIViewController {
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
         
         nearbyBusinesses.makeUrlRequest(access_token) { totalBiz, randomNo in
-            
-            // Set delay timer for animation.
-            let seconds = 4.0
-            let delay = seconds * Double(NSEC_PER_SEC)  // Nanoseconds per seconds
-            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             
             //print("total biz: \(totalBiz), random no.: \(randomNo)")
             if let returnedBusiness = self.nearbyBusinesses.result {
@@ -149,16 +173,13 @@ class SlotMachineViewController: UIViewController {
                     print("biz latitude: \(self.bizCoordinate2D!.latitude), longitude: \(self.bizCoordinate2D!.longitude)")
                 }
                 
-                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
                     self.pickedBizAddress.text = "\(self.bizAddress)"
-                    //self.imageView.stopAnimating()
                 })
             } else {
-                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "No restaurant found"
-                    //self.imageView.stopAnimating()
-                    //imageView.image = imageView.animationImages
                 })
             }
             
