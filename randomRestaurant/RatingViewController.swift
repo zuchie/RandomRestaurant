@@ -40,7 +40,8 @@ class RatingViewController: UIViewController {
             if let id = segue.identifier {
                 if id == "slotMachine" {
                     slotMachineVC.getRatingBar(rating.getRating())
-                    print("url params: \(urlQueryParameters!)")
+                    //print("url params: \(urlQueryParameters!)")
+                    print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
                     slotMachineVC.setUrlQueryParameters(urlQueryParameters!)
                 }
             }
