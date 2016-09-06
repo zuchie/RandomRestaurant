@@ -14,6 +14,8 @@ class CurrentPlace {
     // Instantiate a pair of UILabels in Interface Builder
     private var name: String? = nil
     private var address: String? = nil
+    private var coordinate: CLLocationCoordinate2D? = nil
+    
     private var placesClient: GMSPlacesClient? = nil
     
     // MARK: Initialization
@@ -39,6 +41,7 @@ class CurrentPlace {
                     self.name = place.name
                     self.address = place.formattedAddress!.componentsSeparatedByString(", ")
                         .joinWithSeparator(", ")
+                    self.coordinate = place.coordinate
                 }
             }
             completionHandler()
@@ -54,6 +57,12 @@ class CurrentPlace {
     var currentPlaceAddress: String? {
         get {
             return address
+        }
+    }
+    
+    var currentPlaceCoordinate: CLLocationCoordinate2D? {
+        get {
+            return coordinate
         }
     }
 

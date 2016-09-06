@@ -82,6 +82,7 @@
 				B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */,
 				B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */,
 				B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */,
+				B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -109,18 +110,9 @@
 			isa = PBXGroup;
 			children = (
 				B906DB821D6990A60021B025 /* LocationsTableViewController.swift */,
+				B906DB9D1D6ED7A60021B025 /* CurrentPlace.swift */,
 			);
 			name = Locations;
-			sourceTree = "<group>";
-		};
-		B906DB9A1D6ED2F40021B025 /* Supporting */ = {
-			isa = PBXGroup;
-			children = (
-				B906DB961D6C37260021B025 /* RatingControl.swift */,
-				B906DB9D1D6ED7A60021B025 /* CurrentPlace.swift */,
-				B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */,
-			);
-			name = Supporting;
 			sourceTree = "<group>";
 		};
 		B906DB9F1D7272850021B025 /* Time */ = {
@@ -135,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				B906DBA51D728CAC0021B025 /* RatingViewController.swift */,
+				B906DB961D6C37260021B025 /* RatingControl.swift */,
 			);
 			name = Rating;
 			sourceTree = "<group>";
@@ -162,7 +155,6 @@
 			children = (
 				B906DBA41D728C880021B025 /* Rating */,
 				B906DB9F1D7272850021B025 /* Time */,
-				B906DB9A1D6ED2F40021B025 /* Supporting */,
 				B906DB7F1D698E630021B025 /* Locations */,
 				B906DB791D66DCCA0021B025 /* FoodCategories */,
 				B906DB761D5D80F20021B025 /* Map */,

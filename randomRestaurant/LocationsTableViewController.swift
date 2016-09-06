@@ -21,9 +21,15 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 
     private var currentPlace: CurrentPlace? = nil
 
-    private var filteredLocations = [[String](), [String]()]
+    private struct location {
+        var name: String
+        var coordinate: CLLocationCoordinate2D?
+    }
+
+    private var filteredLocations = [[location](), [location]()]
     
     private var fetcher: GMSAutocompleteFetcher?
+    private var coordinate: CLLocationCoordinate2D?
     
     private enum places: Int {
         case current, other
@@ -52,18 +58,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         locationsTable.hidden = false
         locationsTable.scrollEnabled = true
         
-        filteredLocations[places.current.rawValue].append("Current place")
+        // Coordinate of Current place will be got later.  
+        filteredLocations[places.current.rawValue].append(location(name: "Current place", coordinate: nil))
         currentPlace = CurrentPlace() // Have to do initialization first.
-        
-        /*
-        currentPlace!.getCurrentPlace() {
-            /*
-            let currentPlaceName = self.currentPlace!.currentPlaceName
-            let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
-            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
-            */
-        }
-        */
         
         // Fetcher
         let neBoundsCorner = CLLocationCoordinate2D(latitude: 50.090308, longitude: -66.966982)
@@ -91,8 +88,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
             
             let currentPlaceName = self.currentPlace!.currentPlaceName
             let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
-            print("view will appear")
-            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
+            let currentPlaceCoordinate = self.currentPlace?.currentPlaceCoordinate
+            //print("view will appear")
+            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!), coordinate: \(currentPlaceCoordinate)")
             
         }
     }
@@ -117,7 +115,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
 
-        cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]
+        cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row].name
 
         return cell
     }
@@ -126,6 +124,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
         inputLocation.text = selectedCell.textLabel!.text
+        coordinate = filteredLocations[indexPath.section][indexPath.row].coordinate
         view.endEditing(true) // Hide keyboard.
 
     }
@@ -154,7 +153,12 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }
         // If no input in place search bar, use current place.
-        place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
+        if inputLocation.text == "" || inputLocation.text == "Current place" {
+            place = currentPlace!.currentPlaceAddress
+            coordinate = currentPlace!.currentPlaceCoordinate
+        } else {
+            place = inputLocation.text
+        }
         
         if place == nil {
             
@@ -166,6 +170,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
                     if id == "foodCategories" {
                         urlQueryParameters?.location = place!
                         foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
+                        foodCategoriesVC.setSearchCenterCoordinate(coordinate)
                     }
                 }
             }
@@ -174,12 +179,38 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
 }
 
 extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
+    // Google Places autocomplete.
     func didAutocompleteWithPredictions(predictions: [GMSAutocompletePrediction]) {
         
         for prediction in predictions {
-            let resultsStr = prediction.attributedFullText.string
-            filteredLocations[places.other.rawValue].append(resultsStr)
-            locationsTable.reloadData()
+        
+            // TODO: Get coordinate from placeID and pass it to TimeViewController for Google Time Zone API use.
+            if let id = prediction.placeID {
+                let placesClient = GMSPlacesClient()
+                placesClient.lookUpPlaceID(id, callback: { (place: GMSPlace?, error: NSError?) -> Void in
+                    if let error = error {
+                        print("lookup place id query error: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let place = place {
+                        print("Place name \(place.name)")
+                        print("Place address \(place.formattedAddress)")
+                        print("Place placeID \(place.placeID)")
+                        print("Place attributions \(place.attributions)")
+                        print("Place coordinate \(place.coordinate)")
+                        //self.coordinate = place.coordinate
+                    } else {
+                        print("No place details for \(id)")
+                    }
+                    
+                    let result = prediction.attributedFullText.string
+                    self.filteredLocations[places.other.rawValue].append(location(name: result, coordinate: place?.coordinate))
+                    self.locationsTable.reloadData()
+                })
+            } else {
+                print("no placeID got")
+            }
         }
         
     }
