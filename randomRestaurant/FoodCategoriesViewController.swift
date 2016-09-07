@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
 
 class FoodCategoriesViewController: UITableViewController {
     
@@ -19,13 +18,6 @@ class FoodCategoriesViewController: UITableViewController {
     private var category = ""
     
     var urlQueryParameters: UrlQueryParameters?
-    
-    private var searchCenterCoordinate: CLLocationCoordinate2D?
-    
-    func setSearchCenterCoordinate(coordinate: CLLocationCoordinate2D?) {
-        searchCenterCoordinate = coordinate
-    }
-    
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
     }
@@ -95,7 +87,6 @@ class FoodCategoriesViewController: UITableViewController {
                 if id == "time" {
                     urlQueryParameters?.category = category
                     timeVC.setUrlQueryParameters(urlQueryParameters!)
-                    timeVC.setSearchCenterCoordinate(searchCenterCoordinate)
                 }
             }
         }

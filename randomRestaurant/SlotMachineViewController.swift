@@ -70,7 +70,7 @@ class SlotMachineViewController: UIViewController {
             //print("frame origin y: \(frame.origin.y), frame height: \(frame.height)")
             //print("imageviews count: \(self.imageViews.count)")
             frame.origin.y += frame.height * CGFloat(self.imageViews.count - 1)
-            print("1 index: \(index), frame Y: \(frame.origin.y)")
+            //print("1 index: \(index), frame Y: \(frame.origin.y)")
             imageView.frame = frame
             
         }, completion: { finished in
@@ -80,7 +80,7 @@ class SlotMachineViewController: UIViewController {
                 // Reuse this image view.
                 //imageView.frame.origin.y = -(CGFloat(index) * self.imageViewFrameHeight)
                 //self.imageViews[index] = imageView
-                print("image \(index), Y: \(imageView.frame.origin.y)")
+                //print("image \(index), Y: \(imageView.frame.origin.y)")
             } else {
                 print("animation is still running...")
             }
@@ -91,7 +91,7 @@ class SlotMachineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("view did load")
+        //print("view did load")
         nearbyBusinesses.setRatingBar(ratingBar)
         
         imageViewFrameWidth = self.view.frame.width
@@ -123,7 +123,7 @@ class SlotMachineViewController: UIViewController {
         // Start animation.
         for (index, imageView) in imageViews.enumerate() {
             
-            print("0 index: \(index), Y: \(imageView.frame.origin.y)")
+            //print("0 index: \(index), Y: \(imageView.frame.origin.y)")
             
             //imageViews.removeAtIndex(index)
             //self.view.addSubview(imageView)
