@@ -21,6 +21,9 @@
 		B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */; };
 		B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */; };
 		B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBAB1D76BAF80021B025 /* GetDirection.swift */; };
+		B906DBAE1D8294740021B025 /* MachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBAD1D8294740021B025 /* MachineViewController.swift */; };
+		B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */; };
+		B906DBB41D863E0A0021B025 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */; };
 		B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8561D4EAC4600B0476E /* AppDelegate.swift */; };
 		B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */; };
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
@@ -46,6 +49,9 @@
 		B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickedBusinessLocation.swift; sourceTree = "<group>"; };
 		B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapViewController.swift; sourceTree = "<group>"; };
 		B906DBAB1D76BAF80021B025 /* GetDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDirection.swift; sourceTree = "<group>"; };
+		B906DBAD1D8294740021B025 /* MachineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachineViewController.swift; sourceTree = "<group>"; };
+		B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
+		B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 		B91AC8531D4EAC4600B0476E /* randomRestaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = randomRestaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91AC8561D4EAC4600B0476E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +89,9 @@
 				B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */,
 				B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */,
 				B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */,
+				B906DBAD1D8294740021B025 /* MachineViewController.swift */,
+				B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */,
+				B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -310,9 +319,12 @@
 				B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */,
 				B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */,
 				B906DB9E1D6ED7A60021B025 /* CurrentPlace.swift in Sources */,
+				B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */,
 				B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */,
+				B906DBAE1D8294740021B025 /* MachineViewController.swift in Sources */,
 				B906DBA61D728CAC0021B025 /* RatingViewController.swift in Sources */,
 				B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */,
+				B906DBB41D863E0A0021B025 /* HistoryTableViewController.swift in Sources */,
 				B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */,
 				B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */,
 				B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */,

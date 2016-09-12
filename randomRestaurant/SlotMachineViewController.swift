@@ -13,6 +13,8 @@ class SlotMachineViewController: UIViewController {
 
     @IBOutlet weak var bizPicked: UILabel!
     @IBOutlet weak var pickedBizAddress: UILabel!
+    @IBOutlet weak var viewsContainer: UIView!
+    
     
     private var nearbyBusinesses = GetNearbyBusinesses()
     
@@ -26,27 +28,13 @@ class SlotMachineViewController: UIViewController {
     private var bizAddress = ""
     private var bizCoordinate2D: CLLocationCoordinate2D?
     
-    private let animationImages = [
-        UIImage(named: "image0")!,
-        UIImage(named: "image1")!,
-        UIImage(named: "image2")!,
-        UIImage(named: "image3")!,
-        UIImage(named: "image4")!,
-        UIImage(named: "image5")!,
-        UIImage(named: "image6")!
-    ]
+    private var machineView = MachineViewController()
     
-    private var imageViews = [UIImageView]()
+    private weak var currentVC: UIViewController?
     
     var urlQueryParameters: UrlQueryParameters?
     
-    private var imageViewFrameWidth: CGFloat = 0.0
-    private var imageViewFrameHeight: CGFloat = 0.0
-    private var imageViewFrameX: CGFloat = 0.0
-    private var imageViewFrameY: CGFloat = 0.0
-    
-    private var imagesFrameY = [CGFloat]()
-    
+ 
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
         print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
@@ -64,19 +52,19 @@ class SlotMachineViewController: UIViewController {
             //imageView.image = self.animationImages[index]
             
             //self.view.addSubview(imageView)
-            self.view.bringSubviewToFront(imageView)
+            //self.view.bringSubviewToFront(imageView)
             var frame = imageView.frame
             
             //print("frame origin y: \(frame.origin.y), frame height: \(frame.height)")
             //print("imageviews count: \(self.imageViews.count)")
-            frame.origin.y += frame.height * CGFloat(self.imageViews.count - 1)
+            frame.origin.y += frame.height * CGFloat(self.machineView.imageViews.count - 1)
             //print("1 index: \(index), frame Y: \(frame.origin.y)")
             imageView.frame = frame
             
         }, completion: { finished in
             if finished {
                 //self.view.sendSubviewToBack(imageView)
-                self.view.sendSubviewToBack(imageView)
+                //self.view.sendSubviewToBack(imageView)
                 // Reuse this image view.
                 //imageView.frame.origin.y = -(CGFloat(index) * self.imageViewFrameHeight)
                 //self.imageViews[index] = imageView
@@ -86,34 +74,71 @@ class SlotMachineViewController: UIViewController {
             }
         })
     }
+
+    func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
+        
+        oldViewController.willMoveToParentViewController(nil)
+        self.addChildViewController(newViewController)
+        self.addSubview(newViewController.view, toView: viewsContainer)
+        
+        newViewController.view.alpha = 0
+        newViewController.view.layoutIfNeeded()
+        
+        UIView.animateWithDuration(0.5, animations: {
+            newViewController.view.alpha = 1
+            oldViewController.view.alpha = 0
+            },
+                                   completion: { finished in
+                                    oldViewController.view.removeFromSuperview()
+                                    oldViewController.removeFromParentViewController()
+                                    newViewController.didMoveToParentViewController(self)
+        })
+    }
     
+    @IBAction func segmentChanged(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")
+            newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(currentVC!, toViewController: newViewController!)
+            self.currentVC = newViewController
+        case 1:
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite")
+            newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(currentVC!, toViewController: newViewController!)
+            self.currentVC = newViewController
+        case 2:
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("History")
+            newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(currentVC!, toViewController: newViewController!)
+            self.currentVC = newViewController
+        default:
+            break;
+        }
+    }
+    
+    // Customized function to do view auto layout inside container view.
+    func addSubview(subView:UIView, toView parentView:UIView) {
+        parentView.addSubview(subView)
+        
+        var viewBindingsDict = [String: AnyObject]()
+        viewBindingsDict["subView"] = subView
+        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[subView]|",
+            options: [.AlignAllCenterX, .AlignAllCenterY], metrics: nil, views: viewBindingsDict))
+        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
+            options: [.AlignAllCenterX, .AlignAllCenterY], metrics: nil, views: viewBindingsDict))
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //print("view did load")
         nearbyBusinesses.setRatingBar(ratingBar)
         
-        imageViewFrameWidth = self.view.frame.width
-        imageViewFrameHeight = self.view.frame.height
-        imageViewFrameX = self.view.frame.origin.x
-        imageViewFrameY = self.view.frame.origin.y
-        
-        // Init image views.
-        for index in 0..<animationImages.count {
-            let imageView = UIImageView()
-            imageView.image = self.animationImages[index]
-            imageView.frame = CGRect(x: imageViewFrameX, y: imageViewFrameY - CGFloat(index) * imageViewFrameHeight, width: imageViewFrameWidth, height: imageViewFrameHeight)
-            
-            imagesFrameY.append(imageView.frame.origin.y)
-
-            self.view.addSubview(imageView)
-            // Don't allow images block button.
-            self.view.sendSubviewToBack(imageView)
-            imageViews.append(imageView)
-            
-            print("image view x: \(imageView.frame.origin.x), y: \(imageView.frame.origin.y), height: \(imageView.frame.height), width: \(imageView.frame.width)")
-        }
+        currentVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")
+        currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
+        addChildViewController(currentVC!)
+        self.addSubview(currentVC!.view, toView: viewsContainer)
+        view.sendSubviewToBack(viewsContainer)
     }
     
     @IBAction func start() {
@@ -121,7 +146,7 @@ class SlotMachineViewController: UIViewController {
         //imageView.startAnimating()
         
         // Start animation.
-        for (index, imageView) in imageViews.enumerate() {
+        for (index, imageView) in machineView.imageViews.enumerate() {
             
             //print("0 index: \(index), Y: \(imageView.frame.origin.y)")
             
@@ -131,7 +156,7 @@ class SlotMachineViewController: UIViewController {
             //self.view.sendSubviewToBack(imageView)
             
             // Reset Y.
-            imageView.frame.origin.y = imagesFrameY[index]
+            imageView.frame.origin.y = machineView.imagesFrameY[index]
             
             scrollImages(index, imageView: imageView)
         }
