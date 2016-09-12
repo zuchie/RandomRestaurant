@@ -124,20 +124,66 @@ class SlotMachineViewController: UIViewController {
         var viewBindingsDict = [String: AnyObject]()
         viewBindingsDict["subView"] = subView
         parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[subView]|",
-            options: [.AlignAllCenterX, .AlignAllCenterY], metrics: nil, views: viewBindingsDict))
+            options: [.AlignAllCenterX], metrics: nil, views: viewBindingsDict))
         parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
-            options: [.AlignAllCenterX, .AlignAllCenterY], metrics: nil, views: viewBindingsDict))
+            options: [.AlignAllCenterY], metrics: nil, views: viewBindingsDict))
+        
+        //parentView.layoutIfNeeded()
+        print("parent frame height: \(parentView.frame.height), width: \(parentView.frame.width)")
+        //print("subview frame height: \(subView.frame.height), width: \(subView.frame.width)")
+ 
     }
-    
+    /*
+    override func viewDidLayoutSubviews() {
+        let sub = viewsContainer.subviews.first
+        print("subview: \(sub)")
+        print("subview frame height: \(sub!.frame.height), width: \(sub!.frame.width)")
+    }
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
         
         nearbyBusinesses.setRatingBar(ratingBar)
         
-        currentVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")
+        currentVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine") as! MachineViewController
         currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
+        // Constrain frame of view with container.
+        //currentVC!.view.frame = viewsContainer.bounds
+    
         addChildViewController(currentVC!)
         self.addSubview(currentVC!.view, toView: viewsContainer)
+        
+        /*
+        let machineVC = MachineViewController()
+        
+        let imageViewFrameWidth = currentVC!.view.frame.width
+        let imageViewFrameHeight = currentVC!.view.frame.height
+        let imageViewFrameX = currentVC!.view.frame.origin.x
+        let imageViewFrameY = currentVC!.view.frame.origin.y
+        
+        for (index, view) in machineVC.imageViews.enumerate() {
+            
+            view.frame = CGRect(x: imageViewFrameX, y: imageViewFrameY - CGFloat(index) * imageViewFrameHeight, width: imageViewFrameWidth, height: imageViewFrameHeight)
+            
+            machineVC.imagesFrameY.append(view.frame.origin.y)
+            
+            //view.addSubview(imageView)
+            view.layoutIfNeeded()
+            
+            // Don't allow images block button.
+            //view.sendSubviewToBack(imageView)
+            //imageViews.append(imageView)
+            
+            print("updated image view x: \(view.frame.origin.x), y: \(view.frame.origin.y), height: \(view.frame.height), width: \(view.frame.width)")
+        }
+        */
+ 
+        /*
+        viewsContainer.addSubview(currentVC!.view)
+        currentVC!.view.frame = viewsContainer.bounds
+        currentVC!.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        currentVC!.didMoveToParentViewController(self)
+        */
         view.sendSubviewToBack(viewsContainer)
     }
     
