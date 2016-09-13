@@ -28,13 +28,10 @@ class SlotMachineViewController: UIViewController {
     private var bizAddress = ""
     private var bizCoordinate2D: CLLocationCoordinate2D?
     
-    private var machineView = MachineViewController()
-    
     private weak var currentVC: UIViewController?
     
     var urlQueryParameters: UrlQueryParameters?
     
- 
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
         print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
@@ -57,7 +54,7 @@ class SlotMachineViewController: UIViewController {
             
             //print("frame origin y: \(frame.origin.y), frame height: \(frame.height)")
             //print("imageviews count: \(self.imageViews.count)")
-            frame.origin.y += frame.height * CGFloat(self.machineView.imageViews.count - 1)
+            frame.origin.y += frame.height * CGFloat(MachineViewController.imageViews.count - 1)
             //print("1 index: \(index), frame Y: \(frame.origin.y)")
             imageView.frame = frame
             
@@ -128,18 +125,10 @@ class SlotMachineViewController: UIViewController {
         parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
             options: [.AlignAllCenterY], metrics: nil, views: viewBindingsDict))
         
-        //parentView.layoutIfNeeded()
         print("parent frame height: \(parentView.frame.height), width: \(parentView.frame.width)")
-        //print("subview frame height: \(subView.frame.height), width: \(subView.frame.width)")
  
     }
-    /*
-    override func viewDidLayoutSubviews() {
-        let sub = viewsContainer.subviews.first
-        print("subview: \(sub)")
-        print("subview frame height: \(sub!.frame.height), width: \(sub!.frame.width)")
-    }
-    */
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -147,62 +136,20 @@ class SlotMachineViewController: UIViewController {
         
         currentVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine") as! MachineViewController
         currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
-        // Constrain frame of view with container.
-        //currentVC!.view.frame = viewsContainer.bounds
     
         addChildViewController(currentVC!)
         self.addSubview(currentVC!.view, toView: viewsContainer)
         
-        /*
-        let machineVC = MachineViewController()
-        
-        let imageViewFrameWidth = currentVC!.view.frame.width
-        let imageViewFrameHeight = currentVC!.view.frame.height
-        let imageViewFrameX = currentVC!.view.frame.origin.x
-        let imageViewFrameY = currentVC!.view.frame.origin.y
-        
-        for (index, view) in machineVC.imageViews.enumerate() {
-            
-            view.frame = CGRect(x: imageViewFrameX, y: imageViewFrameY - CGFloat(index) * imageViewFrameHeight, width: imageViewFrameWidth, height: imageViewFrameHeight)
-            
-            machineVC.imagesFrameY.append(view.frame.origin.y)
-            
-            //view.addSubview(imageView)
-            view.layoutIfNeeded()
-            
-            // Don't allow images block button.
-            //view.sendSubviewToBack(imageView)
-            //imageViews.append(imageView)
-            
-            print("updated image view x: \(view.frame.origin.x), y: \(view.frame.origin.y), height: \(view.frame.height), width: \(view.frame.width)")
-        }
-        */
- 
-        /*
-        viewsContainer.addSubview(currentVC!.view)
-        currentVC!.view.frame = viewsContainer.bounds
-        currentVC!.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        currentVC!.didMoveToParentViewController(self)
-        */
         view.sendSubviewToBack(viewsContainer)
     }
     
     @IBAction func start() {
         
-        //imageView.startAnimating()
-        
         // Start animation.
-        for (index, imageView) in machineView.imageViews.enumerate() {
-            
-            //print("0 index: \(index), Y: \(imageView.frame.origin.y)")
-            
-            //imageViews.removeAtIndex(index)
-            //self.view.addSubview(imageView)
-            // Don't allow images block button.
-            //self.view.sendSubviewToBack(imageView)
+        for (index, imageView) in MachineViewController.imageViews.enumerate() {
             
             // Reset Y.
-            imageView.frame.origin.y = machineView.imagesFrameY[index]
+            imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
             
             scrollImages(index, imageView: imageView)
         }
