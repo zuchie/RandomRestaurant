@@ -151,7 +151,10 @@ class SlotMachineViewController: UIViewController {
             // Reset Y.
             imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
             
+            view.bringSubviewToFront(viewsContainer)
+            
             scrollImages(index, imageView: imageView)
+            //view.sendSubviewToBack(viewsContainer)
         }
         
         //scrollImages(0, image: imageView.animationImages!.first!)
