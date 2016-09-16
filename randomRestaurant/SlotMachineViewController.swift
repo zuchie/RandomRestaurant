@@ -15,6 +15,15 @@ class SlotMachineViewController: UIViewController {
     @IBOutlet weak var pickedBizAddress: UILabel!
     @IBOutlet weak var viewsContainer: UIView!
     
+    struct restaurant {
+        var name: String?
+        var price: String?
+        var rating: String?
+        var reviewCount: String?
+        var address: String?
+    }
+    
+    static var pickedRestaurant: restaurant?
     
     private var nearbyBusinesses = GetNearbyBusinesses()
     
@@ -181,10 +190,10 @@ class SlotMachineViewController: UIViewController {
                 
                 // Get picked business location object and convert to address string.
                 if let pickedBizLocationObj = returnedBusiness["location"] as? NSDictionary {
-                        self.bizLocationObj = PickedBusinessLocation(businessObj: pickedBizLocationObj)
+                    self.bizLocationObj = PickedBusinessLocation(businessObj: pickedBizLocationObj)
                     
-                        self.bizAddress = self.bizLocationObj!.getBizAddressString()
-                        print("biz location: \(self.bizAddress)")
+                    self.bizAddress = self.bizLocationObj!.getBizAddressString()
+                    print("biz location: \(self.bizAddress)")
                 } else {
                     print("No location information of picked business")
                 }
@@ -193,6 +202,9 @@ class SlotMachineViewController: UIViewController {
                     self.bizCoordinate2D = CLLocationCoordinate2DMake((pickedBusinessCoordinatesObj["latitude"] as? CLLocationDegrees)!, (pickedBusinessCoordinatesObj["longitude"] as? CLLocationDegrees)!)
                     print("biz latitude: \(self.bizCoordinate2D!.latitude), longitude: \(self.bizCoordinate2D!.longitude)")
                 }
+                
+                // Params going to pass to Core Data of Favorite Restaurant.
+                SlotMachineViewController.pickedRestaurant = restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress)
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
@@ -205,7 +217,6 @@ class SlotMachineViewController: UIViewController {
             }
             
         }
-        
     }
 
     override func didReceiveMemoryWarning() {
