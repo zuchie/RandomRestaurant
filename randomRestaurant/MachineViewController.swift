@@ -41,6 +41,9 @@ class MachineViewController: UIViewController {
         imageViewFrameX = view.frame.origin.x
         imageViewFrameY = view.frame.origin.y
         
+        // Clear.
+        MachineViewController.imageViews.removeAll()
+        
         // Init image views.
         for index in 0..<animationImages.count {
             imageView = UIImageView()

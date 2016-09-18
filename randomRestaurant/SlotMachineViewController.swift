@@ -86,6 +86,7 @@ class SlotMachineViewController: UIViewController {
         oldViewController.willMoveToParentViewController(nil)
         self.addChildViewController(newViewController)
         self.addSubview(newViewController.view, toView: viewsContainer)
+        view.sendSubviewToBack(viewsContainer)
         
         newViewController.view.alpha = 0
         newViewController.view.layoutIfNeeded()
