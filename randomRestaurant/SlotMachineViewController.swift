@@ -15,7 +15,7 @@ class SlotMachineViewController: UIViewController {
     @IBOutlet weak var pickedBizAddress: UILabel!
     @IBOutlet weak var viewsContainer: UIView!
     
-    struct restaurant {
+    struct Restaurant {
         var name: String?
         var price: String?
         var rating: String?
@@ -23,7 +23,7 @@ class SlotMachineViewController: UIViewController {
         var address: String?
     }
     
-    static var pickedRestaurant: restaurant?
+    static var pickedRestaurant: Restaurant?
     
     private var nearbyBusinesses = GetNearbyBusinesses()
     
@@ -204,7 +204,7 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 // Params going to pass to Core Data of Favorite Restaurant.
-                SlotMachineViewController.pickedRestaurant = restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress)
+                SlotMachineViewController.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress)
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"

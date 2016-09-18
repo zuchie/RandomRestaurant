@@ -360,6 +360,10 @@
         <scene sceneID="D8j-jt-vlz">
             <objects>
                 <viewController storyboardIdentifier="Machine" id="uWf-Jb-JbX" customClass="MachineViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0qi-sN-JjF"/>
+                        <viewControllerLayoutGuide type="bottom" id="mqO-mu-hbP"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="El3-fy-ABA">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

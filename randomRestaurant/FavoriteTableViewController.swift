@@ -9,7 +9,9 @@
 import UIKit
 import CoreData
 
-class FavoriteTableViewController: UITableViewController {
+class FavoriteTableViewController: CoreDataTableViewController {
+    
+    //var favRestaurant: SlotMachineViewController.Restaurant?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,31 +25,54 @@ class FavoriteTableViewController: UITableViewController {
         updateDatabase(restaurant!)
     }
     
+    
+    //var managedObjectContext: NSManagedObjectContext? { didSet { updateUI() } }
     // MARK: Model
+    
+    private func updateUI() {
+        if let context = managedObjectContext {
+            let request = NSFetchRequest(entityName: "Restaurant")
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            self.fetchedResultsController = NSFetchedResultsController(
+                fetchRequest: request,
+                managedObjectContext: context,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+        } else {
+            print("managedObjectContext is nil")
+        }
+    }
     
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
-    private func updateDatabase(newRestaurant: SlotMachineViewController.restaurant) {
+    private func updateDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
         managedObjectContext?.performBlock {
             
             _ = Restaurant.restaurant(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
+            
+            // Save context to database.
+            do {
+                try self.managedObjectContext?.save()
+            } catch let error {
+                print("Core data error: \(error)")
+            }
+            
+            self.updateUI()
         }
-        do {
-            try self.managedObjectContext?.save()
-        } catch let error {
-            print("Core data error: \(error)")
-        }
-        printFavoriteRestaurant()
+
+        //printFavoriteRestaurant()
+        //updateUI()
     }
-    
+    /*
     private func printFavoriteRestaurant() {
         managedObjectContext?.performBlock {
-            if let results = try? self.managedObjectContext?.executeFetchRequest(NSFetchRequest(entityName: "Restaurant")) {
+            if let results = try? self.managedObjectContext?.executeFetchRequest(NSFetchRequest(entityName: "Restaurant")).first {
                 print("fav restaurant: \(results!)")
             }
         }
     }
-    
+    */
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -55,6 +80,7 @@ class FavoriteTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
+    /*
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 0
@@ -64,16 +90,30 @@ class FavoriteTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return 0
     }
-
-    /*
+    */
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        
+        let cellID = "favorite"
+        
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
 
         // Configure the cell...
+        if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? Restaurant {
+            var name: String?
+            var address: String?
+            favRestaurant.managedObjectContext?.performBlockAndWait {
+                name = favRestaurant.name
+                address = favRestaurant.address
+            }
+            cell.textLabel?.text = "\(name!), \(address!)"
+        }
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.

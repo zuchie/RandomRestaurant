@@ -12,7 +12,7 @@ import CoreData
 class Restaurant: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
-    class func restaurant(restaurant: SlotMachineViewController.restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Restaurant? {
+    class func restaurant(restaurant: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Restaurant? {
         
         let request = NSFetchRequest(entityName: "Restaurant")
         request.predicate = NSPredicate(format: "name = %@", restaurant.name!)

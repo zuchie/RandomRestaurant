@@ -32,6 +32,7 @@
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
 		B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85D1D4EAC4600B0476E /* Assets.xcassets */; };
 		B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85F1D4EAC4600B0476E /* LaunchScreen.storyboard */; };
+		B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		B91AC85D1D4EAC4600B0476E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B91AC8601D4EAC4600B0476E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B91AC8621D4EAC4600B0476E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -154,6 +156,7 @@
 				B906DBD91D8A9C980021B025 /* Restaurant+CoreDataProperties.swift */,
 				B906DBDA1D8A9C980021B025 /* Restaurant.swift */,
 				B906DBD61D8A988C0021B025 /* Favorite.xcdatamodeld */,
+				B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */,
 			);
 			name = "Core Data";
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */,
 				B906DB9E1D6ED7A60021B025 /* CurrentPlace.swift in Sources */,
 				B906DBD81D8A988C0021B025 /* Favorite.xcdatamodeld in Sources */,
+				B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */,
 				B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */,
 				B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */,
 				B906DBAE1D8294740021B025 /* MachineViewController.swift in Sources */,
