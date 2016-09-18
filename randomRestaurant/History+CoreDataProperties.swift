@@ -1,8 +1,8 @@
 //
-//  Restaurant+CoreDataProperties.swift
+//  History+CoreDataProperties.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 9/15/16.
+//  Created by Zhe Cui on 9/18/16.
 //  Copyright © 2016 Zhe Cui. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -12,12 +12,12 @@
 import Foundation
 import CoreData
 
-extension Restaurant {
+extension History {
 
     @NSManaged var name: String?
     @NSManaged var price: String?
     @NSManaged var rating: String?
-    @NSManaged var reviewCount: String?
     @NSManaged var address: String?
+    @NSManaged var reviewCount: String?
 
 }

@@ -7,7 +7,15 @@
         <attribute name="rating" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reviewCount" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="History" representedClassName=".History" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rating" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reviewCount" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Favorite" positionX="-54" positionY="-9" width="128" height="120"/>
+        <element name="History" positionX="-36" positionY="9" width="128" height="120"/>
+        <element name="Favorite" positionX="0" positionY="45" width="128" height="120"/>
     </elements>
 </model>

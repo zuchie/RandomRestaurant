@@ -7,8 +7,10 @@
 		<string>comgooglemaps</string>
 		<string>comgooglemaps-x-callback</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>randomRestaurant would like to use your current location</string>
+    <key>NSLocationUsageDescription</key>
+    <string>Permission for your current location</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app would like to use your current location</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

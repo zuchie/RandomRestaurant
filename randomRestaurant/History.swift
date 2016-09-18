@@ -1,26 +1,27 @@
 //
-//  Restaurant.swift
+//  History.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 9/15/16.
+//  Created by Zhe Cui on 9/18/16.
 //  Copyright © 2016 Zhe Cui. All rights reserved.
 //
+
 
 import Foundation
 import CoreData
 
-class Restaurant: NSManagedObject {
-
-// Insert code here to add functionality to your managed object subclass
-    class func restaurant(restaurant: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Restaurant? {
+class History: NSManagedObject {
+    
+    // Insert code here to add functionality to your managed object subclass
+    class func history(restaurant: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         
-        let request = NSFetchRequest(entityName: "Restaurant")
+        let request = NSFetchRequest(entityName: "History")
         request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
         
-        if let restaurant = (try? context.executeFetchRequest(request))?.first as? Restaurant {
+        if let restaurant = (try? context.executeFetchRequest(request))?.first as? History {
             print("found entry in core data")
             return restaurant
-        } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("Restaurant", inManagedObjectContext: context) as? Restaurant {
+        } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("History", inManagedObjectContext: context) as? History {
             print("new entry added to core data")
             newRestaurant.name = restaurant.name
             newRestaurant.price = restaurant.price
@@ -32,5 +33,5 @@ class Restaurant: NSManagedObject {
         
         return nil
     }
-
+    
 }
