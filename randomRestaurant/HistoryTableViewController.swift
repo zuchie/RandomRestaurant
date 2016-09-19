@@ -57,7 +57,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         let cellID = "history"
         
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
         

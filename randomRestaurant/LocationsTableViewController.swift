@@ -100,9 +100,6 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cellID = "LocationTableViewCell"
-        
-        // TOTHINK: Why here it doesn't need to register cell class? When uncommenting, cell would be duplicated in table.
-        //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
     
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
         cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]

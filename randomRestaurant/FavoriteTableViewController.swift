@@ -59,7 +59,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
         
         let cellID = "favorite"
         
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
 
