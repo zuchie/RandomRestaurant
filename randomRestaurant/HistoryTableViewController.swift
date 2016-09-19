@@ -57,6 +57,9 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         let cellID = "history"
         
+        // TOTHINK: Why need register? Search bar searching would crash without this.
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
         
         // Configure the cell...
