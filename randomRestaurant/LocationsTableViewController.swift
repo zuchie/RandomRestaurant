@@ -114,20 +114,6 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
 
     }
     
-    private func alert() {
-        
-        // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Waiting for loading current location...", preferredStyle: UIAlertControllerStyle.Alert)
-        
-        // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
-
-        }))
-        
-        // Show the alert.
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
 
     // MARK: - Navigation
 
@@ -142,34 +128,24 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         if inputLocation.text == "" || inputLocation.text == "Current place" {
             currentPlace!.getCurrentPlace() {
                 self.place = self.currentPlace!.currentPlaceAddress
-                
-                if self.place == nil {
-                    self.alert()
-                } else {
-                    if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
-                        if let id = segue.identifier {
-                            if id == "foodCategories" {
-                                print("current place address: \(self.place!)")
-                                self.urlQueryParameters?.location = self.place!
-                                foodCategoriesVC.setUrlQueryParameters(self.urlQueryParameters!)
-                            }
+                if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
+                    if let id = segue.identifier {
+                        if id == "foodCategories" {
+                            print("current place address: \(self.place!)")
+                            self.urlQueryParameters?.location = self.place!
+                            foodCategoriesVC.setUrlQueryParameters(self.urlQueryParameters!)
                         }
                     }
                 }
             }
         } else {
-            place = self.inputLocation.text
-            
-            if place == nil {
-                alert()
-            } else {
-                if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
-                    if let id = segue.identifier {
-                        if id == "foodCategories" {
-                            print("chosen place address: \(place!)")
-                            urlQueryParameters?.location = place!
-                            foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
-                        }
+            place = self.inputLocation.text            
+            if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
+                if let id = segue.identifier {
+                    if id == "foodCategories" {
+                        print("chosen place address: \(place!)")
+                        urlQueryParameters?.location = place!
+                        foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
                     }
                 }
             }

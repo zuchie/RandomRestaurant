@@ -51,30 +51,13 @@ class SlotMachineViewController: UIViewController {
     }
  
     private func scrollImages(index: Int, imageView: UIImageView) {
-        
         UIView.animateWithDuration(4.0, delay: 0.0, options: [.CurveEaseInOut], animations: {
- 
-            //print("image Y: \(imageView.frame.origin.y)")
-            //imageView.image = self.animationImages[index]
-            
-            //self.view.addSubview(imageView)
-            //self.view.bringSubviewToFront(imageView)
             var frame = imageView.frame
-            
-            //print("frame origin y: \(frame.origin.y), frame height: \(frame.height)")
-            //print("imageviews count: \(self.imageViews.count)")
             frame.origin.y += frame.height * CGFloat(MachineViewController.imageViews.count - 1)
-            //print("1 index: \(index), frame Y: \(frame.origin.y)")
             imageView.frame = frame
-            
         }, completion: { finished in
             if finished {
-                //self.view.sendSubviewToBack(imageView)
-                //self.view.sendSubviewToBack(imageView)
-                // Reuse this image view.
-                //imageView.frame.origin.y = -(CGFloat(index) * self.imageViewFrameHeight)
-                //self.imageViews[index] = imageView
-                //print("image \(index), Y: \(imageView.frame.origin.y)")
+                self.view.sendSubviewToBack(self.viewsContainer)
             } else {
                 print("animation is still running...")
             }
@@ -86,7 +69,6 @@ class SlotMachineViewController: UIViewController {
         oldViewController.willMoveToParentViewController(nil)
         self.addChildViewController(newViewController)
         self.addSubview(newViewController.view, toView: viewsContainer)
-        view.sendSubviewToBack(viewsContainer)
         
         newViewController.view.alpha = 0
         newViewController.view.layoutIfNeeded()
@@ -109,16 +91,19 @@ class SlotMachineViewController: UIViewController {
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
+            view.sendSubviewToBack(viewsContainer)
         case 1:
             let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite")
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
+            view.bringSubviewToFront(viewsContainer)
         case 2:
             let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("History")
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
+            view.bringSubviewToFront(viewsContainer)
         default:
             break;
         }
@@ -157,21 +142,13 @@ class SlotMachineViewController: UIViewController {
         
         // Start animation.
         for (index, imageView) in MachineViewController.imageViews.enumerate() {
-            
             // Reset Y.
             imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
-            
             view.bringSubviewToFront(viewsContainer)
-            
             scrollImages(index, imageView: imageView)
-            //view.sendSubviewToBack(viewsContainer)
         }
         
-        //scrollImages(0, image: imageView.animationImages!.first!)
-        
         let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU"
-        
-        //bizPicked.text = nil // Reset for following queries
         
         // Get businesses from Yelp API v3.
         nearbyBusinesses.getUrlParameters(urlQueryParameters?.location, categories: urlQueryParameters?.category, radius: urlQueryParameters?.radius, limit: urlQueryParameters?.limit, open_at: urlQueryParameters?.openAt)

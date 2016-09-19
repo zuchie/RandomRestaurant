@@ -11,6 +11,7 @@ import UIKit
 class MachineViewController: UIViewController {
     
     var imageView: UIImageView!
+    private var viewEverAppeared = false
     
     private let animationImages = [
         UIImage(named: "image0")!,
@@ -36,34 +37,38 @@ class MachineViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         
-        imageViewFrameWidth = view.frame.width
-        imageViewFrameHeight = view.frame.height
-        imageViewFrameX = view.frame.origin.x
-        imageViewFrameY = view.frame.origin.y
-        
-        // Clear.
-        MachineViewController.imageViews.removeAll()
-        
-        // Init image views.
-        for index in 0..<animationImages.count {
-            imageView = UIImageView()
-            imageView.image = self.animationImages[index]
+        // Init imageView once in MachineView lifecycle.
+        // Cannot put into viewDidLoad because view.frame hasn't been updated by that time.
+        if !viewEverAppeared {
+            imageViewFrameWidth = view.frame.width
+            imageViewFrameHeight = view.frame.height
+            imageViewFrameX = view.frame.origin.x
+            imageViewFrameY = view.frame.origin.y
             
-            imageView.frame = CGRect(x: imageViewFrameX, y: imageViewFrameY - CGFloat(index) * imageViewFrameHeight, width: imageViewFrameWidth, height: imageViewFrameHeight)
+            // Clear.
+            MachineViewController.imageViews.removeAll()
             
-            MachineViewController.imagesFrameY.append(imageView.frame.origin.y)
-            
-            view.addSubview(imageView)
-            
-            // Don't allow images block button.
-            //view.sendSubviewToBack(imageView)
-            MachineViewController.imageViews.append(imageView)
-            
-            print("image view x: \(imageView.frame.origin.x), y: \(imageView.frame.origin.y), height: \(imageView.frame.height), width: \(imageView.frame.width)")
+            // Init image views.
+            for index in 0..<animationImages.count {
+                imageView = UIImageView()
+                imageView.image = self.animationImages[index]
+                
+                imageView.frame = CGRect(x: imageViewFrameX, y: imageViewFrameY - CGFloat(index) * imageViewFrameHeight, width: imageViewFrameWidth, height: imageViewFrameHeight)
+                
+                MachineViewController.imagesFrameY.append(imageView.frame.origin.y)
+                
+                view.addSubview(imageView)
+                
+                // Don't allow images block button.
+                //view.sendSubviewToBack(imageView)
+                MachineViewController.imageViews.append(imageView)
+                
+                print("image view x: \(imageView.frame.origin.x), y: \(imageView.frame.origin.y), height: \(imageView.frame.height), width: \(imageView.frame.width)")
+            }
+            viewEverAppeared = true
         }
-
+        
     }
-
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

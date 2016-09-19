@@ -74,6 +74,19 @@ class FoodCategoriesViewController: UITableViewController {
         category = selectedCell.nameLabel.text!.lowercaseString
     }
     
+    private func alert() {
+        
+        // Create the alert.
+        let alert = UIAlertController(title: "Alert", message: "Loading current location...", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // Add an action(button).
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
+        }))
+        
+        // Show the alert.
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -82,11 +95,15 @@ class FoodCategoriesViewController: UITableViewController {
         if let navCtrl = destinationVC as? UINavigationController {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }
-        if let timeVC = destinationVC as? TimeViewController {
-            if let id = segue.identifier {
-                if id == "time" {
-                    urlQueryParameters?.category = category
-                    timeVC.setUrlQueryParameters(urlQueryParameters!)
+        if urlQueryParameters == nil {
+            alert()
+        } else {
+            if let timeVC = destinationVC as? TimeViewController {
+                if let id = segue.identifier {
+                    if id == "time" {
+                        urlQueryParameters?.category = category
+                        timeVC.setUrlQueryParameters(urlQueryParameters!)
+                    }
                 }
             }
         }
