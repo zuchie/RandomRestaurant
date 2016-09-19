@@ -9,14 +9,16 @@
 import UIKit
 import GooglePlaces
 
-class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
+class LocationsTableViewController: UITableViewController, UISearchBarDelegate, CLLocationManagerDelegate {
 
     // MARK: Properties
     
     @IBOutlet weak var inputLocation: UISearchBar!
     @IBOutlet weak var locationsTable: UITableView!
     
-    // Search radius: 40000 meters(25 mi), return 20 businesses.
+    let locationManager = CLLocationManager()
+    
+    // Search radius: 40000 meters(25 mi), return 50 businesses.
     var urlQueryParameters = UrlQueryParameters(location: "", category: "", radius: 40000, limit: 50, openAt: 0)
 
     private var currentPlace: CurrentPlace? = nil
@@ -42,7 +44,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Allocate cache here for URL responses so that cache data won't get lost when view is backed. 
+        // Asking for access of users location.
+        locationManager.delegate = self
+        if CLLocationManager.authorizationStatus() == .NotDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        }
+
+        // Allocate cache here for URL responses so that cache data won't get lost when view is backed.
         let cacheSizeMemory = 5 * 1024 * 1024
         let cacheSizeDisk = 10 * 1024 * 1024
         let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
@@ -53,17 +61,8 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         locationsTable.scrollEnabled = true
         
         filteredLocations[places.current.rawValue].append("Current place")
-        currentPlace = CurrentPlace() // Have to do initialization first.
         
-        /*
-        currentPlace!.getCurrentPlace() {
-            /*
-            let currentPlaceName = self.currentPlace!.currentPlaceName
-            let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
-            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
-            */
-        }
-        */
+        currentPlace = CurrentPlace() // Have to do initialization first.
         
         // Fetcher
         let neBoundsCorner = CLLocationCoordinate2D(latitude: 50.090308, longitude: -66.966982)
@@ -85,17 +84,6 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         NSURLCache.sharedURLCache().removeAllCachedResponses()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        
-        currentPlace!.getCurrentPlace() {
-            
-            let currentPlaceName = self.currentPlace!.currentPlaceName
-            let currentPlaceAddress = self.currentPlace!.currentPlaceAddress
-            print("view will appear")
-            print("current place name: \(currentPlaceName!), address: \(currentPlaceAddress!)")
-            
-        }
-    }
     
     // MARK: - Table view data source
 
@@ -113,12 +101,11 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
         
         let cellID = "LocationTableViewCell"
         
+        // TOTHINK: Why here it doesn't need to register cell class? When uncommenting, cell would be duplicated in table.
         //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
     
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
-
         cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]
-
         return cell
     }
     
@@ -148,24 +135,44 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate {
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
+        
         var destinationVC = segue.destinationViewController
         if let navCtrl = destinationVC as? UINavigationController {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }
-        // If no input in place search bar, use current place.
-        place = (inputLocation.text == "" || inputLocation.text == "Current place") ? currentPlace!.currentPlaceAddress : inputLocation.text
         
-        if place == nil {
-            
-            alert()
-            
+        // If no input in place search bar, use current place.
+        if inputLocation.text == "" || inputLocation.text == "Current place" {
+            currentPlace!.getCurrentPlace() {
+                self.place = self.currentPlace!.currentPlaceAddress
+                
+                if self.place == nil {
+                    self.alert()
+                } else {
+                    if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
+                        if let id = segue.identifier {
+                            if id == "foodCategories" {
+                                print("current place address: \(self.place!)")
+                                self.urlQueryParameters?.location = self.place!
+                                foodCategoriesVC.setUrlQueryParameters(self.urlQueryParameters!)
+                            }
+                        }
+                    }
+                }
+            }
         } else {
-            if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
-                if let id = segue.identifier {
-                    if id == "foodCategories" {
-                        urlQueryParameters?.location = place!
-                        foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
+            place = self.inputLocation.text
+            
+            if place == nil {
+                alert()
+            } else {
+                if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
+                    if let id = segue.identifier {
+                        if id == "foodCategories" {
+                            print("chosen place address: \(place!)")
+                            urlQueryParameters?.location = place!
+                            foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
+                        }
                     }
                 }
             }
