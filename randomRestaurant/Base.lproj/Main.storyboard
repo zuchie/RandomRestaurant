@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -439,19 +440,42 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="history" id="NBY-AP-VtY">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="history" id="NBY-AP-VtY" customClass="HistoryTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NBY-AP-VtY" id="WyT-S0-w9x">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3">
-                                            <rect key="frame" x="554" y="7" width="30" height="30"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3">
+                                            <rect key="frame" x="523" y="-1" width="44" height="44"/>
+                                            <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="BdF-og-VP3" secondAttribute="height" multiplier="1:1" id="s6J-Re-FIe"/>
+                                            </constraints>
                                             <state key="normal" title="Fav"/>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fm5-Lz-MiN">
+                                            <rect key="frame" x="8" y="0.0" width="516" height="44"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="BdF-og-VP3" secondAttribute="trailing" id="2LV-tP-nyd"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="fm5-Lz-MiN" secondAttribute="trailing" constant="35" id="A5H-pw-9kW"/>
+                                        <constraint firstItem="BdF-og-VP3" firstAttribute="height" secondItem="WyT-S0-w9x" secondAttribute="height" id="PbA-nN-mPB"/>
+                                        <constraint firstItem="fm5-Lz-MiN" firstAttribute="leading" secondItem="WyT-S0-w9x" secondAttribute="leadingMargin" id="RG8-74-sh6"/>
+                                        <constraint firstItem="BdF-og-VP3" firstAttribute="top" secondItem="WyT-S0-w9x" secondAttribute="top" constant="-1" id="SWn-HF-voj"/>
+                                        <constraint firstItem="fm5-Lz-MiN" firstAttribute="centerY" secondItem="WyT-S0-w9x" secondAttribute="centerY" id="kFc-M1-rpe"/>
+                                        <constraint firstItem="fm5-Lz-MiN" firstAttribute="top" secondItem="WyT-S0-w9x" secondAttribute="top" id="vbE-2W-DQP"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="addToFav" destination="BdF-og-VP3" id="waM-zL-Jym"/>
+                                    <outlet property="historyLabel" destination="fm5-Lz-MiN" id="TDi-YS-LmF"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -461,6 +485,7 @@
                     </tableView>
                     <connections>
                         <outlet property="searchDisplayController" destination="BWz-wC-M6e" id="1ER-4e-lQV"/>
+                        <outlet property="searchHistory" destination="Sxy-nH-w3I" id="qnx-sR-txj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yv0-x5-1xs" userLabel="First Responder" sceneMemberID="firstResponder"/>

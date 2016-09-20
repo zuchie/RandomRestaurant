@@ -9,10 +9,14 @@
 import UIKit
 import CoreData
 
-class HistoryTableViewController: CoreDataTableViewController {
-
+class HistoryTableViewController: CoreDataTableViewController, UISearchBarDelegate {
+    
+    @IBOutlet weak var searchHistory: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchHistory.delegate = self
         
         if let restaurant = SlotMachineViewController.pickedRestaurant {
             updateDatabase(restaurant)
@@ -20,7 +24,7 @@ class HistoryTableViewController: CoreDataTableViewController {
             updateUI()
         }
     }
-
+    
     private func updateUI() {
         if let context = managedObjectContext {
             let request = NSFetchRequest(entityName: "History")
@@ -58,12 +62,10 @@ class HistoryTableViewController: CoreDataTableViewController {
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cellID = "history"
-        
         // TOTHINK: Why need register? Search bar searching would crash without this.
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("history", forIndexPath: indexPath) as! HistoryTableViewCell
         
         // Configure the cell...
         if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? History {
@@ -73,10 +75,36 @@ class HistoryTableViewController: CoreDataTableViewController {
                 name = favRestaurant.name
                 //address = favRestaurant.address
             }
-            cell.textLabel?.text = name
+            cell.historyLabel.text = name
         }
         
         return cell
     }
-
+    
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
+        searchHistory.text = selectedCell.textLabel!.text
+        view.endEditing(true) // Hide keyboard.
+        
+    }
+    
+    /*
+    // Override to support editing the table view.
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // Delete the row from the data source
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        } else if editingStyle == .Insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+    // Override to support conditional editing of the table view.
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    */
 }
