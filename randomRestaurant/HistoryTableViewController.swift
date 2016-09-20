@@ -14,8 +14,11 @@ class HistoryTableViewController: CoreDataTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let restaurant = SlotMachineViewController.pickedRestaurant
-        updateDatabase(restaurant!)
+        if let restaurant = SlotMachineViewController.pickedRestaurant {
+            updateDatabase(restaurant)
+        } else {
+            updateUI()
+        }
     }
 
     private func updateUI() {
