@@ -12,22 +12,21 @@ import CoreData
 
 class Favorite: NSManagedObject {
     
-    // Insert code here to add functionality to your managed object subclass
-    class func favorite(restaurantName: String, inManagedObjectContext context: NSManagedObjectContext) -> Favorite? {
+    class func favorite(history: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Favorite? {
         
         let request = NSFetchRequest(entityName: "Favorite")
-        request.predicate = NSPredicate(format: "name = %@", restaurantName)
+        request.predicate = NSPredicate(format: "name = %@", history.name!)
         
         if let restaurant = (try? context.executeFetchRequest(request))?.first as? Favorite {
             print("found entry in core data")
             return restaurant
         } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("Favorite", inManagedObjectContext: context) as? Favorite {
             print("new entry added to core data")
-            newRestaurant.name = restaurantName
-            newRestaurant.price = ""
-            newRestaurant.rating = ""
-            newRestaurant.reviewCount = ""
-            newRestaurant.address = ""
+            newRestaurant.name = history.name
+            newRestaurant.price = history.price
+            newRestaurant.rating = history.rating
+            newRestaurant.reviewCount = history.reviewCount
+            newRestaurant.address = history.address
             return newRestaurant
         }
         

@@ -28,6 +28,7 @@ class History: NSManagedObject {
             newRestaurant.rating = restaurant.rating
             newRestaurant.reviewCount = restaurant.reviewCount
             newRestaurant.address = restaurant.address
+            print("new rest: \(newRestaurant)")
             return newRestaurant
         }
         

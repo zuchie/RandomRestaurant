@@ -14,6 +14,11 @@ class HistoryTableViewController: CoreDataTableViewController {
     private var favButtons = [UIButton]()
     private var favLabels = [String]()
     private var favVC = FavoriteTableViewController()
+    private var historyRest = SlotMachineViewController.Restaurant()
+    //private var favRest: Favorite?
+    
+    private let emptyStar = UIImage(named: "emptyStar")
+    private let filledStar = UIImage(named: "filledStar")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +73,8 @@ class HistoryTableViewController: CoreDataTableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("history", forIndexPath: indexPath) as! HistoryTableViewCell
         
         cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: .TouchDown)
+        cell.addToFav.setImage(emptyStar, forState: .Normal)
+        cell.addToFav.setImage(filledStar, forState: .Selected)
         
         // Configure the cell...
         if let historyRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? History {
@@ -86,12 +93,41 @@ class HistoryTableViewController: CoreDataTableViewController {
         return cell
     }
     
+    private func updateButtonStatus(button: UIButton) {
+        let index = favButtons.indexOf(button)
+
+        if button.selected == false {
+            print("button normal")
+            button.selected = true
+            favButtons[index!].selected = true
+        } else {
+            print("button selected")
+            button.selected = false
+            favButtons[index!].selected = false
+            
+            let favRest = Favorite()
+            favRest.name = favLabels[index!]
+            favRest.price = ""
+            favRest.address = ""
+            favRest.rating = ""
+            favRest.reviewCount = ""
+            favVC.deleteFromDatabase(favRest)
+        }
+    }
+    
     func buttonTapped(sender: UIButton) {
         let index = favButtons.indexOf(sender)
         let labelText = favLabels[index!]
         
+        updateButtonStatus(sender)
+        
         // Pass to favorite restaurant database.
-        favVC.updateDatabase(labelText)
+        historyRest.name = labelText
+        historyRest.price = ""
+        historyRest.address = ""
+        historyRest.rating = ""
+        historyRest.reviewCount = ""
+        favVC.updateDatabase(historyRest)
     }
     
     /*

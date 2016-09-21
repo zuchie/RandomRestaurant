@@ -10,12 +10,15 @@ import UIKit
 import CoreData
 
 class FavoriteTableViewController: CoreDataTableViewController {
-
+    
+    //private var favToBeDeleted: Favorite?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         //let restaurant = SlotMachineViewController.pickedRestaurant
         //updateDatabase(restaurant!)
+        //favToBeDeleted = Favorite()
         updateUI()
     }
     
@@ -38,7 +41,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
     
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
-    func updateDatabase(newRestaurant: String) {
+    func updateDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
         managedObjectContext?.performBlock {
             
             _ = Favorite.favorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
@@ -54,6 +57,30 @@ class FavoriteTableViewController: CoreDataTableViewController {
         }
     }
     
+    func deleteFromDatabase(fav: Favorite) {
+
+        /*
+        print("delete from database, name: \(history.name)")
+        let favToBeDeleted = Favorite()
+        print("hello")
+        favToBeDeleted.name = history.name
+        favToBeDeleted.price = history.price
+        favToBeDeleted.rating = history.rating
+        favToBeDeleted.reviewCount = history.reviewCount
+        favToBeDeleted.address = history.address
+        
+        managedObjectContext?.deleteObject(favToBeDeleted)
+        */
+        managedObjectContext?.deleteObject(fav)
+        // Save context to database.
+        do {
+            try self.managedObjectContext?.save()
+        } catch let error {
+            print("Core data deleting error: \(error)")
+        }
+        
+        self.updateUI()
+    }
     
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

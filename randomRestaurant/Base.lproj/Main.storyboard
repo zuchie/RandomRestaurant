@@ -439,12 +439,11 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3">
                                             <rect key="frame" x="556" y="-1" width="44" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="BdF-og-VP3" secondAttribute="height" multiplier="1:1" id="s6J-Re-FIe"/>
                                             </constraints>
-                                            <state key="normal" title="Fav"/>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fm5-Lz-MiN">
                                             <rect key="frame" x="8" y="0.0" width="549" height="44"/>
