@@ -181,7 +181,7 @@ class SlotMachineViewController: UIViewController {
                     print("biz latitude: \(self.bizCoordinate2D!.latitude), longitude: \(self.bizCoordinate2D!.longitude)")
                 }
                 
-                // Params going to pass to Core Data of Favorite Restaurant.
+                // Params going to pass to Core Data of History Restaurant.
                 SlotMachineViewController.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress)
                 
                 dispatch_async(dispatch_get_main_queue(), {

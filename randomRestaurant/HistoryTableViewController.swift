@@ -9,14 +9,14 @@
 import UIKit
 import CoreData
 
-class HistoryTableViewController: CoreDataTableViewController, UISearchBarDelegate {
+class HistoryTableViewController: CoreDataTableViewController {
     
-    @IBOutlet weak var searchHistory: UISearchBar!
+    private var favButtons = [UIButton]()
+    private var favLabels = [String]()
+    private var favVC = FavoriteTableViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        searchHistory.delegate = self
         
         if let restaurant = SlotMachineViewController.pickedRestaurant {
             updateDatabase(restaurant)
@@ -67,27 +67,31 @@ class HistoryTableViewController: CoreDataTableViewController, UISearchBarDelega
         
         let cell = tableView.dequeueReusableCellWithIdentifier("history", forIndexPath: indexPath) as! HistoryTableViewCell
         
+        cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: .TouchDown)
+        
         // Configure the cell...
-        if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? History {
+        if let historyRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? History {
             var name: String?
             //var address: String?
-            favRestaurant.managedObjectContext?.performBlockAndWait {
-                name = favRestaurant.name
+            historyRestaurant.managedObjectContext?.performBlockAndWait {
+                name = historyRestaurant.name
                 //address = favRestaurant.address
             }
             cell.historyLabel.text = name
+            
+            favButtons.append(cell.addToFav)
+            favLabels.append(cell.historyLabel.text!)
         }
         
         return cell
     }
     
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func buttonTapped(sender: UIButton) {
+        let index = favButtons.indexOf(sender)
+        let labelText = favLabels[index!]
         
-        let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
-        searchHistory.text = selectedCell.textLabel!.text
-        view.endEditing(true) // Hide keyboard.
-        
+        // Pass to favorite restaurant database.
+        favVC.updateDatabase(labelText)
     }
     
     /*

@@ -14,8 +14,9 @@ class FavoriteTableViewController: CoreDataTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let restaurant = SlotMachineViewController.pickedRestaurant
-        updateDatabase(restaurant!)
+        //let restaurant = SlotMachineViewController.pickedRestaurant
+        //updateDatabase(restaurant!)
+        updateUI()
     }
     
     
@@ -37,10 +38,10 @@ class FavoriteTableViewController: CoreDataTableViewController {
     
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
-    private func updateDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
+    func updateDatabase(newRestaurant: String) {
         managedObjectContext?.performBlock {
             
-            //_ = Favorite.favorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
+            _ = Favorite.favorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
             
             // Save context to database.
             do {
@@ -53,7 +54,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
         }
     }
     
-    /*
+    
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -74,5 +75,4 @@ class FavoriteTableViewController: CoreDataTableViewController {
 
         return cell
     }
-    */
 }
