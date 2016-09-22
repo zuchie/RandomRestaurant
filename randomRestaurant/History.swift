@@ -2,10 +2,9 @@
 //  History.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 9/18/16.
+//  Created by Zhe Cui on 9/21/16.
 //  Copyright © 2016 Zhe Cui. All rights reserved.
 //
-
 
 import Foundation
 import CoreData
@@ -18,17 +17,20 @@ class History: NSManagedObject {
         let request = NSFetchRequest(entityName: "History")
         request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
         
-        if let restaurant = (try? context.executeFetchRequest(request))?.first as? History {
-            print("found entry in core data")
-            return restaurant
+        if let restaurantFound = (try? context.executeFetchRequest(request))?.first as? History {
+            print("found entry in history core data")
+            restaurantFound.isFavorite = restaurant.isFavorite
+            print("entry is fav? \(restaurantFound.isFavorite)")
+            return restaurantFound
         } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("History", inManagedObjectContext: context) as? History {
-            print("new entry added to core data")
+            print("new entry added to history core data")
             newRestaurant.name = restaurant.name
             newRestaurant.price = restaurant.price
             newRestaurant.rating = restaurant.rating
             newRestaurant.reviewCount = restaurant.reviewCount
             newRestaurant.address = restaurant.address
-            print("new rest: \(newRestaurant)")
+            newRestaurant.isFavorite = restaurant.isFavorite
+            //print("new rest: \(newRestaurant)")
             return newRestaurant
         }
         

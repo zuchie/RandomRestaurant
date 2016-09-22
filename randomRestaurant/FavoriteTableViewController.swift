@@ -41,10 +41,10 @@ class FavoriteTableViewController: CoreDataTableViewController {
     
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
-    func updateDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
+    func addToDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
         managedObjectContext?.performBlock {
             
-            _ = Favorite.favorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
+            _ = Favorite.addFavorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
             
             // Save context to database.
             do {
@@ -57,29 +57,25 @@ class FavoriteTableViewController: CoreDataTableViewController {
         }
     }
     
-    func deleteFromDatabase(fav: Favorite) {
+    func deleteFromDatabase(fav: SlotMachineViewController.Restaurant) {
 
-        /*
-        print("delete from database, name: \(history.name)")
-        let favToBeDeleted = Favorite()
-        print("hello")
-        favToBeDeleted.name = history.name
-        favToBeDeleted.price = history.price
-        favToBeDeleted.rating = history.rating
-        favToBeDeleted.reviewCount = history.reviewCount
-        favToBeDeleted.address = history.address
-        
-        managedObjectContext?.deleteObject(favToBeDeleted)
-        */
-        managedObjectContext?.deleteObject(fav)
-        // Save context to database.
-        do {
-            try self.managedObjectContext?.save()
-        } catch let error {
-            print("Core data deleting error: \(error)")
+        managedObjectContext?.performBlock {
+            
+            let restaurant = Favorite.getFavorite(fav, inManagedObjectContext: self.managedObjectContext!)
+            
+            print("delete from favorite")
+            self.managedObjectContext?.deleteObject(restaurant!)
+            
+            // Save context to database.
+            do {
+                try self.managedObjectContext?.save()
+                
+            } catch let error {
+                print("Core data error: \(error)")
+            }
+            
+            self.updateUI()
         }
-        
-        self.updateUI()
     }
     
     // MARK: - Table view data source

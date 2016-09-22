@@ -11,11 +11,17 @@ import UIKit
 class HistoryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var historyLabel: UILabel!
-    @IBOutlet weak var addToFav: UIButton!
+    @IBOutlet weak var addToFav: HistoryCellButton!
+    
+    private let emptyStar = UIImage(named: "emptyStar")
+    private let filledStar = UIImage(named: "filledStar")
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        addToFav.setImage(emptyStar, forState: .Normal)
+        addToFav.setImage(filledStar, forState: .Selected)
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

@@ -201,7 +201,7 @@
                                 </connections>
                             </segmentedControl>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KuC-ft-5iz">
-                                <rect key="frame" x="0.0" y="92" width="600" height="505"/>
+                                <rect key="frame" x="0.0" y="93" width="600" height="507"/>
                             </containerView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="R2Z-Md-wRi">
                                 <rect key="frame" x="0.0" y="97" width="600" height="80"/>
@@ -247,13 +247,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="iqt-jy-E0a" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Abd-IB-8WV"/>
-                            <constraint firstItem="KuC-ft-5iz" firstAttribute="top" secondItem="R2Z-Md-wRi" secondAttribute="bottom" constant="-85" id="GBj-Vl-l8V"/>
+                            <constraint firstItem="KuC-ft-5iz" firstAttribute="top" secondItem="R2Z-Md-wRi" secondAttribute="bottom" constant="-84" id="GBj-Vl-l8V"/>
                             <constraint firstAttribute="trailing" secondItem="R2Z-Md-wRi" secondAttribute="trailing" id="QHS-qh-QBe"/>
                             <constraint firstItem="R2Z-Md-wRi" firstAttribute="top" secondItem="iqt-jy-E0a" secondAttribute="bottom" constant="5" id="QTI-iG-ouD"/>
                             <constraint firstAttribute="trailing" secondItem="iqt-jy-E0a" secondAttribute="trailing" id="RAf-6n-87L"/>
                             <constraint firstAttribute="trailing" secondItem="KuC-ft-5iz" secondAttribute="trailing" id="SWU-hc-Yz8"/>
                             <constraint firstItem="iqt-jy-E0a" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Xfx-qF-95Y"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KuC-ft-5iz" secondAttribute="bottom" constant="3" id="ZpC-h9-4mM"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KuC-ft-5iz" secondAttribute="bottom" id="ZpC-h9-4mM"/>
                             <constraint firstItem="KuC-ft-5iz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="sOV-fD-roZ"/>
                             <constraint firstItem="R2Z-Md-wRi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xuw-UN-ngp"/>
                         </constraints>
@@ -439,7 +439,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3" customClass="HistoryCellButton" customModule="randomRestaurant" customModuleProvider="target">
                                             <rect key="frame" x="556" y="-1" width="44" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="BdF-og-VP3" secondAttribute="height" multiplier="1:1" id="s6J-Re-FIe"/>

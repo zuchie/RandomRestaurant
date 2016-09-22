@@ -21,6 +21,7 @@ class SlotMachineViewController: UIViewController {
         var rating: String?
         var reviewCount: String?
         var address: String?
+        var isFavorite: Bool?
     }
     
     static var pickedRestaurant: Restaurant?
@@ -120,7 +121,7 @@ class SlotMachineViewController: UIViewController {
         parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
             options: [.AlignAllCenterY], metrics: nil, views: viewBindingsDict))
         
-        print("parent frame height: \(parentView.frame.height), width: \(parentView.frame.width)")
+        //print("parent frame height: \(parentView.frame.height), width: \(parentView.frame.width)")
  
     }
 
@@ -182,7 +183,7 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 // Params going to pass to Core Data of History Restaurant.
-                SlotMachineViewController.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress)
+                SlotMachineViewController.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false)
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"

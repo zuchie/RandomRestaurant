@@ -12,16 +12,16 @@ import CoreData
 
 class Favorite: NSManagedObject {
     
-    class func favorite(history: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Favorite? {
+    class func addFavorite(history: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Favorite? {
         
         let request = NSFetchRequest(entityName: "Favorite")
         request.predicate = NSPredicate(format: "name = %@", history.name!)
         
         if let restaurant = (try? context.executeFetchRequest(request))?.first as? Favorite {
-            print("found entry in core data")
+            print("found entry in favorite core data")
             return restaurant
         } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("Favorite", inManagedObjectContext: context) as? Favorite {
-            print("new entry added to core data")
+            print("new entry added to favorite core data")
             newRestaurant.name = history.name
             newRestaurant.price = history.price
             newRestaurant.rating = history.rating
@@ -29,8 +29,21 @@ class Favorite: NSManagedObject {
             newRestaurant.address = history.address
             return newRestaurant
         }
-        
+
         return nil
     }
     
+    class func getFavorite(history: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Favorite? {
+        
+        let request = NSFetchRequest(entityName: "Favorite")
+        request.predicate = NSPredicate(format: "name = %@", history.name!)
+        
+        if let restaurant = (try? context.executeFetchRequest(request))?.first as? Favorite {
+            print("get entry in favorite core data")
+            return restaurant
+        }
+        
+        return nil
+    }
+
 }
