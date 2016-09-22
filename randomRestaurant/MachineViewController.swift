@@ -59,8 +59,6 @@ class MachineViewController: UIViewController {
                 
                 view.addSubview(imageView)
                 
-                // Don't allow images block button.
-                //view.sendSubviewToBack(imageView)
                 MachineViewController.imageViews.append(imageView)
                 
                 print("image view x: \(imageView.frame.origin.x), y: \(imageView.frame.origin.y), height: \(imageView.frame.height), width: \(imageView.frame.width)")

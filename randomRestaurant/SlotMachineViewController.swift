@@ -52,15 +52,25 @@ class SlotMachineViewController: UIViewController {
     }
  
     private func scrollImages(index: Int, imageView: UIImageView) {
+        
         UIView.animateWithDuration(4.0, delay: 0.0, options: [.CurveEaseInOut], animations: {
+            
             var frame = imageView.frame
+            
             frame.origin.y += frame.height * CGFloat(MachineViewController.imageViews.count - 1)
+            
             imageView.frame = frame
+            
         }, completion: { finished in
+            
             if finished {
+                
                 self.view.sendSubviewToBack(self.viewsContainer)
+                
             } else {
+                
                 print("animation is still running...")
+                
             }
         })
     }
@@ -145,7 +155,9 @@ class SlotMachineViewController: UIViewController {
         for (index, imageView) in MachineViewController.imageViews.enumerate() {
             // Reset Y.
             imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
+            
             view.bringSubviewToFront(viewsContainer)
+            
             scrollImages(index, imageView: imageView)
         }
         

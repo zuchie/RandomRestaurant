@@ -22,6 +22,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         super.viewDidLoad()
         
         if let restaurant = SlotMachineViewController.pickedRestaurant {
+            print("slot picked rest, name: \(restaurant.name)")
             updateDatabase(restaurant)
         } else {
             updateUI()
@@ -29,9 +30,12 @@ class HistoryTableViewController: CoreDataTableViewController {
     }
     
     private func updateUI() {
+        
         if let context = managedObjectContext {
+            
             let request = NSFetchRequest(entityName: "History")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            
             self.fetchedResultsController = NSFetchedResultsController(
                 fetchRequest: request,
                 managedObjectContext: context,
@@ -39,6 +43,7 @@ class HistoryTableViewController: CoreDataTableViewController {
                 cacheName: nil
             )
         } else {
+            
             print("managedObjectContext is nil")
         }
     }
@@ -62,6 +67,23 @@ class HistoryTableViewController: CoreDataTableViewController {
         }
     }
     
+    private func updateRestaurantState(newRestaurant: SlotMachineViewController.Restaurant) {
+        
+        managedObjectContext?.performBlock {
+            
+            _ = History.updateState(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
+            
+            // Save context to database.
+            do {
+                try self.managedObjectContext?.save()
+            } catch let error {
+                print("Core data error: \(error)")
+            }
+            
+            //self.updateUI()
+        }
+    }
+
     
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -83,7 +105,7 @@ class HistoryTableViewController: CoreDataTableViewController {
             //var address: String?
             historyRestaurant.managedObjectContext?.performBlockAndWait {
                 name = historyRestaurant.name
-                isFavorite = historyRestaurant.isFavorite as? Bool
+                isFavorite = historyRestaurant.isFavorite?.boolValue
                 print("rest: \(name), is fav? \(isFavorite)")
                 //address = favRestaurant.address
             }
@@ -146,7 +168,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         historyRest.isFavorite = sender.selected
         
-        updateDatabase(historyRest)
+        updateRestaurantState(historyRest)
     }
     
     /*

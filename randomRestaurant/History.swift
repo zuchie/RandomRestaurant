@@ -19,7 +19,7 @@ class History: NSManagedObject {
         
         if let restaurantFound = (try? context.executeFetchRequest(request))?.first as? History {
             print("found entry in history core data")
-            restaurantFound.isFavorite = restaurant.isFavorite
+            //restaurantFound.isFavorite = restaurant.isFavorite
             print("entry is fav? \(restaurantFound.isFavorite)")
             return restaurantFound
         } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("History", inManagedObjectContext: context) as? History {
@@ -36,5 +36,18 @@ class History: NSManagedObject {
         
         return nil
     }
-    
+ 
+    class func updateState(restaurant: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
+        
+        let request = NSFetchRequest(entityName: "History")
+        request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
+        
+        if let restaurantFound = (try? context.executeFetchRequest(request))?.first as? History {
+            print("update restaurant state")
+            restaurantFound.isFavorite = restaurant.isFavorite
+            return restaurantFound
+        }
+        
+        return nil
+    }
 }
