@@ -18,12 +18,10 @@ class History: NSManagedObject {
         request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
         
         if let restaurantFound = (try? context.executeFetchRequest(request))?.first as? History {
-            print("found entry in history core data")
-            //restaurantFound.isFavorite = restaurant.isFavorite
-            print("entry is fav? \(restaurantFound.isFavorite)")
+            
             return restaurantFound
         } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("History", inManagedObjectContext: context) as? History {
-            print("new entry added to history core data")
+            
             newRestaurant.name = restaurant.name
             newRestaurant.price = restaurant.price
             newRestaurant.rating = restaurant.rating

@@ -11,23 +11,24 @@ import CoreData
 
 class FavoriteTableViewController: CoreDataTableViewController {
     
-    //private var favToBeDeleted: Favorite?
+    private var historyRestaurant: HistoryTableViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //let restaurant = SlotMachineViewController.pickedRestaurant
-        //updateDatabase(restaurant!)
-        //favToBeDeleted = Favorite()
+        historyRestaurant = HistoryTableViewController()
         updateUI()
     }
     
     
     // MARK: Model
     private func updateUI() {
+        
         if let context = managedObjectContext {
+            
             let request = NSFetchRequest(entityName: "Favorite")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            
             self.fetchedResultsController = NSFetchedResultsController(
                 fetchRequest: request,
                 managedObjectContext: context,
@@ -42,6 +43,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
     func addToDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
+        
         managedObjectContext?.performBlock {
             
             _ = Favorite.addFavorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
@@ -63,7 +65,6 @@ class FavoriteTableViewController: CoreDataTableViewController {
             
             let restaurant = Favorite.getFavorite(fav, inManagedObjectContext: self.managedObjectContext!)
             
-            print("delete from favorite")
             self.managedObjectContext?.deleteObject(restaurant!)
             
             // Save context to database.
@@ -98,4 +99,46 @@ class FavoriteTableViewController: CoreDataTableViewController {
 
         return cell
     }
+    
+    // Override to support editing the table view.
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            
+            managedObjectContext?.performBlockAndWait {
+                
+                // Delete from database
+                if let favRestaurant = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Favorite {
+                    
+                    // Remove star from History table cell.
+                    self.historyRestaurant!.removeFromFavorites(favRestaurant.name!)
+                    
+                    self.managedObjectContext?.deleteObject(favRestaurant)
+                    
+                    // Save context to database.
+                    do {
+                        try self.managedObjectContext?.save()
+                        
+                    } catch let error {
+                        print("Core data error: \(error)")
+                    }
+                    
+                    self.updateUI()
+                }
+            }
+            
+            // Delete the row from the data source
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+        } else if editingStyle == .Insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+    // Override to support conditional editing of the table view.
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    
 }

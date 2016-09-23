@@ -13,13 +13,14 @@ class HistoryTableViewController: CoreDataTableViewController {
     
     //private var favButtons = [UIButton]()
     private var favLabels = [String]()
-    private var favVC = FavoriteTableViewController()
+    private var favVC: FavoriteTableViewController?
     
     private var historyRest = SlotMachineViewController.Restaurant()
-    private var favRest = SlotMachineViewController.Restaurant()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        favVC = FavoriteTableViewController()
         
         if let restaurant = SlotMachineViewController.pickedRestaurant {
             print("slot picked rest, name: \(restaurant.name)")
@@ -67,6 +68,14 @@ class HistoryTableViewController: CoreDataTableViewController {
         }
     }
     
+    func removeFromFavorites(name: String) {
+        var restaurant = SlotMachineViewController.Restaurant()
+        restaurant.name = name
+        restaurant.isFavorite = false
+        
+        updateRestaurantState(restaurant)
+    }
+    
     private func updateRestaurantState(newRestaurant: SlotMachineViewController.Restaurant) {
         
         managedObjectContext?.performBlock {
@@ -106,7 +115,7 @@ class HistoryTableViewController: CoreDataTableViewController {
             historyRestaurant.managedObjectContext?.performBlockAndWait {
                 name = historyRestaurant.name
                 isFavorite = historyRestaurant.isFavorite?.boolValue
-                print("rest: \(name), is fav? \(isFavorite)")
+                //print("rest: \(name), is fav? \(isFavorite)")
                 //address = favRestaurant.address
             }
             cell.addToFav.selected = isFavorite!
@@ -114,20 +123,6 @@ class HistoryTableViewController: CoreDataTableViewController {
             
             //favButtons.append(cell.addToFav)
             favLabels.append(cell.historyLabel.text!)
-            
-            /*
-            // TODO: save button.selected state to database.
-            if indexPath.row < favButtons.count {
-                cell.addToFav.selected = favButtons[indexPath.row].selected
-                print("selected: \(cell.addToFav.selected)")
-                //favButtons[indexPath.row] = cell.addToFav
-                //favLabels[indexPath.row] = cell.historyLabel.text!
-            } else {
-                print("append")
-                favButtons.append(cell.addToFav)
-                favLabels.append(cell.historyLabel.text!)
-            }
-            */
         }
         
         return cell
@@ -141,13 +136,13 @@ class HistoryTableViewController: CoreDataTableViewController {
             button.selected = true
             //favButtons[index!].selected = true
             
-            favVC.addToDatabase(historyRest)
+            favVC!.addToDatabase(historyRest)
         } else {
             //print("button selected")
             button.selected = false
             //favButtons[index!].selected = false
 
-            favVC.deleteFromDatabase(historyRest)
+            favVC!.deleteFromDatabase(historyRest)
         }
     }
     
