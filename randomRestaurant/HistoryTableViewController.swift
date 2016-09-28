@@ -10,8 +10,7 @@ import UIKit
 import CoreData
 
 class HistoryTableViewController: CoreDataTableViewController {
-    
-    //private var favButtons = [UIButton]()
+
     private var favLabels = [String]()
     private var favVC: FavoriteTableViewController?
     
@@ -19,40 +18,47 @@ class HistoryTableViewController: CoreDataTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("history view did load")
         
-        favVC = FavoriteTableViewController()
-        
+        favVC = SlotMachineViewController.favoriteTableVC
+        /*
         if let restaurant = SlotMachineViewController.pickedRestaurant {
-            print("slot picked rest, name: \(restaurant.name)")
+            print("machine picked restaurant name: \(restaurant.name)")
             updateDatabase(restaurant)
         } else {
             updateUI()
         }
+        */
+        //updateUI()
     }
-    
+
     private func updateUI() {
         
         if let context = managedObjectContext {
             
             let request = NSFetchRequest(entityName: "History")
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
+            print("updating history UI")
             
+            // WHY here self.fetchedResultsController will trigger viewDidLoad()?
             self.fetchedResultsController = NSFetchedResultsController(
                 fetchRequest: request,
                 managedObjectContext: context,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
+            
         } else {
             
             print("managedObjectContext is nil")
         }
+        
     }
     
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
     
-    private func updateDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
-        
+    func updateDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
+        print("updating history database")
         managedObjectContext?.performBlock {
             
             _ = History.history(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
@@ -63,7 +69,7 @@ class HistoryTableViewController: CoreDataTableViewController {
             } catch let error {
                 print("Core data error: \(error)")
             }
-            
+            //print("will update history UI")
             self.updateUI()
         }
     }
@@ -100,6 +106,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         // TOTHINK: Why need register? Search bar searching would crash without this.
         //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellID)
         
+        print("history cell for row...")
         let cell = tableView.dequeueReusableCellWithIdentifier("history", forIndexPath: indexPath) as! HistoryTableViewCell
         
         cell.addToFav.index = indexPath.row

@@ -24,7 +24,7 @@ class SlotMachineViewController: UIViewController {
         var isFavorite: Bool?
     }
     
-    static var pickedRestaurant: Restaurant?
+    private var pickedRestaurant: Restaurant?
     
     private var nearbyBusinesses = GetNearbyBusinesses()
     
@@ -40,7 +40,36 @@ class SlotMachineViewController: UIViewController {
     
     private weak var currentVC: UIViewController?
     
+    static var scrollingImagesVC: MachineViewController?
+    static var favoriteTableVC: FavoriteTableViewController?
+    static var historyTableVC: HistoryTableViewController?
+    
     var urlQueryParameters: UrlQueryParameters?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        print("slot machine view did load")
+        
+        // Instantiate View Controllers for all Segments. Their references will be kept when switching among Segments.
+        SlotMachineViewController.scrollingImagesVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine") as? MachineViewController
+        SlotMachineViewController.favoriteTableVC = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite") as? FavoriteTableViewController
+        SlotMachineViewController.historyTableVC = self.storyboard?.instantiateViewControllerWithIdentifier("History") as? HistoryTableViewController
+        
+        // Set starting view.
+        currentVC = SlotMachineViewController.scrollingImagesVC
+        currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        addChildViewController(currentVC!)
+        currentVC?.view.frame = viewsContainer.frame
+        self.addSubview(currentVC!.view, toView: viewsContainer)
+        currentVC?.didMoveToParentViewController(self)
+        
+        view.sendSubviewToBack(viewsContainer)
+        
+        
+        nearbyBusinesses.setRatingBar(ratingBar)
+    }
     
     func setUrlQueryParameters(urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
@@ -98,19 +127,22 @@ class SlotMachineViewController: UIViewController {
     @IBAction func segmentChanged(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")
+            //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")
+            let newViewController = SlotMachineViewController.scrollingImagesVC
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
             view.sendSubviewToBack(viewsContainer)
         case 1:
-            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite")
+            //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite")
+            let newViewController = SlotMachineViewController.favoriteTableVC
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
             view.bringSubviewToFront(viewsContainer)
         case 2:
-            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("History")
+            //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("History")
+            let newViewController = SlotMachineViewController.historyTableVC
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
@@ -134,20 +166,6 @@ class SlotMachineViewController: UIViewController {
         //print("parent frame height: \(parentView.frame.height), width: \(parentView.frame.width)")
  
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        nearbyBusinesses.setRatingBar(ratingBar)
-        
-        currentVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine") as! MachineViewController
-        currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
-    
-        addChildViewController(currentVC!)
-        self.addSubview(currentVC!.view, toView: viewsContainer)
-        
-        view.sendSubviewToBack(viewsContainer)
-    }
     
     @IBAction func start() {
         
@@ -161,7 +179,7 @@ class SlotMachineViewController: UIViewController {
             scrollImages(index, imageView: imageView)
         }
         
-        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU"
+        let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU_GcNE4RnhBc2QkkmnGaV3Yx"
         
         // Get businesses from Yelp API v3.
         nearbyBusinesses.getUrlParameters(urlQueryParameters?.location, categories: urlQueryParameters?.category, radius: urlQueryParameters?.radius, limit: urlQueryParameters?.limit, open_at: urlQueryParameters?.openAt)
@@ -195,7 +213,10 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 // Params going to pass to Core Data of History Restaurant.
-                SlotMachineViewController.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false)
+                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false)
+                // Update History database.
+                //print("update history database")
+                SlotMachineViewController.historyTableVC!.updateDatabase(self.pickedRestaurant!)
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"

@@ -43,13 +43,14 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        print("fetched sections count: \(fetchedResultsController?.sections!.count)")
         return fetchedResultsController?.sections?.count ?? 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        
         if let sections = fetchedResultsController?.sections where sections.count > 0 {
+            print("fetched section: \(section), rows count: \(sections[section].numberOfObjects)")
             return sections[section].numberOfObjects
         } else {
             return 0
@@ -74,7 +75,6 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     
     
     // MARK: NSFetchedResultsControllerDelegate
-    
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         tableView.beginUpdates()
     }
@@ -82,7 +82,9 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch type {
         case .Insert: tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+                        print("insert section: \(sectionIndex)")
         case .Delete: tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+                        print("delete section: \(sectionIndex)")
         default: break
         }
     }
@@ -91,8 +93,10 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+                        print("insert row")
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                        print("delete row")
         case .Update:
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Move:
@@ -100,6 +104,13 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         }
     }
+    
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
+    }
+    
+    
     /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
