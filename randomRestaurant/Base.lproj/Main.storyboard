@@ -20,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MTR-O0-3up" id="QMC-Hs-nKV">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="89.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="89"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eGN-xb-64B">
@@ -294,7 +294,7 @@
                                 <rect key="frame" x="0.0" y="136" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0U0-lH-xuv" id="wAF-lt-Nne">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -396,7 +396,7 @@
                                 <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23J-X6-kUM" id="eyb-YP-067">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -436,7 +436,7 @@
                                 <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NBY-AP-VtY" id="WyT-S0-w9x">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3" customClass="HistoryCellButton" customModule="randomRestaurant" customModuleProvider="target">
@@ -455,7 +455,7 @@
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="BdF-og-VP3" secondAttribute="trailing" id="2LV-tP-nyd"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="fm5-Lz-MiN" secondAttribute="trailing" constant="35" id="A5H-pw-9kW"/>
-                                        <constraint firstItem="BdF-og-VP3" firstAttribute="height" secondItem="WyT-S0-w9x" secondAttribute="height" id="PbA-nN-mPB"/>
+                                        <constraint firstItem="BdF-og-VP3" firstAttribute="height" secondItem="WyT-S0-w9x" secondAttribute="height" constant="1" id="PbA-nN-mPB"/>
                                         <constraint firstItem="fm5-Lz-MiN" firstAttribute="leading" secondItem="WyT-S0-w9x" secondAttribute="leadingMargin" id="RG8-74-sh6"/>
                                         <constraint firstItem="BdF-og-VP3" firstAttribute="top" secondItem="WyT-S0-w9x" secondAttribute="top" constant="-1" id="SWn-HF-voj"/>
                                         <constraint firstItem="fm5-Lz-MiN" firstAttribute="centerY" secondItem="WyT-S0-w9x" secondAttribute="centerY" id="kFc-M1-rpe"/>

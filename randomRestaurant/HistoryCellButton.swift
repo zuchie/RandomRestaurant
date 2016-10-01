@@ -11,5 +11,6 @@ import UIKit
 
 // Subclass UIButton to enable passing cell index.
 class HistoryCellButton: UIButton {
-    var index: Int?
+    //var index: Int?
+    var cellText: String?
 }

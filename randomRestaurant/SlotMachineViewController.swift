@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CoreData
 
 class SlotMachineViewController: UIViewController {
 
@@ -22,6 +23,7 @@ class SlotMachineViewController: UIViewController {
         var reviewCount: String?
         var address: String?
         var isFavorite: Bool?
+        var date: Int?
     }
     
     private var pickedRestaurant: Restaurant?
@@ -213,12 +215,17 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 // Params going to pass to Core Data of History Restaurant.
-                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false)
-                // Update History database.
+                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(NSDate().timeIntervalSince1970))
+                
+                print("ns date: \(self.pickedRestaurant?.date!)")
                 //print("update history database")
-                SlotMachineViewController.historyTableVC!.updateDatabase(self.pickedRestaurant!)
+                //SlotMachineViewController.historyTableVC!.updateDatabase(self.pickedRestaurant!)
+                
+                // Update History database.
+                HistoryDB.addEntry(self.pickedRestaurant!)
                 
                 dispatch_async(dispatch_get_main_queue(), {
+                    
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
                     self.pickedBizAddress.text = "\(self.bizAddress)"
                 })
@@ -230,7 +237,8 @@ class SlotMachineViewController: UIViewController {
             
         }
     }
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

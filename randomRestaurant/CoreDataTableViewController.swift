@@ -33,7 +33,7 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
                     frc.delegate = self
                     try frc.performFetch()
                 }
-                tableView.reloadData()
+                //tableView.reloadData()
             } catch let error {
                 print("NSFetchedResultsController.performFetch() failed: \(error)")
             }
@@ -56,7 +56,7 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
             return 0
         }
     }
-
+    /*
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let sections = fetchedResultsController?.sections where sections.count > 0 {
             return sections[section].name
@@ -72,10 +72,11 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
         return fetchedResultsController?.sectionForSectionIndexTitle(title, atIndex: index) ?? 0
     }
-    
+    */
     
     // MARK: NSFetchedResultsControllerDelegate
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        print("table view begin updates")
         tableView.beginUpdates()
     }
     
@@ -93,10 +94,10 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-                        print("insert row")
+                        print("insert row \(newIndexPath!.row)")
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-                        print("delete row")
+                        print("delete row \(indexPath?.row)")
         case .Update:
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Move:
@@ -107,6 +108,7 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        print("table view end updates")
         tableView.endUpdates()
     }
     

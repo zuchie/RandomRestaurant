@@ -19,16 +19,17 @@ class FavoriteTableViewController: CoreDataTableViewController {
         print("fav view did load")
 
         historyRestaurant = SlotMachineViewController.historyTableVC
-        //updateUI()
+        updateUI()
     }
 
     
     // MARK: Model
     private func updateUI() {
         
-        if let context = managedObjectContext {
+        if let context = HistoryDB.managedObjectContext {
             
-            let request = NSFetchRequest(entityName: "Favorite")
+            let request = NSFetchRequest(entityName: "History")
+            request.predicate = NSPredicate(format: "isFavorite == YES")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
             
             self.fetchedResultsController = NSFetchedResultsController(
@@ -41,7 +42,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
             print("managedObjectContext is nil")
         }
     }
-    
+    /*
     var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
     func addToDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
@@ -60,7 +61,8 @@ class FavoriteTableViewController: CoreDataTableViewController {
             self.updateUI()
         }
     }
-    
+    */
+    /*
     func deleteFromDatabase(fav: SlotMachineViewController.Restaurant) {
 
         managedObjectContext?.performBlock {
@@ -80,7 +82,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
             self.updateUI()
         }
     }
-    
+    */
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -89,7 +91,7 @@ class FavoriteTableViewController: CoreDataTableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
 
         // Configure the cell...
-        if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? Favorite {
+        if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) {
             var name: String?
             //var address: String?
             favRestaurant.managedObjectContext?.performBlockAndWait {
@@ -107,27 +109,16 @@ class FavoriteTableViewController: CoreDataTableViewController {
         
         if editingStyle == .Delete {
             
-            managedObjectContext?.performBlockAndWait {
+            
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            // Delete from database
+            //if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) {
                 
-                // Delete from database
-                if let favRestaurant = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Favorite {
-                    
-                    // Remove star from History table cell.
-                    self.historyRestaurant!.removeFromFavorites(favRestaurant.name!)
-                    
-                    self.managedObjectContext?.deleteObject(favRestaurant)
-                    
-                    // Save context to database.
-                    do {
-                        try self.managedObjectContext?.save()
-                        
-                    } catch let error {
-                        print("Core data error: \(error)")
-                    }
-                    
-                    self.updateUI()
-                }
+                // Remove star from History table cell.
+                print("fav cell text: \((cell.textLabel?.text)!)")
+                historyRestaurant!.removeFromFavorites((cell.textLabel?.text)!)
             }
+            //}
             
             // Delete the row from the data source
             //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
