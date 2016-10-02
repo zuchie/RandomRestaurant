@@ -11,24 +11,25 @@ import CoreData
 
 class HistoryTableViewController: CoreDataTableViewController {
     
-    private var historyRest = SlotMachineViewController.Restaurant()
+    private var favoriteRestaurant: FavoriteTableViewController?
+    private var historyRest = Restaurant()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("history view did load")
         
-        updateUI()
+        favoriteRestaurant = SlotMachineViewController.favoriteTableVC
+        
     }
     
-    private func updateUI() {
-        
+    // Fetch data from DB and reload table view.
+    func updateUI() {
         if let context = HistoryDB.managedObjectContext {
-            
             let request = NSFetchRequest(entityName: "History")
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             print("updating history UI")
             
-            self.fetchedResultsController = NSFetchedResultsController(
+            fetchedResultsController = NSFetchedResultsController(
                 fetchRequest: request,
                 managedObjectContext: context,
                 sectionNameKeyPath: nil,
@@ -42,17 +43,18 @@ class HistoryTableViewController: CoreDataTableViewController {
     }
 
     func removeFromFavorites(name: String) {
-        var restaurant = SlotMachineViewController.Restaurant()
-        restaurant.name = name
-        restaurant.isFavorite = false
+        let restaurant = Restaurant()
+        restaurant!.name = name
+        restaurant!.isFavorite = false
         
-        HistoryDB.updateEntryState(restaurant)
+        HistoryDB.updateEntryState(restaurant!)
+        updateUI()
     }
     
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        print("history cell section: \(indexPath.section) row: \(indexPath.row)")
+        //print("history cell section: \(indexPath.section) row: \(indexPath.row)")
         let cell = tableView.dequeueReusableCellWithIdentifier("history", forIndexPath: indexPath) as! HistoryTableViewCell
         
         // Configure the cell...
@@ -86,34 +88,21 @@ class HistoryTableViewController: CoreDataTableViewController {
     func buttonTapped(sender: HistoryCellButton) {
         
         // Pass to favorite restaurant database.
-        historyRest.name = sender.cellText
-        historyRest.price = ""
-        historyRest.address = ""
-        historyRest.rating = ""
-        historyRest.reviewCount = ""
+        historyRest!.name = sender.cellText
+        historyRest!.price = ""
+        historyRest!.address = ""
+        historyRest!.rating = ""
+        historyRest!.reviewCount = ""
         
         updateButtonStatus(sender)
         
-        historyRest.isFavorite = sender.selected
+        historyRest!.isFavorite = sender.selected
         
-        HistoryDB.updateEntryState(historyRest)
+        HistoryDB.updateEntryState(historyRest!)
+        updateUI()
+        
+        favoriteRestaurant!.updateUI()
+        
     }
-    
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
-    }
-    
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
+
 }

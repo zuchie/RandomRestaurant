@@ -383,17 +383,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="Za9-oZ-WPn">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <outlet property="delegate" destination="9Ww-aC-vSP" id="OOa-eq-BXJ"/>
-                            </connections>
-                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="favorite" id="23J-X6-kUM">
-                                <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23J-X6-kUM" id="eyb-YP-067">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -414,7 +406,6 @@
                 <searchDisplayController id="DLU-Td-Dme">
                     <connections>
                         <outlet property="delegate" destination="9Ww-aC-vSP" id="g6V-Ep-dcZ"/>
-                        <outlet property="searchBar" destination="Za9-oZ-WPn" id="C2f-lR-N1F"/>
                         <outlet property="searchContentsController" destination="9Ww-aC-vSP" id="GEJ-nt-M68"/>
                         <outlet property="searchResultsDataSource" destination="9Ww-aC-vSP" id="NsO-vg-bCZ"/>
                         <outlet property="searchResultsDelegate" destination="9Ww-aC-vSP" id="P7D-l0-SZD"/>
@@ -448,7 +439,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fm5-Lz-MiN">
                                             <rect key="frame" x="8" y="0.0" width="549" height="44"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>

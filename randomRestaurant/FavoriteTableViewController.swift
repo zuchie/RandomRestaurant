@@ -12,78 +12,85 @@ import CoreData
 class FavoriteTableViewController: CoreDataTableViewController {
     
     private var historyRestaurant: HistoryTableViewController?
+    private let searchController = UISearchController(searchResultsController: nil)
+    
+    private var restaurants = [Restaurant]()
+    private var filteredRestaurants = [Restaurant]()
+    private var restaurant = Restaurant()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("fav view did load")
+        print("favorite view did load")
 
         historyRestaurant = SlotMachineViewController.historyTableVC
-        updateUI()
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        
+        /*
+        restaurants.removeAll()
+        for (_, rest) in fetchedResultsController!.fetchedObjects!.enumerate() {
+            let fetchedRestaurant = rest as! History
+            
+            restaurant?.name = fetchedRestaurant.name
+            restaurant?.price = fetchedRestaurant.price
+            restaurant?.address = fetchedRestaurant.address
+            restaurant?.rating = fetchedRestaurant.rating
+            restaurant?.isFavorite = fetchedRestaurant.isFavorite?.boolValue
+            restaurant?.reviewCount = fetchedRestaurant.reviewCount
+            restaurant?.date = fetchedRestaurant.date?.integerValue
+            
+            restaurants.append(restaurant!)
+            
+            //tableView.reloadData()
+        }
+        */
     }
-
+    
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        filteredRestaurants = restaurants.filter { restaurant in
+            return restaurant.name!.lowercaseString.containsString(searchText.lowercaseString)
+        }
+        tableView.reloadData()
+    }
     
     // MARK: Model
-    private func updateUI() {
+    func updateUI() {
         
         if let context = HistoryDB.managedObjectContext {
             
             let request = NSFetchRequest(entityName: "History")
             request.predicate = NSPredicate(format: "isFavorite == YES")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            
-            self.fetchedResultsController = NSFetchedResultsController(
+            print("updating favorite UI")
+
+            fetchedResultsController = NSFetchedResultsController(
                 fetchRequest: request,
                 managedObjectContext: context,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
         } else {
+            fetchedResultsController = nil
             print("managedObjectContext is nil")
         }
     }
-    /*
-    var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
 
-    func addToDatabase(newRestaurant: SlotMachineViewController.Restaurant) {
-        
-        managedObjectContext?.performBlock {
-            
-            _ = Favorite.addFavorite(newRestaurant, inManagedObjectContext: self.managedObjectContext!)
-            
-            // Save context to database.
-            do {
-                try self.managedObjectContext?.save()
-            } catch let error {
-                print("Core data error: \(error)")
-            }
-            
-            self.updateUI()
-        }
-    }
-    */
-    /*
-    func deleteFromDatabase(fav: SlotMachineViewController.Restaurant) {
-
-        managedObjectContext?.performBlock {
-            
-            let restaurant = Favorite.getFavorite(fav, inManagedObjectContext: self.managedObjectContext!)
-            
-            self.managedObjectContext?.deleteObject(restaurant!)
-            
-            // Save context to database.
-            do {
-                try self.managedObjectContext?.save()
-                
-            } catch let error {
-                print("Core data error: \(error)")
-            }
-            
-            self.updateUI()
-        }
-    }
-    */
     // MARK: - Table view data source
+    /*
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if searchController.active && searchController.searchBar.text != "" {
+            return filteredRestaurants.count
+        } else {
+            return restaurants.count
+        }
+    }
+    */
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cellID = "favorite"
@@ -91,14 +98,22 @@ class FavoriteTableViewController: CoreDataTableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
 
         // Configure the cell...
-        if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) {
-            var name: String?
-            //var address: String?
-            favRestaurant.managedObjectContext?.performBlockAndWait {
-                name = favRestaurant.name
-                //address = favRestaurant.address
+        let restau: Restaurant
+        
+        if searchController.active && searchController.searchBar.text != "" {
+            restau = filteredRestaurants[indexPath.row]
+            cell.textLabel?.text = restau.name
+        } else {
+            
+            if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) {
+                var name: String?
+                //var address: String?
+                favRestaurant.managedObjectContext?.performBlockAndWait {
+                    name = favRestaurant.name
+                    //address = favRestaurant.address
+                }
+                cell.textLabel?.text = name
             }
-            cell.textLabel?.text = name
         }
 
         return cell
@@ -108,21 +123,11 @@ class FavoriteTableViewController: CoreDataTableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if editingStyle == .Delete {
-            
-            
             if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-            // Delete from database
-            //if let favRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) {
-                
                 // Remove star from History table cell.
-                print("fav cell text: \((cell.textLabel?.text)!)")
+                print("delete favorite cell: \((cell.textLabel?.text)!)")
                 historyRestaurant!.removeFromFavorites((cell.textLabel?.text)!)
             }
-            //}
-            
-            // Delete the row from the data source
-            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
@@ -134,4 +139,10 @@ class FavoriteTableViewController: CoreDataTableViewController {
         return true
     }
     
+}
+
+extension FavoriteTableViewController: UISearchResultsUpdating {
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
 }

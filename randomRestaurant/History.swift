@@ -12,16 +12,20 @@ import CoreData
 class History: NSManagedObject {
     
     // Insert code here to add functionality to your managed object subclass
-    class func history(restaurant: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
+    class func history(restaurant: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         
         let request = NSFetchRequest(entityName: "History")
         request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
         
         if let restaurantFound = (try? context.executeFetchRequest(request))?.first as? History {
             
+            print("found entry in database")
+
             return restaurantFound
         } else if let newRestaurant = NSEntityDescription.insertNewObjectForEntityForName("History", inManagedObjectContext: context) as? History {
-            
+
+            print("add new entry to database")
+
             newRestaurant.name = restaurant.name
             newRestaurant.price = restaurant.price
             newRestaurant.rating = restaurant.rating
@@ -29,21 +33,22 @@ class History: NSManagedObject {
             newRestaurant.address = restaurant.address
             newRestaurant.isFavorite = restaurant.isFavorite
             newRestaurant.date = restaurant.date
-            //print("new rest: \(newRestaurant)")
+            
             return newRestaurant
         }
         
         return nil
     }
  
-    class func updateState(restaurant: SlotMachineViewController.Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
+    class func updateState(restaurant: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         
         let request = NSFetchRequest(entityName: "History")
         request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
         
         if let restaurantFound = (try? context.executeFetchRequest(request))?.first as? History {
-            print("update restaurant state")
             restaurantFound.isFavorite = restaurant.isFavorite
+            print("update entry state in database")
+
             return restaurantFound
         }
         

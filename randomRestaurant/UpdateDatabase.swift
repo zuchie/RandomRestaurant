@@ -11,12 +11,10 @@ import CoreData
 
 class HistoryDB {
     
-    
     static var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
     
-    class func addEntry(entry: SlotMachineViewController.Restaurant) {
-        print("updating database")
-        managedObjectContext?.performBlock {
+    class func addEntry(entry: Restaurant) {
+        managedObjectContext?.performBlockAndWait {
             
             _ = History.history(entry, inManagedObjectContext: self.managedObjectContext!)
             
@@ -26,14 +24,11 @@ class HistoryDB {
             } catch let error {
                 print("Core data error: \(error)")
             }
-            //print("will update history UI")
-            //self.updateUI()
         }
     }
     
-    class func updateEntryState(entry: SlotMachineViewController.Restaurant) {
-        
-        managedObjectContext?.performBlock {
+    class func updateEntryState(entry: Restaurant) {
+        managedObjectContext?.performBlockAndWait {
             
             _ = History.updateState(entry, inManagedObjectContext: self.managedObjectContext!)
             
@@ -44,7 +39,6 @@ class HistoryDB {
                 print("Core data error: \(error)")
             }
             
-            //self.updateUI()
         }
     }
 }

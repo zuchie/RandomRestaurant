@@ -36,6 +36,7 @@
 		B9488F111D93AA41000DB973 /* HistoryCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9488F101D93AA41000DB973 /* HistoryCellButton.swift */; };
 		B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */; };
 		B96AE9961D8E9CC600257751 /* Restaurant.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B96AE9941D8E9CC600257751 /* Restaurant.xcdatamodeld */; };
+		B9F133AC1DA09BE500708D69 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F133AB1DA09BE500708D69 /* Restaurant.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +74,7 @@
 		B9488F101D93AA41000DB973 /* HistoryCellButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryCellButton.swift; sourceTree = "<group>"; };
 		B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		B96AE9951D8E9CC600257751 /* Restaurant.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Restaurant.xcdatamodel; sourceTree = "<group>"; };
+		B9F133AB1DA09BE500708D69 /* Restaurant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -109,6 +111,7 @@
 				B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */,
 				B9488F0A1D9137DF000DB973 /* HistoryTableViewCell.swift */,
 				B9488F101D93AA41000DB973 /* HistoryCellButton.swift */,
+				B9F133AB1DA09BE500708D69 /* Restaurant.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9F133AC1DA09BE500708D69 /* Restaurant.swift in Sources */,
 				B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */,
 				B906DB971D6C37260021B025 /* RatingControl.swift in Sources */,
 				B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */,
