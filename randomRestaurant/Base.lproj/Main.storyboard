@@ -125,40 +125,48 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ICx-Fm-f9c">
-                                <rect key="frame" x="0.0" y="275" width="600" height="90"/>
+                                <rect key="frame" x="0.0" y="264" width="600" height="40"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkZ-uR-jmD" customClass="RatingControl" customModule="randomRestaurant" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="2" width="560" height="86"/>
+                                        <rect key="frame" x="20" y="20" width="560" height="0.0"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="2" id="8Ol-UT-qOd"/>
-                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="2" id="JSR-gG-kDF"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="20" symbolic="YES" id="JSR-gG-kDF"/>
                                     <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" id="MDd-LU-20z"/>
-                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" id="OJm-ZP-Aei"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" symbolic="YES" id="Mud-47-D8j"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="leading" secondItem="ICx-Fm-f9c" secondAttribute="leading" constant="20" symbolic="YES" id="OJm-ZP-Aei"/>
+                                    <constraint firstItem="bkZ-uR-jmD" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="top" constant="20" symbolic="YES" id="Ocs-vq-zos"/>
                                     <constraint firstItem="bkZ-uR-jmD" firstAttribute="centerX" secondItem="ICx-Fm-f9c" secondAttribute="centerX" id="QRZ-lZ-szQ"/>
                                     <constraint firstAttribute="bottom" secondItem="bkZ-uR-jmD" secondAttribute="bottom" constant="2" id="T3d-JG-30A"/>
                                     <constraint firstAttribute="trailing" secondItem="bkZ-uR-jmD" secondAttribute="trailing" constant="20" id="a5e-UI-sPj"/>
                                     <constraint firstItem="bkZ-uR-jmD" firstAttribute="centerY" secondItem="ICx-Fm-f9c" secondAttribute="centerY" id="cIp-AT-alA"/>
+                                    <constraint firstAttribute="bottom" secondItem="bkZ-uR-jmD" secondAttribute="bottom" constant="20" symbolic="YES" id="ok6-SA-pnh"/>
+                                    <constraint firstAttribute="trailing" secondItem="bkZ-uR-jmD" secondAttribute="trailing" constant="20" symbolic="YES" id="qHT-us-Und"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="8Ol-UT-qOd"/>
+                                        <exclude reference="JSR-gG-kDF"/>
                                         <exclude reference="MDd-LU-20z"/>
+                                        <exclude reference="OJm-ZP-Aei"/>
+                                        <exclude reference="QRZ-lZ-szQ"/>
                                         <exclude reference="T3d-JG-30A"/>
                                         <exclude reference="a5e-UI-sPj"/>
+                                        <exclude reference="cIp-AT-alA"/>
                                     </mask>
                                 </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="top" secondItem="GxQ-I6-m89" secondAttribute="bottom" constant="211" id="75l-HU-jyU"/>
-                            <constraint firstAttribute="trailing" secondItem="ICx-Fm-f9c" secondAttribute="trailing" id="D8g-gX-Ovt"/>
-                            <constraint firstItem="OWJ-eP-SFb" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="bottom" constant="235" id="McS-GG-TMo"/>
-                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" id="wc0-Uc-1V9"/>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="top" secondItem="GxQ-I6-m89" secondAttribute="bottom" constant="200" id="G8P-eo-YAF"/>
+                            <constraint firstAttribute="trailing" secondItem="ICx-Fm-f9c" secondAttribute="trailing" id="utz-Cf-vB1"/>
+                            <constraint firstItem="OWJ-eP-SFb" firstAttribute="top" secondItem="ICx-Fm-f9c" secondAttribute="bottom" constant="296" id="w6B-xE-iZV"/>
+                            <constraint firstItem="ICx-Fm-f9c" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" id="wK7-Z0-eOj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="What's the rating?" id="7m8-at-NRV">

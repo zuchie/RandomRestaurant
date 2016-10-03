@@ -32,9 +32,10 @@ class RatingControl: UIView {
 
     // MARK: Initialization
     override func layoutSubviews() {
+        
         let buttonSize = Int(frame.size.height)
 
-        //print("buttonSize: \(buttonSize)")
+        print("layout subviews buttonSize: \(buttonSize)")
         
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         
@@ -65,7 +66,9 @@ class RatingControl: UIView {
     }
 
     override func intrinsicContentSize() -> CGSize {
+        
         let buttonSize = Int(frame.size.height)
+        print("intrinsic size button size: \(buttonSize)")
         let width = buttonSize * starCount + spacing * (starCount - 1)
         return CGSize(width: width, height: buttonSize)
     }
