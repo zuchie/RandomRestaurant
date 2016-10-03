@@ -12,37 +12,37 @@ import GoogleMaps
 class GoogleMapViewController: UIViewController {
     
     
-    private var location: String?
-    private var bizCoordinate2D: CLLocationCoordinate2D?
-    private var bizName: String?
-    private var departureTime: Int?
-    private var drawRoute = GetDirection()
-    private var mapView: GMSMapView!
+    fileprivate var location: String?
+    fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
+    fileprivate var bizName: String?
+    fileprivate var departureTime: Int?
+    fileprivate var drawRoute = GetDirection()
+    fileprivate var mapView: GMSMapView!
     
-    private var label = UILabel()
-    private var button = UIButton()
+    fileprivate var label = UILabel()
+    fileprivate var button = UIButton()
     
     
-    func setBizLocation(location: String) {
+    func setBizLocation(_ location: String) {
         self.location = location
     }
     
-    func setBizCoordinate2D(coordinate2D: CLLocationCoordinate2D) {
+    func setBizCoordinate2D(_ coordinate2D: CLLocationCoordinate2D) {
         self.bizCoordinate2D = coordinate2D
     }
     
-    func setBizName(name: String) {
+    func setBizName(_ name: String) {
         self.bizName = name
     }
 
-    func setDepartureTime(time: Int) {
+    func setDepartureTime(_ time: Int) {
         // Convert back from local time to UTC for Google Maps API departure_time use.
-        self.departureTime = time - NSTimeZone.localTimeZone().secondsFromGMT
+        self.departureTime = time - NSTimeZone.local.secondsFromGMT()
     }
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
-    override func viewWillAppear(animated: Bool) {
-        view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
+    override func viewWillAppear(_ animated: Bool) {
+        view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
     }
     /*
     // Deregister observer.
@@ -50,9 +50,11 @@ class GoogleMapViewController: UIViewController {
         view.removeObserver(self, forKeyPath: "myLocation")
     }
     */
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
-        if keyPath == "myLocation" && (object?.isKindOfClass(GMSMapView))! {
+        //if keyPath == "myLocation" && ((object as AnyObject).isKind(of: GMSMapView())) {
+        if keyPath == "myLocation" && object is GMSMapView {
             
             // Draw route.
             drawRoute.makeGoogleDirectionsUrl(
@@ -68,7 +70,7 @@ class GoogleMapViewController: UIViewController {
                 // Draw from returned polyline.
                 for points in routesPoints {
                     //print("poly points: \(points)")
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         let path = GMSMutablePath(fromEncodedPath: points)
                         let polyline = GMSPolyline(path: path)
                         polyline.strokeWidth = 3
@@ -79,15 +81,15 @@ class GoogleMapViewController: UIViewController {
                 
                 print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     
                     // Update camera to new bounds.
                     let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
                     let edges = UIEdgeInsetsMake(120, 40, 40, 40)
-                    let camera = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: edges)
+                    let camera = GMSCameraUpdate.fit(bounds, with: edges)
                     
                     print("update camera")
-                    self.mapView.animateWithCameraUpdate(camera)
+                    self.mapView.animate(with: camera)
                     
                     self.label.text = "\(distances.first!), \(durationInTraffic)"
                 })
@@ -101,12 +103,12 @@ class GoogleMapViewController: UIViewController {
     override func loadView() {
         // Create a GMSCameraPosition that tells the map to display the
         // business position at zoom level 12.
-        let camera = GMSCameraPosition.cameraWithTarget(bizCoordinate2D!, zoom: 10.0)
-        mapView = GMSMapView.mapWithFrame(CGRect.zero, camera: camera)
+        let camera = GMSCameraPosition.camera(withTarget: bizCoordinate2D!, zoom: 10.0)
+        mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         
         //mapView = GMSMapView()
 
-        mapView.myLocationEnabled = true
+        mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
 
         view = mapView
@@ -126,12 +128,12 @@ class GoogleMapViewController: UIViewController {
         // Add label.
         let labelWidth: CGFloat = 180.0
         let labelHeight: CGFloat = 20.0
-        let screenBounds = UIScreen.mainScreen().bounds
+        let screenBounds = UIScreen.main.bounds
         
         label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
-        label.backgroundColor = UIColor.lightGrayColor()
-        label.textAlignment = .Center
-        label.textColor = UIColor.whiteColor()
+        label.backgroundColor = UIColor.lightGray
+        label.textAlignment = .center
+        label.textColor = UIColor.white
         label.adjustsFontSizeToFitWidth = true
         
         view.addSubview(label)
@@ -140,27 +142,27 @@ class GoogleMapViewController: UIViewController {
         let buttonSize: CGFloat = 40.0
         let buttonYPosition: CGFloat = 65.0 // TODO: Don't use hardcoded.
         button.frame = CGRect(x: screenBounds.width - buttonSize, y: buttonYPosition, width: buttonSize, height: buttonSize)
-        button.backgroundColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
+        button.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
         button.showsTouchWhenHighlighted = true
-        button.setTitle("Nav", forState: .Normal)
-        button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        button.setTitle("Nav", for: UIControlState())
+        button.setTitleColor(UIColor.darkText, for: UIControlState())
         
-        button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: .TouchDown)
+        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
         
         view.addSubview(button)
     }
     
     // Open Google Maps app for navigation. Need to add "comgooglemaps", and "comgooglemaps-x-callback" into plist "LSApplicationQueriesSchemes" array.
-    func buttonTapped(button: UIButton) {
+    func buttonTapped(_ button: UIButton) {
         let bizLat = bizCoordinate2D?.latitude
         let bizlng = bizCoordinate2D?.longitude
-        let testURL = NSURL(string: "comgooglemaps-x-callback://")
-        let app = UIApplication.sharedApplication()
+        let testURL = URL(string: "comgooglemaps-x-callback://")
+        let app = UIApplication.shared
         if app.canOpenURL(testURL!) {
             let directionsRequest = "comgooglemaps-x-callback://" +
                 "?daddr=\(bizLat!),\(bizlng!)" + "&x-success=sourceapp://?resume=true&x-source=AirApp";
-            let directionsURL = NSURL(string: directionsRequest)
-            UIApplication.sharedApplication().openURL(directionsURL!)
+            let directionsURL = URL(string: directionsRequest)
+            UIApplication.shared.openURL(directionsURL!)
         } else {
             NSLog("Can't use comgooglemaps-x-callback:// on this device.");
         }

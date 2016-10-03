@@ -7,11 +7,22 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class RatingControl: UIView {
     
     // MARK: Properties
-    private var rating: Double? {
+    fileprivate var rating: Double? {
         didSet {
             setNeedsLayout()
             //setNeedsDisplay()
@@ -19,16 +30,16 @@ class RatingControl: UIView {
         }
     }
     
-    private var ratingButtons = [UIButton]()
-    private var spacing = 5
-    private var starCount = 5
+    fileprivate var ratingButtons = [UIButton]()
+    fileprivate var spacing = 5
+    fileprivate var starCount = 5
     
-    private var buttonConsecutiveTapCount = 0
-    private var tappedButtonIndex: Int?
+    fileprivate var buttonConsecutiveTapCount = 0
+    fileprivate var tappedButtonIndex: Int?
 
-    private let filledStarImage = UIImage(named: "filledStar")
-    private let emptyStarImage = UIImage(named: "emptyStar")
-    private let halfFilledStarImage = UIImage(named: "halfFilledStar")
+    fileprivate let filledStarImage = UIImage(named: "filledStar")
+    fileprivate let emptyStarImage = UIImage(named: "emptyStar")
+    fileprivate let halfFilledStarImage = UIImage(named: "halfFilledStar")
 
     // MARK: Initialization
     override func layoutSubviews() {
@@ -39,7 +50,7 @@ class RatingControl: UIView {
         
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         
-        for (index, button) in ratingButtons.enumerate() {
+        for (index, button) in ratingButtons.enumerated() {
             buttonFrame.origin.x = CGFloat(index * (buttonSize + spacing))
             button.frame = buttonFrame
         }
@@ -53,19 +64,19 @@ class RatingControl: UIView {
         for _ in 0..<starCount {
             let button = UIButton()
             
-            button.setImage(emptyStarImage, forState: .Normal)
-            button.setImage(filledStarImage, forState: .Selected)
-            button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
+            button.setImage(emptyStarImage, for: UIControlState())
+            button.setImage(filledStarImage, for: .selected)
+            button.setImage(filledStarImage, for: [.highlighted, .selected])
             
             button.adjustsImageWhenHighlighted = false
             
-            button.addTarget(self, action: #selector(ratingButtonTapped(_:)), forControlEvents: .TouchDown)
+            button.addTarget(self, action: #selector(ratingButtonTapped(_:)), for: .touchDown)
             ratingButtons += [button]
             addSubview(button)
         }
     }
 
-    override func intrinsicContentSize() -> CGSize {
+    override var intrinsicContentSize : CGSize {
         
         let buttonSize = Int(frame.size.height)
         print("intrinsic size button size: \(buttonSize)")
@@ -74,9 +85,9 @@ class RatingControl: UIView {
     }
 
     // MARK: Button Action
-    func ratingButtonTapped(button: UIButton) {
+    func ratingButtonTapped(_ button: UIButton) {
         
-        let buttonIndex = ratingButtons.indexOf(button)!
+        let buttonIndex = ratingButtons.index(of: button)!
         var ratingMinusPointFive = false
 
         // Not fist time tapping.
@@ -86,14 +97,14 @@ class RatingControl: UIView {
                 buttonConsecutiveTapCount += 1
                 // Toggle button image when consecutive tap.
                 if buttonConsecutiveTapCount % 2 == 1 {
-                    button.setImage(halfFilledStarImage, forState: .Selected)
+                    button.setImage(halfFilledStarImage, for: .selected)
                     ratingMinusPointFive = true
                 } else {
-                    button.setImage(filledStarImage, forState: .Selected)
+                    button.setImage(filledStarImage, for: .selected)
                 }
             } else {
                 buttonConsecutiveTapCount = 0
-                ratingButtons[tappedButtonIndex!].setImage(filledStarImage, forState: .Selected)
+                ratingButtons[tappedButtonIndex!].setImage(filledStarImage, for: .selected)
             }
         }
         tappedButtonIndex = buttonIndex
@@ -106,10 +117,10 @@ class RatingControl: UIView {
         updateButtonSelectionStates()
     }
     
-    private func updateButtonSelectionStates() {
-        for (index, button) in ratingButtons.enumerate() {
+    fileprivate func updateButtonSelectionStates() {
+        for (index, button) in ratingButtons.enumerated() {
             // If the index of a button is less than the rating, that button should be selected.
-            button.selected = Double(index) < rating
+            button.isSelected = Double(index) < rating
         }
     }
     

@@ -11,10 +11,10 @@ import CoreData
 
 class HistoryDB {
     
-    static var managedObjectContext: NSManagedObjectContext? = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
+    static var managedObjectContext: NSManagedObjectContext? = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
     
-    class func addEntry(entry: Restaurant) {
-        managedObjectContext?.performBlockAndWait {
+    class func addEntry(_ entry: Restaurant) {
+        managedObjectContext?.performAndWait {
             
             _ = History.history(entry, inManagedObjectContext: self.managedObjectContext!)
             
@@ -27,8 +27,8 @@ class HistoryDB {
         }
     }
     
-    class func updateEntryState(entry: Restaurant) {
-        managedObjectContext?.performBlockAndWait {
+    class func updateEntryState(_ entry: Restaurant) {
+        managedObjectContext?.performAndWait {
             
             _ = History.updateState(entry, inManagedObjectContext: self.managedObjectContext!)
             

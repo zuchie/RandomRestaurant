@@ -16,21 +16,21 @@ class SlotMachineViewController: UIViewController {
     @IBOutlet weak var pickedBizAddress: UILabel!
     @IBOutlet weak var viewsContainer: UIView!
     
-    private var pickedRestaurant: Restaurant?
+    fileprivate var pickedRestaurant: Restaurant?
     
-    private var nearbyBusinesses = GetNearbyBusinesses()
+    fileprivate var nearbyBusinesses = GetNearbyBusinesses()
     
-    private var ratingBar = 0.0
+    fileprivate var ratingBar = 0.0
     
-    private var bizName = ""
-    private var bizPrice = ""
-    private var bizRating = ""
-    private var bizReviewCount = ""
-    private var bizLocationObj: PickedBusinessLocation?
-    private var bizAddress = ""
-    private var bizCoordinate2D: CLLocationCoordinate2D?
+    fileprivate var bizName = ""
+    fileprivate var bizPrice = ""
+    fileprivate var bizRating = ""
+    fileprivate var bizReviewCount = ""
+    fileprivate var bizLocationObj: PickedBusinessLocation?
+    fileprivate var bizAddress = ""
+    fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     
-    private weak var currentVC: UIViewController?
+    fileprivate weak var currentVC: UIViewController?
     
     static var scrollingImagesVC: MachineViewController?
     static var favoriteTableVC: FavoriteTableViewController?
@@ -44,9 +44,9 @@ class SlotMachineViewController: UIViewController {
         print("slot machine view did load")
         
         // Instantiate View Controllers for all Segments. Their references will be kept when switching among Segments.
-        SlotMachineViewController.scrollingImagesVC = self.storyboard?.instantiateViewControllerWithIdentifier("Machine") as? MachineViewController
-        SlotMachineViewController.favoriteTableVC = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite") as? FavoriteTableViewController
-        SlotMachineViewController.historyTableVC = self.storyboard?.instantiateViewControllerWithIdentifier("History") as? HistoryTableViewController
+        SlotMachineViewController.scrollingImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "Machine") as? MachineViewController
+        SlotMachineViewController.favoriteTableVC = self.storyboard?.instantiateViewController(withIdentifier: "Favorite") as? FavoriteTableViewController
+        SlotMachineViewController.historyTableVC = self.storyboard?.instantiateViewController(withIdentifier: "History") as? HistoryTableViewController
         
         // Set starting view.
         currentVC = SlotMachineViewController.scrollingImagesVC
@@ -55,26 +55,26 @@ class SlotMachineViewController: UIViewController {
         addChildViewController(currentVC!)
         currentVC?.view.frame = viewsContainer.frame
         self.addSubview(currentVC!.view, toView: viewsContainer)
-        currentVC?.didMoveToParentViewController(self)
+        currentVC?.didMove(toParentViewController: self)
         
-        view.sendSubviewToBack(viewsContainer)
+        view.sendSubview(toBack: viewsContainer)
         
         
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
-    func setUrlQueryParameters(urlParam: UrlQueryParameters) {
+    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
         print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
     }
     
-    func getRatingBar(rating: Double) {
+    func getRatingBar(_ rating: Double) {
         ratingBar = rating
     }
  
-    private func scrollImages(index: Int, imageView: UIImageView) {
+    fileprivate func scrollImages(_ index: Int, imageView: UIImageView) {
         
-        UIView.animateWithDuration(4.0, delay: 0.0, options: [.CurveEaseInOut], animations: {
+        UIView.animate(withDuration: 4.0, delay: 0.0, options: UIViewAnimationOptions(), animations: {
             
             var frame = imageView.frame
             
@@ -86,7 +86,7 @@ class SlotMachineViewController: UIViewController {
             
             if finished {
                 
-                self.view.sendSubviewToBack(self.viewsContainer)
+                self.view.sendSubview(toBack: self.viewsContainer)
                 
             } else {
                 
@@ -96,27 +96,27 @@ class SlotMachineViewController: UIViewController {
         })
     }
 
-    func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
+    func cycleFromViewController(_ oldViewController: UIViewController, toViewController newViewController: UIViewController) {
         
-        oldViewController.willMoveToParentViewController(nil)
+        oldViewController.willMove(toParentViewController: nil)
         self.addChildViewController(newViewController)
         self.addSubview(newViewController.view, toView: viewsContainer)
         
         newViewController.view.alpha = 0
         newViewController.view.layoutIfNeeded()
         
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             newViewController.view.alpha = 1
             oldViewController.view.alpha = 0
             },
                                    completion: { finished in
                                     oldViewController.view.removeFromSuperview()
                                     oldViewController.removeFromParentViewController()
-                                    newViewController.didMoveToParentViewController(self)
+                                    newViewController.didMove(toParentViewController: self)
         })
     }
     
-    @IBAction func segmentChanged(sender: UISegmentedControl) {
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")
@@ -124,36 +124,36 @@ class SlotMachineViewController: UIViewController {
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
-            view.sendSubviewToBack(viewsContainer)
+            view.sendSubview(toBack: viewsContainer)
         case 1:
             //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Favorite")
             let newViewController = SlotMachineViewController.favoriteTableVC
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
-            view.bringSubviewToFront(viewsContainer)
+            view.bringSubview(toFront: viewsContainer)
         case 2:
             //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("History")
             let newViewController = SlotMachineViewController.historyTableVC
             newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
             self.cycleFromViewController(currentVC!, toViewController: newViewController!)
             self.currentVC = newViewController
-            view.bringSubviewToFront(viewsContainer)
+            view.bringSubview(toFront: viewsContainer)
         default:
             break;
         }
     }
     
     // Customized function to do view auto layout inside container view.
-    func addSubview(subView:UIView, toView parentView:UIView) {
+    func addSubview(_ subView:UIView, toView parentView:UIView) {
         parentView.addSubview(subView)
         
         var viewBindingsDict = [String: AnyObject]()
         viewBindingsDict["subView"] = subView
-        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[subView]|",
-            options: [.AlignAllCenterX], metrics: nil, views: viewBindingsDict))
-        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
-            options: [.AlignAllCenterY], metrics: nil, views: viewBindingsDict))
+        parentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[subView]|",
+            options: [.alignAllCenterX], metrics: nil, views: viewBindingsDict))
+        parentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[subView]|",
+            options: [.alignAllCenterY], metrics: nil, views: viewBindingsDict))
         
         //print("parent frame height: \(parentView.frame.height), width: \(parentView.frame.width)")
  
@@ -162,11 +162,11 @@ class SlotMachineViewController: UIViewController {
     @IBAction func start() {
         
         // Start animation.
-        for (index, imageView) in MachineViewController.imageViews.enumerate() {
+        for (index, imageView) in MachineViewController.imageViews.enumerated() {
             // Reset Y.
             imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
             
-            view.bringSubviewToFront(viewsContainer)
+            view.bringSubview(toFront: viewsContainer)
             
             scrollImages(index, imageView: imageView)
         }
@@ -205,20 +205,20 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 // Params going to pass to Core Data of History Restaurant.
-                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(NSDate().timeIntervalSince1970))
+                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970))
                 
                 // Update History database.
                 HistoryDB.addEntry(self.pickedRestaurant!)
                 // Update table view.
                 SlotMachineViewController.historyTableVC?.updateUI()
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
                     self.pickedBizAddress.text = "\(self.bizAddress)"
                 })
             } else {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.bizPicked.text = "No restaurant found"
                 })
             }
@@ -231,26 +231,26 @@ class SlotMachineViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    private func alert() {
+    fileprivate func alert() {
         
         // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Please push \"Start\" button.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Alert", message: "Please push \"Start\" button.", preferredStyle: UIAlertControllerStyle.alert)
         
         // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
             
         }))
         
         // Show the alert.
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let destinationVC = segue.destinationViewController
+        let destinationVC = segue.destination
         
         if bizAddress.isEmpty || bizCoordinate2D == nil {
             

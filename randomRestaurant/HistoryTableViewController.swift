@@ -12,7 +12,7 @@ import CoreData
 class HistoryTableViewController: CoreDataTableViewController {
     
     //private var favoriteRestaurant: FavoriteTableViewController?
-    private var historyRest = Restaurant()
+    fileprivate var historyRest = Restaurant()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +25,7 @@ class HistoryTableViewController: CoreDataTableViewController {
     // Fetch data from DB and reload table view.
     func updateUI() {
         if let context = HistoryDB.managedObjectContext {
-            let request = NSFetchRequest(entityName: "History")
+            let request: NSFetchRequest<History> = NSFetchRequest(entityName: "History")
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             print("updating history UI")
             
@@ -42,7 +42,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         }
     }
 
-    func removeFromFavorites(name: String) {
+    func removeFromFavorites(_ name: String) {
         let restaurant = Restaurant()
         restaurant!.name = name
         restaurant!.isFavorite = false
@@ -55,40 +55,40 @@ class HistoryTableViewController: CoreDataTableViewController {
     }
     
     // MARK: - Table view data source
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         //print("history cell section: \(indexPath.section) row: \(indexPath.row)")
-        let cell = tableView.dequeueReusableCellWithIdentifier("history", forIndexPath: indexPath) as! HistoryTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "history", for: indexPath) as! HistoryTableViewCell
         
         // Configure the cell...
-        if let historyRestaurant = fetchedResultsController?.objectAtIndexPath(indexPath) as? History {
+        if let historyRestaurant = fetchedResultsController?.object(at: indexPath) {
             var name: String?
             var isFavorite: Bool?
             
-            historyRestaurant.managedObjectContext?.performBlockAndWait {
+            historyRestaurant.managedObjectContext?.performAndWait {
                 name = historyRestaurant.name
                 isFavorite = historyRestaurant.isFavorite?.boolValue
             }
-            cell.addToFav.selected = isFavorite!
+            cell.addToFav.isSelected = isFavorite!
             cell.historyLabel.text = name
             
             cell.addToFav.cellText = cell.historyLabel.text
-            cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: .TouchDown)
+            cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
         }
         
         return cell
     }
     
-    private func updateButtonStatus(button: UIButton) {
+    fileprivate func updateButtonStatus(_ button: UIButton) {
 
-        if button.selected == false {
-            button.selected = true
+        if button.isSelected == false {
+            button.isSelected = true
         } else {
-            button.selected = false
+            button.isSelected = false
         }
     }
     
-    func buttonTapped(sender: HistoryCellButton) {
+    func buttonTapped(_ sender: HistoryCellButton) {
         
         // Pass to favorite restaurant database.
         historyRest!.name = sender.cellText
@@ -99,7 +99,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         updateButtonStatus(sender)
         
-        historyRest!.isFavorite = sender.selected
+        historyRest!.isFavorite = sender.isSelected
         
         HistoryDB.updateEntryState(historyRest!)
         updateUI()

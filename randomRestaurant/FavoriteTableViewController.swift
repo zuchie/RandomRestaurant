@@ -13,12 +13,12 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    private var searchActive = false
+    fileprivate var searchActive = false
     
-    private var historyRestaurant: HistoryTableViewController?
+    fileprivate var historyRestaurant: HistoryTableViewController?
     
-    private var favoriteRestaurants = [Restaurant]()
-    private var filteredRestaurants = [Restaurant]()
+    fileprivate var favoriteRestaurants = [Restaurant]()
+    fileprivate var filteredRestaurants = [Restaurant]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +30,12 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         //fetchFavoritesFromHistoryDB()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         fetchFavoritesFromHistoryDB()
     }
 
     // MARK: Model
-    private var fetchedResultsController: NSFetchedResultsController? {
+    fileprivate var fetchedResultsController: NSFetchedResultsController<History>? {
         didSet {
             do {
                 if let frc = fetchedResultsController {
@@ -49,10 +49,10 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         }
     }
     
-    private func fetchFavoritesFromHistoryDB() {
+    fileprivate func fetchFavoritesFromHistoryDB() {
         if let context = HistoryDB.managedObjectContext {
             
-            let request = NSFetchRequest(entityName: "History")
+            let request: NSFetchRequest<History> = NSFetchRequest(entityName: "History")
             request.predicate = NSPredicate(format: "isFavorite == YES")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
             print("fetch favorites from DB")
@@ -71,7 +71,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         favoriteRestaurants.removeAll()
         
         for obj in fetchedResultsController!.fetchedObjects! {
-            let fetchedRestaurant = obj as! History
+            let fetchedRestaurant = obj
             let restaurant = Restaurant()
             
             restaurant?.name = fetchedRestaurant.name
@@ -80,7 +80,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             restaurant?.rating = fetchedRestaurant.rating
             restaurant?.isFavorite = fetchedRestaurant.isFavorite?.boolValue
             restaurant?.reviewCount = fetchedRestaurant.reviewCount
-            restaurant?.date = fetchedRestaurant.date?.integerValue
+            restaurant?.date = fetchedRestaurant.date?.intValue
             
             favoriteRestaurants.append(restaurant!)
         }
@@ -88,26 +88,26 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         tableView.reloadData()
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true;
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchActive = false;
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false;
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false;
     }
  
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         filteredRestaurants = favoriteRestaurants.filter { restaurant in
-            return restaurant.name!.lowercaseString.containsString(searchText.lowercaseString)
+            return restaurant.name!.lowercased().contains(searchText.lowercased())
         }
         
         if filteredRestaurants.count == 0 {
@@ -122,7 +122,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
 
     // MARK: - Table view data source
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if searchActive && searchBar.text != "" {
             return filteredRestaurants.count
@@ -131,21 +131,21 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellID = "favorite"
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
         // Configure the cell...
         let restau: Restaurant
         
         if searchActive && searchBar.text != "" {
-            restau = filteredRestaurants[indexPath.row]
+            restau = filteredRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         } else {
             
-            restau = favoriteRestaurants[indexPath.row]
+            restau = favoriteRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         }
 
@@ -153,23 +153,23 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     }
     
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        if editingStyle == .Delete {
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+        if editingStyle == .delete {
+            if let cell = tableView.cellForRow(at: indexPath) {
                 // Remove star from History table cell.
                 print("delete favorite cell: \((cell.textLabel?.text)!)")
-                favoriteRestaurants.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                favoriteRestaurants.remove(at: (indexPath as NSIndexPath).row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
                 historyRestaurant!.removeFromFavorites((cell.textLabel?.text)!)
             }
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
     
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }

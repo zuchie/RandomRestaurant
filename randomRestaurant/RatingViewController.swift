@@ -14,7 +14,7 @@ class RatingViewController: UIViewController {
     @IBOutlet weak var rating: RatingControl!
     
     var urlQueryParameters: UrlQueryParameters?
-    func setUrlQueryParameters(urlParam: UrlQueryParameters) {
+    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
     }
     
@@ -32,9 +32,9 @@ class RatingViewController: UIViewController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let destinationVC = segue.destinationViewController
+        let destinationVC = segue.destination
         
         if let slotMachineVC = destinationVC as? SlotMachineViewController {
             if let id = segue.identifier {

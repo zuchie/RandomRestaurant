@@ -11,27 +11,27 @@ import UIKit
 class FoodCategoriesViewController: UITableViewController {
     
     // MARK: Properties
-    private var foodCategories = [FoodCategories]()
+    fileprivate var foodCategories = [FoodCategories]()
     
-    private var foodCategoriesName = ["Chinese", "Mexican", "Italian", "NewAmerican", "TradAmerican", "French"]
+    fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "NewAmerican", "TradAmerican", "French"]
     
-    private var category = ""
+    fileprivate var category = ""
     
     var urlQueryParameters: UrlQueryParameters?
-    func setUrlQueryParameters(urlParam: UrlQueryParameters) {
+    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        for categoryName in foodCategoriesName.enumerate() {
+        for categoryName in foodCategoriesName.enumerated() {
             loadFoodCategories(categoryName.element)
         }
     }
     
-    func loadFoodCategories(name: String) {
-        let photo = UIImage(named: name.lowercaseString)!
+    func loadFoodCategories(_ name: String) {
+        let photo = UIImage(named: name.lowercased())!
         let food = FoodCategories(name: name, photo: photo)!
         foodCategories += [food]
     }
@@ -43,22 +43,22 @@ class FoodCategoriesViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return foodCategories.count
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "FoodCategoriesTableViewCell"
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! FoodCategoriesTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! FoodCategoriesTableViewCell
         
-        let foodCategory = foodCategories[indexPath.row]
+        let foodCategory = foodCategories[(indexPath as NSIndexPath).row]
 
         // Configure the cell...
         cell.nameLabel.text = foodCategory.name
@@ -67,31 +67,31 @@ class FoodCategoriesViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as! FoodCategoriesTableViewCell
+        let selectedCell = tableView.cellForRow(at: indexPath) as! FoodCategoriesTableViewCell
         // Food category has to be lower case for API to recognize.
-        category = selectedCell.nameLabel.text!.lowercaseString
+        category = selectedCell.nameLabel.text!.lowercased()
     }
     
-    private func alert() {
+    fileprivate func alert() {
         
         // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Loading current location...", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Alert", message: "Loading current location...", preferredStyle: UIAlertControllerStyle.alert)
         
         // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
         }))
         
         // Show the alert.
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        var destinationVC = segue.destinationViewController
+        var destinationVC = segue.destination
         if let navCtrl = destinationVC as? UINavigationController {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }

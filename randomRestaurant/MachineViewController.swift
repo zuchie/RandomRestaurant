@@ -11,9 +11,9 @@ import UIKit
 class MachineViewController: UIViewController {
     
     var imageView: UIImageView!
-    private var viewEverAppeared = false
+    fileprivate var viewEverAppeared = false
     
-    private let animationImages = [
+    fileprivate let animationImages = [
         UIImage(named: "image0")!,
         UIImage(named: "image1")!,
         UIImage(named: "image2")!,
@@ -26,16 +26,16 @@ class MachineViewController: UIViewController {
     static var imageViews = [UIImageView]()
     static var imagesFrameY = [CGFloat]()
     
-    private var imageViewFrameWidth: CGFloat = 0.0
-    private var imageViewFrameHeight: CGFloat = 0.0
-    private var imageViewFrameX: CGFloat = 0.0
-    private var imageViewFrameY: CGFloat = 0.0
+    fileprivate var imageViewFrameWidth: CGFloat = 0.0
+    fileprivate var imageViewFrameHeight: CGFloat = 0.0
+    fileprivate var imageViewFrameX: CGFloat = 0.0
+    fileprivate var imageViewFrameY: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
         // Init imageView once in MachineView lifecycle.
         // Cannot put into viewDidLoad because view.frame hasn't been updated by that time.

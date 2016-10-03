@@ -12,18 +12,18 @@ import GooglePlaces
 class CurrentPlace {
     
     // Instantiate a pair of UILabels in Interface Builder
-    private var name: String? = nil
-    private var address: String? = nil
-    private var placesClient: GMSPlacesClient? = nil
+    fileprivate var name: String? = nil
+    fileprivate var address: String? = nil
+    fileprivate var placesClient: GMSPlacesClient? = nil
     
     // MARK: Initialization
     init() {
-        placesClient = GMSPlacesClient.sharedClient()
+        placesClient = GMSPlacesClient.shared()
     }
 
-    func getCurrentPlace(completionHandler: () -> Void) {
+    func getCurrentPlace(_ completionHandler: @escaping () -> Void) {
         
-        placesClient?.currentPlaceWithCallback({
+        placesClient?.currentPlace(callback: {
             (placeLikelihoodList: GMSPlaceLikelihoodList?, error: NSError?) -> Void in
             if let error = error {
                 print("Pick Place error: \(error.localizedDescription)")
@@ -37,12 +37,12 @@ class CurrentPlace {
                 let firstPlace = placeLikelihoodList.likelihoods.first?.place
                 if let place = firstPlace {
                     self.name = place.name
-                    self.address = place.formattedAddress!.componentsSeparatedByString(", ")
-                        .joinWithSeparator(", ")
+                    self.address = place.formattedAddress!.components(separatedBy: ", ")
+                        .joined(separator: ", ")
                 }
             }
             completionHandler()
-        })
+        } as! GMSPlaceLikelihoodListCallback)
     }
     
     var currentPlaceName: String? {

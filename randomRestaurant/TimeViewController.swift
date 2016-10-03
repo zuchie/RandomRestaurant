@@ -15,10 +15,10 @@ class TimeViewController: UIViewController {
     
     var urlQueryParameters: UrlQueryParameters?
     
-    private var currentDate = 0
-    private var pickerDate = 0
+    fileprivate var currentDate = 0
+    fileprivate var pickerDate = 0
     
-    func setUrlQueryParameters(urlParam: UrlQueryParameters) {
+    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
         urlQueryParameters = urlParam
     }
 
@@ -26,7 +26,7 @@ class TimeViewController: UIViewController {
         super.viewDidLoad()
         
         // Refresh view with current date.
-        datePicker.setDate(NSDate(), animated: true)
+        datePicker.setDate(Date(), animated: true)
         
         //datePicker.addTarget(self, action: #selector(datePickerChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
@@ -35,13 +35,13 @@ class TimeViewController: UIViewController {
     
     }
     // Minutes precision, in order to use cached data when re-query is made in 1 min.
-    private func updateDatesWithMinPrecision() {
-        let calendar = NSCalendar.currentCalendar()
+    fileprivate func updateDatesWithMinPrecision() {
+        let calendar = Calendar.current
         let dateForPicker = datePicker.date
-        let secondsForPicker = calendar.component(NSCalendarUnit.Second, fromDate: dateForPicker)
+        let secondsForPicker = (calendar as NSCalendar).component(NSCalendar.Unit.second, from: dateForPicker)
         
-        let dateForCurrent = NSDate()
-        let secondsForCurrent = calendar.component(NSCalendarUnit.Second, fromDate: dateForCurrent)
+        let dateForCurrent = Date()
+        let secondsForCurrent = (calendar as NSCalendar).component(NSCalendar.Unit.second, from: dateForCurrent)
 
         /*
          * Yelp API v3 is using unixTime(business.literalHours) to compare with open_at.
@@ -52,12 +52,12 @@ class TimeViewController: UIViewController {
         pickerDate = Int(dateForPicker.timeIntervalSince1970) - secondsForPicker
         currentDate = Int(dateForCurrent.timeIntervalSince1970) - secondsForCurrent
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.long
+        dateFormatter.timeStyle = DateFormatter.Style.long
         
-        let picDate = dateFormatter.stringFromDate(dateForPicker)
-        let curDate = dateFormatter.stringFromDate(dateForCurrent)
+        let picDate = dateFormatter.string(from: dateForPicker)
+        let curDate = dateFormatter.string(from: dateForCurrent)
         
         print("picked date: \(picDate), current date: \(curDate)")
         //print("offset picked date unix: \(pickerDate), offset current date unix: \(currentDate)")
@@ -80,28 +80,28 @@ class TimeViewController: UIViewController {
         updateDatesWithMinPrecision()
     }
     */
-    private func alert() {
+    fileprivate func alert() {
         
         // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Cannot be a past date.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Alert", message: "Cannot be a past date.", preferredStyle: UIAlertControllerStyle.alert)
         
         // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { action in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
             // Set picker to current date.
-            self.datePicker.setDate(NSDate(), animated: true)
+            self.datePicker.setDate(Date(), animated: true)
             self.updateDatesWithMinPrecision()
         }))
         
         // Show the alert.
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let destinationVC = segue.destinationViewController
+        let destinationVC = segue.destination
         
         updateDatesWithMinPrecision()
         if pickerDate < currentDate {
@@ -110,7 +110,7 @@ class TimeViewController: UIViewController {
             
         } else {
             if let ratingVC = destinationVC as? RatingViewController {
-                if let id = segue.identifier where id == "rating" {
+                if let id = segue.identifier , id == "rating" {
                     urlQueryParameters?.openAt = pickerDate
                     ratingVC.setUrlQueryParameters(urlQueryParameters!)
                 }

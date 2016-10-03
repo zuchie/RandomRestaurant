@@ -21,23 +21,23 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
     // Search radius: 40000 meters(25 mi), return 50 businesses.
     var urlQueryParameters = UrlQueryParameters(location: "", category: "", radius: 40000, limit: 50, openAt: 0)
 
-    private var currentPlace: CurrentPlace? = nil
+    fileprivate var currentPlace: CurrentPlace? = nil
 
-    private var filteredLocations = [[String](), [String]()]
+    fileprivate var filteredLocations = [[String](), [String]()]
     
-    private var fetcher: GMSAutocompleteFetcher?
+    fileprivate var fetcher: GMSAutocompleteFetcher?
     
-    private enum places: Int {
+    fileprivate enum places: Int {
         case current, other
     }
     
-    private var place: String? // Pass to Yelp API parameter "location".
+    fileprivate var place: String? // Pass to Yelp API parameter "location".
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        let inputText = searchText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 
         // Clear all other places appended.
-        filteredLocations[places.other.rawValue].removeAll(keepCapacity: false)
+        filteredLocations[places.other.rawValue].removeAll(keepingCapacity: false)
         fetcher?.sourceTextHasChanged(inputText)
     }
     
@@ -46,19 +46,20 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         
         // Asking for access of users location.
         locationManager.delegate = self
-        if CLLocationManager.authorizationStatus() == .NotDetermined {
+        if CLLocationManager.authorizationStatus() == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
         }
 
         // Allocate cache here for URL responses so that cache data won't get lost when view is backed.
         let cacheSizeMemory = 5 * 1024 * 1024
         let cacheSizeDisk = 10 * 1024 * 1024
-        let urlCache = NSURLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
-        NSURLCache.setSharedURLCache(urlCache)
+        let urlCache = URLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
+        //URLCache.setSharedURLCache(urlCache)
+        URLCache.shared = urlCache
         
         inputLocation.delegate = self
-        locationsTable.hidden = false
-        locationsTable.scrollEnabled = true
+        locationsTable.isHidden = false
+        locationsTable.isScrollEnabled = true
         
         filteredLocations[places.current.rawValue].append("Current place")
         
@@ -71,7 +72,7 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         
         // Set up the autocomplete filter.
         let filter = GMSAutocompleteFilter()
-        filter.type = .City
+        filter.type = .city
         
         // Create the fetcher.
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
@@ -81,34 +82,34 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        NSURLCache.sharedURLCache().removeAllCachedResponses()
+        URLCache.shared.removeAllCachedResponses()
     }
     
     
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         
         return filteredLocations.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return filteredLocations[section].count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellID = "LocationTableViewCell"
     
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath)
-        cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        cell.textLabel!.text = filteredLocations[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let selectedCell = tableView.cellForRowAtIndexPath(indexPath)!
+        let selectedCell = tableView.cellForRow(at: indexPath)!
         inputLocation.text = selectedCell.textLabel!.text
         view.endEditing(true) // Hide keyboard.
 
@@ -117,9 +118,9 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
 
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        var destinationVC = segue.destinationViewController
+        var destinationVC = segue.destination
         if let navCtrl = destinationVC as? UINavigationController {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }
@@ -154,8 +155,16 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
 }
 
 extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
+    /**
+     * Called when an autocomplete request returns an error.
+     * @param error the error that was received.
+     */
+    public func didFailAutocompleteWithError(_ error: Error) {
+        print("autocomplete error: \(error.localizedDescription)")
+    }
+
     // Google Places autocomplete.
-    func didAutocompleteWithPredictions(predictions: [GMSAutocompletePrediction]) {
+    func didAutocomplete(with predictions: [GMSAutocompletePrediction]) {
         
         for prediction in predictions {
             let resultsStr = prediction.attributedFullText.string
@@ -164,9 +173,6 @@ extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
         }
         
     }
-    
-    func didFailAutocompleteWithError(error: NSError) {
-        print("autocomplete error: \(error.localizedDescription)")
-    }
+
 }
 

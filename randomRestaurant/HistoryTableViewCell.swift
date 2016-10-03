@@ -13,18 +13,18 @@ class HistoryTableViewCell: UITableViewCell {
     @IBOutlet weak var historyLabel: UILabel!
     @IBOutlet weak var addToFav: HistoryCellButton!
     
-    private let emptyStar = UIImage(named: "emptyStar")
-    private let filledStar = UIImage(named: "filledStar")
+    fileprivate let emptyStar = UIImage(named: "emptyStar")
+    fileprivate let filledStar = UIImage(named: "filledStar")
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
-        addToFav.setImage(emptyStar, forState: .Normal)
-        addToFav.setImage(filledStar, forState: .Selected)
+        addToFav.setImage(emptyStar, for: UIControlState())
+        addToFav.setImage(filledStar, for: .selected)
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
