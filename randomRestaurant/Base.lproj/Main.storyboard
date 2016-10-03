@@ -383,9 +383,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="nNR-EW-jT1">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="favorite" id="23J-X6-kUM">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23J-X6-kUM" id="eyb-YP-067">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -399,18 +404,10 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="searchDisplayController" destination="DLU-Td-Dme" id="zJB-so-G5Z"/>
+                        <outlet property="searchBar" destination="nNR-EW-jT1" id="MCt-i2-Vae"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tY1-tH-yEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="DLU-Td-Dme">
-                    <connections>
-                        <outlet property="delegate" destination="9Ww-aC-vSP" id="g6V-Ep-dcZ"/>
-                        <outlet property="searchContentsController" destination="9Ww-aC-vSP" id="GEJ-nt-M68"/>
-                        <outlet property="searchResultsDataSource" destination="9Ww-aC-vSP" id="NsO-vg-bCZ"/>
-                        <outlet property="searchResultsDelegate" destination="9Ww-aC-vSP" id="P7D-l0-SZD"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="5713" y="1030"/>
         </scene>
@@ -464,19 +461,8 @@
                             <outlet property="delegate" destination="AfL-pR-sEH" id="qzw-Vq-MRc"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="BWz-wC-M6e" id="1ER-4e-lQV"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yv0-x5-1xs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="BWz-wC-M6e">
-                    <connections>
-                        <outlet property="delegate" destination="AfL-pR-sEH" id="T6S-1n-iQG"/>
-                        <outlet property="searchContentsController" destination="AfL-pR-sEH" id="Wog-X2-vac"/>
-                        <outlet property="searchResultsDataSource" destination="AfL-pR-sEH" id="zsL-M2-Pog"/>
-                        <outlet property="searchResultsDelegate" destination="AfL-pR-sEH" id="6cf-Dz-yW7"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="6371" y="1030"/>
         </scene>

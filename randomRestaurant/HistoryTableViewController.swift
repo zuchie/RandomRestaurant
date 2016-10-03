@@ -11,15 +11,15 @@ import CoreData
 
 class HistoryTableViewController: CoreDataTableViewController {
     
-    private var favoriteRestaurant: FavoriteTableViewController?
+    //private var favoriteRestaurant: FavoriteTableViewController?
     private var historyRest = Restaurant()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("history view did load")
         
-        favoriteRestaurant = SlotMachineViewController.favoriteTableVC
-        
+        //favoriteRestaurant = SlotMachineViewController.favoriteTableVC
+        updateUI()
     }
     
     // Fetch data from DB and reload table view.
@@ -49,6 +49,9 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         HistoryDB.updateEntryState(restaurant!)
         updateUI()
+        
+        // Delete from Favorite list.
+        //favoriteRestaurant!.removeFromFavorites(restaurant!)
     }
     
     // MARK: - Table view data source
@@ -101,8 +104,16 @@ class HistoryTableViewController: CoreDataTableViewController {
         HistoryDB.updateEntryState(historyRest!)
         updateUI()
         
-        favoriteRestaurant!.updateUI()
+        /*
+        // Update favorite restaurant list and update table view.
+        if historyRest!.isFavorite! {
+            favoriteRestaurant!.addToFavorites(historyRest!)
+        } else {
+            favoriteRestaurant!.removeFromFavorites(historyRest!)
+        }
         
+        favoriteRestaurant!.updateUI()
+        */
     }
 
 }
