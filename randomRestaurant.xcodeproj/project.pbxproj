@@ -12,7 +12,6 @@
 		B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB821D6990A60021B025 /* LocationsTableViewController.swift */; };
 		B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */; };
 		B906DB8F1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB8E1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift */; };
-		B906DB971D6C37260021B025 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB961D6C37260021B025 /* RatingControl.swift */; };
 		B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB981D6C3DBC0021B025 /* FoodCategories.swift */; };
 		B906DB9E1D6ED7A60021B025 /* CurrentPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB9D1D6ED7A60021B025 /* CurrentPlace.swift */; };
 		B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA01D72729A0021B025 /* TimeViewController.swift */; };
@@ -48,7 +47,6 @@
 		B906DB821D6990A60021B025 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
 		B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetNearbyBusinesses.swift; sourceTree = "<group>"; };
 		B906DB8E1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesTableViewCell.swift; sourceTree = "<group>"; };
-		B906DB961D6C37260021B025 /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		B906DB981D6C3DBC0021B025 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
 		B906DB9D1D6ED7A60021B025 /* CurrentPlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentPlace.swift; sourceTree = "<group>"; };
 		B906DBA01D72729A0021B025 /* TimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeViewController.swift; sourceTree = "<group>"; };
@@ -156,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				B906DBA51D728CAC0021B025 /* RatingViewController.swift */,
-				B906DB961D6C37260021B025 /* RatingControl.swift */,
 			);
 			name = Rating;
 			sourceTree = "<group>";
@@ -254,6 +251,7 @@
 				TargetAttributes = {
 					B91AC8521D4EAC4600B0476E = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = TYA2375JGG;
 						LastSwiftMigration = 0800;
 					};
 				};
@@ -345,7 +343,6 @@
 			files = (
 				B9F133AC1DA09BE500708D69 /* Restaurant.swift in Sources */,
 				B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */,
-				B906DB971D6C37260021B025 /* RatingControl.swift in Sources */,
 				B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */,
 				B906DB8F1D6C0D760021B025 /* FoodCategoriesTableViewCell.swift in Sources */,
 				B9488F0B1D9137DF000DB973 /* HistoryTableViewCell.swift in Sources */,
@@ -489,6 +486,7 @@
 			baseConfigurationReference = B253D8D0E02E0864ACF7B4A8 /* Pods-randomRestaurant.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = TYA2375JGG;
 				INFOPLIST_FILE = randomRestaurant/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhecui.randomRestaurant;
@@ -502,6 +500,7 @@
 			baseConfigurationReference = A5CEEFFD83C11D5C4928E23A /* Pods-randomRestaurant.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = TYA2375JGG;
 				INFOPLIST_FILE = randomRestaurant/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhecui.randomRestaurant;
