@@ -24,7 +24,7 @@ class CurrentPlace {
     func getCurrentPlace(_ completionHandler: @escaping () -> Void) {
         
         placesClient?.currentPlace(callback: {
-            (placeLikelihoodList: GMSPlaceLikelihoodList?, error: NSError?) -> Void in
+            (placeLikelihoodList: GMSPlaceLikelihoodList?, error: Error?) -> Void in
             if let error = error {
                 print("Pick Place error: \(error.localizedDescription)")
                 return
@@ -42,7 +42,7 @@ class CurrentPlace {
                 }
             }
             completionHandler()
-        } as! GMSPlaceLikelihoodListCallback)
+        } )
     }
     
     var currentPlaceName: String? {
