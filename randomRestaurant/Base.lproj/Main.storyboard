@@ -122,36 +122,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="D9c-DA-5Zg">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="D9c-DA-5Zg">
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O4W-Q7-6Qs">
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="O4W-Q7-6Qs" secondAttribute="height" multiplier="1:1" id="uJq-uG-moF"/>
+                                            <constraint firstAttribute="width" secondItem="O4W-Q7-6Qs" secondAttribute="height" multiplier="1:1" id="12o-vb-pTW"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="urZ-e9-zE3">
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="urZ-e9-zE3" secondAttribute="height" multiplier="1:1" id="5zd-g5-aSg"/>
-                                        </constraints>
                                         <state key="normal" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pi-SK-PvA">
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="5pi-SK-PvA" secondAttribute="height" multiplier="1:1" id="9Xx-jY-pJJ"/>
-                                        </constraints>
                                         <state key="normal" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Bm-Wf-8LP">
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="7Bm-Wf-8LP" secondAttribute="height" multiplier="1:1" id="GNt-il-lbz"/>
-                                        </constraints>
                                         <state key="normal" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uzx-L7-T2R">
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="Uzx-L7-T2R" secondAttribute="height" multiplier="1:1" id="5gS-B3-RuQ"/>
-                                        </constraints>
                                         <state key="normal" title="Button"/>
                                     </button>
                                 </subviews>
@@ -159,10 +147,9 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="OWJ-eP-SFb" firstAttribute="top" secondItem="D9c-DA-5Zg" secondAttribute="bottom" constant="300" id="0JZ-Qy-Od0"/>
-                            <constraint firstItem="D9c-DA-5Zg" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" constant="20" symbolic="YES" id="78i-Vb-iPP"/>
-                            <constraint firstAttribute="trailing" secondItem="D9c-DA-5Zg" secondAttribute="trailing" constant="20" symbolic="YES" id="fhN-YD-wVt"/>
-                            <constraint firstItem="D9c-DA-5Zg" firstAttribute="top" secondItem="GxQ-I6-m89" secondAttribute="bottom" constant="240" id="g0Z-B1-ypF"/>
+                            <constraint firstAttribute="trailing" secondItem="D9c-DA-5Zg" secondAttribute="trailing" constant="20" symbolic="YES" id="a80-7c-h1R"/>
+                            <constraint firstItem="D9c-DA-5Zg" firstAttribute="centerY" secondItem="zhQ-xk-Sj0" secondAttribute="centerY" id="d2d-ns-i6A"/>
+                            <constraint firstItem="D9c-DA-5Zg" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" constant="20" symbolic="YES" id="wBr-W4-SHz"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="What's the rating?" id="7m8-at-NRV">
@@ -285,7 +272,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Current place" id="siD-Ne-3g2">
-                            <rect key="frame" x="0.0" y="64" width="0.0" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="336" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
@@ -366,7 +353,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="nNR-EW-jT1">
-                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="336" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
