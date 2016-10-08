@@ -73,19 +73,7 @@ class FoodCategoriesViewController: UITableViewController {
         // Food category has to be lower case for API to recognize.
         category = selectedCell.nameLabel.text!.lowercased()
     }
-    
-    fileprivate func alert() {
-        
-        // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Loading current location...", preferredStyle: UIAlertControllerStyle.alert)
-        
-        // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
-        }))
-        
-        // Show the alert.
-        self.present(alert, animated: true, completion: nil)
-    }
+
 
     // MARK: - Navigation
     
@@ -95,15 +83,12 @@ class FoodCategoriesViewController: UITableViewController {
         if let navCtrl = destinationVC as? UINavigationController {
             destinationVC = navCtrl.visibleViewController ?? destinationVC
         }
-        if urlQueryParameters == nil {
-            alert()
-        } else {
-            if let timeVC = destinationVC as? TimeViewController {
-                if let id = segue.identifier {
-                    if id == "time" {
-                        urlQueryParameters?.category = category
-                        timeVC.setUrlQueryParameters(urlQueryParameters!)
-                    }
+        
+        if let timeVC = destinationVC as? TimeViewController {
+            if let id = segue.identifier {
+                if id == "time" {
+                    urlQueryParameters?.category = category
+                    timeVC.setUrlQueryParameters(urlQueryParameters!)
                 }
             }
         }
