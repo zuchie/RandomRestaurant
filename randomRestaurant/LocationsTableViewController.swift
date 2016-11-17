@@ -10,10 +10,11 @@ import UIKit
 import GooglePlaces
 import CoreLocation
 
-class LocationsTableViewController: UITableViewController, CLLocationManagerDelegate {
+class LocationsTableViewController: UITableViewController, UISearchBarDelegate, CLLocationManagerDelegate {
 
     // MARK: Properties
     @IBOutlet weak var locationsTable: UITableView!
+    @IBOutlet weak var inputLocation: UISearchBar!
     
     fileprivate var searchController: UISearchController!
     
@@ -53,6 +54,7 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
         locationsTable.isHidden = false
         locationsTable.isScrollEnabled = true
         
+        inputLocation.delegate = self
         filteredLocations[Locations.current.rawValue].append("Current Location")
         
         locationManager.delegate = self
@@ -138,15 +140,13 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
         }
     }
 
-    /*
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         // Clear all other places appended.
         //self.navigationController?.setNavigationBarHidden(true, animated: true)
-        filteredLocations[places.other.rawValue].removeAll(keepingCapacity: false)
+        filteredLocations[Locations.other.rawValue].removeAll(keepingCapacity: false)
         fetcher?.sourceTextHasChanged(inputText)
     }
-    */
     
     /*
     private func getCurrentPlace() {
