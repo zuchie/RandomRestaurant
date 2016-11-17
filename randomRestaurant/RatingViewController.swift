@@ -28,8 +28,8 @@ class RatingViewController: UIViewController {
     
     fileprivate var rating: Double?
     
-    var urlQueryParameters: UrlQueryParameters?
-    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
+    var urlQueryParameters: YelpUrlQueryParameters?
+    func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
     }
     
@@ -113,7 +113,7 @@ class RatingViewController: UIViewController {
                     slotMachineVC.getRatingBar(getRating())
                     //print("url params: \(urlQueryParameters!)")
                     print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
-                    slotMachineVC.setUrlQueryParameters(urlQueryParameters!)
+                    slotMachineVC.setYelpUrlQueryParameters(urlQueryParameters!)
                 }
             }
         }

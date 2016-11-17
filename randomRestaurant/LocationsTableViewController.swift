@@ -10,87 +10,61 @@ import UIKit
 import GooglePlaces
 import CoreLocation
 
-class LocationsTableViewController: UITableViewController, UISearchResultsUpdating, CLLocationManagerDelegate {
+class LocationsTableViewController: UITableViewController, CLLocationManagerDelegate {
 
     // MARK: Properties
     @IBOutlet weak var locationsTable: UITableView!
     
     fileprivate var searchController: UISearchController!
-    fileprivate var resultsViewController: SearchResutlsTableViewController!
     
-    fileprivate var placesClient: GMSPlacesClient!
-
+    // Used for getting current location coordinates.
     let locationManager = CLLocationManager()
     
     // Search radius: 40000 meters(25 mi), return 50 businesses.
-    var urlQueryParameters = UrlQueryParameters(location: "", category: "", radius: 40000, limit: 50, openAt: 0)
-
-    // 2D array.
-    fileprivate var filteredLocations = [[String](), [String]()]
+    var urlQueryParameters = YelpUrlQueryParameters(location: "", category: "", radius: 40000, limit: 50, openAt: 0)
     
+    // Locations for locationsTable.
+    var filteredLocations = [[String](), [String]()]
+    
+    // Used for Google Places Autocomplete feature.
     fileprivate var fetcher: GMSAutocompleteFetcher!
     
-    fileprivate enum places: Int {
+    fileprivate enum Locations: Int {
         case current, other
     }
     
-    fileprivate struct Place {
+    fileprivate struct Location {
         var name: String?
         var address: String?
     }
     
-    fileprivate var currentPlace: Place?
-    fileprivate var otherPlace: Place?
+    fileprivate var currentLocation = Location()
+    fileprivate var otherLocation = Location()
 
+    /*
     func getFilteredLocations() ->[[String]] {
             return filteredLocations
     }
-    
+    */
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Asking for access of users location.
-        if CLLocationManager.authorizationStatus() == .notDetermined {
-            locationManager.requestWhenInUseAuthorization()
-        }
 
-        /*
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
-        }
-        */
-        resultsViewController = SearchResutlsTableViewController()
-        searchController = UISearchController(searchResultsController: resultsViewController)
+        locationsTable.isHidden = false
+        locationsTable.isScrollEnabled = true
         
-        searchController?.searchResultsUpdater = self
-        searchController?.hidesNavigationBarDuringPresentation = true
-        //searchResultsController.dimsBackgroundDuringPresentation = false
-        searchController?.searchBar.searchBarStyle = .prominent
-        searchController?.searchBar.sizeToFit()
-        definesPresentationContext = true
-        tableView.tableHeaderView = searchController.searchBar
+        filteredLocations[Locations.current.rawValue].append("Current Location")
         
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
-        currentPlace = Place()
-        otherPlace = Place()
-        
-        placesClient = GMSPlacesClient.shared()
-
         // Allocate cache here for URL responses so that cache data won't get lost when view is backed.
         let cacheSizeMemory = 5 * 1024 * 1024
         let cacheSizeDisk = 10 * 1024 * 1024
         let urlCache = URLCache(memoryCapacity: cacheSizeMemory, diskCapacity: cacheSizeDisk, diskPath: "urlCache")
         URLCache.shared = urlCache
         
-        //inputLocation.delegate = self
-        locationsTable.isHidden = false
-        locationsTable.isScrollEnabled = true
-        
-        filteredLocations[places.current.rawValue].append("Current place")
-        
-        // Fetcher
+        // Create the Google Places Autocomplete Fetcher.
         let neBoundsCorner = CLLocationCoordinate2D(latitude: 50.090308, longitude: -66.966982)
         let swBoundsCorner = CLLocationCoordinate2D(latitude: 22.567078, longitude: -125.75968)
         let bounds = GMSCoordinateBounds(coordinate: neBoundsCorner, coordinate: swBoundsCorner)
@@ -99,27 +73,68 @@ class LocationsTableViewController: UITableViewController, UISearchResultsUpdati
         let filter = GMSAutocompleteFilter()
         filter.type = .city
         
-        // Create the fetcher.
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
-        fetcher?.delegate = self
+        fetcher.delegate = self
 
     }
 
+    // Asking for access of user's location.
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        switch status {
+            
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
+        case .denied:
+            // Asking users to enable location access from Settings.
+            let alertController = UIAlertController(
+                title: "Location Access Disabled",
+                message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
+                preferredStyle: .alert
+            )
+            let cancelAction = UIAlertAction(
+                title: "Cancel",
+                style: .cancel,
+                handler: nil
+            )
+            let openAction = UIAlertAction(title: "Open Settings", style: .default) { action in
+                if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                    UIApplication.shared.openURL(url)
+                }
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(openAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        default:
+            print("Access request error")
+        }
+    }
+    
+    //
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationManager.stopUpdatingLocation()
+    }
+    
+    /*
     override func viewWillAppear(_ animated: Bool) {
-        print("location view will appear")
+        print("********location view will appear")
         currentPlace?.name = ""
         currentPlace?.address = ""
         getCurrentPlace()
     }
+    */
     
     public func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text {
             let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             // Clear all other places appended.
-            filteredLocations[places.other.rawValue].removeAll(keepingCapacity: false)
-            fetcher?.sourceTextHasChanged(inputText)
+            filteredLocations[Locations.other.rawValue].removeAll(keepingCapacity: false)
+            fetcher.sourceTextHasChanged(inputText)
             
-            //tableView.reloadData()
+            tableView.reloadData()
         }
     }
 
@@ -133,6 +148,7 @@ class LocationsTableViewController: UITableViewController, UISearchResultsUpdati
     }
     */
     
+    /*
     private func getCurrentPlace() {
         print("get current place")
         placesClient?.currentPlace(callback: {
@@ -152,7 +168,8 @@ class LocationsTableViewController: UITableViewController, UISearchResultsUpdati
             }
         })
     }
-
+    */
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         URLCache.shared.removeAllCachedResponses()
@@ -202,7 +219,7 @@ class LocationsTableViewController: UITableViewController, UISearchResultsUpdati
     }
 
     /*
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    private func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let userLocation:CLLocation = locations[0] as CLLocation
         
         manager.stopUpdatingLocation()
@@ -234,7 +251,7 @@ class LocationsTableViewController: UITableViewController, UISearchResultsUpdati
                         if id == "foodCategories" {
                             print("current place address: \(self.currentPlace!.address!)")
                             self.urlQueryParameters?.location = self.currentPlace!.address!
-                            foodCategoriesVC.setUrlQueryParameters(self.urlQueryParameters!)
+                            foodCategoriesVC.setYelpUrlQueryParameters(self.urlQueryParameters!)
                         }
                     }
                 }
@@ -246,7 +263,7 @@ class LocationsTableViewController: UITableViewController, UISearchResultsUpdati
                     if id == "foodCategories" {
                         print("chosen place address: \(otherPlace!.address!)")
                         urlQueryParameters?.location = otherPlace!.address!
-                        foodCategoriesVC.setUrlQueryParameters(urlQueryParameters!)
+                        foodCategoriesVC.setYelpUrlQueryParameters(urlQueryParameters!)
                     }
                 }
             }
@@ -270,9 +287,8 @@ extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
         for prediction in predictions {
             //let placeID = prediction.placeID
             let resultsStr = prediction.attributedFullText.string
-            filteredLocations[places.other.rawValue].append(resultsStr)
-            //locationsTable.reloadData()
-            resultsViewController.setResults(locations: filteredLocations)
+            filteredLocations[Locations.other.rawValue].append(resultsStr)
+            locationsTable.reloadData()
         }
     }
 

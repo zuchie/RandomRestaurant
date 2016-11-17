@@ -1,5 +1,5 @@
 //
-//  UrlQueryParameters.swift
+//  YelpUrlQueryParameters.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 8/27/16.
@@ -8,14 +8,22 @@
 
 import Foundation
 
-class UrlQueryParameters {
-    // MARK: Properties
+class YelpUrlQueryParameters {
     
-    var location: String
-    var category: String
-    var radius: Int
-    var limit: Int
-    var openAt: Int
+    /*
+    // MARK: Properties
+    static var location: String?
+    static var category: String?
+    static var radius = 40000
+    static var limit = 50
+    static var openAt: Int?
+    */
+    
+    var location: String?
+    var category: String?
+    var radius: Int?
+    var limit: Int?
+    var openAt: Int?
     
     // MARK: Initialization
     init?(location: String, category: String, radius: Int, limit: Int, openAt: Int) {

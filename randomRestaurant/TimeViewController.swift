@@ -13,12 +13,12 @@ class TimeViewController: UIViewController {
     // MARK: Properties
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    var urlQueryParameters: UrlQueryParameters?
+    var urlQueryParameters: YelpUrlQueryParameters?
     
     fileprivate var currentDate = 0
     fileprivate var pickerDate = 0
     
-    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
+    func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
     }
 
@@ -112,7 +112,7 @@ class TimeViewController: UIViewController {
             if let ratingVC = destinationVC as? RatingViewController {
                 if let id = segue.identifier , id == "rating" {
                     urlQueryParameters?.openAt = pickerDate
-                    ratingVC.setUrlQueryParameters(urlQueryParameters!)
+                    ratingVC.setYelpUrlQueryParameters(urlQueryParameters!)
                 }
             }
         }

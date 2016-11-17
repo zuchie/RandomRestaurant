@@ -17,8 +17,8 @@ class FoodCategoriesViewController: UITableViewController {
     
     fileprivate var category = ""
     
-    var urlQueryParameters: UrlQueryParameters?
-    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
+    var urlQueryParameters: YelpUrlQueryParameters?
+    func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
     }
     
@@ -88,7 +88,7 @@ class FoodCategoriesViewController: UITableViewController {
             if let id = segue.identifier {
                 if id == "time" {
                     urlQueryParameters?.category = category
-                    timeVC.setUrlQueryParameters(urlQueryParameters!)
+                    timeVC.setYelpUrlQueryParameters(urlQueryParameters!)
                 }
             }
         }

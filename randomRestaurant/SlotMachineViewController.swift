@@ -36,7 +36,7 @@ class SlotMachineViewController: UIViewController {
     static var favoriteTableVC: FavoriteTableViewController?
     static var historyTableVC: HistoryTableViewController?
     
-    var urlQueryParameters: UrlQueryParameters?
+    var urlQueryParameters: YelpUrlQueryParameters?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +63,7 @@ class SlotMachineViewController: UIViewController {
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
-    func setUrlQueryParameters(_ urlParam: UrlQueryParameters) {
+    func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
         print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
     }
@@ -263,7 +263,7 @@ class SlotMachineViewController: UIViewController {
                         mapVC.setBizLocation(bizAddress)
                         mapVC.setBizCoordinate2D(bizCoordinate2D!)
                         mapVC.setBizName(bizName)
-                        mapVC.setDepartureTime(urlQueryParameters!.openAt)
+                        mapVC.setDepartureTime(urlQueryParameters!.openAt!)
                     }
                 }
             }
