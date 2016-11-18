@@ -13,18 +13,21 @@ class TimeViewController: UIViewController {
     // MARK: Properties
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    var urlQueryParameters: YelpUrlQueryParameters?
+    //var urlQueryParameters: YelpUrlQueryParameters?
     
     fileprivate var currentDate = 0
     fileprivate var pickerDate = 0
-    
+    /*
     func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
     }
-
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("time category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
+        
+
         // Refresh view with current date.
         datePicker.setDate(Date(), animated: true)
         
@@ -59,6 +62,7 @@ class TimeViewController: UIViewController {
         let picDate = dateFormatter.string(from: dateForPicker)
         let curDate = dateFormatter.string(from: dateForCurrent)
         
+        YelpUrlQueryParameters.openAt = pickerDate
         print("picked date: \(picDate), current date: \(curDate)")
         //print("offset picked date unix: \(pickerDate), offset current date unix: \(currentDate)")
         
@@ -101,14 +105,14 @@ class TimeViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let destinationVC = segue.destination
+        //let destinationVC = segue.destination
         
         updateDatesWithMinPrecision()
         if pickerDate < currentDate {
-            
             alert()
-            
-        } else {
+        }
+        /*
+        else {
             if let ratingVC = destinationVC as? RatingViewController {
                 if let id = segue.identifier , id == "rating" {
                     urlQueryParameters?.openAt = pickerDate
@@ -116,6 +120,7 @@ class TimeViewController: UIViewController {
                 }
             }
         }
+        */
     }
 
 }

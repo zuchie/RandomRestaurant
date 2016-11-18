@@ -36,12 +36,14 @@ class SlotMachineViewController: UIViewController {
     static var favoriteTableVC: FavoriteTableViewController?
     static var historyTableVC: HistoryTableViewController?
     
-    var urlQueryParameters: YelpUrlQueryParameters?
+    //var urlQueryParameters: YelpUrlQueryParameters?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("slot machine view did load")
+        
+        print("category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
         // Instantiate View Controllers for all Segments. Their references will be kept when switching among Segments.
         SlotMachineViewController.scrollingImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "Machine") as? MachineViewController
@@ -59,14 +61,15 @@ class SlotMachineViewController: UIViewController {
         
         view.sendSubview(toBack: viewsContainer)
         
-        
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
+    /*
     func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
-        print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
+        print("category: \(urlQueryParameters!.category), coordinates: \(urlQueryParameters!.coordinates), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
     }
+    */
     
     func getRatingBar(_ rating: Double) {
         ratingBar = rating
@@ -174,7 +177,7 @@ class SlotMachineViewController: UIViewController {
         let access_token = "XxrwsnAP8YyUtmYdSrC0RCHA6sgn8ggZILNUhNZQqkP8zBTNjondbANeyBLWw7V8LGX-cAb_H4jM2OMu_mnJpwVik5IU0g_S6ZOEJZTaU_GcNE4RnhBc2QkkmnGaV3Yx"
         
         // Get businesses from Yelp API v3.
-        nearbyBusinesses.getUrlParameters(urlQueryParameters?.location, categories: urlQueryParameters?.category, radius: urlQueryParameters?.radius, limit: urlQueryParameters?.limit, open_at: urlQueryParameters?.openAt)
+        nearbyBusinesses.getUrlParameters(YelpUrlQueryParameters.coordinates, categories: YelpUrlQueryParameters.category, radius: YelpUrlQueryParameters.radius, limit: YelpUrlQueryParameters.limit, open_at: YelpUrlQueryParameters.openAt)
         
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
         
@@ -263,7 +266,7 @@ class SlotMachineViewController: UIViewController {
                         mapVC.setBizLocation(bizAddress)
                         mapVC.setBizCoordinate2D(bizCoordinate2D!)
                         mapVC.setBizName(bizName)
-                        mapVC.setDepartureTime(urlQueryParameters!.openAt!)
+                        mapVC.setDepartureTime(YelpUrlQueryParameters.openAt!)
                     }
                 }
             }

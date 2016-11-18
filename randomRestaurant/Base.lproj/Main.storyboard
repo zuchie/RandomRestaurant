@@ -24,11 +24,11 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MTR-O0-3up" id="QMC-Hs-nKV">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="89"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eGN-xb-64B">
-                                            <rect key="frame" x="0.0" y="0.0" width="99" height="89.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="99" height="90"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="99" id="GxN-MS-kKf"/>
                                             </constraints>
@@ -53,6 +53,7 @@
                                 <connections>
                                     <outlet property="nameLabel" destination="Nxg-Wh-x2q" id="3mm-mt-59d"/>
                                     <outlet property="photoImageView" destination="eGN-xb-64B" id="4eJ-PY-xZM"/>
+                                    <segue destination="rZU-dN-vl8" kind="show" identifier="time" id="7Xm-iL-0fl"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -63,11 +64,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="What to eat?" id="dxM-VT-CMx">
                         <barButtonItem key="backBarButtonItem" title="Back" id="3Cp-ZU-6EL"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="Y89-jd-B1e">
-                            <connections>
-                                <segue destination="rZU-dN-vl8" kind="show" identifier="time" id="fBK-fO-ShV"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fRj-b9-bvD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -87,7 +83,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="13E-fX-soO">
-                                <rect key="frame" x="0.0" y="225.5" width="375" height="216"/>
+                                <rect key="frame" x="0.0" y="226" width="375" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="494037125.498281">
                                     <!--2016-08-28 00:32:05 +0000-->
                                 </date>
@@ -297,13 +293,16 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="LocationTableViewCell" id="0U0-lH-xuv">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="LocationTableViewCell" id="0U0-lH-xuv">
                                 <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0U0-lH-xuv" id="wAF-lt-Nne">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="H1W-kT-6DQ" kind="show" identifier="foodCategories" id="MkV-o8-foj"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -313,11 +312,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Where to eat?" id="jKj-Xl-gKT">
                         <barButtonItem key="backBarButtonItem" title="Back" id="CfQ-yP-5qD"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="2Gz-t5-hFn">
-                            <connections>
-                                <segue destination="H1W-kT-6DQ" kind="show" identifier="foodCategories" id="Bqz-sQ-159"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="inputLocation" destination="1Vz-eV-DRP" id="hiy-Xa-b3B"/>
@@ -382,7 +376,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23J-X6-kUM" id="eyb-YP-067">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -413,17 +407,17 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NBY-AP-VtY" id="WyT-S0-w9x">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3" customClass="HistoryCellButton" customModule="randomRestaurant" customModuleProvider="target">
-                                            <rect key="frame" x="330.5" y="-1" width="44.5" height="44.5"/>
+                                            <rect key="frame" x="331" y="-1" width="44" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="BdF-og-VP3" secondAttribute="height" multiplier="1:1" id="s6J-Re-FIe"/>
                                             </constraints>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fm5-Lz-MiN">
-                                            <rect key="frame" x="8" y="0.0" width="324" height="43.5"/>
+                                            <rect key="frame" x="8" y="0.0" width="324" height="44"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>

@@ -27,14 +27,16 @@ class RatingViewController: UIViewController {
     fileprivate var tappedButtonIndex: Int?
     
     fileprivate var rating: Double?
-    
+    /*
     var urlQueryParameters: YelpUrlQueryParameters?
     func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
     }
-    
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("rating category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
         ratingButtons += [button0, button1, button2, button3, button4]
         
@@ -108,13 +110,14 @@ class RatingViewController: UIViewController {
         let destinationVC = segue.destination
         
         if let slotMachineVC = destinationVC as? SlotMachineViewController {
-            if let id = segue.identifier {
-                if id == "slotMachine" {
-                    slotMachineVC.getRatingBar(getRating())
-                    //print("url params: \(urlQueryParameters!)")
-                    print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.location), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
-                    slotMachineVC.setYelpUrlQueryParameters(urlQueryParameters!)
-                }
+            if let id = segue.identifier, id == "slotMachine" {
+                slotMachineVC.getRatingBar(getRating())
+                
+                /*
+                //print("url params: \(urlQueryParameters!)")
+                print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.coordinates), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
+                slotMachineVC.setYelpUrlQueryParameters(urlQueryParameters!)
+                */
             }
         }
     }

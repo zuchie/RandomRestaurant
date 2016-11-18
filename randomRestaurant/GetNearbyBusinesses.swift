@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 class GetNearbyBusinesses {
     
@@ -16,7 +17,7 @@ class GetNearbyBusinesses {
     fileprivate var businessesSearchUrl = String()
     
     fileprivate struct UrlParameters {
-        var location: String?
+        var coordinates: CLLocationCoordinate2D?
         var categories: String?
         var radius: Int?
         var limit: Int?
@@ -90,10 +91,10 @@ class GetNearbyBusinesses {
     }
     
     // MARK: Helper functions
-    func getUrlParameters(_ location: String?, categories: String?, radius: Int?, limit: Int?, open_at: Int?) {
+    func getUrlParameters(_ coordinates: CLLocationCoordinate2D?, categories: String?, radius: Int?, limit: Int?, open_at: Int?) {
         
-        if location != nil {
-            urlParams.location = location
+        if coordinates != nil {
+            urlParams.coordinates = coordinates
         }
         if categories != nil {
             urlParams.categories = categories
@@ -113,13 +114,16 @@ class GetNearbyBusinesses {
     func makeBusinessesSearchUrl(_ baseUrl: String) {
         businessesSearchUrl = baseUrl
         
-        businessesSearchUrl += urlParams.location != nil ? "&location=\(urlParams.location!)" : ""
+        businessesSearchUrl += urlParams.coordinates?.latitude != nil ? "&latitude=\(urlParams.coordinates!.latitude)" : ""
+        businessesSearchUrl += urlParams.coordinates?.longitude != nil ? "&longitude=\(urlParams.coordinates!   .longitude)" : ""
         businessesSearchUrl += urlParams.categories != nil ? "&categories=\(urlParams.categories!)" : ""
         businessesSearchUrl += urlParams.radius != nil ? "&radius=\(urlParams.radius!)" : ""
         businessesSearchUrl += urlParams.limit != nil ? "&limit=\(urlParams.limit!)" : ""
         businessesSearchUrl += urlParams.open_at != nil ? "&open_at=\(urlParams.open_at!)" : ""
         // Convert string to URL query allowed string to escape spaces.
         businessesSearchUrl = businessesSearchUrl.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        
+        //print("***url: \(businessesSearchUrl)")
     }
     
     // Make own completionHandler function.
@@ -199,6 +203,7 @@ class GetNearbyBusinesses {
             if let convertedJsonIntoDict = try JSONSerialization.jsonObject(with: data!, options: []) as? Dictionary<String, AnyObject> {
                 
                 // Print out dictionary
+                //print("json: \(convertedJsonIntoDict)")
                 //print(convertedJsonIntoDict)
                 //self.sortAndRandomlyPickBiz(convertedJsonIntoDict)
                 

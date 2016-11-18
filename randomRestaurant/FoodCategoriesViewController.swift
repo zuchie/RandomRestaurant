@@ -15,15 +15,18 @@ class FoodCategoriesViewController: UITableViewController {
     
     fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "NewAmerican", "TradAmerican", "French"]
     
-    fileprivate var category = ""
-    
+    //fileprivate var category = ""
+    /*
     var urlQueryParameters: YelpUrlQueryParameters?
     func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
         urlQueryParameters = urlParam
     }
-    
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        print("categories category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
+        
 
         for categoryName in foodCategoriesName.enumerated() {
             loadFoodCategories(categoryName.element)
@@ -71,10 +74,12 @@ class FoodCategoriesViewController: UITableViewController {
         
         let selectedCell = tableView.cellForRow(at: indexPath) as! FoodCategoriesTableViewCell
         // Food category has to be lower case for API to recognize.
-        category = selectedCell.nameLabel.text!.lowercased()
+        //category = selectedCell.nameLabel.text!.lowercased()
+        YelpUrlQueryParameters.category = selectedCell.nameLabel.text!.lowercased()
     }
 
 
+    /*
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -94,5 +99,5 @@ class FoodCategoriesViewController: UITableViewController {
         }
         
     }
-
+    */
 }
