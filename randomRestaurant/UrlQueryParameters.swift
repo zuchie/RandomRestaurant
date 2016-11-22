@@ -14,7 +14,7 @@ class YelpUrlQueryParameters {
     // MARK: Properties
     static var coordinates: CLLocationCoordinate2D?
     static var category: String?
-    static var radius = 40000
+    static var radius = 10000
     static var limit = 50
     static var openAt: Int?
 

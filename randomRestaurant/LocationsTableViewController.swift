@@ -22,6 +22,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
     
     let googlePlaceDetails = GooglePlaceDetails()
     
+    fileprivate var imageView: UIImageView?
+    private var visualEffectView: UIVisualEffectView?
+    
+    fileprivate enum VisualEffect {
+        case blur
+    }
+    
     // Search radius: 40000 meters(25 mi), return 50 businesses.
     //var urlQueryParameters = YelpUrlQueryParameters(coordinates: kCLLocationCoordinate2DInvalid, category: "", radius: 40000, limit: 50, openAt: 0)
     
@@ -43,6 +50,13 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
 
         // Hide Nav bar.
         //self.navigationController!.setNavigationBarHidden(true, animated: true)
+        
+        // Hide empty cells.
+        locationsTable.tableFooterView = UIView(frame: CGRect.zero)
+        // Keep image aspect and fit instead of streched image by default.
+        imageView = UIImageView(image: UIImage(named: "globe"))
+        imageView?.contentMode = .scaleAspectFit
+        locationsTable.backgroundView = imageView
 
         locationsTable.isHidden = false
         locationsTable.isScrollEnabled = true
@@ -71,8 +85,20 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
         fetcher.delegate = self
+        
+        makeVisualEffectView(effect: .blur)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        // Empty cells.
+        filteredLocations[Locations.other.rawValue].removeAll(keepingCapacity: false)
+        locationsTable.reloadData()
+        
+        // Remove blur effect when there is one.
+        if imageView?.subviews.count != 0 {
+            removeVisualEffectView(visualEffectView!)
+        }
+    }
     
     // MARK: Memory.
     
@@ -81,7 +107,6 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         super.didReceiveMemoryWarning()
         URLCache.shared.removeAllCachedResponses()
     }
-    
     
     // MARK: - Core Location.
     
@@ -176,6 +201,35 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         view.endEditing(true) // Hide keyboard.
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = .clear
+        //cell.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        cell.contentView.backgroundColor = UIColor(white: 1, alpha: 0.5)
+    }
+    
+    
+    // MARK: Visual Effect View.
+    
+    private func makeVisualEffectView(effect: VisualEffect) {
+        switch effect {
+        case .blur:
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+            visualEffectView = UIVisualEffectView(effect: blurEffect)
+        }
+    }
+    
+    fileprivate func addVisualEffectView(effect: VisualEffect, to view: UIImageView) {
+        switch effect {
+        case .blur:
+            visualEffectView?.frame = view.bounds
+            view.addSubview(visualEffectView!)
+        }
+    }
+    
+    private func removeVisualEffectView(_ view: UIVisualEffectView) {
+        view.removeFromSuperview()
+    }
+    
     
     /*
     // MARK: - Alert.
@@ -235,7 +289,10 @@ extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
             let resultsStr = prediction.attributedFullText.string
             filteredLocations[Locations.other.rawValue].append((name: resultsStr, placeID: placeID!))
         }
-        // Update table.
+        // Blur background image when it hasn't been done & Update table.
+        if imageView?.subviews.count == 0 {
+            addVisualEffectView(effect: .blur, to: imageView!)
+        }
         locationsTable.reloadData()
     }
 }
