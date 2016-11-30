@@ -15,10 +15,13 @@ import GoogleMaps
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    let themeColor = UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1.0)
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // Theme color.
+        window?.tintColor = themeColor
+        
         // Google Maps
         GMSServices.provideAPIKey("AIzaSyARb5tLyClE1TXO_Lnj_I2OEuIyk-WI8SA")
         // Google Places.
