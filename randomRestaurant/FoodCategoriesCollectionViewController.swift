@@ -28,10 +28,13 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
             loadFoodCategories(categoryName.element)
         }
         
-        // Uncomment the following line to preserve selection between presentations
+        // Preserve selection between presentations.
+        // Only false can make didDeselectItemAt work.
+        // When select a different cell, the previously selected cell will be deselected first.
         self.clearsSelectionOnViewWillAppear = false
     }
 
+    
     func loadFoodCategories(_ name: String) {
         let photo = UIImage(named: name.lowercased())!
         let food = FoodCategories(name: name, photo: photo)!
@@ -66,29 +69,46 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         
         return cell
     }
-
-    // MARK: UICollectionViewDelegate
     
+    // MARK: UICollectionViewDelegate
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
     override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         
         return true
     }
+    */
     
+    /*
     // Uncomment this method to specify if the specified item should be selected
     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        
+        let cell = collectionView.cellForItem(at: indexPath) as! FoodCategoriesCollectionViewCell
+        
+        cell.layer.borderWidth = 2
+        cell.layer.borderColor = UIColor.darkGray.cgColor
         
         return true
     }
     */
- 
+    
+    // Highlight selected cell & pass data.
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCell = collectionView.cellForItem(at: indexPath) as! FoodCategoriesCollectionViewCell
+        
+        selectedCell.layer.borderWidth = 2.0
+        selectedCell.layer.borderColor = UIColor.brown.cgColor
         
         YelpUrlQueryParameters.category = selectedCell.nameLabel.text?.lowercased()
     }
     
+    // Clear highlight.
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let deselectedCell = collectionView.cellForItem(at: indexPath) {
+            deselectedCell.layer.borderColor = UIColor.clear.cgColor
+        }
+    }
+ 
     /*
     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
@@ -115,7 +135,7 @@ extension FoodCategoriesCollectionViewController: UICollectionViewDelegateFlowLa
         let availableWidth = view.frame.width - padding
         let itemWidth = availableWidth / CGFloat(itemsPerRow)
         
-        return CGSize(width: itemWidth, height: itemWidth * 1.25)
+        return CGSize(width: itemWidth, height: itemWidth * 1.5)
     }
     
     /*
