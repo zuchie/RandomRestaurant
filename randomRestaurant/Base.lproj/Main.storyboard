@@ -15,7 +15,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -61,7 +61,7 @@
                                 <connections>
                                     <outlet property="nameLabel" destination="J3d-d8-xhv" id="yYK-WR-Noe"/>
                                     <outlet property="photoImageView" destination="7Im-EN-hQW" id="Lgp-4v-OPG"/>
-                                    <segue destination="rZU-dN-vl8" kind="show" id="fzu-47-XZX"/>
+                                    <segue destination="VJg-eE-0oq" kind="show" id="mz0-qT-PnF"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -79,46 +79,84 @@
             <point key="canvasLocation" x="3901.5999999999999" y="358.4707646176912"/>
         </scene>
         <!--When to eat?-->
-        <scene sceneID="aoh-3M-TKJ">
+        <scene sceneID="0Km-Qz-qbG">
             <objects>
-                <viewController id="rZU-dN-vl8" customClass="TimeViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VJg-eE-0oq" customClass="DateViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="KHU-kh-F4x"/>
-                        <viewControllerLayoutGuide type="bottom" id="VwK-fL-ycL"/>
+                        <viewControllerLayoutGuide type="top" id="kPm-oz-A89"/>
+                        <viewControllerLayoutGuide type="bottom" id="GIw-QZ-nZW"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="oZA-Jl-2yQ">
+                    <view key="view" contentMode="scaleToFill" id="tde-h3-SBV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="13E-fX-soO">
-                                <rect key="frame" x="0.0" y="225.5" width="375" height="216"/>
-                                <date key="date" timeIntervalSinceReferenceDate="494037125.498281">
-                                    <!--2016-08-28 00:32:05 +0000-->
-                                </date>
-                            </datePicker>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
+                                <rect key="frame" x="62" y="209" width="250" height="250"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="bof-fg-hqo" secondAttribute="height" multiplier="1:1" id="Brw-gb-nCb"/>
+                                    <constraint firstAttribute="width" constant="250" id="Nni-wL-oWq"/>
+                                </constraints>
+                            </imageView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmHour" translatesAutoresizingMaskIntoConstraints="NO" id="9lG-fg-tA1">
+                                <rect key="frame" x="137" y="284" width="100" height="100"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="9lG-fg-tA1" secondAttribute="height" multiplier="1:1" id="H95-2x-sga"/>
+                                    <constraint firstAttribute="width" constant="100" id="oAw-4O-chx"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="tGm-XH-B0o" appends="YES" id="FtL-Dg-t15"/>
+                                </connections>
+                            </imageView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmMin" translatesAutoresizingMaskIntoConstraints="NO" id="zLv-K8-EV6">
+                                <rect key="frame" x="137" y="284" width="100" height="100"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="zLv-K8-EV6" secondAttribute="height" multiplier="1:1" id="pXG-oz-cJW"/>
+                                    <constraint firstAttribute="width" constant="100" id="y7E-dt-cAe"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="mGl-9h-qPH" appends="YES" id="RQ7-jA-SyW"/>
+                                </connections>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="13E-fX-soO" firstAttribute="leading" secondItem="oZA-Jl-2yQ" secondAttribute="leading" id="0Q2-0N-LeR"/>
-                            <constraint firstItem="13E-fX-soO" firstAttribute="centerY" secondItem="oZA-Jl-2yQ" secondAttribute="centerY" id="7tO-Ho-LxN"/>
-                            <constraint firstAttribute="trailing" secondItem="13E-fX-soO" secondAttribute="trailing" id="n2i-Nj-n12"/>
+                            <constraint firstItem="9lG-fg-tA1" firstAttribute="centerY" secondItem="bof-fg-hqo" secondAttribute="centerY" id="1eE-eb-6Oo"/>
+                            <constraint firstItem="bof-fg-hqo" firstAttribute="centerY" secondItem="tde-h3-SBV" secondAttribute="centerY" id="30r-2h-UQR"/>
+                            <constraint firstItem="9lG-fg-tA1" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="5cy-yV-pMu"/>
+                            <constraint firstItem="bof-fg-hqo" firstAttribute="centerX" secondItem="tde-h3-SBV" secondAttribute="centerX" id="EJo-s6-WtQ"/>
+                            <constraint firstItem="zLv-K8-EV6" firstAttribute="top" secondItem="9lG-fg-tA1" secondAttribute="top" id="eyJ-kp-Uhk"/>
+                            <constraint firstItem="zLv-K8-EV6" firstAttribute="leading" secondItem="9lG-fg-tA1" secondAttribute="leading" id="sCe-ii-cO4"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="When to eat?" id="ylx-Ub-Xio">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="tCZ-5d-hgi"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="Pkb-5k-wu1">
+                    <navigationItem key="navigationItem" title="When to eat?" id="gea-hc-WH2">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="KHr-rr-i14"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="iJ2-Ww-Z0v">
                             <connections>
-                                <segue destination="vAp-XE-6Pg" kind="show" identifier="rating" id="WhQ-fi-JyS"/>
+                                <segue destination="vAp-XE-6Pg" kind="show" identifier="rating" id="7KB-U8-aef"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="datePicker" destination="13E-fX-soO" id="c2p-pR-tOb"/>
-                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6ct-75-3qT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LOb-Ig-iIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="tGm-XH-B0o">
+                    <connections>
+                        <action selector="handleClockHourArmRotation:" destination="VJg-eE-0oq" id="aPY-Q5-1Eu"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="mGl-9h-qPH">
+                    <connections>
+                        <action selector="handleClockMinuteArmRotation:" destination="VJg-eE-0oq" id="rxU-in-Xtf"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="4620.5" y="359.5"/>
+            <point key="canvasLocation" x="4585" y="355"/>
         </scene>
         <!--What's the rating?-->
         <scene sceneID="oRf-90-amh">
@@ -471,7 +509,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pdi-8i-KGA" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yig-np-s8Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="yig-np-s8Q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -485,4 +523,10 @@
             <point key="canvasLocation" x="2478" y="359"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="clockArmHour" width="112" height="112"/>
+        <image name="clockArmMin" width="112" height="112"/>
+        <image name="clockDial" width="112" height="112"/>
+        <image name="day" width="150" height="84"/>
+    </resources>
 </document>
