@@ -9,72 +9,51 @@
 import UIKit
 
 class DateViewController: UIViewController {
-    //private let clockArmHour = UIImageView(image: UIImage(named: "clockArmRed"))
+
     @IBOutlet weak var clockArmHour: UIImageView!
     @IBOutlet weak var clockArmHourWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var clockArmHourHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var clockArmHourXPositionConstraint: NSLayoutConstraint!
     @IBOutlet weak var clockArmHourYPositionConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var clockArmMinute: UIImageView!
+    @IBOutlet weak var clockArmMinuteWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var clockArmMinuteHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var clockArmMinuteXPositionConstraint: NSLayoutConstraint!
+    @IBOutlet weak var clockArmMinuteYPositionConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var clockDial: UIImageView!
     
+    // Angle by radian.
     private var clockArmHourAngle: CGFloat = 0
-    private var affineTransform: CGAffineTransform?
-
-    @IBAction func handleClockHourArmRotation(_ sender: UIPanGestureRecognizer) {
-        //let translation = sender.translation(in: sender.view)
-        let touchPosition = sender.location(in: sender.view)
-        if let view = sender.view {
-            /*
-            print("center: \(translation.x, translation.y)")
-            view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
-            */
-            
-            //let center = clockDial.layer.position
-            //let centerToTouch = CGVector(dx: translation.x - center.x, dy: translation.y - center.y)
-            
-            /*
-            let panEndPositionAngle = atan2(-translation.y, translation.x)
-            let rotationAngle = panEndPositionAngle - clockArmHourAngle
-            view.transform = (affineTransform?.rotated(by: rotationAngle))!
-            
-            print("translation: \(translation.x, translation.y)")
-            print("pan end point angle: \(panEndPositionAngle * CGFloat(180.0 / M_PI))")
-            print("rotation angle: \(rotationAngle * CGFloat(180.0 / M_PI))")
-            
-            clockArmHourAngle += rotationAngle
-            */
-            
-            let touchPositionAngle = atan2(-touchPosition.y, touchPosition.x)
-            let rotationAngle = touchPositionAngle - clockArmHourAngle
-            view.transform = (affineTransform?.rotated(by: rotationAngle))!
-            //view.transform = (affineTransform?.rotated(by: touchPositionAngle))!
-            
-            print("touch position y, x: \(-touchPosition.y, touchPosition.x)")
-            print("touch position angle: \(touchPositionAngle * CGFloat(180.0 / M_PI))")
-            print("rotation angle: \(rotationAngle * CGFloat(180.0 / M_PI))")
-            
-            clockArmHourAngle += rotationAngle
-            clockArmHourAngle = clockArmHourAngle.truncatingRemainder(dividingBy: CGFloat(2 * M_PI))
-            print("clock arm angle: \(clockArmHourAngle * CGFloat(180.0 / M_PI))")
-
-        }
-        //sender.setTranslation(CGPoint.zero, in: sender.view)
-    }
+    private var clockArmMinuteAngle: CGFloat = CGFloat(M_PI / 2)
     
-    /*
-    private func handleClockMinuteArmRotation(_ sender: UIPanGestureRecognizer) {
+    private var clockArmHourAffineTransform: CGAffineTransform?
+    private var clockArmMinuteAffineTransform: CGAffineTransform?
+
+    @IBAction func handleClockArmRotation(_ sender: UITapGestureRecognizer) {
+        let touchPosition = sender.location(in: sender.view)
+        // Move coordinate system from upperleft corner to center.
+        let touchPositionToCenterX = touchPosition.x - sender.view!.bounds.size.width / 2
+        let touchPositionToCenterY = touchPosition.y - sender.view!.bounds.size.height / 2
+        // Get touch position angle.
+        let touchPositionAngle = atan2(touchPositionToCenterY, touchPositionToCenterX)
+        // Rotate clock arm.
+        UIView.animate(
+            withDuration: 1.0,
+            delay: 0,
+            options: [],
+            animations: {
+                self.clockArmHour.transform = (self.clockArmHourAffineTransform?.rotated(by: touchPositionAngle))!
+            },
+            completion: { finished in
+                if finished {
+                    print("animation done")
+                }
+            })
         
-        //sender.location(in: self.view.subviews.)
-        
-        let translation = sender.translation(in: sender.view)
-        if let view = sender.view {
-            view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
-            //view.transform.rotated(by: <#T##CGFloat#>)
-        }
-        sender.setTranslation(CGPoint.zero, in: sender.view)
     }
-    */
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,8 +66,17 @@ class DateViewController: UIViewController {
         
         // Set rotation anchor point to the arm head.
         clockArmHour.layer.anchorPoint.x = 0
-        affineTransform = CGAffineTransform(rotationAngle: clockArmHourAngle)
-        clockArmHour.transform = affineTransform!
+        clockArmHourAffineTransform = CGAffineTransform(rotationAngle: clockArmHourAngle)
+        clockArmHour.transform = clockArmHourAffineTransform!
+        
+        let clockArmMinuteWidth: CGFloat = clockDial.bounds.size.width / 3
+        let clockArmMinuteHeight: CGFloat = clockArmMinuteWidth / 15
+        clockArmMinuteWidthConstraint.constant = clockArmMinuteWidth
+        clockArmMinuteHeightConstraint.constant = clockArmMinuteHeight
+        
+        clockArmMinute.layer.anchorPoint.x = 0
+        clockArmMinuteAffineTransform = CGAffineTransform(rotationAngle: clockArmMinuteAngle)
+        clockArmMinute.transform = clockArmMinuteAffineTransform!
     }
     
     override func didReceiveMemoryWarning() {

@@ -94,30 +94,39 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
+                            <imageView alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
                                 <rect key="frame" x="20" y="166" width="335" height="335"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="bof-fg-hqo" secondAttribute="height" multiplier="1:1" id="Brw-gb-nCb"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="ive-YF-T46" appends="YES" id="zZL-wO-Gax"/>
+                                </connections>
                             </imageView>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
-                                <rect key="frame" x="152" y="330.5" width="70" height="7"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
+                                <rect key="frame" x="152" y="330" width="70" height="7"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="bLw-1Z-xJj"/>
                                     <constraint firstAttribute="height" constant="7" id="ivJ-aM-MMY"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="5BV-cs-NTf" appends="YES" id="dKP-yO-7ur"/>
-                                </connections>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
+                                <rect key="frame" x="147" y="330.5" width="80" height="5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="oMl-0t-U4z"/>
+                                    <constraint firstAttribute="height" constant="5" id="vof-G1-uRJ"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="centerY" secondItem="tde-h3-SBV" secondAttribute="centerY" id="30r-2h-UQR"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerY" secondItem="bof-fg-hqo" secondAttribute="centerY" id="KUG-kH-F4V"/>
                             <constraint firstAttribute="trailing" secondItem="bof-fg-hqo" secondAttribute="trailing" constant="20" symbolic="YES" id="OXB-Zp-649"/>
                             <constraint firstItem="i4F-zD-U7k" firstAttribute="centerY" secondItem="bof-fg-hqo" secondAttribute="centerY" id="dp7-uj-0mD"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="i4F-zD-U7k" secondAttribute="centerX" id="gDj-CR-Rjc"/>
                             <constraint firstItem="i4F-zD-U7k" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="goV-7G-Tc7"/>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" constant="20" symbolic="YES" id="rRV-Jt-WhG"/>
                         </constraints>
@@ -136,15 +145,20 @@
                         <outlet property="clockArmHourWidthConstraint" destination="bLw-1Z-xJj" id="an4-k6-Heb"/>
                         <outlet property="clockArmHourXPositionConstraint" destination="goV-7G-Tc7" id="9Iu-oh-guG"/>
                         <outlet property="clockArmHourYPositionConstraint" destination="dp7-uj-0mD" id="DnN-o0-aOQ"/>
+                        <outlet property="clockArmMinute" destination="kFQ-mn-jmP" id="P0v-zo-I7m"/>
+                        <outlet property="clockArmMinuteHeightConstraint" destination="vof-G1-uRJ" id="mPW-x4-SmJ"/>
+                        <outlet property="clockArmMinuteWidthConstraint" destination="oMl-0t-U4z" id="Xl6-ps-n6b"/>
+                        <outlet property="clockArmMinuteXPositionConstraint" destination="gDj-CR-Rjc" id="8Bw-zj-JFW"/>
+                        <outlet property="clockArmMinuteYPositionConstraint" destination="KUG-kH-F4V" id="o1K-5o-jnd"/>
                         <outlet property="clockDial" destination="bof-fg-hqo" id="3Iv-zk-wHC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOb-Ig-iIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="5BV-cs-NTf">
+                <tapGestureRecognizer id="ive-YF-T46">
                     <connections>
-                        <action selector="handleClockHourArmRotation:" destination="VJg-eE-0oq" id="jDR-My-FDO"/>
+                        <action selector="handleClockArmRotation:" destination="VJg-eE-0oq" id="aUj-sh-fYE"/>
                     </connections>
-                </panGestureRecognizer>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="4584.8000000000002" y="354.87256371814095"/>
         </scene>
@@ -527,6 +541,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="clockArmBlack" width="112" height="112"/>
         <image name="clockArmRed" width="112" height="112"/>
         <image name="clockDial" width="112" height="112"/>
         <image name="day" width="150" height="84"/>
