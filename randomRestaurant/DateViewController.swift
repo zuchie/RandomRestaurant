@@ -44,64 +44,19 @@ class DateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // TODO: How to use translatesAutoresizingMaskIntoConstraints?
-        //clockArmHour.translatesAutoresizingMaskIntoConstraints = true
-        
-        let clockArmHourWidth: CGFloat = clockDial.frame.size.width / 4
+        // Dynamically update width & height according to superview size.
+        let clockArmHourWidth: CGFloat = clockDial.bounds.size.width / 4
         let clockArmHourHeight: CGFloat = clockArmHourWidth / 10
         clockArmHourWidthConstraint.constant = clockArmHourWidth
         clockArmHourHeightConstraint.constant = clockArmHourHeight
-        clockArmHourXPositionConstraint.constant += clockArmHourWidth / 2
         
-        // Do any additional setup after loading the view.
-        // Add clock arms.
-        //let clockArmMinute = UIImageView(image: UIImage(named: "clockArmBlack"))
+        // Set rotation anchor point to the arm head.
+        clockArmHour.layer.anchorPoint.x = 0
+        let rotation: CGFloat = 45.0
+        clockArmHour.transform = CGAffineTransform(rotationAngle: rotation * CGFloat(M_PI / 180.0))
         
-        //clockArmHour.frame = CGRect(origin: origin, size: size)
-
-        //clockArmHour.layoutIfNeeded()
-        
-        /*
-        // Add gesture recognizer.
-        let panGesture = UIGestureRecognizer(target: self, action: #selector(self.handleClockHourArmRotation(_:)))
-        clockArmHour.addGestureRecognizer(panGesture)
-        clockArmHour.isUserInteractionEnabled = true
-        */
-        
-        //self.view.addSubview(clockArmHour)
-        //self.view.addSubview(clockArmMinute)
-        
-        // Set to default position.
-        //clockArmHour.leadingAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        //clockArmMinute.leadingAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        
-        // Set rotation anchor point.
-        //clockArmHour.layer.anchorPoint = CGPoint(x: clockArmHour.frame.origin.x, y: clockArmHour.frame.origin.y + clockArmHour.frame.height / 2)
-        //clockArmMinute.layer.anchorPoint = CGPoint(x: clockArmMinute.frame.minX, y: clockArmMinute.frame.height / 2)
+        //clockArmHour.transform.rotated(by: rotation * CGFloat(180.0 / M_PI))
     }
-    
-    /*
-    override func viewDidAppear(_ animated: Bool) {
-        // Do any additional setup after loading the view.
-        // Add clock arms.
-        //let clockArmMinute = UIImageView(image: UIImage(named: "clockArmBlack"))
-        let clockArmHourWidth: CGFloat = clockDial.frame.size.width / 4
-        let clockArmHourHeight: CGFloat = clockArmHourWidth / 10
-        let size = CGSize(width: clockArmHourWidth, height: clockArmHourHeight)
-        let origin = CGPoint(x: self.view.center.x, y: self.view.frame.height / 2 - clockArmHourHeight / 2)
-        
-        clockArmHour.frame = CGRect(origin: origin, size: size)
-        
-        /*
-         // Add gesture recognizer.
-         let panGesture = UIGestureRecognizer(target: self, action: #selector(self.handleClockHourArmRotation(_:)))
-         clockArmHour.addGestureRecognizer(panGesture)
-         clockArmHour.isUserInteractionEnabled = true
-         */
-        
-        //self.view.addSubview(clockArmHour)
-    }
-    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
