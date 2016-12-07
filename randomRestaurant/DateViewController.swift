@@ -24,27 +24,31 @@ class DateViewController: UIViewController {
     private var clockArmHourAngle: CGFloat?
     private var clockArmMinuteAngle: CGFloat?
     
-    private var clockArmHourAffineTransform: CGAffineTransform?
-    private var clockArmMinuteAffineTransform: CGAffineTransform?
-    
     private var hourArmToXAxisAngle: CGFloat = CGFloat(M_PI / 2)
+    
+    let calendar = Calendar.current
+    let currentDate = Date()
     
     private var currentHour: Int?
     private var currentMinute: Int?
-    private var currentSecond: Int?
+    
+    private var clockDialWidth: CGFloat?
+    private var clockDialHeight: CGFloat?
 
     @IBAction func handleHourArmRotation(_ sender: UIPanGestureRecognizer) {
         let touchPosition = sender.location(in: clockDial)
         // Move coordinate system from upperleft corner to center.
-        let touchPositionToCenterX = touchPosition.x - clockDial.bounds.size.width / 2
-        let touchPositionToCenterY = touchPosition.y - clockDial.bounds.size.height / 2
+        let touchPositionToCenterX = touchPosition.x - clockDialWidth! / 2
+        let touchPositionToCenterY = touchPosition.y - clockDialHeight! / 2
         // Get touch position angle.
-        let touchPositionAngle = atan2(touchPositionToCenterY, touchPositionToCenterX) + hourArmToXAxisAngle
-        let clockMinuteArmAngle = getClockMinuteArmAngle(by: touchPositionAngle)
+        clockArmHourAngle = atan2(touchPositionToCenterY, touchPositionToCenterX) + hourArmToXAxisAngle
+        clockArmMinuteAngle = getClockMinuteArmAngle(by: clockArmHourAngle!)
         
         // Rotate clock arms.
-        self.clockArmHour.transform = (self.clockArmHourAffineTransform?.rotated(by: touchPositionAngle))!
-        self.clockArmMinute.transform = (self.clockArmMinuteAffineTransform?.rotated(by: clockMinuteArmAngle))!
+        self.clockArmHour.transform = CGAffineTransform(rotationAngle: clockArmHourAngle!)
+        self.clockArmMinute.transform = CGAffineTransform(rotationAngle: clockArmMinuteAngle!)
+        
+        print("hour angle: \(clockArmHourAngle! * (180.0 / CGFloat(M_PI))), min angle: \(clockArmMinuteAngle! * (180.0 / CGFloat(M_PI)))")
         
         /*
         UIView.animate(
@@ -52,12 +56,7 @@ class DateViewController: UIViewController {
             delay: 0,
             options: [],
             animations: {
-                self.clockArmHour.transform = (self.clockArmHourAffineTransform?.rotated(by: touchPositionAngle))!
-                /*
-                 for rotation in MinuteArmRotationLegs {
-                 self.clockArmMinute.transform = (self.clockArmMinuteAffineTransform?.rotated(by: rotation))!
-                 }
-                 */
+                    self.clockArmHour.transform = CGAffineTransform(rotationAngle: clockArmHourAngle!)
         },
             completion: { finished in
                 if finished {
@@ -72,15 +71,12 @@ class DateViewController: UIViewController {
         return clockHourArmAngle * minuteToHourAngularVelocity
     }
     
-    // Minutes precision, in order to use cached data when re-query is made in 1 min.
     private func getCurrentDate() {
-        let calendar = Calendar.current
-        let currentDate = Date()
         currentHour = calendar.component(.hour, from: currentDate)
         currentMinute = calendar.component(.minute, from: currentDate)
-        currentSecond = calendar.component(.second, from: currentDate)
+        let currentSecond = calendar.component(.second, from: currentDate)
         
-        print("current Hour: Min: Sec: \(currentHour, currentMinute, currentSecond)")
+        print("current Hour: Min: \(currentHour, currentMinute)")
         
         /*
          * Yelp API v3 is using unixTime(business.literalHours) to compare with open_at.
@@ -88,17 +84,14 @@ class DateViewController: UIViewController {
          * e.g. User is querying date=4pm PDT, unixTime(date) is actually 11pm UTC, comparing with literal business hours 3pm - 9pm which would give false. So user has to offset with seconds from PDT to UTC, which is (-7 * 3600) to get 4pm comparing with 3pm - 9pm which would give true then.
          * Update 09/06/2016: Yelp has updated API that no conversion from UTC to local time is needed from users.
          */
-        //dateNoSeconds = Int(currentDate.timeIntervalSince1970) - currentSecond
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = DateFormatter.Style.long
         dateFormatter.timeStyle = DateFormatter.Style.long
         
         let curDate = dateFormatter.string(from: currentDate)
         
-        // TODO: Add picked date here.
-        //YelpUrlQueryParameters.openAt = pickerDate
-        
         print("current date: \(curDate)")
+        print("current date in unix: \(Int(currentDate.timeIntervalSince1970) - currentSecond)")
     }
     
     // Get current clock arms angle.
@@ -109,12 +102,24 @@ class DateViewController: UIViewController {
         return (hourArmAngle, minuteArmAngle)
     }
     
+    private func getHourMinute(from hourArm: CGFloat, _ minArm: CGFloat) -> (hour: Int, min: Int) {
+        let min = Int(minArm * 30 / CGFloat(M_PI))
+        //let hour = Int((hourArm - minArm / 12) * (6 / CGFloat(M_PI)))
+        let hour = Int(hourArm * (6 / CGFloat(M_PI)))
+        
+        return (hour, min)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("Date category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
 
         getCurrentDate()
+        
+        clockDialWidth = clockDial.bounds.size.width
+        clockDialHeight = clockDial.bounds.size.height
+        
         let clockArmsAngle = getClockArmAngle(from: currentHour!, currentMinute!)
         clockArmHourAngle = clockArmsAngle.hour
         clockArmMinuteAngle = clockArmsAngle.minute
@@ -127,8 +132,7 @@ class DateViewController: UIViewController {
         
         // Set rotation anchor point to the arm head.
         clockArmHour.layer.anchorPoint.y = 1
-        clockArmHourAffineTransform = CGAffineTransform(rotationAngle: clockArmHourAngle!)
-        clockArmHour.transform = clockArmHourAffineTransform!
+        clockArmHour.transform = CGAffineTransform(rotationAngle: clockArmHourAngle!)
         
         let clockArmMinuteHeight: CGFloat = clockDial.bounds.size.height / 3
         let clockArmMinuteWidth: CGFloat = clockArmMinuteHeight / 15
@@ -136,8 +140,7 @@ class DateViewController: UIViewController {
         clockArmMinuteWidthConstraint.constant = clockArmMinuteWidth
         
         clockArmMinute.layer.anchorPoint.y = 1
-        clockArmMinuteAffineTransform = CGAffineTransform(rotationAngle: clockArmMinuteAngle!)
-        clockArmMinute.transform = clockArmMinuteAffineTransform!
+        clockArmMinute.transform = CGAffineTransform(rotationAngle: clockArmMinuteAngle!)
     }
     
     override func didReceiveMemoryWarning() {
@@ -145,14 +148,19 @@ class DateViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        let hourMin = getHourMinute(from: clockArmHourAngle!, clockArmMinuteAngle!)
+        
+        print("hour, min: \(hourMin.hour, hourMin.min)")
+        // Minutes precision, in order to use cached data when re-query is made in 1 min.
+        if let proposedDate = calendar.date(bySettingHour: hourMin.hour, minute: hourMin.min, second: 0, of: currentDate) {
+            YelpUrlQueryParameters.openAt = Int(proposedDate.timeIntervalSince1970)
+        }
     }
-    */
 
 }
