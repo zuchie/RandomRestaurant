@@ -15,7 +15,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -90,9 +90,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
                                 <rect key="frame" x="20" y="166" width="335" height="335"/>
@@ -119,15 +118,28 @@
                                     <outletCollection property="gestureRecognizers" destination="L5o-41-CdE" appends="YES" id="fqQ-KA-y5f"/>
                                 </connections>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="am" translatesAutoresizingMaskIntoConstraints="NO" id="Doz-Xw-ZwI">
+                                <rect key="frame" x="151" y="414" width="73" height="53"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Doz-Xw-ZwI" secondAttribute="height" multiplier="73:53" id="6Af-Ou-u1e"/>
+                                    <constraint firstAttribute="width" constant="73" id="d9B-B9-q8I"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="centerY" secondItem="tde-h3-SBV" secondAttribute="centerY" id="30r-2h-UQR"/>
                             <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerY" secondItem="i4F-zD-U7k" secondAttribute="centerY" id="4ha-rF-S2H"/>
                             <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="i4F-zD-U7k" secondAttribute="centerX" id="AGw-Tu-cd4"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="centerY" secondItem="i4F-zD-U7k" secondAttribute="centerY" id="Abg-UO-gfE"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="bottom" secondItem="GIw-QZ-nZW" secondAttribute="top" id="LuM-p8-Xb6"/>
                             <constraint firstAttribute="trailing" secondItem="bof-fg-hqo" secondAttribute="trailing" constant="20" symbolic="YES" id="OXB-Zp-649"/>
+                            <constraint firstItem="GIw-QZ-nZW" firstAttribute="top" secondItem="Doz-Xw-ZwI" secondAttribute="bottom" constant="200" id="eao-sc-oXd"/>
                             <constraint firstItem="i4F-zD-U7k" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="l1K-hR-qe3"/>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" constant="20" symbolic="YES" id="rRV-Jt-WhG"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="centerX" secondItem="kFQ-mn-jmP" secondAttribute="centerX" id="tEe-hK-Oyc"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="b49-pD-ZQi" secondAttribute="centerX" id="wKc-96-yDa"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" id="wVv-7h-GtO"/>
                             <constraint firstItem="i4F-zD-U7k" firstAttribute="centerY" secondItem="bof-fg-hqo" secondAttribute="centerY" id="whZ-6t-hnw"/>
                         </constraints>
                     </view>
@@ -147,6 +159,7 @@
                         <outlet property="clockArmMinuteHeightConstraint" destination="vof-G1-uRJ" id="mPW-x4-SmJ"/>
                         <outlet property="clockArmMinuteWidthConstraint" destination="oMl-0t-U4z" id="Xl6-ps-n6b"/>
                         <outlet property="clockDial" destination="bof-fg-hqo" id="3Iv-zk-wHC"/>
+                        <outlet property="dayNight" destination="Doz-Xw-ZwI" id="WSj-Ag-elm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOb-Ig-iIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -509,7 +522,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pdi-8i-KGA" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yig-np-s8Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="yig-np-s8Q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -537,6 +550,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="am" width="112" height="112"/>
         <image name="clockArmBlack" width="112" height="112"/>
         <image name="clockArmRed" width="112" height="112"/>
         <image name="clockDial" width="112" height="112"/>

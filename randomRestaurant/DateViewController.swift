@@ -19,6 +19,7 @@ class DateViewController: UIViewController {
     @IBOutlet weak var clockArmMinuteHeightConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var clockDial: UIImageView!
+    @IBOutlet weak var dayNight: UIImageView!
     
     // Angle by radian.
     private var clockArmHourAngle: Float?
@@ -32,6 +33,11 @@ class DateViewController: UIViewController {
     
     private var clockDialWidth: Float?
     private var clockDialHeight: Float?
+    
+    private var isAM: Bool?
+    
+    private var currentAngle: Float = 0.0
+    private var previousAngle: Float = 0.0
 
     @IBAction func handleHourArmRotation(_ sender: UIPanGestureRecognizer) {
         let touchPosition = sender.location(in: clockDial)
@@ -59,13 +65,30 @@ class DateViewController: UIViewController {
         self.clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourAngle!))
         self.clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteAngle!))
         
+        // When Hour arm passes 12 o'clock, switch AM/PM.
+        // TODO: Use observer?
+        currentAngle = clockArmHourAngle!
+        if abs(currentAngle - previousAngle) > 300 * Float(M_PI) / 180.0 {
+            isAM = (isAM! ? false : true)
+        }
+        if self.isAM! {
+            self.dayNight.image = UIImage(named: "am")
+        } else {
+            self.dayNight.image = UIImage(named: "pm")
+        }
+        previousAngle = currentAngle
+        
         /*
         UIView.animate(
-            withDuration: 1.0,
+            withDuration: 0.5,
             delay: 0,
             options: [],
             animations: {
-                    self.clockArmHour.transform = CGAffineTransform(rotationAngle: clockArmHourAngle!)
+                if self.isAM! {
+                    self.dayNight.image = UIImage(named: "am")
+                } else {
+                    self.dayNight.image = UIImage(named: "pm")
+                }
         },
             completion: { finished in
                 if finished {
@@ -73,7 +96,6 @@ class DateViewController: UIViewController {
                 }
         })
         */
-        //self.clockArmHour.transform = CGAffineTransform.identity
     }
 
     private func getClockMinuteArmAngle(by clockHourArmAngle: Float) -> Float {
@@ -86,6 +108,14 @@ class DateViewController: UIViewController {
         currentHour = calendar.component(.hour, from: currentDate)
         currentMinute = calendar.component(.minute, from: currentDate)
         //let currentSecond = calendar.component(.second, from: currentDate)
+        
+        if currentHour! < 12 {
+            isAM = true
+            dayNight.image = UIImage(named: "am")
+        } else {
+            isAM = false
+            dayNight.image = UIImage(named: "pm")
+        }
         
         /*
          * Yelp API v3 is using unixTime(business.literalHours) to compare with open_at.
@@ -114,9 +144,13 @@ class DateViewController: UIViewController {
     
     // Get Hour & Minutes from clock arms angle, angles have to be from 0 to 2PI.
     private func getHourMinute(from hourArm: Float, _ minArm: Float) -> (hour: Int, min: Int) {
-        let hour = Int(hourArm * 6.0 / Float(M_PI))
+        var hour = Int(hourArm * 6.0 / Float(M_PI))
         let min = Int(minArm * 30.0 / Float(M_PI))
         
+        // Plus 12 to PM Hours.
+        if !(isAM!) {
+            hour += 12
+        }
         return (hour, min)
     }
 
