@@ -38,12 +38,22 @@ class DateViewController: UIViewController {
         // Move coordinate system from upperleft corner to center.
         let touchPositionToCenterX = Float(touchPosition.x) - clockDialWidth! / 2
         let touchPositionToCenterY = Float(touchPosition.y) - clockDialHeight! / 2
+        
+        //print("touch x, y: \(touchPositionToCenterX, touchPositionToCenterY)")
         // Get the angles the arms should rotate.
         // Because arms' origin direction is upright(0 rad), while 0 rad of coordinate system is to the right,
         // so that 0 rad of coordinate system is actually PI/2 rad of arms; -10 degree of coordinate sys is
         // actually 80 degree of arms.
         clockArmHourAngle = atan2(touchPositionToCenterY, touchPositionToCenterX) + Float(M_PI) / 2
+        // Convert negative rads to positive.
+        if clockArmHourAngle! < 0 {
+            clockArmHourAngle! += 2 * Float(M_PI)
+        }
+        
         clockArmMinuteAngle = getClockMinuteArmAngle(by: clockArmHourAngle!)
+        
+        //print("hr angle: \(clockArmHourAngle! * (180 / Float(M_PI)))")
+        //print("min angle: \(clockArmMinuteAngle! * (180 / Float(M_PI)))")
         
         // Rotate clock arms.
         self.clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourAngle!))
@@ -63,6 +73,7 @@ class DateViewController: UIViewController {
                 }
         })
         */
+        //self.clockArmHour.transform = CGAffineTransform.identity
     }
 
     private func getClockMinuteArmAngle(by clockHourArmAngle: Float) -> Float {
@@ -74,7 +85,7 @@ class DateViewController: UIViewController {
     private func getCurrentDate() {
         currentHour = calendar.component(.hour, from: currentDate)
         currentMinute = calendar.component(.minute, from: currentDate)
-        let currentSecond = calendar.component(.second, from: currentDate)
+        //let currentSecond = calendar.component(.second, from: currentDate)
         
         /*
          * Yelp API v3 is using unixTime(business.literalHours) to compare with open_at.
@@ -90,12 +101,12 @@ class DateViewController: UIViewController {
         let curDate = dateFormatter.string(from: currentDate)
         
         print("current date: \(curDate)")
-        print("current date in unix: \(Int(currentDate.timeIntervalSince1970) - currentSecond)")
+        //print("current date in unix: \(Int(currentDate.timeIntervalSince1970) - currentSecond)")
     }
     
     // Get current clock arms angle.
     private func getClockArmAngle(from hour: Int, _ minute: Int) -> (hour: Float, minute: Float) {
-        print("current Hour: Min: \(hour, minute)")
+        //print("current Hour: Min: \(hour, minute)")
         let minuteArmAngle = Float(minute) * Float(M_PI) / 30.0
         let hourArmAngle = Float(hour) * Float(M_PI) / 6.0 + minuteArmAngle / 12.0
         return (hourArmAngle, minuteArmAngle)
@@ -103,17 +114,8 @@ class DateViewController: UIViewController {
     
     // Get Hour & Minutes from clock arms angle, angles have to be from 0 to 2PI.
     private func getHourMinute(from hourArm: Float, _ minArm: Float) -> (hour: Int, min: Int) {
-        var armHr = hourArm
-        var armMin = minArm
-
-        // Convert negative angles to positive angles.
-        if armHr < 0 {
-            armHr += 2.0 * Float(M_PI)
-            armMin += 2.0 * Float(M_PI)
-        }
-        
-        let hour = Int(armHr * 6.0 / Float(M_PI))
-        let min = Int(armMin * 30.0 / Float(M_PI))
+        let hour = Int(hourArm * 6.0 / Float(M_PI))
+        let min = Int(minArm * 30.0 / Float(M_PI))
         
         return (hour, min)
     }
@@ -123,14 +125,17 @@ class DateViewController: UIViewController {
         
         print("Date category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
-        clockDialWidth = Float(clockDial.bounds.size.width)
-        clockDialHeight = Float(clockDial.bounds.size.height)
-
         getCurrentDate()
-        
+
         let clockArmsAngle = getClockArmAngle(from: currentHour!, currentMinute!)
         clockArmHourAngle = clockArmsAngle.hour
         clockArmMinuteAngle = clockArmsAngle.minute
+    }
+    
+    // Finalize views' bounds.
+    override func viewDidLayoutSubviews() {
+        clockDialWidth = Float(clockDial.bounds.size.width)
+        clockDialHeight = Float(clockDial.bounds.size.height)
         
         // Dynamically update width & height according to superview size.
         let clockArmHourHeight = clockDial.bounds.size.height / 4
@@ -163,7 +168,7 @@ class DateViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         let hourMin = getHourMinute(from: clockArmHourAngle!, clockArmMinuteAngle!)
-        print("got hour, min: \(hourMin.hour, hourMin.min)")
+        print("proposed hour, min: \(hourMin.hour, hourMin.min)")
         
         // Minutes precision, in order to use cached data when re-query is made in 1 min.
         if let proposedDate = calendar.date(bySettingHour: hourMin.hour, minute: hourMin.min, second: 0, of: currentDate) {
