@@ -91,13 +91,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="1" width="374" height="666"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
                                 <rect key="frame" x="20" y="166" width="335" height="335"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="bof-fg-hqo" secondAttribute="height" multiplier="1:1" id="Brw-gb-nCb"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="am" translatesAutoresizingMaskIntoConstraints="NO" id="Doz-Xw-ZwI">
+                                <rect key="frame" x="145" y="378" width="85" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Doz-Xw-ZwI" secondAttribute="height" multiplier="4:3" id="DMF-nu-ipq"/>
+                                    <constraint firstAttribute="width" constant="85" id="hE9-oi-cZp"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
@@ -118,13 +125,6 @@
                                     <outletCollection property="gestureRecognizers" destination="L5o-41-CdE" appends="YES" id="fqQ-KA-y5f"/>
                                 </connections>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="am" translatesAutoresizingMaskIntoConstraints="NO" id="Doz-Xw-ZwI">
-                                <rect key="frame" x="151" y="414" width="73" height="53"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Doz-Xw-ZwI" secondAttribute="height" multiplier="73:53" id="6Af-Ou-u1e"/>
-                                    <constraint firstAttribute="width" constant="73" id="d9B-B9-q8I"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -132,13 +132,13 @@
                             <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerY" secondItem="i4F-zD-U7k" secondAttribute="centerY" id="4ha-rF-S2H"/>
                             <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="i4F-zD-U7k" secondAttribute="centerX" id="AGw-Tu-cd4"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="centerY" secondItem="i4F-zD-U7k" secondAttribute="centerY" id="Abg-UO-gfE"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="tde-h3-SBV" secondAttribute="centerX" id="B0g-rr-zZL"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="bottom" secondItem="GIw-QZ-nZW" secondAttribute="top" id="LuM-p8-Xb6"/>
                             <constraint firstAttribute="trailing" secondItem="bof-fg-hqo" secondAttribute="trailing" constant="20" symbolic="YES" id="OXB-Zp-649"/>
-                            <constraint firstItem="GIw-QZ-nZW" firstAttribute="top" secondItem="Doz-Xw-ZwI" secondAttribute="bottom" constant="200" id="eao-sc-oXd"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="bof-fg-hqo" secondAttribute="bottom" constant="-123" id="Tpz-Vb-LVv"/>
                             <constraint firstItem="i4F-zD-U7k" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="l1K-hR-qe3"/>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" constant="20" symbolic="YES" id="rRV-Jt-WhG"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="centerX" secondItem="kFQ-mn-jmP" secondAttribute="centerX" id="tEe-hK-Oyc"/>
-                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="b49-pD-ZQi" secondAttribute="centerX" id="wKc-96-yDa"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" id="wVv-7h-GtO"/>
                             <constraint firstItem="i4F-zD-U7k" firstAttribute="centerY" secondItem="bof-fg-hqo" secondAttribute="centerY" id="whZ-6t-hnw"/>
                         </constraints>

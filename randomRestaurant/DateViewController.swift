@@ -172,7 +172,7 @@ class DateViewController: UIViewController {
         clockDialHeight = Float(clockDial.bounds.size.height)
         
         // Dynamically update width & height according to superview size.
-        let clockArmHourHeight = clockDial.bounds.size.height / 4
+        let clockArmHourHeight = clockDial.bounds.size.height / 3
         let clockArmHourWidth = clockArmHourHeight / 10
         clockArmHourHeightConstraint.constant = clockArmHourHeight
         clockArmHourWidthConstraint.constant = clockArmHourWidth
@@ -181,7 +181,7 @@ class DateViewController: UIViewController {
         clockArmHour.layer.anchorPoint.y = 1
         clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourAngle!))
         
-        let clockArmMinuteHeight = clockDial.bounds.size.height / 3
+        let clockArmMinuteHeight = clockDial.bounds.size.height / 2.5
         let clockArmMinuteWidth = clockArmMinuteHeight / 15
         clockArmMinuteHeightConstraint.constant = clockArmMinuteHeight
         clockArmMinuteWidthConstraint.constant = clockArmMinuteWidth
