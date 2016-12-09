@@ -18,8 +18,11 @@ class DateViewController: UIViewController {
     @IBOutlet weak var clockArmMinuteWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var clockArmMinuteHeightConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var background: UIImageView!
     @IBOutlet weak var clockDial: UIImageView!
     @IBOutlet weak var dayNight: UIImageView!
+    
+    private var bgImageName = ""
     
     // Angle by radian.
     private var clockArmHourAngle: Float?
@@ -38,7 +41,7 @@ class DateViewController: UIViewController {
     
     private var currentAngle: Float = 0.0
     private var previousAngle: Float = 0.0
-
+    
     @IBAction func handleHourArmRotation(_ sender: UIPanGestureRecognizer) {
         let touchPosition = sender.location(in: clockDial)
         // Move coordinate system from upperleft corner to center.
@@ -61,22 +64,12 @@ class DateViewController: UIViewController {
         //print("hr angle: \(clockArmHourAngle! * (180 / Float(M_PI)))")
         //print("min angle: \(clockArmMinuteAngle! * (180 / Float(M_PI)))")
         
+        setAmPm()
+        setBackgroundImage()
+        
         // Rotate clock arms.
         self.clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourAngle!))
         self.clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteAngle!))
-        
-        // When Hour arm passes 12 o'clock, switch AM/PM.
-        // TODO: Use observer?
-        currentAngle = clockArmHourAngle!
-        if abs(currentAngle - previousAngle) > 300 * Float(M_PI) / 180.0 {
-            isAM = (isAM! ? false : true)
-        }
-        if self.isAM! {
-            self.dayNight.image = UIImage(named: "am")
-        } else {
-            self.dayNight.image = UIImage(named: "pm")
-        }
-        previousAngle = currentAngle
         
         /*
         UIView.animate(
@@ -98,6 +91,56 @@ class DateViewController: UIViewController {
         */
     }
 
+    private func setAmPm() {
+        // When Hour arm passes 12 o'clock, switch AM/PM.
+        currentAngle = clockArmHourAngle!
+        if abs(currentAngle - previousAngle) > 300 * Float(M_PI) / 180.0 {
+            isAM = (isAM! ? false : true)
+            dayNight.image = isAM! ? UIImage(named: "am") : UIImage(named: "pm")
+        }
+        previousAngle = currentAngle
+    }
+    
+    private func setBackgroundImage() {
+        //
+        var imageName = ""
+        if isAM! {
+            if (clockArmHourAngle! >= Float(0)) && (clockArmHourAngle! < 2 * Float(M_PI) / 6) {
+                imageName = "night4"
+            } else if clockArmHourAngle! < 4 * Float(M_PI) / 6 {
+                imageName = "night5"
+            } else if clockArmHourAngle! < 6 * Float(M_PI) / 6 {
+                imageName = "night6"
+            } else if clockArmHourAngle! < 8 * Float(M_PI) / 6 {
+                imageName = "day1"
+            } else if clockArmHourAngle! < 10 * Float(M_PI) / 6 {
+                imageName = "day2"
+            } else {
+                imageName = "day3"
+            }
+        } else {
+            if (clockArmHourAngle! >= Float(0)) && (clockArmHourAngle! < 2 * Float(M_PI) / 6) {
+                imageName = "day4"
+            } else if clockArmHourAngle! < 4 * Float(M_PI) / 6 {
+                imageName = "day5"
+            } else if clockArmHourAngle! < 6 * Float(M_PI) / 6 {
+                imageName = "day6"
+            } else if clockArmHourAngle! < 8 * Float(M_PI) / 6 {
+                imageName = "night1"
+            } else if clockArmHourAngle! < 10 * Float(M_PI) / 6 {
+                imageName = "night2"
+            } else {
+                imageName = "night3"
+            }
+        }
+        
+        // Set when image is different.
+        if bgImageName != imageName {
+            background.image = UIImage(named: imageName)
+            bgImageName = imageName
+        }
+    }
+    
     private func getClockMinuteArmAngle(by clockHourArmAngle: Float) -> Float {
         let minuteToHourAngularVelocity: Float = 12.0
         // Angle in 2 * PI.
@@ -153,7 +196,7 @@ class DateViewController: UIViewController {
         }
         return (hour, min)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -164,6 +207,8 @@ class DateViewController: UIViewController {
         let clockArmsAngle = getClockArmAngle(from: currentHour!, currentMinute!)
         clockArmHourAngle = clockArmsAngle.hour
         clockArmMinuteAngle = clockArmsAngle.minute
+        
+        setBackgroundImage()
     }
     
     // Finalize views' bounds.

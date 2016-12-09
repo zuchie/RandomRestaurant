@@ -15,7 +15,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -91,7 +91,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
-                                <rect key="frame" x="0.0" y="1" width="374" height="666"/>
+                                <rect key="frame" x="0.0" y="1" width="375" height="666"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
                                 <rect key="frame" x="20" y="166" width="335" height="335"/>
@@ -152,6 +152,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="background" destination="b49-pD-ZQi" id="eye-1J-ItI"/>
                         <outlet property="clockArmHour" destination="i4F-zD-U7k" id="u9c-nv-cvk"/>
                         <outlet property="clockArmHourHeightConstraint" destination="ivJ-aM-MMY" id="4Ia-XI-XyI"/>
                         <outlet property="clockArmHourWidthConstraint" destination="bLw-1Z-xJj" id="an4-k6-Heb"/>
@@ -522,7 +523,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pdi-8i-KGA" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="yig-np-s8Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yig-np-s8Q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
