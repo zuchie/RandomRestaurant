@@ -93,7 +93,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
                                 <rect key="frame" x="0.0" y="1" width="375" height="666"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
+                            <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
                                 <rect key="frame" x="20" y="166" width="335" height="335"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -540,6 +540,10 @@
         <scene sceneID="reE-IZ-0kL">
             <objects>
                 <viewController id="6Sq-xY-GXl" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="roB-IY-p4w"/>
+                        <viewControllerLayoutGuide type="bottom" id="Yoh-xC-45W"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="XKV-YI-8Qq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -136,6 +136,8 @@ class DateViewController: UIViewController {
         
         // Set when image is different.
         if bgImageName != imageName {
+            //print("hour angle: \(clockArmHourAngle! * 180.0 / Float(M_PI))")
+            //print("image name: \(imageName)")
             background.image = UIImage(named: imageName)
             bgImageName = imageName
         }
@@ -178,10 +180,13 @@ class DateViewController: UIViewController {
     }
     
     // Get current clock arms angle.
-    private func getClockArmAngle(from hour: Int, _ minute: Int) -> (hour: Float, minute: Float) {
+    private func getClockArmAngle(from hr: Int, _ min: Int) -> (hour: Float, minute: Float) {
         //print("current Hour: Min: \(hour, minute)")
-        let minuteArmAngle = Float(minute) * Float(M_PI) / 30.0
-        let hourArmAngle = Float(hour) * Float(M_PI) / 6.0 + minuteArmAngle / 12.0
+        let minuteArmAngle = Float(min) * Float(M_PI) / 30.0
+        // Round Hour to less than 12.
+        let myHr = hr >= 12 ? hr - 12 : hr
+        
+        let hourArmAngle = Float(myHr) * Float(M_PI) / 6.0 + minuteArmAngle / 12.0
         return (hourArmAngle, minuteArmAngle)
     }
     

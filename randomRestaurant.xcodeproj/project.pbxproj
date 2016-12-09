@@ -36,6 +36,7 @@
 		B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */; };
 		B9A760601DF2488B005BBA2A /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605F1DF2488B005BBA2A /* DateViewController.swift */; };
 		B9F133AC1DA09BE500708D69 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F133AB1DA09BE500708D69 /* Restaurant.swift */; };
+		B9F508BB1DFB6D8100ACCD73 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F508BA1DFB6D8100ACCD73 /* Clock.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +74,7 @@
 		B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		B9A7605F1DF2488B005BBA2A /* DateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
 		B9F133AB1DA09BE500708D69 /* Restaurant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
+		B9F508BA1DFB6D8100ACCD73 /* Clock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -146,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				B9A7605F1DF2488B005BBA2A /* DateViewController.swift */,
+				B9F508BA1DFB6D8100ACCD73 /* Clock.swift */,
 			);
 			name = Time;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				B96AE9961D8E9CC600257751 /* Restaurant.xcdatamodeld in Sources */,
 				B906DBAE1D8294740021B025 /* MachineViewController.swift in Sources */,
 				B906DBA61D728CAC0021B025 /* RatingViewController.swift in Sources */,
+				B9F508BB1DFB6D8100ACCD73 /* Clock.swift in Sources */,
 				B9A760601DF2488B005BBA2A /* DateViewController.swift in Sources */,
 				B9488F111D93AA41000DB973 /* HistoryCellButton.swift in Sources */,
 				B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */,
