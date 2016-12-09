@@ -11,7 +11,6 @@
 		B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB821D6990A60021B025 /* LocationsTableViewController.swift */; };
 		B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */; };
 		B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB981D6C3DBC0021B025 /* FoodCategories.swift */; };
-		B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA01D72729A0021B025 /* TimeViewController.swift */; };
 		B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */; };
 		B906DBA61D728CAC0021B025 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA51D728CAC0021B025 /* RatingViewController.swift */; };
 		B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */; };
@@ -47,7 +46,6 @@
 		B906DB821D6990A60021B025 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
 		B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetNearbyBusinesses.swift; sourceTree = "<group>"; };
 		B906DB981D6C3DBC0021B025 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
-		B906DBA01D72729A0021B025 /* TimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeViewController.swift; sourceTree = "<group>"; };
 		B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlQueryParameters.swift; sourceTree = "<group>"; };
 		B906DBA51D728CAC0021B025 /* RatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
 		B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickedBusinessLocation.swift; sourceTree = "<group>"; };
@@ -147,7 +145,6 @@
 		B906DB9F1D7272850021B025 /* Time */ = {
 			isa = PBXGroup;
 			children = (
-				B906DBA01D72729A0021B025 /* TimeViewController.swift */,
 				B9A7605F1DF2488B005BBA2A /* DateViewController.swift */,
 			);
 			name = Time;
@@ -367,7 +364,6 @@
 				B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */,
 				B906DBB41D863E0A0021B025 /* HistoryTableViewController.swift in Sources */,
 				B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */,
-				B906DBA11D72729A0021B025 /* TimeViewController.swift in Sources */,
 				B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */,
 				B93812851D9DACAC00EE51F1 /* UpdateDatabase.swift in Sources */,
 			);
