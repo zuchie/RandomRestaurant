@@ -15,7 +15,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -91,7 +91,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day" translatesAutoresizingMaskIntoConstraints="NO" id="b49-pD-ZQi">
-                                <rect key="frame" x="0.0" y="1" width="375" height="666"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockDial" translatesAutoresizingMaskIntoConstraints="NO" id="bof-fg-hqo">
                                 <rect key="frame" x="20" y="166" width="335" height="335"/>
@@ -101,46 +101,45 @@
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="am" translatesAutoresizingMaskIntoConstraints="NO" id="Doz-Xw-ZwI">
-                                <rect key="frame" x="145" y="378" width="85" height="64"/>
+                                <rect key="frame" x="145" y="366" width="85" height="64"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Doz-Xw-ZwI" secondAttribute="height" multiplier="4:3" id="DMF-nu-ipq"/>
                                     <constraint firstAttribute="width" constant="85" id="hE9-oi-cZp"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
-                                <rect key="frame" x="147" y="331" width="80" height="5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="oMl-0t-U4z"/>
-                                    <constraint firstAttribute="height" constant="5" id="vof-G1-uRJ"/>
-                                </constraints>
-                            </imageView>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
-                                <rect key="frame" x="152" y="330" width="70" height="7"/>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
+                                <rect key="frame" x="181" y="218" width="12" height="120"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="70" id="bLw-1Z-xJj"/>
-                                    <constraint firstAttribute="height" constant="7" id="ivJ-aM-MMY"/>
+                                    <constraint firstAttribute="width" constant="12" id="f7u-OW-HaL"/>
                                 </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="L5o-41-CdE" appends="YES" id="fqQ-KA-y5f"/>
+                                    <outletCollection property="gestureRecognizers" destination="L5o-41-CdE" appends="YES" id="C1c-vf-IjR"/>
                                 </connections>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
+                                <rect key="frame" x="183" y="188" width="8" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="8" id="YpB-uA-p6j"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="bof-fg-hqo" firstAttribute="centerY" secondItem="tde-h3-SBV" secondAttribute="centerY" id="30r-2h-UQR"/>
-                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerY" secondItem="i4F-zD-U7k" secondAttribute="centerY" id="4ha-rF-S2H"/>
-                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="i4F-zD-U7k" secondAttribute="centerX" id="AGw-Tu-cd4"/>
-                            <constraint firstItem="b49-pD-ZQi" firstAttribute="centerY" secondItem="i4F-zD-U7k" secondAttribute="centerY" id="Abg-UO-gfE"/>
-                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="tde-h3-SBV" secondAttribute="centerX" id="B0g-rr-zZL"/>
-                            <constraint firstItem="b49-pD-ZQi" firstAttribute="bottom" secondItem="GIw-QZ-nZW" secondAttribute="top" id="LuM-p8-Xb6"/>
-                            <constraint firstAttribute="trailing" secondItem="bof-fg-hqo" secondAttribute="trailing" constant="20" symbolic="YES" id="OXB-Zp-649"/>
-                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="bof-fg-hqo" secondAttribute="bottom" constant="-123" id="Tpz-Vb-LVv"/>
-                            <constraint firstItem="i4F-zD-U7k" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="l1K-hR-qe3"/>
-                            <constraint firstItem="bof-fg-hqo" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" constant="20" symbolic="YES" id="rRV-Jt-WhG"/>
-                            <constraint firstItem="b49-pD-ZQi" firstAttribute="centerX" secondItem="kFQ-mn-jmP" secondAttribute="centerX" id="tEe-hK-Oyc"/>
-                            <constraint firstItem="b49-pD-ZQi" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" id="wVv-7h-GtO"/>
-                            <constraint firstItem="i4F-zD-U7k" firstAttribute="centerY" secondItem="bof-fg-hqo" secondAttribute="centerY" id="whZ-6t-hnw"/>
+                            <constraint firstItem="bof-fg-hqo" firstAttribute="centerY" secondItem="tde-h3-SBV" secondAttribute="centerY" id="05v-Ag-O79"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="Doz-Xw-ZwI" secondAttribute="centerX" id="7O5-Uc-fj3"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="top" secondItem="tde-h3-SBV" secondAttribute="top" id="AC5-bG-bKg"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="bottom" secondItem="GIw-QZ-nZW" secondAttribute="top" id="DzX-oQ-0fU"/>
+                            <constraint firstAttribute="trailing" secondItem="b49-pD-ZQi" secondAttribute="trailing" id="Llf-HU-xgu"/>
+                            <constraint firstItem="b49-pD-ZQi" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" id="OBh-cz-KBo"/>
+                            <constraint firstAttribute="trailing" secondItem="bof-fg-hqo" secondAttribute="trailing" constant="20" symbolic="YES" id="Via-2U-KkC"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="bof-fg-hqo" secondAttribute="bottom" constant="-135" id="WYn-qj-uHB"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="i4F-zD-U7k" secondAttribute="bottom" constant="28" id="YTg-3J-ZvG"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="tde-h3-SBV" secondAttribute="centerX" id="ny7-u4-zee"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="bottom" secondItem="i4F-zD-U7k" secondAttribute="bottom" id="qsC-Tr-2lU"/>
+                            <constraint firstItem="bof-fg-hqo" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" constant="20" symbolic="YES" id="rCY-n9-ARr"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="top" secondItem="kPm-oz-A89" secondAttribute="bottom" constant="124" id="wto-Wf-ebi"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="i4F-zD-U7k" secondAttribute="centerX" id="yBU-oi-PsE"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="When to eat?" id="gea-hc-WH2">
@@ -152,21 +151,17 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="background" destination="b49-pD-ZQi" id="eye-1J-ItI"/>
-                        <outlet property="clockArmHour" destination="i4F-zD-U7k" id="u9c-nv-cvk"/>
-                        <outlet property="clockArmHourHeightConstraint" destination="ivJ-aM-MMY" id="4Ia-XI-XyI"/>
-                        <outlet property="clockArmHourWidthConstraint" destination="bLw-1Z-xJj" id="an4-k6-Heb"/>
-                        <outlet property="clockArmMinute" destination="kFQ-mn-jmP" id="P0v-zo-I7m"/>
-                        <outlet property="clockArmMinuteHeightConstraint" destination="vof-G1-uRJ" id="mPW-x4-SmJ"/>
-                        <outlet property="clockArmMinuteWidthConstraint" destination="oMl-0t-U4z" id="Xl6-ps-n6b"/>
-                        <outlet property="clockDial" destination="bof-fg-hqo" id="3Iv-zk-wHC"/>
-                        <outlet property="dayNight" destination="Doz-Xw-ZwI" id="WSj-Ag-elm"/>
+                        <outlet property="amPM" destination="Doz-Xw-ZwI" id="5Ng-jw-Q1p"/>
+                        <outlet property="background" destination="b49-pD-ZQi" id="MVd-U4-NVg"/>
+                        <outlet property="clockArmHour" destination="i4F-zD-U7k" id="XJe-Wg-axf"/>
+                        <outlet property="clockArmMinute" destination="kFQ-mn-jmP" id="SsD-fI-thE"/>
+                        <outlet property="clockDial" destination="bof-fg-hqo" id="hsk-PQ-ZYE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOb-Ig-iIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="L5o-41-CdE">
                     <connections>
-                        <action selector="handleHourArmRotation:" destination="VJg-eE-0oq" id="cqk-kB-hxB"/>
+                        <action selector="handleHourArmRotation:" destination="VJg-eE-0oq" id="gXQ-6W-S5p"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>
@@ -238,7 +233,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZET-NZ-dcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5268" y="350.37481259370315"/>
+            <point key="canvasLocation" x="5250" y="359"/>
         </scene>
         <!--Our recommendation-->
         <scene sceneID="tne-QT-ifu">
@@ -535,23 +530,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bIa-vt-aBn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2478" y="359"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="reE-IZ-0kL">
-            <objects>
-                <viewController id="6Sq-xY-GXl" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="roB-IY-p4w"/>
-                        <viewControllerLayoutGuide type="bottom" id="Yoh-xC-45W"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="XKV-YI-8Qq">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="soK-pe-iEG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>
