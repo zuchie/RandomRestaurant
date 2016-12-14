@@ -66,25 +66,6 @@ class DateViewController: UIViewController {
         // Rotate clock arms.
         self.clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
         self.clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
-        
-        /*
-         UIView.animate(
-         withDuration: 0.5,
-         delay: 0,
-         options: [],
-         animations: {
-         if self.isAM! {
-         self.dayNight.image = UIImage(named: "am")
-         } else {
-         self.dayNight.image = UIImage(named: "pm")
-         }
-         },
-         completion: { finished in
-         if finished {
-         print("animation done")
-         }
-         })
-         */
     }
  
     private func setAmPm() {
@@ -171,49 +152,14 @@ class DateViewController: UIViewController {
         
         // Set rotation anchor point to the arm head.
         clockArmHour.layer.anchorPoint.y = 1
-        //clockArmHour.layer.position.y += clockArmHour.frame.height / 2
         hourArmBottomConstraint.constant += clockArmHour.frame.height / 2
+        // Rotate.
         clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
 
-        
         clockArmMinute.layer.anchorPoint.y = 1
         minuteArmBottomConstraint.constant = clockArmMinute.frame.height / 2
         clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
     }
-    
-    /*
-    // Finalize views' bounds.
-    override func viewDidLayoutSubviews() {
-        clockDialWidth = Float(clockDial.frame.width)
-        clockDialHeight = Float(clockDial.frame.height)
-        
-        //clockArmHour.layer.position.y += clockArmHour.frame.height / 2
-
-        print("view did layout clock dial width, height: \(clockDialWidth, clockDialHeight)")
-        /*
-        // Dynamically update width & height according to superview size.
-        let clockArmHourHeight = clockDial.bounds.size.height / 3
-        let clockArmHourWidth = clockArmHourHeight / 10
-        clockArmHourHeightConstraint.constant = clockArmHourHeight
-        clockArmHourWidthConstraint.constant = clockArmHourWidth
-        */
- 
-        //clockArmHour.frame.origin.y += clockArmHour.frame.height / 2
-        // Set rotation anchor point to the arm head.
-        //clockArmHour.layer.anchorPoint.y = 1
-        //clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
-        
-        /*
-        let clockArmMinuteHeight = clockDial.bounds.size.height / 2.5
-        let clockArmMinuteWidth = clockArmMinuteHeight / 15
-        clockArmMinuteHeightConstraint.constant = clockArmMinuteHeight
-        clockArmMinuteWidthConstraint.constant = clockArmMinuteWidth
-        
-        clockArmMinute.layer.anchorPoint.y = 1
-        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
-        */
-    }
-    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
