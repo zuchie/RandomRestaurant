@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -107,39 +108,40 @@
                                     <constraint firstAttribute="width" constant="85" id="hE9-oi-cZp"/>
                                 </constraints>
                             </imageView>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
-                                <rect key="frame" x="181" y="218" width="12" height="120"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
+                                <rect key="frame" x="183" y="183.5" width="8" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="8P3-Em-wfP"/>
+                                    <constraint firstAttribute="width" constant="8" id="YpB-uA-p6j"/>
+                                </constraints>
+                            </imageView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
+                                <rect key="frame" x="181" y="213.5" width="12" height="120"/>
                                 <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="AB4-L8-HCm"/>
                                     <constraint firstAttribute="width" constant="12" id="f7u-OW-HaL"/>
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="L5o-41-CdE" appends="YES" id="C1c-vf-IjR"/>
                                 </connections>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
-                                <rect key="frame" x="183" y="188" width="8" height="150"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="8" id="YpB-uA-p6j"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="centerY" secondItem="tde-h3-SBV" secondAttribute="centerY" id="05v-Ag-O79"/>
-                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="Doz-Xw-ZwI" secondAttribute="centerX" id="7O5-Uc-fj3"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="top" secondItem="tde-h3-SBV" secondAttribute="top" id="AC5-bG-bKg"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="bottom" secondItem="GIw-QZ-nZW" secondAttribute="top" id="DzX-oQ-0fU"/>
+                            <constraint firstItem="i4F-zD-U7k" firstAttribute="bottom" secondItem="bof-fg-hqo" secondAttribute="centerY" id="FOD-fU-gJl"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="I4o-Oc-Tqe"/>
+                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="bof-fg-hqo" secondAttribute="bottom" constant="-135" id="JQh-Qx-MVw"/>
                             <constraint firstAttribute="trailing" secondItem="b49-pD-ZQi" secondAttribute="trailing" id="Llf-HU-xgu"/>
                             <constraint firstItem="b49-pD-ZQi" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" id="OBh-cz-KBo"/>
                             <constraint firstAttribute="trailing" secondItem="bof-fg-hqo" secondAttribute="trailing" constant="20" symbolic="YES" id="Via-2U-KkC"/>
-                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="bof-fg-hqo" secondAttribute="bottom" constant="-135" id="WYn-qj-uHB"/>
-                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="top" secondItem="i4F-zD-U7k" secondAttribute="bottom" constant="28" id="YTg-3J-ZvG"/>
-                            <constraint firstItem="Doz-Xw-ZwI" firstAttribute="centerX" secondItem="tde-h3-SBV" secondAttribute="centerX" id="ny7-u4-zee"/>
-                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="bottom" secondItem="i4F-zD-U7k" secondAttribute="bottom" id="qsC-Tr-2lU"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="e5v-y3-wCf"/>
+                            <constraint firstItem="i4F-zD-U7k" firstAttribute="centerX" secondItem="bof-fg-hqo" secondAttribute="centerX" id="mhz-LD-wjr"/>
                             <constraint firstItem="bof-fg-hqo" firstAttribute="leading" secondItem="tde-h3-SBV" secondAttribute="leading" constant="20" symbolic="YES" id="rCY-n9-ARr"/>
-                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="top" secondItem="kPm-oz-A89" secondAttribute="bottom" constant="124" id="wto-Wf-ebi"/>
-                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="centerX" secondItem="i4F-zD-U7k" secondAttribute="centerX" id="yBU-oi-PsE"/>
+                            <constraint firstItem="kFQ-mn-jmP" firstAttribute="bottom" secondItem="bof-fg-hqo" secondAttribute="centerY" id="v4I-0n-04E"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="When to eat?" id="gea-hc-WH2">
@@ -156,6 +158,8 @@
                         <outlet property="clockArmHour" destination="i4F-zD-U7k" id="XJe-Wg-axf"/>
                         <outlet property="clockArmMinute" destination="kFQ-mn-jmP" id="SsD-fI-thE"/>
                         <outlet property="clockDial" destination="bof-fg-hqo" id="hsk-PQ-ZYE"/>
+                        <outlet property="hourArmBottomConstraint" destination="FOD-fU-gJl" id="uNm-Sf-YqR"/>
+                        <outlet property="minuteArmBottomConstraint" destination="v4I-0n-04E" id="ndP-DR-tpC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOb-Ig-iIh" userLabel="First Responder" sceneMemberID="firstResponder"/>

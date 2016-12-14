@@ -16,6 +16,9 @@ class DateViewController: UIViewController {
     @IBOutlet weak var clockArmMinute: UIImageView!
     @IBOutlet weak var clockArmHour: UIImageView!
     
+    @IBOutlet weak var hourArmBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var minuteArmBottomConstraint: NSLayoutConstraint!
+    
     private let clock = Clock()
     
     private var bgImageName = ""
@@ -168,14 +171,14 @@ class DateViewController: UIViewController {
         
         // Set rotation anchor point to the arm head.
         clockArmHour.layer.anchorPoint.y = 1
-        clockArmHour.layer.position.y += clockArmHour.frame.height / 2
-
+        //clockArmHour.layer.position.y += clockArmHour.frame.height / 2
+        hourArmBottomConstraint.constant += clockArmHour.frame.height / 2
         clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
 
+        
         clockArmMinute.layer.anchorPoint.y = 1
+        minuteArmBottomConstraint.constant = clockArmMinute.frame.height / 2
         clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
-        clockArmMinute.layer.position.y += clockArmMinute.frame.height / 2
-
     }
     
     /*
@@ -184,6 +187,8 @@ class DateViewController: UIViewController {
         clockDialWidth = Float(clockDial.frame.width)
         clockDialHeight = Float(clockDial.frame.height)
         
+        //clockArmHour.layer.position.y += clockArmHour.frame.height / 2
+
         print("view did layout clock dial width, height: \(clockDialWidth, clockDialHeight)")
         /*
         // Dynamically update width & height according to superview size.
@@ -193,10 +198,10 @@ class DateViewController: UIViewController {
         clockArmHourWidthConstraint.constant = clockArmHourWidth
         */
  
-        clockArmHour.frame.origin.y += clockArmHour.frame.height / 2
+        //clockArmHour.frame.origin.y += clockArmHour.frame.height / 2
         // Set rotation anchor point to the arm head.
-        clockArmHour.layer.anchorPoint.y = 1
-        clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+        //clockArmHour.layer.anchorPoint.y = 1
+        //clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
         
         /*
         let clockArmMinuteHeight = clockDial.bounds.size.height / 2.5
@@ -209,7 +214,7 @@ class DateViewController: UIViewController {
         */
     }
     */
- 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
