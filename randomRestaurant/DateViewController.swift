@@ -30,9 +30,6 @@ class DateViewController: UIViewController {
     private var currentHour: Int?
     private var currentMinute: Int?
     
-    private var clockDialWidth: Float?
-    private var clockDialHeight: Float?
-    
     private var isAM: Bool?
     
     private var currentAngle: Float = 0.0
@@ -41,10 +38,9 @@ class DateViewController: UIViewController {
     @IBAction func handleHourArmRotation(_ sender: UIPanGestureRecognizer) {
         let touchPosition = sender.location(in: clockDial)
         // Move coordinate system from upperleft corner to center.
-        let touchPositionToCenterX = Float(touchPosition.x) - clockDialWidth! / 2
-        let touchPositionToCenterY = Float(touchPosition.y) - clockDialHeight! / 2
+        let touchPositionToCenterX = Float(touchPosition.x - clockDial.frame.width / 2)
+        let touchPositionToCenterY = Float(touchPosition.y - clockDial.frame.height / 2)
         
-        //print("touch x, y: \(touchPositionToCenterX, touchPositionToCenterY)")
         // Get the angles the arms should rotate.
         // Because arms' origin direction is upright(0 rad), while 0 rad of coordinate system is to the right,
         // so that 0 rad of coordinate system is actually PI/2 rad of arms; -10 degree of coordinate sys is
@@ -60,12 +56,12 @@ class DateViewController: UIViewController {
         //print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
         //print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
         
+        // Rotate clock arms.
+        clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
+        
         setAmPm()
         setBackgroundImage()
-
-        // Rotate clock arms.
-        self.clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
-        self.clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
     }
  
     private func setAmPm() {
@@ -131,11 +127,6 @@ class DateViewController: UIViewController {
         
         print("Date category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
-        clockDialWidth = Float(clockDial.frame.width)
-        clockDialHeight = Float(clockDial.frame.height)
-
-        print("view did load clock dial width, height: \(clockDialWidth, clockDialHeight)")
-        
         currentHour = clock.trueTime.hour
         currentMinute = clock.trueTime.minute
         clockArmHourRad = clock.trueTime.hourRad
@@ -150,6 +141,9 @@ class DateViewController: UIViewController {
         
         setBackgroundImage()
         
+        //print("view did load hour arm frame, bounds: \(clockArmHour.frame, clockArmHour.bounds)")
+        //print("view did load dial frame, bounds: \(clockDial.frame, clockDial.bounds)")
+        
         // Set rotation anchor point to the arm head.
         clockArmHour.layer.anchorPoint.y = 1
         hourArmBottomConstraint.constant += clockArmHour.frame.height / 2
@@ -157,7 +151,7 @@ class DateViewController: UIViewController {
         clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
 
         clockArmMinute.layer.anchorPoint.y = 1
-        minuteArmBottomConstraint.constant = clockArmMinute.frame.height / 2
+        minuteArmBottomConstraint.constant += clockArmMinute.frame.height / 2
         clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
     }
     
