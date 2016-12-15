@@ -53,18 +53,18 @@ class DateViewController: UIViewController {
         
         clockArmMinuteRad = getClockMinuteArmAngle(by: clockArmHourRad!)
         
-        //print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
-        //print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+        print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
+        print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
         
         // Rotate clock arms.
         clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
         clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
         
-        setAmPm()
+        setAMPM()
         setBackgroundImage()
     }
  
-    private func setAmPm() {
+    private func setAMPM() {
         // When Hour arm passes 12 o'clock, switch AM/PM.
         currentAngle = clockArmHourRad!
         if abs(currentAngle - previousAngle) > 300 * Float(M_PI) / 180.0 {
@@ -118,8 +118,17 @@ class DateViewController: UIViewController {
     
     private func getClockMinuteArmAngle(by clockHourArmAngle: Float) -> Float {
         let minuteToHourAngularVelocity: Float = 12.0
+        let minRad = (clockHourArmAngle * minuteToHourAngularVelocity).truncatingRemainder(dividingBy: 2.0 * (Float)(M_PI))
         // Angle in 2 * PI.
-        return (clockHourArmAngle * minuteToHourAngularVelocity).truncatingRemainder(dividingBy: 2 * Float(M_PI))
+        // TODO: minRad could be 2PI(e.g. 6:00), why?
+        /*
+        var minRad = clockHourArmAngle * 12.0
+        while minRad >= 2.0 * (Float)(M_PI) {
+            minRad -= 2.0 * (Float)(M_PI)
+        }
+        */
+        
+        return minRad
     }
     
     override func viewDidLoad() {
@@ -138,6 +147,9 @@ class DateViewController: UIViewController {
         } else {
             amPM.image = UIImage(named: "pm")
         }
+        
+        // Save for setAMPM() use.
+        previousAngle = clockArmHourRad!
         
         setBackgroundImage()
         
@@ -171,6 +183,7 @@ class DateViewController: UIViewController {
         let date = clock.date
         let hour = clock.faceTime.hour!
         let minute = clock.faceTime.minute!
+        print("proposed hourrad, minrad: \(clockArmHourRad!, clockArmMinuteRad!)")
         print("proposed hour, min: \(hour, minute)")
         
         // Minutes precision, in order to use cached data when re-query is made in 1 min.
