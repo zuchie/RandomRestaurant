@@ -51,6 +51,8 @@ class DateViewController: UIViewController {
             clockArmHourRad! += 2 * Float(M_PI)
         }
         
+        // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
+        clockArmHourRad = (clockArmHourRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
         clockArmMinuteRad = getClockMinuteArmAngle(by: clockArmHourRad!)
         
         print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
@@ -118,15 +120,16 @@ class DateViewController: UIViewController {
     
     private func getClockMinuteArmAngle(by clockHourArmAngle: Float) -> Float {
         let minuteToHourAngularVelocity: Float = 12.0
-        let minRad = (clockHourArmAngle * minuteToHourAngularVelocity).truncatingRemainder(dividingBy: 2.0 * (Float)(M_PI))
+        let PI2Digits = ((Float)(M_PI) * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+        
         // Angle in 2 * PI.
-        // TODO: minRad could be 2PI(e.g. 6:00), why?
-        /*
-        var minRad = clockHourArmAngle * 12.0
-        while minRad >= 2.0 * (Float)(M_PI) {
-            minRad -= 2.0 * (Float)(M_PI)
-        }
-        */
+        let minRad = (clockHourArmAngle * minuteToHourAngularVelocity).truncatingRemainder(dividingBy: 2.0 * PI2Digits)
+        
+        //print("min rad: \(clockHourArmAngle * minuteToHourAngularVelocity)")
+        //print("2PI: \(2.0 * (Float)(M_PI))")
+        //print("min rad truncated: \(minRad)")
+        //print("hour rad: \(clockHourArmAngle)")
+        //print("hour rad 2 digits: \(hourRad2Digits)")
         
         return minRad
     }
