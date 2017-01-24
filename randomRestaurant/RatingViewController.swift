@@ -20,19 +20,14 @@ class RatingViewController: UIViewController {
     fileprivate var ratingButtons = [UIButton]()
 
     fileprivate let filledStarImage = UIImage(named: "filledStar")
-    fileprivate let emptyStarImage = UIImage(named: "emptyStar")
+    //fileprivate let emptyStarImage = UIImage(named: "emptyStar")
     fileprivate let halfFilledStarImage = UIImage(named: "halfFilledStar")
     
     fileprivate var buttonConsecutiveTapCount = 0
     fileprivate var tappedButtonIndex: Int?
     
     fileprivate var rating: Double?
-    /*
-    var urlQueryParameters: YelpUrlQueryParameters?
-    func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
-        urlQueryParameters = urlParam
-    }
-    */
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,7 +36,7 @@ class RatingViewController: UIViewController {
         ratingButtons += [button0, button1, button2, button3, button4]
         
         for button in ratingButtons {
-            button.setImage(emptyStarImage, for: UIControlState())
+            //button.setImage(emptyStarImage, for: UIControlState())
             button.setImage(filledStarImage, for: .selected)
             button.setImage(filledStarImage, for: [.highlighted, .selected])
             button.addTarget(self, action: #selector(ratingButtonTapped(_:)), for: .touchDown)

@@ -33,7 +33,6 @@ class Clock {
         trueTime.minuteRad = clockArmAngles.minute
         trueTime.isAM = clockArmAngles.isAM
         
-        //
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = DateFormatter.Style.long
         dateFormatter.timeStyle = DateFormatter.Style.long
