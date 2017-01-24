@@ -109,14 +109,14 @@
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmBlack" translatesAutoresizingMaskIntoConstraints="NO" id="kFQ-mn-jmP">
-                                <rect key="frame" x="183" y="203.5" width="8" height="130"/>
+                                <rect key="frame" x="183" y="204" width="8" height="130"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="130" id="8P3-Em-wfP"/>
                                     <constraint firstAttribute="width" constant="8" id="YpB-uA-p6j"/>
                                 </constraints>
                             </imageView>
                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockArmRed" translatesAutoresizingMaskIntoConstraints="NO" id="i4F-zD-U7k">
-                                <rect key="frame" x="181" y="233.5" width="12" height="100"/>
+                                <rect key="frame" x="181" y="234" width="12" height="100"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="AB4-L8-HCm"/>
@@ -211,11 +211,20 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="emptyStar" translatesAutoresizingMaskIntoConstraints="NO" id="3Hz-Vo-seo">
+                                <rect key="frame" x="20" y="211" width="83" height="83"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="3Hz-Vo-seo" secondAttribute="height" multiplier="1:1" id="JF2-ar-DPe"/>
+                                    <constraint firstAttribute="width" constant="83" id="lYU-Bj-4KL"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="D9c-DA-5Zg" firstAttribute="top" secondItem="3Hz-Vo-seo" secondAttribute="bottom" constant="8" symbolic="YES" id="HSC-Ml-7kw"/>
                             <constraint firstAttribute="trailing" secondItem="D9c-DA-5Zg" secondAttribute="trailing" constant="20" symbolic="YES" id="a80-7c-h1R"/>
                             <constraint firstItem="D9c-DA-5Zg" firstAttribute="centerY" secondItem="zhQ-xk-Sj0" secondAttribute="centerY" id="d2d-ns-i6A"/>
+                            <constraint firstItem="3Hz-Vo-seo" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" constant="20" symbolic="YES" id="d9n-zx-J43"/>
                             <constraint firstItem="D9c-DA-5Zg" firstAttribute="leading" secondItem="zhQ-xk-Sj0" secondAttribute="leading" constant="20" symbolic="YES" id="wBr-W4-SHz"/>
                         </constraints>
                     </view>
@@ -228,6 +237,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="animation" destination="3Hz-Vo-seo" id="I9p-lP-3Mc"/>
+                        <outlet property="animationLeading" destination="d9n-zx-J43" id="IqP-Lz-bHJ"/>
+                        <outlet property="animationWidth" destination="lYU-Bj-4KL" id="sJe-S6-W4Q"/>
                         <outlet property="button0" destination="O4W-Q7-6Qs" id="OlD-7v-saR"/>
                         <outlet property="button1" destination="urZ-e9-zE3" id="0B1-qH-d7C"/>
                         <outlet property="button2" destination="5pi-SK-PvA" id="qfC-hq-Gvn"/>
@@ -237,7 +249,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZET-NZ-dcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5250" y="359"/>
+            <point key="canvasLocation" x="5248.8000000000002" y="358.4707646176912"/>
         </scene>
         <!--Our recommendation-->
         <scene sceneID="tne-QT-ifu">

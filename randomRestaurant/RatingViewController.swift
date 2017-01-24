@@ -17,16 +17,27 @@ class RatingViewController: UIViewController {
     @IBOutlet weak var button3: UIButton!
     @IBOutlet weak var button4: UIButton!
     
+    @IBOutlet weak var animation: UIImageView!
+    @IBOutlet weak var animationWidth: NSLayoutConstraint!
+    @IBOutlet weak var animationLeading: NSLayoutConstraint!
+    
+    private var animationLeadingSpace: CGFloat!
+    
     fileprivate var ratingButtons = [UIButton]()
 
     fileprivate let filledStarImage = UIImage(named: "filledStar")
-    //fileprivate let emptyStarImage = UIImage(named: "emptyStar")
     fileprivate let halfFilledStarImage = UIImage(named: "halfFilledStar")
     
     fileprivate var buttonConsecutiveTapCount = 0
     fileprivate var tappedButtonIndex: Int?
     
     fileprivate var rating: Double?
+    
+    private let animationImages = [
+        UIImage(named: "filledStar")!,
+        UIImage(named: "halfFilledStar")!,
+        UIImage(named: "emptyStar")!
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +53,9 @@ class RatingViewController: UIViewController {
             button.addTarget(self, action: #selector(ratingButtonTapped(_:)), for: .touchDown)
         }
         
+        // Animation image view is the same size with button.
+        animationWidth.constant = button0.frame.width
+        animationLeadingSpace = animationLeading.constant
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,6 +94,19 @@ class RatingViewController: UIViewController {
         print("rating: \(rating!)")
         
         updateButtonSelectionStates()
+        
+        startAnimation(at: button.frame.origin.x)
+    }
+    
+    private func startAnimation(at xPosition: CGFloat) {
+        //print("x position: \(xPosition)")
+        //print("original leading space: \(animationLeadingSpace)")
+        animationLeading.constant = animationLeadingSpace + xPosition
+        
+        animation.animationImages = animationImages
+        animation.animationDuration = 0.5
+        animation.animationRepeatCount = 1
+        animation.startAnimating()
     }
     
     fileprivate func updateButtonSelectionStates() {
