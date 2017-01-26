@@ -10,8 +10,9 @@ import UIKit
 
 class MachineViewController: UIViewController {
     
-    var imageView: UIImageView!
-    fileprivate var viewEverAppeared = false
+    //var imageView: UIImageView!
+    //fileprivate var viewEverAppeared = false
+    @IBOutlet weak var animation: UIImageView!
     
     fileprivate let animationImages = [
         UIImage(named: "image0")!,
@@ -23,6 +24,7 @@ class MachineViewController: UIViewController {
         UIImage(named: "image6")!
     ]
     
+    /*
     static var imageViews = [UIImageView]()
     static var imagesFrameY = [CGFloat]()
     
@@ -30,11 +32,20 @@ class MachineViewController: UIViewController {
     fileprivate var imageViewFrameHeight: CGFloat = 0.0
     fileprivate var imageViewFrameX: CGFloat = 0.0
     fileprivate var imageViewFrameY: CGFloat = 0.0
+    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
+    func startAnimation() {
+        animation.animationImages = animationImages
+        animation.animationDuration = 1.0
+        animation.animationRepeatCount = 1
+        animation.startAnimating()
+    }
+    
+    /*
     override func viewDidAppear(_ animated: Bool) {
         
         // Init imageView once in MachineView lifecycle.
@@ -67,7 +78,7 @@ class MachineViewController: UIViewController {
         }
         
     }
-    
+    */
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

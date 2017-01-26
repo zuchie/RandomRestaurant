@@ -32,9 +32,9 @@ class SlotMachineViewController: UIViewController {
     
     fileprivate weak var currentVC: UIViewController?
     
-    static var scrollingImagesVC: MachineViewController?
-    static var favoriteTableVC: FavoriteTableViewController?
-    static var historyTableVC: HistoryTableViewController?
+    static var scrollingImagesVC: MachineViewController!
+    static var favoriteTableVC: FavoriteTableViewController!
+    static var historyTableVC: HistoryTableViewController!
     
     //var urlQueryParameters: YelpUrlQueryParameters?
     
@@ -52,10 +52,10 @@ class SlotMachineViewController: UIViewController {
         
         // Set starting view.
         currentVC = SlotMachineViewController.scrollingImagesVC
-        currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
+        //currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
         
         addChildViewController(currentVC!)
-        currentVC?.view.frame = viewsContainer.frame
+        //currentVC?.view.frame = viewsContainer.frame
         self.addSubview(currentVC!.view, toView: viewsContainer)
         currentVC?.didMove(toParentViewController: self)
         
@@ -64,19 +64,15 @@ class SlotMachineViewController: UIViewController {
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
-    /*
-    func setYelpUrlQueryParameters(_ urlParam: YelpUrlQueryParameters) {
-        urlQueryParameters = urlParam
-        print("category: \(urlQueryParameters!.category), coordinates: \(urlQueryParameters!.coordinates), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
-    }
-    */
-    
     func getRatingBar(_ rating: Double) {
         ratingBar = rating
     }
  
-    fileprivate func scrollImages(_ index: Int, imageView: UIImageView) {
+    fileprivate func scrollImages() {
         
+        SlotMachineViewController.scrollingImagesVC.startAnimation()
+
+        /*
         UIView.animate(withDuration: 4.0, delay: 0.0, options: UIViewAnimationOptions(), animations: {
             
             var frame = imageView.frame
@@ -97,6 +93,7 @@ class SlotMachineViewController: UIViewController {
                 
             }
         })
+        */
     }
 
     func cycleFromViewController(_ oldViewController: UIViewController, toViewController newViewController: UIViewController) {
@@ -165,6 +162,11 @@ class SlotMachineViewController: UIViewController {
     @IBAction func start() {
         
         // Start animation.
+        view.bringSubview(toFront: viewsContainer)
+        scrollImages()
+        view.sendSubview(toBack: viewsContainer)
+
+        /*
         for (index, imageView) in MachineViewController.imageViews.enumerated() {
             // Reset Y.
             imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
@@ -173,7 +175,7 @@ class SlotMachineViewController: UIViewController {
             
             scrollImages(index, imageView: imageView)
         }
-        
+        */
         let access_token = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
         
         // Get businesses from Yelp API v3.
