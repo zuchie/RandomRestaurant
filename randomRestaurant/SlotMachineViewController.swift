@@ -68,6 +68,7 @@ class SlotMachineViewController: UIViewController {
         ratingBar = rating
     }
  
+    /*
     fileprivate func scrollImages() {
         
         SlotMachineViewController.scrollingImagesVC.startAnimation()
@@ -95,7 +96,8 @@ class SlotMachineViewController: UIViewController {
         })
         */
     }
-
+    */
+    
     func cycleFromViewController(_ oldViewController: UIViewController, toViewController newViewController: UIViewController) {
         
         oldViewController.willMove(toParentViewController: nil)
@@ -163,8 +165,11 @@ class SlotMachineViewController: UIViewController {
         
         // Start animation.
         view.bringSubview(toFront: viewsContainer)
-        scrollImages()
-        view.sendSubview(toBack: viewsContainer)
+        SlotMachineViewController.scrollingImagesVC.startAnimation() { finish in
+            if finish {
+                self.view.sendSubview(toBack: self.viewsContainer)
+            }
+        }
 
         /*
         for (index, imageView) in MachineViewController.imageViews.enumerated() {

@@ -38,16 +38,18 @@ class MachineViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    func startAnimation() {
+    func startAnimation(completionHandler: @escaping (_ finish: Bool) -> Void) {
         animation.animationImages = animationImages
         animation.animationDuration = 1.0
         animation.animationRepeatCount = 1
         animation.startAnimating()
+        let finish = true
+        completionHandler(finish)
     }
     
     /*
     override func viewDidAppear(_ animated: Bool) {
-        
+     
         // Init imageView once in MachineView lifecycle.
         // Cannot put into viewDidLoad because view.frame hasn't been updated by that time.
         if !viewEverAppeared {
