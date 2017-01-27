@@ -52,7 +52,8 @@ class SlotMachineViewController: UIViewController {
         
         // Set starting view.
         currentVC = SlotMachineViewController.scrollingImagesVC
-        //currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
+        // Use constraints set by Auto Layout to layout Machine View.
+        currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
         
         addChildViewController(currentVC!)
         //currentVC?.view.frame = viewsContainer.frame
