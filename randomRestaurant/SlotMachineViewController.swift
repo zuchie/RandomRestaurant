@@ -64,39 +64,13 @@ class SlotMachineViewController: UIViewController {
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
+    func afterAnimation() {
+        view.sendSubview(toBack: viewsContainer)
+    }
+    
     func getRatingBar(_ rating: Double) {
         ratingBar = rating
     }
- 
-    /*
-    fileprivate func scrollImages() {
-        
-        SlotMachineViewController.scrollingImagesVC.startAnimation()
-
-        /*
-        UIView.animate(withDuration: 4.0, delay: 0.0, options: UIViewAnimationOptions(), animations: {
-            
-            var frame = imageView.frame
-            
-            frame.origin.y += frame.height * CGFloat(MachineViewController.imageViews.count - 1)
-            
-            imageView.frame = frame
-            
-        }, completion: { finished in
-            
-            if finished {
-                
-                self.view.sendSubview(toBack: self.viewsContainer)
-                
-            } else {
-                
-                print("animation is still running...")
-                
-            }
-        })
-        */
-    }
-    */
     
     func cycleFromViewController(_ oldViewController: UIViewController, toViewController newViewController: UIViewController) {
         
@@ -165,22 +139,12 @@ class SlotMachineViewController: UIViewController {
         
         // Start animation.
         view.bringSubview(toFront: viewsContainer)
-        SlotMachineViewController.scrollingImagesVC.startAnimation() { finish in
-            if finish {
-                self.view.sendSubview(toBack: self.viewsContainer)
-            }
-        }
-
-        /*
-        for (index, imageView) in MachineViewController.imageViews.enumerated() {
-            // Reset Y.
-            imageView.frame.origin.y = MachineViewController.imagesFrameY[index]
-            
-            view.bringSubview(toFront: viewsContainer)
-            
-            scrollImages(index, imageView: imageView)
-        }
-        */
+        SlotMachineViewController.scrollingImagesVC.startAnimation()
+        
+        // Register things to do when animation is done.
+        self.perform(#selector(SlotMachineViewController.afterAnimation), with: nil, afterDelay: SlotMachineViewController.scrollingImagesVC.animation.animationDuration)
+        
+        // Start Yelp API query.
         let access_token = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
         
         // Get businesses from Yelp API v3.
@@ -232,7 +196,6 @@ class SlotMachineViewController: UIViewController {
                     self.bizPicked.text = "No restaurant found"
                 })
             }
-            
         }
     }
     

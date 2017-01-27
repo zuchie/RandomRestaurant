@@ -38,15 +38,15 @@ class MachineViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    func startAnimation(completionHandler: @escaping (_ finish: Bool) -> Void) {
+    func startAnimation() {
+        
         animation.animationImages = animationImages
-        animation.animationDuration = 1.0
+        animation.animationDuration = 2.0
         animation.animationRepeatCount = 1
+        
         animation.startAnimating()
-        let finish = true
-        completionHandler(finish)
     }
-    
+
     /*
     override func viewDidAppear(_ animated: Bool) {
      
