@@ -2,24 +2,28 @@
 //  History+CoreDataProperties.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 10/1/16.
-//  Copyright © 2016 Zhe Cui. All rights reserved.
-//
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
+//  Created by Zhe Cui on 1/27/17.
+//  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
 import Foundation
 import CoreData
 
+
 extension History {
 
-    @NSManaged var address: String?
-    @NSManaged var isFavorite: NSNumber?
-    @NSManaged var name: String?
-    @NSManaged var price: String?
-    @NSManaged var rating: String?
-    @NSManaged var reviewCount: String?
-    @NSManaged var date: NSNumber?
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<History> {
+        return NSFetchRequest<History>(entityName: "History");
+    }
+
+    @NSManaged public var address: String?
+    @NSManaged public var date: NSNumber?
+    @NSManaged public var isFavorite: NSNumber?
+    @NSManaged public var name: String?
+    @NSManaged public var price: String?
+    @NSManaged public var rating: String?
+    @NSManaged public var reviewCount: String?
+    @NSManaged public var imageUrl: String?
+    @NSManaged public var url: String?
 
 }

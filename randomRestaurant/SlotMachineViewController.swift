@@ -29,6 +29,8 @@ class SlotMachineViewController: UIViewController {
     fileprivate var bizLocationObj: PickedBusinessLocation?
     fileprivate var bizAddress = ""
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
+    fileprivate var bizUrl = ""
+    fileprivate var bizImageUrl = ""
     
     fileprivate weak var currentVC: UIViewController?
     
@@ -179,8 +181,11 @@ class SlotMachineViewController: UIViewController {
                     print("biz latitude: \(self.bizCoordinate2D!.latitude), longitude: \(self.bizCoordinate2D!.longitude)")
                 }
                 
+                self.bizUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
+                self.bizImageUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "image_url")
+                
                 // Params going to pass to Core Data of History Restaurant.
-                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970))
+                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), imageUrl: self.bizImageUrl, url: self.bizUrl)
                 
                 // Update History database.
                 HistoryDB.addEntry(self.pickedRestaurant!)
@@ -190,7 +195,7 @@ class SlotMachineViewController: UIViewController {
                 DispatchQueue.main.async(execute: {
                     
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
-                    self.pickedBizAddress.text = "\(self.bizAddress)"
+                    self.pickedBizAddress.text = "\(self.bizAddress), url: \(self.bizUrl), image: \(self.bizImageUrl)"
                 })
             } else {
                 DispatchQueue.main.async(execute: {

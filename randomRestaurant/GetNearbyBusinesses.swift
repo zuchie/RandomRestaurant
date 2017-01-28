@@ -72,6 +72,14 @@ class GetNearbyBusinesses {
             } else {
                 return ""
             }
+        },
+        "image_url": OperationTypes.getStrByKey {
+            let val = $0[$1] as? String
+            return val ?? ""
+        },
+        "url": OperationTypes.getStrByKey {
+            let val = $0[$1] as? String
+            return val ?? ""
         }
     ]
 
