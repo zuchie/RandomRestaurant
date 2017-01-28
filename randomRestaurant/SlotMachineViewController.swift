@@ -195,7 +195,7 @@ class SlotMachineViewController: UIViewController {
                 DispatchQueue.main.async(execute: {
                     
                     self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
-                    self.pickedBizAddress.text = "\(self.bizAddress), url: \(self.bizUrl), image: \(self.bizImageUrl)"
+                    self.pickedBizAddress.text = "\(self.bizAddress)"
                 })
             } else {
                 DispatchQueue.main.async(execute: {
@@ -205,6 +205,17 @@ class SlotMachineViewController: UIViewController {
         }
     }
     
+    @IBAction func openYelpUrl(_ sender: UIButton) {
+        if let bizUrl = URL(string: self.bizUrl) {
+            UIApplication.shared.openURL(bizUrl)
+        }
+    }
+    
+    @IBAction func openYelpImage(_ sender: UIButton) {
+        if let bizImageUrl = URL(string: self.bizImageUrl) {
+            UIApplication.shared.openURL(bizImageUrl)
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

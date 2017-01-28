@@ -314,20 +314,46 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apI-9O-jco">
+                                <rect key="frame" x="20" y="412" width="335" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="apI-9O-jco" secondAttribute="height" multiplier="67:6" id="dDd-QB-xg0"/>
+                                </constraints>
+                                <state key="normal" title="Yelp Page"/>
+                                <connections>
+                                    <action selector="openYelpUrl:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SxL-4t-laS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xn2-Rm-UjT">
+                                <rect key="frame" x="20" y="450" width="335" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="xn2-Rm-UjT" secondAttribute="height" multiplier="67:6" id="HPy-1g-u5L"/>
+                                </constraints>
+                                <state key="normal" title="Image"/>
+                                <connections>
+                                    <action selector="openYelpImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9k3-Z1-CWU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="HyB-Jj-k9x" secondAttribute="trailing" id="09r-Z1-9OK"/>
                             <constraint firstItem="iqt-jy-E0a" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="89m-37-aax"/>
                             <constraint firstItem="KuC-ft-5iz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9PA-zi-bUf"/>
+                            <constraint firstItem="xn2-Rm-UjT" firstAttribute="top" secondItem="apI-9O-jco" secondAttribute="bottom" constant="8" symbolic="YES" id="DUF-Fu-9WY"/>
                             <constraint firstAttribute="trailing" secondItem="iqt-jy-E0a" secondAttribute="trailing" id="Ind-fo-Y8M"/>
                             <constraint firstItem="HyB-Jj-k9x" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Kga-dw-9ur"/>
+                            <constraint firstItem="apI-9O-jco" firstAttribute="top" secondItem="gfb-AF-tli" secondAttribute="bottom" constant="8" symbolic="YES" id="N7W-vA-oYV"/>
                             <constraint firstAttribute="trailing" secondItem="gfb-AF-tli" secondAttribute="trailing" constant="20" symbolic="YES" id="OvS-H8-zhK"/>
+                            <constraint firstItem="apI-9O-jco" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="Xij-Yv-rtm"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="HyB-Jj-k9x" secondAttribute="bottom" id="YfM-ni-7Jm"/>
                             <constraint firstAttribute="trailing" secondItem="KuC-ft-5iz" secondAttribute="trailing" id="YsD-Z4-Q88"/>
+                            <constraint firstItem="xn2-Rm-UjT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="bHe-mi-QwI"/>
                             <constraint firstItem="gfb-AF-tli" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="jom-F6-3mp"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KuC-ft-5iz" secondAttribute="bottom" id="kzw-fO-VPx"/>
                             <constraint firstItem="gfb-AF-tli" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="32.25" id="lja-Ql-h56"/>
+                            <constraint firstAttribute="trailing" secondItem="apI-9O-jco" secondAttribute="trailing" constant="20" symbolic="YES" id="pRq-es-tp1"/>
+                            <constraint firstAttribute="trailing" secondItem="xn2-Rm-UjT" secondAttribute="trailing" constant="20" symbolic="YES" id="whZ-ds-Gj3"/>
                             <constraint firstItem="iqt-jy-E0a" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="xu4-Np-NbS"/>
                             <constraint firstItem="KuC-ft-5iz" firstAttribute="top" secondItem="iqt-jy-E0a" secondAttribute="bottom" id="yCg-WP-S7s"/>
                         </constraints>
