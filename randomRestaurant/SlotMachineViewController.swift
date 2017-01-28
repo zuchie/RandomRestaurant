@@ -16,6 +16,7 @@ class SlotMachineViewController: UIViewController {
     @IBOutlet weak var pickedBizAddress: UILabel!
     @IBOutlet weak var viewsContainer: UIView!
     
+    fileprivate var bizImageView: UIImageView!
     fileprivate var pickedRestaurant: Restaurant?
     
     fileprivate var nearbyBusinesses = GetNearbyBusinesses()
@@ -68,6 +69,20 @@ class SlotMachineViewController: UIViewController {
     }
     
     func afterAnimation() {
+        // Set starting view.
+        //currentVC = SlotMachineViewController.scrollingImagesVC
+        // Use constraints set by Auto Layout to layout Machine View.
+        //currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        //addChildViewController(currentVC!)
+        //currentVC?.view.frame = viewsContainer.frame
+        
+        if let bizImageUrl = URL(string: self.bizImageUrl) {
+            //UIApplication.shared.openURL(bizImageUrl)
+            downloadImage(url: bizImageUrl)
+        }
+        //currentVC?.didMove(toParentViewController: self)
+        
         view.sendSubview(toBack: viewsContainer)
     }
     
@@ -142,6 +157,11 @@ class SlotMachineViewController: UIViewController {
         
         // Start animation.
         view.bringSubview(toFront: viewsContainer)
+        // Set starting view.
+
+        //currentVC?.view.frame = viewsContainer.frame
+        self.addSubview(SlotMachineViewController.scrollingImagesVC!.view, toView: viewsContainer)
+        
         SlotMachineViewController.scrollingImagesVC.startAnimation()
         
         // Register things to do when animation is done.
@@ -211,9 +231,26 @@ class SlotMachineViewController: UIViewController {
         }
     }
     
-    @IBAction func openYelpImage(_ sender: UIButton) {
-        if let bizImageUrl = URL(string: self.bizImageUrl) {
-            UIApplication.shared.openURL(bizImageUrl)
+    func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+                completion(data, response, error)
+            }.resume()
+    }
+    
+    func downloadImage(url: URL) {
+        print("Image Download Started")
+        getDataFromUrl(url: url) { data, response, error  in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Image Download Finished")
+            
+            DispatchQueue.main.async() { () -> Void in
+                self.bizImageView = UIImageView(image: UIImage(data: data))
+                //self.bizImageView.frame = self.viewsContainer.frame
+                //self.bizImageView.contentMode = .scaleAspectFit
+                self.addSubview(self.bizImageView, toView: self.viewsContainer)
+            }
         }
     }
     
