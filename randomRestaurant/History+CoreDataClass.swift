@@ -33,6 +33,7 @@ public class History: NSManagedObject {
             newRestaurant.address = restaurant.address
             newRestaurant.isFavorite = restaurant.isFavorite as NSNumber?
             newRestaurant.date = restaurant.date as NSNumber?
+            newRestaurant.url = restaurant.url
             
             return newRestaurant
         }

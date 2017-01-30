@@ -31,7 +31,6 @@ class SlotMachineViewController: UIViewController {
     fileprivate var bizAddress = ""
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     fileprivate var bizUrl = ""
-    fileprivate var bizImageUrl = ""
     
     fileprivate weak var currentVC: UIViewController?
     
@@ -69,20 +68,6 @@ class SlotMachineViewController: UIViewController {
     }
     
     func afterAnimation() {
-        // Set starting view.
-        //currentVC = SlotMachineViewController.scrollingImagesVC
-        // Use constraints set by Auto Layout to layout Machine View.
-        //currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        //addChildViewController(currentVC!)
-        //currentVC?.view.frame = viewsContainer.frame
-        
-        if let bizImageUrl = URL(string: self.bizImageUrl) {
-            //UIApplication.shared.openURL(bizImageUrl)
-            downloadImage(url: bizImageUrl)
-        }
-        //currentVC?.didMove(toParentViewController: self)
-        
         view.sendSubview(toBack: viewsContainer)
     }
     
@@ -155,13 +140,13 @@ class SlotMachineViewController: UIViewController {
     
     @IBAction func start() {
         
-        // Start animation.
-        view.bringSubview(toFront: viewsContainer)
         // Set starting view.
+        view.bringSubview(toFront: viewsContainer)
 
         //currentVC?.view.frame = viewsContainer.frame
         self.addSubview(SlotMachineViewController.scrollingImagesVC!.view, toView: viewsContainer)
         
+        // Start animation.
         SlotMachineViewController.scrollingImagesVC.startAnimation()
         
         // Register things to do when animation is done.
@@ -202,10 +187,9 @@ class SlotMachineViewController: UIViewController {
                 }
                 
                 self.bizUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
-                self.bizImageUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "image_url")
                 
                 // Params going to pass to Core Data of History Restaurant.
-                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), imageUrl: self.bizImageUrl, url: self.bizUrl)
+                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), url: self.bizUrl)
                 
                 // Update History database.
                 HistoryDB.addEntry(self.pickedRestaurant!)
@@ -228,29 +212,6 @@ class SlotMachineViewController: UIViewController {
     @IBAction func openYelpUrl(_ sender: UIButton) {
         if let bizUrl = URL(string: self.bizUrl) {
             UIApplication.shared.openURL(bizUrl)
-        }
-    }
-    
-    func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-                completion(data, response, error)
-            }.resume()
-    }
-    
-    func downloadImage(url: URL) {
-        print("Image Download Started")
-        getDataFromUrl(url: url) { data, response, error  in
-            guard let data = data, error == nil else { return }
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Image Download Finished")
-            
-            DispatchQueue.main.async() { () -> Void in
-                self.bizImageView = UIImageView(image: UIImage(data: data))
-                //self.bizImageView.frame = self.viewsContainer.frame
-                //self.bizImageView.contentMode = .scaleAspectFit
-                self.addSubview(self.bizImageView, toView: self.viewsContainer)
-            }
         }
     }
     
