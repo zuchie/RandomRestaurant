@@ -12,8 +12,6 @@ import CoreData
 
 class SlotMachineViewController: UIViewController {
 
-    @IBOutlet weak var bizPicked: UILabel!
-    @IBOutlet weak var pickedBizAddress: UILabel!
     @IBOutlet weak var viewsContainer: UIView!
     
     fileprivate var bizImageView: UIImageView!
@@ -32,13 +30,12 @@ class SlotMachineViewController: UIViewController {
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     fileprivate var bizUrl = ""
     
-    fileprivate weak var currentVC: UIViewController?
+    fileprivate weak var currentVC: UIViewController!
     
     static var scrollingImagesVC: MachineViewController!
     static var favoriteTableVC: FavoriteTableViewController!
     static var historyTableVC: HistoryTableViewController!
-    
-    //var urlQueryParameters: YelpUrlQueryParameters?
+    static var resultsVC: ResultsViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,24 +48,40 @@ class SlotMachineViewController: UIViewController {
         SlotMachineViewController.scrollingImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "Machine") as? MachineViewController
         SlotMachineViewController.favoriteTableVC = self.storyboard?.instantiateViewController(withIdentifier: "Favorite") as? FavoriteTableViewController
         SlotMachineViewController.historyTableVC = self.storyboard?.instantiateViewController(withIdentifier: "History") as? HistoryTableViewController
+        SlotMachineViewController.resultsVC = self.storyboard?.instantiateViewController(withIdentifier: "Results") as? ResultsViewController
         
         // Set starting view.
         currentVC = SlotMachineViewController.scrollingImagesVC
-        // Use constraints set by Auto Layout to layout Machine View.
-        currentVC!.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        addChildViewController(currentVC!)
-        //currentVC?.view.frame = viewsContainer.frame
-        self.addSubview(currentVC!.view, toView: viewsContainer)
-        currentVC?.didMove(toParentViewController: self)
-        
+        addViewController(vc: currentVC, to: viewsContainer)
         view.sendSubview(toBack: viewsContainer)
         
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
+    func addViewController(vc: UIViewController, to view: UIView) {
+        // Use constraints set by Auto Layout to layout Machine View.
+        vc.view.translatesAutoresizingMaskIntoConstraints = false
+        addChildViewController(vc)
+        //currentVC?.view.frame = viewsContainer.frame
+        addSubview(vc.view, toView: view)
+        vc.didMove(toParentViewController: self)
+    }
+    
     func afterAnimation() {
         view.sendSubview(toBack: viewsContainer)
+        
+        // Show results.
+        if let vc = SlotMachineViewController.resultsVC {
+            //vc.modalPresentationStyle = .formSheet
+            //vc.preferredContentSize = CGSize(width: 100.0, height: 100.0)
+            /*
+            let popover = vc.popoverPresentationController
+            //popover?.delegate = self
+            popover?.sourceView = self.view
+            popover?.sourceRect = CGRect(x: 0, y: 0, width: view.frame.width * 0.5, height: view.frame.height * 0.5)
+            */
+            self.present(vc, animated: false, completion: nil)
+        }
     }
     
     func getRatingBar(_ rating: Double) {
@@ -78,8 +91,8 @@ class SlotMachineViewController: UIViewController {
     func cycleFromViewController(_ oldViewController: UIViewController, toViewController newViewController: UIViewController) {
         
         oldViewController.willMove(toParentViewController: nil)
-        self.addChildViewController(newViewController)
-        self.addSubview(newViewController.view, toView: viewsContainer)
+        addChildViewController(newViewController)
+        addSubview(newViewController.view, toView: viewsContainer)
         
         newViewController.view.alpha = 0
         newViewController.view.layoutIfNeeded()
@@ -144,7 +157,7 @@ class SlotMachineViewController: UIViewController {
         view.bringSubview(toFront: viewsContainer)
 
         //currentVC?.view.frame = viewsContainer.frame
-        self.addSubview(SlotMachineViewController.scrollingImagesVC!.view, toView: viewsContainer)
+        addSubview(SlotMachineViewController.scrollingImagesVC!.view, toView: viewsContainer)
         
         // Start animation.
         SlotMachineViewController.scrollingImagesVC.startAnimation()
@@ -188,6 +201,9 @@ class SlotMachineViewController: UIViewController {
                 
                 self.bizUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
                 
+                // Get results.
+                SlotMachineViewController.resultsVC.getResults(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, url: self.bizUrl, address: self.bizAddress, coordinate: self.bizCoordinate2D!, totalBiz: totalBiz, randomNo: randomNo)
+                
                 // Params going to pass to Core Data of History Restaurant.
                 self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), url: self.bizUrl)
                 
@@ -195,30 +211,17 @@ class SlotMachineViewController: UIViewController {
                 HistoryDB.addEntry(self.pickedRestaurant!)
                 // Update table view.
                 SlotMachineViewController.historyTableVC?.updateUI()
-                
-                DispatchQueue.main.async(execute: {
-                    
-                    self.bizPicked.text = "\(self.bizName)\nprice: \(self.bizPrice), rating: \(self.bizRating), review count: \(self.bizReviewCount)\ntotal found: \(totalBiz), picked no.: \(randomNo)"
-                    self.pickedBizAddress.text = "\(self.bizAddress)"
-                })
             } else {
-                DispatchQueue.main.async(execute: {
-                    self.bizPicked.text = "No restaurant found"
-                })
+                SlotMachineViewController.resultsVC.getResults(name: nil, price: nil, rating: nil, reviewCount: nil, url: nil, address: nil, coordinate: nil, totalBiz: nil, randomNo: nil)
             }
         }
     }
-    
-    @IBAction func openYelpUrl(_ sender: UIButton) {
-        if let bizUrl = URL(string: self.bizUrl) {
-            UIApplication.shared.openURL(bizUrl)
-        }
-    }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    /*
     fileprivate func alert() {
         
         // Create the alert.
@@ -232,10 +235,10 @@ class SlotMachineViewController: UIViewController {
         // Show the alert.
         self.present(alert, animated: true, completion: nil)
     }
-
+    */
     
     // MARK: - Navigation
-    
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let destinationVC = segue.destination
@@ -257,6 +260,6 @@ class SlotMachineViewController: UIViewController {
             }
         }
     }
-    
+    */
 }
 

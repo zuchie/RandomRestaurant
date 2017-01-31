@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class HistoryTableViewController: CoreDataTableViewController {
     
@@ -62,21 +63,44 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         // Configure the cell...
         if let historyRestaurant = fetchedResultsController?.object(at: indexPath) {
-            var name: String?
-            var isFavorite: Bool?
+            var name: String!
+            var isFavorite: Bool!
+            var url: String!
+            var rating: String!
+            var reviewCount: String!
+            var price: String!
+            var address: String!
+            var coordinate: CLLocationCoordinate2D!
             
             historyRestaurant.managedObjectContext?.performAndWait {
                 name = historyRestaurant.name
                 isFavorite = historyRestaurant.isFavorite?.boolValue
+                url = historyRestaurant.url
             }
             cell.addToFav.isSelected = isFavorite!
             cell.historyLabel.text = name
+            
+            // TODO:
+            /*
+             cell.url = url
+             cell.rating = rating
+             cell.reviewCount = reviewCount
+             cell.price = price
+             cell.address = address
+             cell.coordinate = coordinate
+            */
             
             cell.addToFav.cellText = cell.historyLabel.text
             cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell = tableView.cellForRow(at: indexPath)!
+        
+        // TODO: Load results view.
     }
     
     fileprivate func updateButtonStatus(_ button: UIButton) {
@@ -90,7 +114,7 @@ class HistoryTableViewController: CoreDataTableViewController {
     
     func buttonTapped(_ sender: HistoryCellButton) {
         
-        // Pass to favorite restaurant database.
+        // Update database with isFavorite status change.
         historyRest!.name = sender.cellText
         historyRest!.price = ""
         historyRest!.address = ""
