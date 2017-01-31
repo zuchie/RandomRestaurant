@@ -72,7 +72,7 @@ class SlotMachineViewController: UIViewController {
         
         // Show results.
         if let vc = SlotMachineViewController.resultsVC {
-            //vc.modalPresentationStyle = .formSheet
+            vc.modalPresentationStyle = .popover
             //vc.preferredContentSize = CGSize(width: 100.0, height: 100.0)
             /*
             let popover = vc.popoverPresentationController

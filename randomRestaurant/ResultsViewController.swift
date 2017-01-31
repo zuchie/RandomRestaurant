@@ -42,7 +42,7 @@ class ResultsViewController: UIViewController {
         if let yelpUrl = url {
             UIApplication.shared.openURL(URL(string: yelpUrl)!)
         } else {
-            print("No Yelp URL has been got")
+            alert()
         }
     }
     
@@ -58,11 +58,15 @@ class ResultsViewController: UIViewController {
         }
     }
 
+    // Dismiss view controller.
+    @IBAction func dismiss(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
     fileprivate func alert() {
         
         // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Please push \"Start\" button.", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
         
         // Add an action(button).
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in

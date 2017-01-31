@@ -428,7 +428,7 @@
                         <viewControllerLayoutGuide type="top" id="pZl-3w-XbP"/>
                         <viewControllerLayoutGuide type="bottom" id="C1M-An-ILj"/>
                     </layoutGuides>
-                    <view key="view" alpha="0.69999999999999996" contentMode="scaleToFill" id="s6G-DB-tlO">
+                    <view key="view" contentMode="scaleToFill" id="s6G-DB-tlO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -472,16 +472,30 @@
                                     <constraint firstAttribute="width" secondItem="1Ms-y8-jmP" secondAttribute="height" multiplier="15:8" id="snk-4B-EO7"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKV-tA-91H">
+                                <rect key="frame" x="20" y="538" width="335" height="84"/>
+                                <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="dKV-tA-91H" secondAttribute="height" multiplier="4:1" id="zvb-zZ-n0h"/>
+                                </constraints>
+                                <state key="normal" title="Dismiss"/>
+                                <connections>
+                                    <action selector="dismiss:" destination="jiX-AL-im1" eventType="touchUpInside" id="jdF-SY-bT9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6FP-hc-ygJ" firstAttribute="top" secondItem="TkH-Fs-Whc" secondAttribute="bottom" id="2N0-5c-NRk"/>
                             <constraint firstItem="TkH-Fs-Whc" firstAttribute="leading" secondItem="s6G-DB-tlO" secondAttribute="leading" id="FIp-Bo-XaY"/>
                             <constraint firstItem="6FP-hc-ygJ" firstAttribute="leading" secondItem="s6G-DB-tlO" secondAttribute="leading" id="Phw-zX-UGr"/>
+                            <constraint firstItem="dKV-tA-91H" firstAttribute="top" secondItem="6FP-hc-ygJ" secondAttribute="bottom" constant="20" id="UOn-dL-FzW"/>
+                            <constraint firstAttribute="trailing" secondItem="dKV-tA-91H" secondAttribute="trailing" constant="20" symbolic="YES" id="VhJ-ra-0fK"/>
                             <constraint firstAttribute="trailing" secondItem="6FP-hc-ygJ" secondAttribute="trailing" id="Yvf-wm-NcW"/>
                             <constraint firstItem="TkH-Fs-Whc" firstAttribute="centerY" secondItem="s6G-DB-tlO" secondAttribute="centerY" id="Z0o-Lh-Jrh"/>
                             <constraint firstItem="1Ms-y8-jmP" firstAttribute="leading" secondItem="s6G-DB-tlO" secondAttribute="leading" id="eXn-MH-Eh1"/>
                             <constraint firstAttribute="trailing" secondItem="1Ms-y8-jmP" secondAttribute="trailing" id="jgL-dJ-nkj"/>
+                            <constraint firstItem="dKV-tA-91H" firstAttribute="leading" secondItem="s6G-DB-tlO" secondAttribute="leading" constant="20" symbolic="YES" id="jr2-NN-8x5"/>
                             <constraint firstAttribute="trailing" secondItem="TkH-Fs-Whc" secondAttribute="trailing" id="mjc-di-pxe"/>
                             <constraint firstItem="TkH-Fs-Whc" firstAttribute="top" secondItem="1Ms-y8-jmP" secondAttribute="bottom" id="zCP-sg-Bot"/>
                         </constraints>
