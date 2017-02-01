@@ -107,7 +107,8 @@ class HistoryTableViewController: CoreDataTableViewController {
         // Get results.
         SlotMachineViewController.resultsVC.getResults(name: cell.historyLabel.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
         
-        self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
+        //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
+        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: true)
     }
     
     fileprivate func updateButtonStatus(_ button: UIButton) {

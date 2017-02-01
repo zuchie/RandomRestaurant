@@ -48,7 +48,8 @@ class ResultsViewController: UIViewController {
 
     // Dismiss view controller.
     @IBAction func dismiss(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        //self.dismiss(animated: true, completion: nil)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     fileprivate func alert() {

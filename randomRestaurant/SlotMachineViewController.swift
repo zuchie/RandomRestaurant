@@ -72,7 +72,8 @@ class SlotMachineViewController: UIViewController {
         view.sendSubview(toBack: viewsContainer)
         
         // Show results.
-        self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
+        //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
+        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: true)
     }
     
     func getRatingBar(_ rating: Double) {
