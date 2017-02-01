@@ -68,9 +68,9 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             fetchedResultsController = nil
             print("managedObjectContext is nil")
         }
-        
+        print("here 0")
         favoriteRestaurants.removeAll()
-        
+        print("here 1")
         for obj in fetchedResultsController!.fetchedObjects! {
             let fetchedRestaurant = obj
             let restaurant = Restaurant()
@@ -88,24 +88,31 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             restaurant?.url = fetchedRestaurant.url
             
             favoriteRestaurants.append(restaurant!)
+            print("here 2")
         }
 
+        print("here 3")
         tableView.reloadData()
+        print("here 4")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print("here 10")
         searchActive = true;
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        print("here 11")
         searchActive = false;
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("here 12")
         searchActive = false;
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("here 13")
         searchActive = false;
     }
  
@@ -116,8 +123,10 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         }
         
         if filteredRestaurants.count == 0 {
+            print("here 14")
             searchActive = false
         } else {
+            print("here 15")
             searchActive = true
         }
         
@@ -129,9 +138,13 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if searchActive && searchBar.text != "" {
+        print("search active \(searchActive), searchBar text \(searchBar.text)")
+        if searchBar.text != "" {
+            print("filter row count: \(filteredRestaurants.count)")
             return filteredRestaurants.count
         } else {
+            print("fav row count: \(favoriteRestaurants.count)")
+
             return favoriteRestaurants.count
         }
     }
@@ -139,21 +152,23 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellID = "favorite"
-        
+        print("here 5")
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
-        
+        print("here 6")
         // Configure the cell...
         let restau: Restaurant
         
-        if searchActive && searchBar.text != "" {
+        print("1 search active \(searchActive), searchBar text \(searchBar.text)")
+        if searchBar.text != "" {
+            print("here **")
             restau = filteredRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         } else {
-            
+            print("here ##")
             restau = favoriteRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         }
-
+        print("here 7")
         //print("restau url: \(restau.url), restau category: \(restau.category)")
         cell.url = restau.url
         cell.rating = restau.rating
@@ -162,7 +177,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         cell.address = restau.address
         cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!, restau.longitude!)
         cell.category = restau.category
-        
+        print("here 8")
         return cell
     }
     
@@ -174,7 +189,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         SlotMachineViewController.resultsVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
         
         //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
-        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: true)
+        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
     }
     
     // Override to support editing the table view.
@@ -183,9 +198,21 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         if editingStyle == .delete {
             if let cell = tableView.cellForRow(at: indexPath) {
                 // Remove star from History table cell.
-                print("delete favorite cell: \((cell.textLabel?.text)!)")
-                favoriteRestaurants.remove(at: (indexPath as NSIndexPath).row)
+                //print("delete from favorite and filtered: \((cell.textLabel?.text)!)")
+                // Delete from favorite.
+                for (index, restaurant) in favoriteRestaurants.enumerated() {
+                    if restaurant.name == cell.textLabel?.text {
+                        favoriteRestaurants.remove(at: index)
+                    }
+                }
+                // Delete from filtered.
+                for (index, restaurant) in filteredRestaurants.enumerated() {
+                    if restaurant.name == cell.textLabel?.text {
+                        filteredRestaurants.remove(at: index)
+                    }
+                }
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                // Remove from DB.
                 historyRestaurant!.removeFromFavorites((cell.textLabel?.text)!)
             }
         } else if editingStyle == .insert {
