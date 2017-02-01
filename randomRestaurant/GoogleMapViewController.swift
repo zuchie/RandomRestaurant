@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 
 class GoogleMapViewController: UIViewController {
-        
+    
     fileprivate var location: String?
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     fileprivate var bizName: String?
@@ -99,6 +99,8 @@ class GoogleMapViewController: UIViewController {
     }
     
     override func loadView() {
+        //super.loadView()
+        
         // Create a GMSCameraPosition that tells the map to display the
         // business position at zoom level 12.
         let camera = GMSCameraPosition.camera(withTarget: bizCoordinate2D!, zoom: 10.0)
@@ -108,7 +110,7 @@ class GoogleMapViewController: UIViewController {
 
         mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
-
+        
         view = mapView
         
         // Creates a marker in the center of the map.
@@ -117,16 +119,15 @@ class GoogleMapViewController: UIViewController {
         marker.title = bizName
         marker.snippet = location
         marker.map = mapView
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Add label.
-        let labelWidth: CGFloat = 180.0
-        let labelHeight: CGFloat = 20.0
         let screenBounds = UIScreen.main.bounds
+        let labelWidth: CGFloat = screenBounds.width * 0.5
+        let labelHeight: CGFloat = labelWidth / 9.0
         
         label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
         label.backgroundColor = UIColor.lightGray
@@ -135,21 +136,6 @@ class GoogleMapViewController: UIViewController {
         label.adjustsFontSizeToFitWidth = true
         
         view.addSubview(label)
-        
-        /*
-        // Add button.
-        let buttonSize: CGFloat = 40.0
-        let buttonYPosition: CGFloat = 65.0 // TODO: Don't use hardcoded.
-        button.frame = CGRect(x: screenBounds.width - buttonSize, y: buttonYPosition, width: buttonSize, height: buttonSize)
-        button.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
-        button.showsTouchWhenHighlighted = true
-        button.setTitle("Nav", for: UIControlState())
-        button.setTitleColor(UIColor.darkText, for: UIControlState())
-        
-        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
-        
-        view.addSubview(button)
-        */
     }
     
     // Open Google Maps app for navigation. Need to add "comgooglemaps", and "comgooglemaps-x-callback" into plist "LSApplicationQueriesSchemes" array.
@@ -167,22 +153,6 @@ class GoogleMapViewController: UIViewController {
             NSLog("Can't use comgooglemaps-x-callback:// on this device.");
         }
     }
-    /*
-    func buttonTapped(_ button: UIButton) {
-        let bizLat = bizCoordinate2D?.latitude
-        let bizlng = bizCoordinate2D?.longitude
-        let testURL = URL(string: "comgooglemaps-x-callback://")
-        let app = UIApplication.shared
-        if app.canOpenURL(testURL!) {
-            let directionsRequest = "comgooglemaps-x-callback://" +
-                "?daddr=\(bizLat!),\(bizlng!)" + "&x-success=sourceapp://?resume=true&x-source=AirApp";
-            let directionsURL = URL(string: directionsRequest)
-            UIApplication.shared.openURL(directionsURL!)
-        } else {
-            NSLog("Can't use comgooglemaps-x-callback:// on this device.");
-        }
-    }
-    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

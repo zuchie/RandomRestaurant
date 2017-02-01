@@ -41,7 +41,7 @@ class SlotMachineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("slot machine view did load")
+        //print("slot machine view did load")
         
         print("category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
@@ -73,7 +73,7 @@ class SlotMachineViewController: UIViewController {
         
         // Show results.
         //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
-        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: true)
+        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
     }
     
     func getRatingBar(_ rating: Double) {

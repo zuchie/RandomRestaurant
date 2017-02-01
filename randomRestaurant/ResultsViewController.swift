@@ -49,7 +49,7 @@ class ResultsViewController: UIViewController {
     // Dismiss view controller.
     @IBAction func dismiss(_ sender: UIButton) {
         //self.dismiss(animated: true, completion: nil)
-        _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: false)
     }
     
     fileprivate func alert() {
@@ -63,7 +63,7 @@ class ResultsViewController: UIViewController {
         }))
         
         // Show the alert.
-        self.present(alert, animated: true, completion: nil)
+        self.present(alert, animated: false, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -71,19 +71,14 @@ class ResultsViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        // Hide Navi Bar for Results View.
-        //navigationItem.hidesBackButton = true
-        navigationController?.isNavigationBarHidden = true
-    }
     
     // Restore Navi Bar.
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
         if name == nil {
             bizInfo.text = "No restaurant found"
         } else {
