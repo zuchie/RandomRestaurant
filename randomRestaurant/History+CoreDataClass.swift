@@ -58,5 +58,25 @@ public class History: NSManagedObject {
         
         return nil
     }
-
+    
+    class func countEntityInstances(inManagedObjectContext context: NSManagedObjectContext) -> Int {
+        let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
+        var count: Int?
+        
+        do {
+            try count = context.count(for: request)
+        } catch let error {
+            print("Count for Fetch Request error: \(error)")
+        }
+        
+        return count!
+    }
+    
+    class func deleteFirst(inManagedObjectContext context: NSManagedObjectContext) {
+        let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
+        if let restaurantFound = (try? context.fetch(request))?.first as? History {
+            context.delete(restaurantFound)
+        }
+    }
+    
 }

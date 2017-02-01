@@ -18,6 +18,12 @@ class HistoryDB {
             
             _ = History.history(entry, inManagedObjectContext: self.managedObjectContext!)
             
+            let count = History.countEntityInstances(inManagedObjectContext: self.managedObjectContext!)
+            if count >= 3 {
+                // Delete the first instance.
+                print("Delete first instance")
+                History.deleteFirst(inManagedObjectContext: managedObjectContext!)
+            }
             // Save context to database.
             do {
                 try self.managedObjectContext?.save()
@@ -26,6 +32,8 @@ class HistoryDB {
             }
         }
     }
+    
+    
     
     class func updateEntryState(_ entry: Restaurant) {
         managedObjectContext?.performAndWait {
@@ -41,4 +49,14 @@ class HistoryDB {
             
         }
     }
+    /*
+    class func countFetchRequest() -> Int {
+        var count: Int?
+        managedObjectContext?.performAndWait {
+            
+            count = History.countEntityInstances(inManagedObjectContext: self.managedObjectContext!)
+        }
+        return count!
+    }
+    */
 }
