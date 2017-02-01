@@ -423,7 +423,7 @@
         <!--Our Recommendation-->
         <scene sceneID="ArI-ZP-5Wh">
             <objects>
-                <viewController storyboardIdentifier="Results" id="jiX-AL-im1" customClass="ResultsViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Results" modalTransitionStyle="crossDissolve" id="jiX-AL-im1" customClass="ResultsViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pZl-3w-XbP"/>
                         <viewControllerLayoutGuide type="bottom" id="C1M-An-ILj"/>
