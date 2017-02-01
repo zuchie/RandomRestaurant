@@ -10,8 +10,7 @@ import UIKit
 import GoogleMaps
 
 class GoogleMapViewController: UIViewController {
-    
-    
+        
     fileprivate var location: String?
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     fileprivate var bizName: String?
@@ -20,8 +19,7 @@ class GoogleMapViewController: UIViewController {
     fileprivate var mapView: GMSMapView!
     
     fileprivate var label = UILabel()
-    fileprivate var button = UIButton()
-    
+    //fileprivate var button = UIButton()
     
     func setBizLocation(_ location: String) {
         self.location = location
@@ -138,6 +136,7 @@ class GoogleMapViewController: UIViewController {
         
         view.addSubview(label)
         
+        /*
         // Add button.
         let buttonSize: CGFloat = 40.0
         let buttonYPosition: CGFloat = 65.0 // TODO: Don't use hardcoded.
@@ -150,9 +149,25 @@ class GoogleMapViewController: UIViewController {
         button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
         
         view.addSubview(button)
+        */
     }
     
     // Open Google Maps app for navigation. Need to add "comgooglemaps", and "comgooglemaps-x-callback" into plist "LSApplicationQueriesSchemes" array.
+    @IBAction func StartNavigation(_ sender: UIBarButtonItem) {
+        let bizLat = bizCoordinate2D?.latitude
+        let bizlng = bizCoordinate2D?.longitude
+        let testURL = URL(string: "comgooglemaps-x-callback://")
+        let app = UIApplication.shared
+        if app.canOpenURL(testURL!) {
+            let directionsRequest = "comgooglemaps-x-callback://" +
+                "?daddr=\(bizLat!),\(bizlng!)" + "&x-success=sourceapp://?resume=true&x-source=AirApp";
+            let directionsURL = URL(string: directionsRequest)
+            UIApplication.shared.openURL(directionsURL!)
+        } else {
+            NSLog("Can't use comgooglemaps-x-callback:// on this device.");
+        }
+    }
+    /*
     func buttonTapped(_ button: UIButton) {
         let bizLat = bizCoordinate2D?.latitude
         let bizlng = bizCoordinate2D?.longitude
@@ -167,6 +182,7 @@ class GoogleMapViewController: UIViewController {
             NSLog("Can't use comgooglemaps-x-callback:// on this device.");
         }
     }
+    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

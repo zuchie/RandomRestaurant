@@ -370,7 +370,7 @@
             </objects>
             <point key="canvasLocation" x="3183.5" y="359.5"/>
         </scene>
-        <!--Google Map View Controller-->
+        <!--Map-->
         <scene sceneID="ofu-rG-FBP">
             <objects>
                 <viewController id="dqH-Fl-zN4" customClass="GoogleMapViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
@@ -383,6 +383,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Map" id="crp-nu-wRy">
+                        <barButtonItem key="rightBarButtonItem" title="Navigation" id="t6z-g2-Qf1">
+                            <connections>
+                                <action selector="StartNavigation:" destination="dqH-Fl-zN4" id="RLx-VM-7sx"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tA0-Tj-M8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
