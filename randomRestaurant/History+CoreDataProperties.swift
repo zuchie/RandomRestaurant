@@ -2,7 +2,7 @@
 //  History+CoreDataProperties.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 1/30/17.
+//  Created by Zhe Cui on 1/31/17.
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
@@ -24,5 +24,8 @@ extension History {
     @NSManaged public var rating: String?
     @NSManaged public var reviewCount: String?
     @NSManaged public var url: String?
+    @NSManaged public var latitude: NSNumber?
+    @NSManaged public var longitude: NSNumber?
+    @NSManaged public var category: String?
 
 }

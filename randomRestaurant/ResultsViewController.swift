@@ -22,10 +22,9 @@ class ResultsViewController: UIViewController {
     private var coordinate: CLLocationCoordinate2D?
     private var totalBiz: Int?
     private var randomNo: Int?
-    
-    private let mapVC = GoogleMapViewController()
-    
-    func getResults(name: String?, price: String?, rating: String?, reviewCount: String?, url: String?, address: String?, coordinate: CLLocationCoordinate2D?, totalBiz: Int?, randomNo: Int?) {
+    private var category: String?
+        
+    func getResults(name: String?, price: String?, rating: String?, reviewCount: String?, url: String?, address: String?, coordinate: CLLocationCoordinate2D?, totalBiz: Int?, randomNo: Int?, category: String?) {
 
         self.name = name
         self.price = price
@@ -36,6 +35,7 @@ class ResultsViewController: UIViewController {
         self.coordinate = coordinate
         self.totalBiz = totalBiz
         self.randomNo = randomNo
+        self.category = category
     }
     
     @IBAction func linkToYelp(_ sender: UIButton) {
@@ -43,18 +43,6 @@ class ResultsViewController: UIViewController {
             UIApplication.shared.openURL(URL(string: yelpUrl)!)
         } else {
             alert()
-        }
-    }
-    
-    @IBAction func linkToMap(_ sender: UIButton) {
-        
-        if address == nil || coordinate == nil {
-            alert()
-        } else {
-            mapVC.setBizLocation(address!)
-            mapVC.setBizCoordinate2D(coordinate!)
-            mapVC.setBizName(name!)
-            mapVC.setDepartureTime(YelpUrlQueryParameters.openAt!)
         }
     }
 
@@ -87,7 +75,7 @@ class ResultsViewController: UIViewController {
         if name == nil {
             bizInfo.text = "No restaurant found"
         } else {
-            bizInfo.text = "\(name!)\nprice: \(price!), rating: \(rating!), review count: \(reviewCount!)\ntotal found: \(totalBiz!), picked no.: \(randomNo!), address: \(address!)"
+            bizInfo.text = "\(name!)\nprice: \(price!), rating: \(rating!), review count: \(reviewCount!)\ntotal found: \(totalBiz!), picked no.: \(randomNo!)\naddress: \(address!)\ncategory: \(category!)"
         }
     }
     
@@ -97,14 +85,26 @@ class ResultsViewController: UIViewController {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        let destinationVC = segue.destination
+        
+        if address == nil || coordinate == nil {
+            alert()
+        } else {
+            if let mapVC = destinationVC as? GoogleMapViewController {
+                if let id = segue.identifier, id == "googleMap" {
+                    mapVC.setBizLocation(address!)
+                    mapVC.setBizCoordinate2D(coordinate!)
+                    mapVC.setBizName(name!)
+                    mapVC.setDepartureTime(YelpUrlQueryParameters.openAt!)
+                }
+            }
+        }
     }
-    */
 
 }

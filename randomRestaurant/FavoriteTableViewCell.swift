@@ -1,19 +1,16 @@
 //
-//  HistoryTableViewCell.swift
+//  FavoriteTableViewCell.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 9/20/16.
-//  Copyright © 2016 Zhe Cui. All rights reserved.
+//  Created by Zhe Cui on 1/31/17.
+//  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
 import UIKit
 import CoreLocation
 
-class HistoryTableViewCell: UITableViewCell {
+class FavoriteTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var historyLabel: UILabel!
-    @IBOutlet weak var addToFav: HistoryCellButton!
-    
     var rating: String!
     var reviewCount: String!
     var url: String!
@@ -22,16 +19,9 @@ class HistoryTableViewCell: UITableViewCell {
     var coordinate: CLLocationCoordinate2D!
     var category: String!
     
-    
-    fileprivate let emptyStar = UIImage(named: "emptyStar")
-    fileprivate let filledStar = UIImage(named: "filledStar")
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        addToFav.setImage(emptyStar, for: UIControlState())
-        addToFav.setImage(filledStar, for: .selected)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -39,4 +29,5 @@ class HistoryTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+
 }

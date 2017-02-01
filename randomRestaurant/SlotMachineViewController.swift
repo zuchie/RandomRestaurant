@@ -29,6 +29,7 @@ class SlotMachineViewController: UIViewController {
     fileprivate var bizAddress = ""
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     fileprivate var bizUrl = ""
+    fileprivate var bizCategory = ""
     
     fileprivate weak var currentVC: UIViewController!
     
@@ -71,17 +72,7 @@ class SlotMachineViewController: UIViewController {
         view.sendSubview(toBack: viewsContainer)
         
         // Show results.
-        if let vc = SlotMachineViewController.resultsVC {
-            vc.modalPresentationStyle = .popover
-            //vc.preferredContentSize = CGSize(width: 100.0, height: 100.0)
-            /*
-            let popover = vc.popoverPresentationController
-            //popover?.delegate = self
-            popover?.sourceView = self.view
-            popover?.sourceRect = CGRect(x: 0, y: 0, width: view.frame.width * 0.5, height: view.frame.height * 0.5)
-            */
-            self.present(vc, animated: false, completion: nil)
-        }
+        self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
     }
     
     func getRatingBar(_ rating: Double) {
@@ -201,18 +192,20 @@ class SlotMachineViewController: UIViewController {
                 
                 self.bizUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
                 
+                self.bizCategory = YelpUrlQueryParameters.category!
+                        
                 // Get results.
-                SlotMachineViewController.resultsVC.getResults(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, url: self.bizUrl, address: self.bizAddress, coordinate: self.bizCoordinate2D!, totalBiz: totalBiz, randomNo: randomNo)
+                SlotMachineViewController.resultsVC.getResults(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, url: self.bizUrl, address: self.bizAddress, coordinate: self.bizCoordinate2D!, totalBiz: totalBiz, randomNo: randomNo, category: self.bizCategory)
                 
                 // Params going to pass to Core Data of History Restaurant.
-                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), url: self.bizUrl)
+                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), url: self.bizUrl, latitude: (self.bizCoordinate2D?.latitude)!, longitude: (self.bizCoordinate2D?.longitude)!, category: self.bizCategory)
                 
                 // Update History database.
                 HistoryDB.addEntry(self.pickedRestaurant!)
                 // Update table view.
                 SlotMachineViewController.historyTableVC?.updateUI()
             } else {
-                SlotMachineViewController.resultsVC.getResults(name: nil, price: nil, rating: nil, reviewCount: nil, url: nil, address: nil, coordinate: nil, totalBiz: nil, randomNo: nil)
+                SlotMachineViewController.resultsVC.getResults(name: nil, price: nil, rating: nil, reviewCount: nil, url: nil, address: nil, coordinate: nil, totalBiz: nil, randomNo: nil, category: nil)
             }
         }
     }

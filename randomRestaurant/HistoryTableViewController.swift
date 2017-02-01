@@ -71,24 +71,28 @@ class HistoryTableViewController: CoreDataTableViewController {
             var price: String!
             var address: String!
             var coordinate: CLLocationCoordinate2D!
+            var category: String!
             
             historyRestaurant.managedObjectContext?.performAndWait {
                 name = historyRestaurant.name
                 isFavorite = historyRestaurant.isFavorite?.boolValue
                 url = historyRestaurant.url
+                rating = historyRestaurant.rating
+                reviewCount = historyRestaurant.reviewCount
+                price = historyRestaurant.price
+                address = historyRestaurant.address
+                coordinate = CLLocationCoordinate2DMake((historyRestaurant.latitude?.doubleValue)!, (historyRestaurant.longitude?.doubleValue)!)
+                category = historyRestaurant.category
             }
             cell.addToFav.isSelected = isFavorite!
             cell.historyLabel.text = name
-            
-            // TODO:
-            /*
-             cell.url = url
-             cell.rating = rating
-             cell.reviewCount = reviewCount
-             cell.price = price
-             cell.address = address
-             cell.coordinate = coordinate
-            */
+            cell.url = url
+            cell.rating = rating
+            cell.reviewCount = reviewCount
+            cell.price = price
+            cell.address = address
+            cell.coordinate = coordinate
+            cell.category = category
             
             cell.addToFav.cellText = cell.historyLabel.text
             cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
@@ -98,9 +102,12 @@ class HistoryTableViewController: CoreDataTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCell = tableView.cellForRow(at: indexPath)!
+        let cell = tableView.cellForRow(at: indexPath) as! HistoryTableViewCell
         
-        // TODO: Load results view.
+        // Get results.
+        SlotMachineViewController.resultsVC.getResults(name: cell.historyLabel.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+        
+        self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
     }
     
     fileprivate func updateButtonStatus(_ button: UIButton) {

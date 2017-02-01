@@ -50,7 +50,7 @@ class GetNearbyBusinesses {
     }
 
     // Get value by key and convert value into string or empty string if key doesn't exist.
-    fileprivate var operations: [String: OperationTypes] = [
+    fileprivate var operations: [String : OperationTypes] = [
         "name": OperationTypes.getStrByKey {
             let val = $0[$1] as? String
             return val ?? ""

@@ -18,8 +18,11 @@ class Restaurant {
     var isFavorite: Bool?
     var date: Int?
     var url: String?
+    var latitude: Double?
+    var longitude: Double?
+    var category: String?
     
-    init?(name: String, price: String, rating: String, reviewCount: String, address: String, isFavorite: Bool, date: Int, url: String) {
+    init?(name: String, price: String, rating: String, reviewCount: String, address: String, isFavorite: Bool, date: Int, url: String, latitude: Double, longitude: Double, category: String) {
         self.name = name
         self.price = price
         self.rating = rating
@@ -27,7 +30,10 @@ class Restaurant {
         self.address = address
         self.isFavorite = isFavorite
         self.date = date
-        self.url = url        
+        self.url = url
+        self.latitude = latitude
+        self.longitude = longitude
+        self.category = category
     }
     
     init?() {

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, NSFetchedResultsControllerDelegate {
     
@@ -81,6 +82,10 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             restaurant?.isFavorite = fetchedRestaurant.isFavorite?.boolValue
             restaurant?.reviewCount = fetchedRestaurant.reviewCount
             restaurant?.date = fetchedRestaurant.date?.intValue
+            restaurant?.category = fetchedRestaurant.category
+            restaurant?.latitude = fetchedRestaurant.latitude?.doubleValue
+            restaurant?.longitude = fetchedRestaurant.longitude?.doubleValue
+            restaurant?.url = fetchedRestaurant.url
             
             favoriteRestaurants.append(restaurant!)
         }
@@ -135,7 +140,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         
         let cellID = "favorite"
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
         
         // Configure the cell...
         let restau: Restaurant
@@ -149,7 +154,26 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             cell.textLabel?.text = restau.name
         }
 
+        //print("restau url: \(restau.url), restau category: \(restau.category)")
+        cell.url = restau.url
+        cell.rating = restau.rating
+        cell.reviewCount = restau.reviewCount
+        cell.price = restau.price
+        cell.address = restau.address
+        cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!, restau.longitude!)
+        cell.category = restau.category
+        
         return cell
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! FavoriteTableViewCell
+        
+        // Get results.
+        SlotMachineViewController.resultsVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+        
+        self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
     }
     
     // Override to support editing the table view.

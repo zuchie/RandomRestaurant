@@ -21,6 +21,7 @@
 		B906DBB41D863E0A0021B025 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */; };
 		B916A5171E3C1BF800923032 /* History+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B916A5161E3C1BF800923032 /* History+CoreDataClass.swift */; };
 		B916A5191E401C7E00923032 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B916A5181E401C7E00923032 /* ResultsViewController.swift */; };
+		B916A51B1E41536300923032 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */; };
 		B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8561D4EAC4600B0476E /* AppDelegate.swift */; };
 		B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */; };
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
@@ -58,6 +59,7 @@
 		B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 		B916A5161E3C1BF800923032 /* History+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B916A5181E401C7E00923032 /* ResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
+		B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		B91AC8531D4EAC4600B0476E /* randomRestaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = randomRestaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91AC8561D4EAC4600B0476E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B91AC8581D4EAC4600B0476E /* SlotMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				B9488F101D93AA41000DB973 /* HistoryCellButton.swift */,
 				B9F133AB1DA09BE500708D69 /* Restaurant.swift */,
 				B916A5181E401C7E00923032 /* ResultsViewController.swift */,
+				B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */,
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
 				B982EEBD1DDE9F2D00382EB9 /* GooglePlaceDetails.swift in Sources */,
+				B916A51B1E41536300923032 /* FavoriteTableViewCell.swift in Sources */,
 				B9488F0B1D9137DF000DB973 /* HistoryTableViewCell.swift in Sources */,
 				B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */,
 				B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */,

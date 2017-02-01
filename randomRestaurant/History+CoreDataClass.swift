@@ -34,6 +34,9 @@ public class History: NSManagedObject {
             newRestaurant.isFavorite = restaurant.isFavorite as NSNumber?
             newRestaurant.date = restaurant.date as NSNumber?
             newRestaurant.url = restaurant.url
+            newRestaurant.latitude = restaurant.latitude as NSNumber?
+            newRestaurant.longitude = restaurant.longitude as NSNumber?
+            newRestaurant.category = restaurant.category
             
             return newRestaurant
         }
