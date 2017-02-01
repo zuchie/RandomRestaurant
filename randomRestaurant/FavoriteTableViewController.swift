@@ -14,7 +14,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    fileprivate var searchActive = false
+    //fileprivate var searchActive = false
     
     fileprivate var historyRestaurant: HistoryTableViewController?
     
@@ -68,9 +68,8 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             fetchedResultsController = nil
             print("managedObjectContext is nil")
         }
-        print("here 0")
         favoriteRestaurants.removeAll()
-        print("here 1")
+        
         for obj in fetchedResultsController!.fetchedObjects! {
             let fetchedRestaurant = obj
             let restaurant = Restaurant()
@@ -88,48 +87,38 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
             restaurant?.url = fetchedRestaurant.url
             
             favoriteRestaurants.append(restaurant!)
-            print("here 2")
         }
-
-        print("here 3")
         tableView.reloadData()
-        print("here 4")
     }
-    
+    /*
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("here 10")
         searchActive = true;
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("here 11")
         searchActive = false;
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("here 12")
         searchActive = false;
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("here 13")
         searchActive = false;
     }
- 
+    */
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         filteredRestaurants = favoriteRestaurants.filter { restaurant in
             return restaurant.name!.lowercased().contains(searchText.lowercased())
         }
-        
+        /*
         if filteredRestaurants.count == 0 {
-            print("here 14")
             searchActive = false
         } else {
-            print("here 15")
             searchActive = true
         }
-        
+        */
         tableView.reloadData()
     }
 
@@ -138,13 +127,9 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        print("search active \(searchActive), searchBar text \(searchBar.text)")
         if searchBar.text != "" {
-            print("filter row count: \(filteredRestaurants.count)")
             return filteredRestaurants.count
         } else {
-            print("fav row count: \(favoriteRestaurants.count)")
-
             return favoriteRestaurants.count
         }
     }
@@ -152,23 +137,17 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellID = "favorite"
-        print("here 5")
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
-        print("here 6")
         // Configure the cell...
         let restau: Restaurant
         
-        print("1 search active \(searchActive), searchBar text \(searchBar.text)")
         if searchBar.text != "" {
-            print("here **")
             restau = filteredRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         } else {
-            print("here ##")
             restau = favoriteRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         }
-        print("here 7")
         //print("restau url: \(restau.url), restau category: \(restau.category)")
         cell.url = restau.url
         cell.rating = restau.rating
@@ -177,7 +156,6 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         cell.address = restau.address
         cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!, restau.longitude!)
         cell.category = restau.category
-        print("here 8")
         return cell
     }
     
