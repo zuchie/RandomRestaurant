@@ -74,6 +74,8 @@ public class History: NSManagedObject {
     
     class func deleteFirst(inManagedObjectContext context: NSManagedObjectContext) {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+
         if let restaurantFound = (try? context.fetch(request))?.first as? History {
             context.delete(restaurantFound)
         }
