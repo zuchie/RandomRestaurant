@@ -19,6 +19,8 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        //view.addObserver(self, forKeyPath: "hasChanges", options: .new, context: nil)
+        //print("added observer")
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,7 +28,28 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
         // Dispose of any resources that can be recreated.
     }
 
-    var fetchedResultsController: NSFetchedResultsController<History>? {
+    /*
+    // Add KVO to context.
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        print("context changes has been observed")
+        if keyPath == "hasChanges" && object is NSManagedObjectContext? {
+            // Save uncommitted changes to DB.
+            if let objContext = object as? NSManagedObjectContext {
+                do {
+                    try objContext.save()
+                    print("instance saved")
+                } catch let error {
+                    print("Core data saving error: \(error)")
+                }
+            }
+        }
+        // Deregister observer.
+        view.removeObserver(self, forKeyPath: "hasChanges")
+    }
+    */
+    
+    // Fetch all instances from entity and update Table View.
+    var fetchedResultsController: NSFetchedResultsController<NSManagedObject>? {
         didSet {
             do {
                 if let frc = fetchedResultsController {

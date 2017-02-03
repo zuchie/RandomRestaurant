@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, NSFetchedResultsControllerDelegate {
+class FavoriteTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -29,14 +29,57 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         
         historyRestaurant = SlotMachineViewController.historyTableVC
         //fetchFavoritesFromHistoryDB()
+        //updateUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        fetchFavoritesFromHistoryDB()
+        updateUI()
     }
-
+    
+    // Fetch data from DB and reload table view.
+    fileprivate func updateUI() {
+        if let context = DataBase.managedObjectContext {
+            let request = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            print("updating favorite UI")
+            
+            fetchedResultsController = NSFetchedResultsController(
+                fetchRequest: request,
+                managedObjectContext: context,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            
+        } else {
+            fetchedResultsController = nil
+            print("managedObjectContext is nil")
+        }
+        
+        favoriteRestaurants.removeAll()
+        
+        for obj in fetchedResultsController!.fetchedObjects! {
+            let fetchedRestaurant = obj as! Favorite
+            let restaurant = Restaurant()
+            
+            restaurant?.name = fetchedRestaurant.name
+            restaurant?.price = fetchedRestaurant.price
+            restaurant?.address = fetchedRestaurant.address
+            restaurant?.rating = fetchedRestaurant.rating
+            restaurant?.reviewCount = fetchedRestaurant.reviewCount
+            restaurant?.date = fetchedRestaurant.date?.intValue
+            restaurant?.category = fetchedRestaurant.category
+            restaurant?.latitude = fetchedRestaurant.latitude?.doubleValue
+            restaurant?.longitude = fetchedRestaurant.longitude?.doubleValue
+            restaurant?.url = fetchedRestaurant.url
+            restaurant?.isFavorite = nil
+            
+            favoriteRestaurants.append(restaurant!)
+        }
+        tableView.reloadData()
+    }
+    
     // MARK: Model
-    fileprivate var fetchedResultsController: NSFetchedResultsController<History>? {
+    fileprivate var fetchedResultsController: NSFetchedResultsController<NSManagedObject>? {
         didSet {
             do {
                 if let frc = fetchedResultsController {
@@ -50,8 +93,9 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         }
     }
     
+    /*
     fileprivate func fetchFavoritesFromHistoryDB() {
-        if let context = HistoryDB.managedObjectContext {
+        if let context = DataBase.managedObjectContext {
             
             let request: NSFetchRequest<History> = NSFetchRequest(entityName: "History")
             request.predicate = NSPredicate(format: "isFavorite == YES")
@@ -90,6 +134,7 @@ class FavoriteTableViewController: UITableViewController, UISearchBarDelegate, N
         }
         tableView.reloadData()
     }
+    */
     /*
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true;

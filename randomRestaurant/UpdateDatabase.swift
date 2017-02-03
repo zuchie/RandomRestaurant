@@ -9,54 +9,105 @@
 import UIKit
 import CoreData
 
-class HistoryDB {
+class DataBase {
     
     static var managedObjectContext: NSManagedObjectContext? = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
     
-    class func addEntry(_ entry: Restaurant) {
+    class func add(_ instance: Restaurant, to entity: String) {
         managedObjectContext?.performAndWait {
             
-            _ = History.history(entry, inManagedObjectContext: self.managedObjectContext!)
-            
-            let count = History.countEntityInstances(inManagedObjectContext: self.managedObjectContext!)
-            if count >= 3 {
-                // Delete the first instance.
-                print("Delete first instance")
-                History.deleteFirst(inManagedObjectContext: managedObjectContext!)
+            if entity == "history" {
+                _ = History.addNew(instance, inManagedObjectContext: self.managedObjectContext!)
+                let count = History.countEntityInstances(inManagedObjectContext: self.managedObjectContext!)
+                if count > 30 {
+                    // Delete the first instance.
+                    print("DB to delete first instance")
+                    History.deleteFirst(inManagedObjectContext: managedObjectContext!)
+                }
+            } else if entity == "favorite" {
+                print("DB trying to add instance to favorite entity")
+                 _ = Favorite.addNew(instance, inManagedObjectContext: self.managedObjectContext!)
+            } else {
+                print("Error entity type")
+                return
             }
-            // Save context to database.
-            do {
-                try self.managedObjectContext?.save()
-            } catch let error {
-                print("Core data error: \(error)")
+            
+            print("context has any changes? \(self.managedObjectContext?.hasChanges)")
+            if (self.managedObjectContext?.hasChanges)! {
+                // Save context to database.
+                do {
+                    try self.managedObjectContext?.save()
+                    print("context saved")
+                } catch let error {
+                    print("Core data error: \(error)")
+                }
             }
         }
     }
     
-    
-    
-    class func updateEntryState(_ entry: Restaurant) {
+    class func retrieve(_ instance: Restaurant, in entity: String) -> Restaurant {
+        var found: History?
+        let restaurant = Restaurant()!
         managedObjectContext?.performAndWait {
-            
-            _ = History.updateState(entry, inManagedObjectContext: self.managedObjectContext!)
-            
-            // Save context to database.
-            do {
-                try self.managedObjectContext?.save()
-            } catch let error {
-                print("Core data error: \(error)")
+            if entity == "history" {
+                found = History.retrieve(instance, inManagedObjectContext: self.managedObjectContext!)!
+                print("DB retrieved instance in history entity")
+            }
+        }
+        restaurant.name = found?.name
+        restaurant.address = found?.address
+        restaurant.category = found?.category
+        restaurant.date = found?.date?.intValue
+        restaurant.isFavorite = found?.isFavorite?.boolValue
+        restaurant.latitude = found?.latitude?.doubleValue
+        restaurant.longitude = found?.longitude?.doubleValue
+        restaurant.price = found?.price
+        restaurant.rating = found?.rating
+        restaurant.reviewCount = found?.reviewCount
+        restaurant.url = found?.url
+        
+        return restaurant
+    }
+    
+    class func updateInstanceState(_ instance: Restaurant, in entity: String) {
+        managedObjectContext?.performAndWait {
+            if entity == "history" {
+                _ = History.updateState(instance, inManagedObjectContext: self.managedObjectContext!)
+            } else {
+                print("instance is not History type")
+                return
             }
             
+            print("context has any changes? \(self.managedObjectContext?.hasChanges)")
+            if (self.managedObjectContext?.hasChanges)! {
+                // Save context to database.
+                do {
+                    try self.managedObjectContext?.save()
+                    print("context saved")
+                } catch let error {
+                    print("Core data error: \(error)")
+                }
+            }
         }
     }
-    /*
-    class func countFetchRequest() -> Int {
-        var count: Int?
+    
+    class func delete(_ instance: Restaurant, in entity: String) {
+        print("delete instance")
         managedObjectContext?.performAndWait {
-            
-            count = History.countEntityInstances(inManagedObjectContext: self.managedObjectContext!)
+            if entity == "favorite" {
+                Favorite.delete(instance, inManagedObjectContext: self.managedObjectContext!)
+            }
+            print("context has any changes? \(self.managedObjectContext?.hasChanges)")
+            if (self.managedObjectContext?.hasChanges)! {
+                // Save context to database.
+                do {
+                    try self.managedObjectContext?.save()
+                    print("context saved")
+                } catch let error {
+                    print("Core data error: \(error)")
+                }
+            }
         }
-        return count!
     }
-    */
+
 }

@@ -13,7 +13,7 @@ import CoreLocation
 class HistoryTableViewController: CoreDataTableViewController {
     
     //private var favoriteRestaurant: FavoriteTableViewController?
-    fileprivate var historyRest = Restaurant()
+    fileprivate var favoriteRest = Restaurant()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +25,8 @@ class HistoryTableViewController: CoreDataTableViewController {
     
     // Fetch data from DB and reload table view.
     func updateUI() {
-        if let context = HistoryDB.managedObjectContext {
-            let request: NSFetchRequest<History> = NSFetchRequest(entityName: "History")
+        if let context = DataBase.managedObjectContext {
+            let request = NSFetchRequest<NSManagedObject>(entityName: "History")
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             print("updating history UI")
             
@@ -48,8 +48,10 @@ class HistoryTableViewController: CoreDataTableViewController {
         restaurant!.name = name
         restaurant!.isFavorite = false
         
-        HistoryDB.updateEntryState(restaurant!)
+        DataBase.updateInstanceState(restaurant!, in: "history")
         updateUI()
+        
+        DataBase.delete(restaurant!, in: "favorite")
         
         // Delete from Favorite list.
         //favoriteRestaurant!.removeFromFavorites(restaurant!)
@@ -62,7 +64,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "history", for: indexPath) as! HistoryTableViewCell
         
         // Configure the cell...
-        if let historyRestaurant = fetchedResultsController?.object(at: indexPath) {
+        if let historyRestaurant = fetchedResultsController?.object(at: indexPath) as? History {
             var name: String!
             var isFavorite: Bool!
             var url: String!
@@ -123,29 +125,32 @@ class HistoryTableViewController: CoreDataTableViewController {
     func buttonTapped(_ sender: HistoryCellButton) {
         
         // Update database with isFavorite status change.
-        historyRest!.name = sender.cellText
-        historyRest!.price = ""
-        historyRest!.address = ""
-        historyRest!.rating = ""
-        historyRest!.reviewCount = ""
+        favoriteRest!.name = sender.cellText
+        
+        let found = DataBase.retrieve(favoriteRest!, in: "history")
+        
+        favoriteRest!.price = found.price
+        favoriteRest!.address = found.address
+        favoriteRest!.rating = found.rating
+        favoriteRest!.reviewCount = found.reviewCount
+        favoriteRest!.category = found.category
+        favoriteRest!.date = found.date
+        favoriteRest!.latitude = found.latitude
+        favoriteRest!.longitude = found.longitude
+        favoriteRest!.url = found.url
         
         updateButtonStatus(sender)
+        found.isFavorite = sender.isSelected
         
-        historyRest!.isFavorite = sender.isSelected
-        
-        HistoryDB.updateEntryState(historyRest!)
+        DataBase.updateInstanceState(found, in: "history")
         updateUI()
         
-        /*
         // Update favorite restaurant list and update table view.
-        if historyRest!.isFavorite! {
-            favoriteRestaurant!.addToFavorites(historyRest!)
+        if found.isFavorite! {
+            DataBase.add(favoriteRest!, to: "favorite")
         } else {
-            favoriteRestaurant!.removeFromFavorites(historyRest!)
+            DataBase.delete(favoriteRest!, in: "favorite")
         }
-        
-        favoriteRestaurant!.updateUI()
-        */
     }
 
 }

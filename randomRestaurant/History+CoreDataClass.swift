@@ -6,56 +6,64 @@
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 
 public class History: NSManagedObject {
     // Insert code here to add functionality to your managed object subclass
-    class func history(_ restaurant: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
-        
+    class func addNew(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
-        request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name!)
         
-        if let restaurantFound = (try? context.fetch(request))?.first as? History {
+        if let instanceFound = (try? context.fetch(request))?.first as? History {
+            print("found instance in history entity")
+            return instanceFound
+        } else if let newInstance = NSEntityDescription.insertNewObject(forEntityName: "History", into: context) as? History {
+            print("add new instance to history entity")
             
-            print("found entry in database")
+            newInstance.name = instance.name
+            newInstance.price = instance.price
+            newInstance.rating = instance.rating
+            newInstance.reviewCount = instance.reviewCount
+            newInstance.address = instance.address
+            newInstance.isFavorite = instance.isFavorite as NSNumber?
+            newInstance.date = instance.date as NSNumber?
+            newInstance.url = instance.url
+            newInstance.latitude = instance.latitude as NSNumber?
+            newInstance.longitude = instance.longitude as NSNumber?
+            newInstance.category = instance.category
             
-            return restaurantFound
-        } else if let newRestaurant = NSEntityDescription.insertNewObject(forEntityName: "History", into: context) as? History {
-            
-            print("add new entry to database")
-            
-            newRestaurant.name = restaurant.name
-            newRestaurant.price = restaurant.price
-            newRestaurant.rating = restaurant.rating
-            newRestaurant.reviewCount = restaurant.reviewCount
-            newRestaurant.address = restaurant.address
-            newRestaurant.isFavorite = restaurant.isFavorite as NSNumber?
-            newRestaurant.date = restaurant.date as NSNumber?
-            newRestaurant.url = restaurant.url
-            newRestaurant.latitude = restaurant.latitude as NSNumber?
-            newRestaurant.longitude = restaurant.longitude as NSNumber?
-            newRestaurant.category = restaurant.category
-            
-            return newRestaurant
+            return newInstance
         }
         
         return nil
     }
     
-    class func updateState(_ restaurant: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
+    class func retrieve(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
+        let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
+        request.predicate = NSPredicate(format: "name = %@", instance.name!)
+        
+        if let instanceFound = (try? context.fetch(request))?.first as? History {
+            print("found instance in history entity")
+            return instanceFound
+        } else {
+            print("didn't find instance")
+            return nil
+        }
+    }
+    
+    class func updateState(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
-        request.predicate = NSPredicate(format: "name = %@", restaurant.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name!)
         
-        if let restaurantFound = (try? context.fetch(request))?.first as? History {
-            restaurantFound.isFavorite = restaurant.isFavorite as NSNumber?
-            print("update entry state in database")
+        if let instanceFound = (try? context.fetch(request))?.first as? History {
+            instanceFound.isFavorite = instance.isFavorite as NSNumber?
+            print("update instance state in history entity")
             
-            return restaurantFound
+            return instanceFound
         }
-        
         return nil
     }
     

@@ -41,9 +41,9 @@ class SlotMachineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //print("slot machine view did load")
+        print("slot machine view did load")
         
-        print("category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
+        //print("category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
         // Instantiate View Controllers for all Segments. Their references will be kept when switching among Segments.
         SlotMachineViewController.scrollingImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "Machine") as? MachineViewController
@@ -202,9 +202,9 @@ class SlotMachineViewController: UIViewController {
                 self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), url: self.bizUrl, latitude: (self.bizCoordinate2D?.latitude)!, longitude: (self.bizCoordinate2D?.longitude)!, category: self.bizCategory)
                 
                 // Update History database.
-                HistoryDB.addEntry(self.pickedRestaurant!)
+                DataBase.add(self.pickedRestaurant!, to: "history")
                 // Update table view.
-                SlotMachineViewController.historyTableVC?.updateUI()
+                //SlotMachineViewController.historyTableVC?.updateUI()
             } else {
                 SlotMachineViewController.resultsVC.getResults(name: nil, price: nil, rating: nil, reviewCount: nil, url: nil, address: nil, coordinate: nil, totalBiz: nil, randomNo: nil, category: nil)
             }
