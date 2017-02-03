@@ -66,6 +66,37 @@ class DateViewController: UIViewController {
         setBackgroundImage()
     }
  
+    @IBAction func handleMinuteArmRotation(_ sender: UIPanGestureRecognizer) {
+        let touchPosition = sender.location(in: clockDial)
+        // Move coordinate system from upperleft corner to center.
+        let touchPositionToCenterX = Float(touchPosition.x - clockDial.frame.width / 2)
+        let touchPositionToCenterY = Float(touchPosition.y - clockDial.frame.height / 2)
+        
+        // Get the angles the arms should rotate.
+        // Because arms' origin direction is upright(0 rad), while 0 rad of coordinate system is to the right,
+        // so that 0 rad of coordinate system is actually PI/2 rad of arms; -10 degree of coordinate sys is
+        // actually 80 degree of arms.
+        clockArmMinuteRad = atan2(touchPositionToCenterY, touchPositionToCenterX) + Float(M_PI) / 2
+        // Convert negative rads to positive.
+        if clockArmMinuteRad! < 0 {
+            clockArmMinuteRad! += 2 * Float(M_PI)
+        }
+        
+        // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
+        clockArmMinuteRad = (clockArmMinuteRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+        clockArmHourRad = getClockHourArmAngle(by: clockArmMinuteRad!)
+        
+        print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
+        print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+        
+        // Rotate clock arms.
+        clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
+        
+        setAMPM()
+        setBackgroundImage()
+    }
+    
     private func setAMPM() {
         // When Hour arm passes 12 o'clock, switch AM/PM.
         currentAngle = clockArmHourRad!
@@ -132,6 +163,22 @@ class DateViewController: UIViewController {
         //print("hour rad 2 digits: \(hourRad2Digits)")
         
         return minRad
+    }
+    
+    private func getClockHourArmAngle(by clockMinuteArmAngle: Float) -> Float {
+        let hourToMinuteAngularVelocity: Float = 1.0 / 12.0
+        let PI2Digits = ((Float)(M_PI) * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+        
+        // Angle in 2 * PI.
+        let hourRad = (clockMinuteArmAngle * hourToMinuteAngularVelocity).truncatingRemainder(dividingBy: 2.0 * PI2Digits)
+        
+        //print("min rad: \(clockHourArmAngle * minuteToHourAngularVelocity)")
+        //print("2PI: \(2.0 * (Float)(M_PI))")
+        //print("min rad truncated: \(minRad)")
+        //print("hour rad: \(clockHourArmAngle)")
+        //print("hour rad 2 digits: \(hourRad2Digits)")
+        
+        return hourRad
     }
     
     override func viewDidLoad() {
