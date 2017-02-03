@@ -32,8 +32,8 @@ class DateViewController: UIViewController {
     
     private var isAM: Bool?
     
-    private var currentAngle: Float = 0.0
-    private var previousAngle: Float = 0.0
+    private var currentHourAngle: Float = 0.0
+    private var previousHourAngle: Float = 0.0
     
     @IBAction func handleHourArmRotation(_ sender: UIPanGestureRecognizer) {
         let touchPosition = sender.location(in: clockDial)
@@ -50,20 +50,36 @@ class DateViewController: UIViewController {
         if clockArmHourRad! < 0 {
             clockArmHourRad! += 2 * Float(M_PI)
         }
+        print("previous hr: \(previousHourAngle * (180 / Float(M_PI)))")
+        print("current hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
+
+        let delta = clockArmHourRad! - previousHourAngle
+        print("delta: \(delta * (180 / Float(M_PI)))")
         
-        // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
-        clockArmHourRad = (clockArmHourRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
-        clockArmMinuteRad = getClockMinuteArmAngle(by: clockArmHourRad!)
+        if abs(delta) >= Float(M_PI) / 6.0 {
+            // Rotate clock arms.
+            let quotient = Int(delta.divided(by: Float(M_PI) / 6.0))
+            print("quotient in Float: \(Float(quotient))")
+            clockArmHourRad = previousHourAngle + Float(quotient) * Float(M_PI) / 6.0
+            
+            // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
+            clockArmHourRad = (clockArmHourRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+            //clockArmMinuteRad = getClockMinuteArmAngle(by: clockArmHourRad!)
+            
+            print("===after hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
+            
+            clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+            
+            setAMPM()
+            setBackgroundImage()
+            
+            previousHourAngle = clockArmHourRad!
+            
+            //print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
+            //print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+        }
         
-        print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
-        print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
-        
-        // Rotate clock arms.
-        clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
-        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
-        
-        setAMPM()
-        setBackgroundImage()
+        //clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
     }
  
     @IBAction func handleMinuteArmRotation(_ sender: UIPanGestureRecognizer) {
@@ -99,12 +115,12 @@ class DateViewController: UIViewController {
     
     private func setAMPM() {
         // When Hour arm passes 12 o'clock, switch AM/PM.
-        currentAngle = clockArmHourRad!
-        if abs(currentAngle - previousAngle) > 300 * Float(M_PI) / 180.0 {
+        currentHourAngle = clockArmHourRad!
+        if abs(currentHourAngle - previousHourAngle) > 300 * Float(M_PI) / 180.0 {
             isAM = (isAM! ? false : true)
             amPM.image = isAM! ? UIImage(named: "am") : UIImage(named: "pm")
         }
-        previousAngle = currentAngle
+        previousHourAngle = currentHourAngle
     }
  
     private func setBackgroundImage() {
@@ -199,7 +215,7 @@ class DateViewController: UIViewController {
         }
         
         // Save for setAMPM() use.
-        previousAngle = clockArmHourRad!
+        previousHourAngle = clockArmHourRad!
         
         setBackgroundImage()
         
