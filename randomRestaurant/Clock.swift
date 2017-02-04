@@ -13,18 +13,19 @@ class Clock {
     struct Time {
         var hour: Int?
         var minute: Int?
-        var hourRad: Float?
-        var minuteRad: Float?
-        var isAM: Bool?
+        //var hourRad: Float?
+        //var minuteRad: Float?
+        //var isAM: Bool?
     }
     
     let calendar = Calendar.current
     let date = Date()
     
-    var trueTime = Time()
-    var faceTime = Time()
+    //var trueTime = Time()
+    var clockTime = Time()
     
     init() {
+        /*
         trueTime.hour = calendar.component(.hour, from: date)
         trueTime.minute = calendar.component(.minute, from: date)
         
@@ -40,16 +41,49 @@ class Clock {
         let curDate = dateFormatter.string(from: date)
         
         print("current date: \(curDate)")
+        */
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func getClockDate(from hrRadDelta: Float, and minRadDelta: Float) -> Date {
+        let hrDelta = Int(hrRadDelta * 6.0 / Float(M_PI))
+        let minDelta = Int(minRadDelta * 30.0 / Float(M_PI))
+        
+        print("clockTime hour: \(clockTime.hour!)")
+        print("hour delta: \(hrDelta)")
+        clockTime.hour = clockTime.hour! + hrDelta
+        clockTime.minute = clockTime.minute! + minDelta
+        
+        // Pass 0 instead of 24 to calendar to make it work.
+        if clockTime.hour == 24 {
+            clockTime.hour = 0
+        }
+        if clockTime.hour! < 0 {
+            clockTime.hour = clockTime.hour! + 24
+        }
+        if clockTime.minute == 60 {
+            print("minute round back to 0")
+            clockTime.minute = 0
+        }
+        if clockTime.minute! < 0 {
+            clockTime.minute = clockTime.minute! + 60
+        }
+
+        let clockDate = calendar.date(bySettingHour: clockTime.hour!, minute: clockTime.minute!, second: 0, of: date)
+        
+        print("clockDate: \(clockDate)")
+        return clockDate!
+    }
+    
     // Get current clock arms angle.
-    private func getHourMinuteAnglesAMPM(from hr: Int, _ min: Int) -> (hour: Float, minute: Float, isAM: Bool) {
+    func getHourMinuteAnglesAMPM(from hr: Int, _ min: Int) -> (hour: Float, minute: Float, isAM: Bool) {
         //print("current Hour: Min: \(hour, minute)")
         let minuteArmAngle = Float(min) * Float(M_PI) / 30.0
+        print("==hour: \(hr)")
+
         // Round Hour to less than 12.
         let isAM: Bool
         let myHr: Int
@@ -65,6 +99,7 @@ class Clock {
         return (hourArmAngle, minuteArmAngle, isAM)
     }
     
+    /*
     // Get Hour & Minutes from clock arms angle, angles have to be from 0 to 2PI.
     func getHourMinute(from hourRad: Float, _ minRad: Float, _ isAM: Bool) {
         var hour = Int(hourRad * 6.0 / Float(M_PI))
@@ -75,10 +110,11 @@ class Clock {
             hour += 12
         }
         
-        faceTime.hourRad = hourRad
-        faceTime.minuteRad = minRad
-        faceTime.isAM = isAM
-        faceTime.hour = hour
-        faceTime.minute = min
+        clockTime.hourRad = hourRad
+        clockTime.minuteRad = minRad
+        clockTime.isAM = isAM
+        clockTime.hour = hour
+        clockTime.minute = min
     }
+    */
 }

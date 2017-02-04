@@ -19,6 +19,8 @@ class DateViewController: UIViewController {
     @IBOutlet weak var hourArmBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var minuteArmBottomConstraint: NSLayoutConstraint!
     
+    private let calendar = Calendar.current
+    private let date = Date()
     private let clock = Clock()
     
     private var bgImageName = ""
@@ -27,13 +29,15 @@ class DateViewController: UIViewController {
     private var clockArmHourRad: Float?
     private var clockArmMinuteRad: Float?
     
-    private var currentHour: Int?
-    private var currentMinute: Int?
+    //private var currentHour: Int?
+    //private var currentMinute: Int?
     
     private var isAM: Bool?
     
     private var currentHourAngle: Float = 0.0
     private var previousHourAngle: Float = 0.0
+    private var currentMinuteAngle: Float = 0.0
+    private var previousMinuteAngle: Float = 0.0
     
     @IBAction func handleHourArmRotation(_ sender: UIPanGestureRecognizer) {
         let touchPosition = sender.location(in: clockDial)
@@ -50,27 +54,45 @@ class DateViewController: UIViewController {
         if clockArmHourRad! < 0 {
             clockArmHourRad! += 2 * Float(M_PI)
         }
-        print("previous hr: \(previousHourAngle * (180 / Float(M_PI)))")
-        print("current hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
 
-        let delta = clockArmHourRad! - previousHourAngle
-        print("delta: \(delta * (180 / Float(M_PI)))")
+        var delta = clockArmHourRad! - previousHourAngle
+        //print("delta: \(delta * (180 / Float(M_PI)))")
         
         if abs(delta) >= Float(M_PI) / 6.0 {
+            print("previous hr: \(previousHourAngle * (180 / Float(M_PI)))")
+            print("current hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
+            // Take care when crossing 12'o clock. Angle would be coming from 358 degree to 1 degree.
+            if abs(delta) > (300.0 * Float(M_PI) / 180.0) {
+                if delta < 0 {
+                    delta = delta + 2.0 * Float(M_PI)
+                    print("delta: \(delta * (180 / Float(M_PI)))")
+                } else {
+                    delta = delta - 2.0 * Float(M_PI)
+                }
+            }
             // Rotate clock arms.
             let quotient = Int(delta.divided(by: Float(M_PI) / 6.0))
             print("quotient in Float: \(Float(quotient))")
-            clockArmHourRad = previousHourAngle + Float(quotient) * Float(M_PI) / 6.0
+            let formalizedDelta = Float(quotient) * Float(M_PI) / 6.0
+            //clockArmHourRad = previousHourAngle + Float(quotient) * Float(M_PI) / 6.0
+            let clockDate = clock.getClockDate(from: formalizedDelta, and: 0.0)
             
+            let clockArmRads = clock.getHourMinuteAnglesAMPM(from: calendar.component(.hour, from: clockDate), calendar.component(.minute, from: clockDate))
+            
+            clockArmHourRad = clockArmRads.hour
+            isAM = clockArmRads.isAM
+            
+            print("==isAM: \(isAM)")
             // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
-            clockArmHourRad = (clockArmHourRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+            //clockArmHourRad = (clockArmHourRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
             //clockArmMinuteRad = getClockMinuteArmAngle(by: clockArmHourRad!)
             
-            print("===after hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
+            //print("===after hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
             
-            clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+            //clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+            setClockArms(hourArmRad: clockArmHourRad!, minuteArmRad: nil)
             
-            setAMPM()
+            setAMPM(isAM: isAM!)
             setBackgroundImage()
             
             previousHourAngle = clockArmHourRad!
@@ -83,7 +105,30 @@ class DateViewController: UIViewController {
     }
  
     @IBAction func handleMinuteArmRotation(_ sender: UIPanGestureRecognizer) {
+        /*
+        let velocity = sender.velocity(in: clockDial)
+        let delta = atan2(Float(velocity.y), Float(velocity.x))
+        print("previous minute: \(previousMinuteAngle * (180 / Float(M_PI)))")
+        print("current minute: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+
+        print("delta: \(delta * (180 / Float(M_PI)))")
+
+        clockArmMinuteRad = previousMinuteAngle + delta /*+ Float(M_PI) / 2*/
+        // Convert negative rads to positive.
+        if clockArmMinuteRad! < 0 {
+            clockArmMinuteRad! += 2 * Float(M_PI)
+        }
+        
+        // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
+        clockArmMinuteRad = (clockArmMinuteRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+        print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad! ))
+        
+        previousMinuteAngle = clockArmMinuteRad!
+        */
+        
         let touchPosition = sender.location(in: clockDial)
+
         // Move coordinate system from upperleft corner to center.
         let touchPositionToCenterX = Float(touchPosition.x - clockDial.frame.width / 2)
         let touchPositionToCenterY = Float(touchPosition.y - clockDial.frame.height / 2)
@@ -98,29 +143,52 @@ class DateViewController: UIViewController {
             clockArmMinuteRad! += 2 * Float(M_PI)
         }
         
-        // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
-        clockArmMinuteRad = (clockArmMinuteRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
-        clockArmHourRad = getClockHourArmAngle(by: clockArmMinuteRad!)
+        let delta = clockArmMinuteRad! - previousMinuteAngle
+        //print("delta: \(delta * (180 / Float(M_PI)))")
         
-        print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
-        print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+        if abs(delta) >= Float(M_PI) / 30.0 {
+            // Rotate clock arms.
+            let quotient = Int(delta.divided(by: Float(M_PI) / 30.0))
+            //print("quotient in Float: \(Float(quotient))")
+            clockArmMinuteRad = previousMinuteAngle + Float(quotient) * Float(M_PI) / 30.0
+            
+            // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
+            clockArmMinuteRad = (clockArmMinuteRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+            clockArmHourRad = getClockHourArmAngle(by: clockArmMinuteRad!)
+
+            //clockArmMinuteRad = getClockMinuteArmAngle(by: clockArmHourRad!)
+            
+            //print("===after hr: \(clockArmHourRad! * (180 / Float(M_PI)))")
+            
+            clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
+            clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+
+            //setAMPM(isAM: )
+            setBackgroundImage()
+            
+            previousMinuteAngle = clockArmMinuteRad!
+            
+            //print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
+            //print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
+        }
+
+        // Round to decimal 2 to make inaccurate Float work, otherwise 6:00 could give 6:59.
+        //clockArmMinuteRad = (clockArmMinuteRad! * pow(10.0, 2.0)).rounded() / pow(10.0, 2.0)
+        //clockArmHourRad = getClockHourArmAngle(by: clockArmMinuteRad!)
+        
+        //print("hr Rad: \(clockArmHourRad! * (180 / Float(M_PI)))")
+        //print("min Rad: \(clockArmMinuteRad! * (180 / Float(M_PI)))")
         
         // Rotate clock arms.
-        clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
-        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
+        //clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+        //clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
         
-        setAMPM()
-        setBackgroundImage()
+        //setAMPM()
+        //setBackgroundImage()
     }
     
-    private func setAMPM() {
-        // When Hour arm passes 12 o'clock, switch AM/PM.
-        currentHourAngle = clockArmHourRad!
-        if abs(currentHourAngle - previousHourAngle) > 300 * Float(M_PI) / 180.0 {
-            isAM = (isAM! ? false : true)
-            amPM.image = isAM! ? UIImage(named: "am") : UIImage(named: "pm")
-        }
-        previousHourAngle = currentHourAngle
+    private func setAMPM(isAM: Bool) {
+        amPM.image = isAM ? UIImage(named: "am") : UIImage(named: "pm")
     }
  
     private func setBackgroundImage() {
@@ -202,11 +270,16 @@ class DateViewController: UIViewController {
         
         print("Date category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
-        currentHour = clock.trueTime.hour
-        currentMinute = clock.trueTime.minute
-        clockArmHourRad = clock.trueTime.hourRad
-        clockArmMinuteRad = clock.trueTime.minuteRad
-        isAM = clock.trueTime.isAM
+        clock.clockTime.hour = calendar.component(.hour, from: date)
+        clock.clockTime.minute = calendar.component(.minute, from: date)
+        
+        let clockArmRads = clock.getHourMinuteAnglesAMPM(from: clock.clockTime.hour!, clock.clockTime.minute!)
+        
+        //currentHour = clock.trueTime.hour
+        //currentMinute = clock.trueTime.minute
+        clockArmHourRad = clockArmRads.hour
+        clockArmMinuteRad = clockArmRads.minute
+        isAM = clockArmRads.isAM
         
         if isAM! {
             amPM.image = UIImage(named: "am")
@@ -216,6 +289,7 @@ class DateViewController: UIViewController {
         
         // Save for setAMPM() use.
         previousHourAngle = clockArmHourRad!
+        previousMinuteAngle = clockArmMinuteRad!
         
         setBackgroundImage()
         
@@ -226,11 +300,22 @@ class DateViewController: UIViewController {
         clockArmHour.layer.anchorPoint.y = 1
         hourArmBottomConstraint.constant += clockArmHour.frame.height / 2
         // Rotate.
-        clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
+        //clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
 
         clockArmMinute.layer.anchorPoint.y = 1
         minuteArmBottomConstraint.constant += clockArmMinute.frame.height / 2
-        clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
+        //clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
+        
+        setClockArms(hourArmRad: clockArmHourRad!, minuteArmRad: clockArmMinuteRad!)
+    }
+    
+    fileprivate func setClockArms(hourArmRad: Float?, minuteArmRad: Float?) {
+        if hourArmRad != nil {
+            clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(hourArmRad!))
+        }
+        if minuteArmRad != nil {
+            clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(minuteArmRad!))
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -244,11 +329,11 @@ class DateViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        clock.getHourMinute(from: clockArmHourRad!, clockArmMinuteRad!, isAM!)
+        //clock.getHourMinute(from: clockArmHourRad!, clockArmMinuteRad!, isAM!)
         let calendar = clock.calendar
         let date = clock.date
-        let hour = clock.faceTime.hour!
-        let minute = clock.faceTime.minute!
+        let hour = clock.clockTime.hour!
+        let minute = clock.clockTime.minute!
         print("proposed hourrad, minrad: \(clockArmHourRad!, clockArmMinuteRad!)")
         print("proposed hour, min: \(hour, minute)")
         
