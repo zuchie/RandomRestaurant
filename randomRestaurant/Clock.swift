@@ -52,29 +52,35 @@ class Clock {
         let hrDelta = Int(hrRadDelta * 6.0 / Float(M_PI))
         let minDelta = Int(minRadDelta * 30.0 / Float(M_PI))
         
-        print("clockTime hour: \(clockTime.hour!)")
-        print("hour delta: \(hrDelta)")
+        //print("clockTime hour: \(clockTime.hour!)")
+        //print("hour delta: \(hrDelta)")
         clockTime.hour = clockTime.hour! + hrDelta
         clockTime.minute = clockTime.minute! + minDelta
         
+        if clockTime.minute! >= 60 {
+            //print("minute round back to 0")
+            clockTime.minute = clockTime.minute! - 60
+            clockTime.hour = clockTime.hour! + 1
+        }
+        if clockTime.minute! < 0 {
+            clockTime.minute = clockTime.minute! + 60
+            clockTime.hour = clockTime.hour! - 1
+        }
+        
         // Pass 0 instead of 24 to calendar to make it work.
-        if clockTime.hour == 24 {
-            clockTime.hour = 0
+        if clockTime.hour! >= 24 {
+            clockTime.hour = clockTime.hour! - 24
         }
         if clockTime.hour! < 0 {
             clockTime.hour = clockTime.hour! + 24
         }
-        if clockTime.minute == 60 {
-            print("minute round back to 0")
-            clockTime.minute = 0
-        }
-        if clockTime.minute! < 0 {
-            clockTime.minute = clockTime.minute! + 60
-        }
+
+        print("**clockTime hour: \(clockTime.hour!)")
+        print("**clockTime minute: \(clockTime.minute!)")
 
         let clockDate = calendar.date(bySettingHour: clockTime.hour!, minute: clockTime.minute!, second: 0, of: date)
         
-        print("clockDate: \(clockDate)")
+        //print("clockDate: \(clockDate)")
         return clockDate!
     }
     
@@ -82,7 +88,7 @@ class Clock {
     func getHourMinuteAnglesAMPM(from hr: Int, _ min: Int) -> (hour: Float, minute: Float, isAM: Bool) {
         //print("current Hour: Min: \(hour, minute)")
         let minuteArmAngle = Float(min) * Float(M_PI) / 30.0
-        print("==hour: \(hr)")
+        //print("==hour: \(hr)")
 
         // Round Hour to less than 12.
         let isAM: Bool
