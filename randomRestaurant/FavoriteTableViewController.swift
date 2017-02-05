@@ -20,7 +20,7 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     //fileprivate var filteredRestaurants = [Restaurant]()
     
     fileprivate var favoriteRestaurants = [(category: String, restaurants: [Restaurant])]()
-    fileprivate var filteredRestaurants = [(category: String, restaurants: [Restaurant])]()
+    fileprivate var filteredRestaurants = [Restaurant]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,13 +104,25 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        var result: Bool?
-        filteredRestaurants = favoriteRestaurants.filter { restaurant in
-            for member in restaurant.restaurants {
-                result = member.name!.lowercased().contains(searchText.lowercased())
+        /*
+         filteredRestaurants = favoriteRestaurants.filter { restaurant in
+         for member in restaurant.restaurants {
+         result = member.name!.lowercased().contains(searchText.lowercased())
+         }
+         return result!
+         }
+         */
+        var filtered = [Restaurant]()
+        for member in favoriteRestaurants {
+            for restaurant in member.restaurants {
+                filtered.append(restaurant)
             }
-            return result!
         }
+        
+        filteredRestaurants = filtered.filter { restaurant in
+            return restaurant.name!.lowercased().contains(searchText.lowercased())
+        }
+        
         tableView.reloadData()
     }
 
@@ -119,7 +131,7 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         if searchBar.text != "" {
-            return filteredRestaurants.count
+            return 1
         } else {
             print("number of sections: \(favoriteRestaurants.count)")
             return favoriteRestaurants.count
@@ -129,7 +141,7 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if searchBar.text != "" {
-            return filteredRestaurants[section].restaurants.count
+            return filteredRestaurants.count
         } else {
             return favoriteRestaurants[section].restaurants.count
         }
@@ -137,9 +149,9 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if searchBar.text != "" {
-            if section < filteredRestaurants.count {
-                return filteredRestaurants[section].category.uppercased()
-            }
+        
+            return nil
+        
         } else {
             if section < favoriteRestaurants.count {
                 return favoriteRestaurants[section].category.uppercased()
@@ -156,7 +168,7 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         let restau: Restaurant
         
         if searchBar.text != "" {
-            restau = filteredRestaurants[(indexPath as NSIndexPath).section].restaurants[(indexPath as NSIndexPath).row]
+            restau = filteredRestaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         } else {
             restau = favoriteRestaurants[(indexPath as NSIndexPath).section].restaurants[(indexPath as NSIndexPath).row]
@@ -209,17 +221,17 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
                 }
                 // Delete from filtered.
                 for (index, restaurant) in filteredRestaurants.enumerated() {
-                    for (idx, member) in restaurant.restaurants.enumerated() {
-                        if member.name == cell.textLabel?.text {
-                            filteredRestaurants[index].restaurants.remove(at: idx)
-                        }
-                    }
-                    /*
-                    // Delete section when there is no members in it.
-                    if filteredRestaurants[index].restaurants.count == 0 {
+                    
+                    if restaurant.name == cell.textLabel?.text {
                         filteredRestaurants.remove(at: index)
                     }
-                    */
+                    
+                    /*
+                     // Delete section when there is no members in it.
+                     if filteredRestaurants[index].restaurants.count == 0 {
+                     filteredRestaurants.remove(at: index)
+                     }
+                     */
                 }
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 // Remove from DB.
