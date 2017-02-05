@@ -14,12 +14,13 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    //fileprivate var searchActive = false
-    
     fileprivate var historyRestaurant: HistoryTableViewController?
     
-    fileprivate var favoriteRestaurants = [Restaurant]()
-    fileprivate var filteredRestaurants = [Restaurant]()
+    //fileprivate var favoriteRestaurants = [Restaurant]()
+    //fileprivate var filteredRestaurants = [Restaurant]()
+    
+    fileprivate var favoriteRestaurants = [(category: String, restaurants: [Restaurant])]()
+    fileprivate var filteredRestaurants = [(category: String, restaurants: [Restaurant])]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,6 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         searchBar.delegate = self
         
         historyRestaurant = SlotMachineViewController.historyTableVC
-        //fetchFavoritesFromHistoryDB()
         //updateUI()
     }
     
@@ -39,7 +39,7 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
     // Fetch data from DB and reload table view.
     fileprivate func updateUI() {
         if let context = DataBase.managedObjectContext {
-            let request = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
+            let request = NSFetchRequest<Favorite>(entityName: "Favorite")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
             print("updating favorite UI")
             
@@ -58,7 +58,7 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         favoriteRestaurants.removeAll()
         
         for obj in fetchedResultsController!.fetchedObjects! {
-            let fetchedRestaurant = obj as! Favorite
+            let fetchedRestaurant = obj
             let restaurant = Restaurant()
             
             restaurant?.name = fetchedRestaurant.name
@@ -73,13 +73,23 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
             restaurant?.url = fetchedRestaurant.url
             restaurant?.isFavorite = nil
             
-            favoriteRestaurants.append(restaurant!)
+            var newCategory = true
+            //favoriteRestaurants.append(restaurant!)
+            for (index, member) in favoriteRestaurants.enumerated() {
+                if restaurant?.category == member.category {
+                    newCategory = false
+                    favoriteRestaurants[index].restaurants.append(restaurant!)
+                }
+            }
+            if newCategory {
+                favoriteRestaurants.append((category: (restaurant?.category)!, restaurants: [restaurant!]))
+            }
         }
         tableView.reloadData()
     }
     
     // MARK: Model
-    fileprivate var fetchedResultsController: NSFetchedResultsController<NSManagedObject>? {
+    fileprivate var fetchedResultsController: NSFetchedResultsController<Favorite>? {
         didSet {
             do {
                 if let frc = fetchedResultsController {
@@ -93,90 +103,49 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         }
     }
     
-    /*
-    fileprivate func fetchFavoritesFromHistoryDB() {
-        if let context = DataBase.managedObjectContext {
-            
-            let request: NSFetchRequest<History> = NSFetchRequest(entityName: "History")
-            request.predicate = NSPredicate(format: "isFavorite == YES")
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            print("fetch favorites from DB")
-            
-            fetchedResultsController = NSFetchedResultsController(
-                fetchRequest: request,
-                managedObjectContext: context,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
-        } else {
-            fetchedResultsController = nil
-            print("managedObjectContext is nil")
-        }
-        favoriteRestaurants.removeAll()
-        
-        for obj in fetchedResultsController!.fetchedObjects! {
-            let fetchedRestaurant = obj
-            let restaurant = Restaurant()
-            
-            restaurant?.name = fetchedRestaurant.name
-            restaurant?.price = fetchedRestaurant.price
-            restaurant?.address = fetchedRestaurant.address
-            restaurant?.rating = fetchedRestaurant.rating
-            restaurant?.isFavorite = fetchedRestaurant.isFavorite?.boolValue
-            restaurant?.reviewCount = fetchedRestaurant.reviewCount
-            restaurant?.date = fetchedRestaurant.date?.intValue
-            restaurant?.category = fetchedRestaurant.category
-            restaurant?.latitude = fetchedRestaurant.latitude?.doubleValue
-            restaurant?.longitude = fetchedRestaurant.longitude?.doubleValue
-            restaurant?.url = fetchedRestaurant.url
-            
-            favoriteRestaurants.append(restaurant!)
-        }
-        tableView.reloadData()
-    }
-    */
-    /*
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchActive = true;
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    */
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        var result: Bool?
         filteredRestaurants = favoriteRestaurants.filter { restaurant in
-            return restaurant.name!.lowercased().contains(searchText.lowercased())
+            for member in restaurant.restaurants {
+                result = member.name!.lowercased().contains(searchText.lowercased())
+            }
+            return result!
         }
-        /*
-        if filteredRestaurants.count == 0 {
-            searchActive = false
-        } else {
-            searchActive = true
-        }
-        */
         tableView.reloadData()
     }
 
 
     // MARK: - Table view data source
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         
         if searchBar.text != "" {
             return filteredRestaurants.count
         } else {
+            print("number of sections: \(favoriteRestaurants.count)")
             return favoriteRestaurants.count
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if searchBar.text != "" {
+            return filteredRestaurants[section].restaurants.count
+        } else {
+            return favoriteRestaurants[section].restaurants.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if searchBar.text != "" {
+            if section < filteredRestaurants.count {
+                return filteredRestaurants[section].category.uppercased()
+            }
+        } else {
+            if section < favoriteRestaurants.count {
+                return favoriteRestaurants[section].category.uppercased()
+            }
+        }
+        return nil
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -187,10 +156,10 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         let restau: Restaurant
         
         if searchBar.text != "" {
-            restau = filteredRestaurants[(indexPath as NSIndexPath).row]
+            restau = filteredRestaurants[(indexPath as NSIndexPath).section].restaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         } else {
-            restau = favoriteRestaurants[(indexPath as NSIndexPath).row]
+            restau = favoriteRestaurants[(indexPath as NSIndexPath).section].restaurants[(indexPath as NSIndexPath).row]
             cell.textLabel?.text = restau.name
         }
         //print("restau url: \(restau.url), restau category: \(restau.category)")
@@ -224,15 +193,33 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
                 //print("delete from favorite and filtered: \((cell.textLabel?.text)!)")
                 // Delete from favorite.
                 for (index, restaurant) in favoriteRestaurants.enumerated() {
-                    if restaurant.name == cell.textLabel?.text {
+                    for (idx, member) in restaurant.restaurants.enumerated() {
+                        if member.name == cell.textLabel?.text {
+                            print("remove at: \(indexPath.section, indexPath.row)")
+                            favoriteRestaurants[index].restaurants.remove(at: idx)
+                            print("index: \(index)")
+                        }
+                    }
+                    /*
+                    // Delete section when there is no members in it.
+                    if restaurant.restaurants.count == 0 {
                         favoriteRestaurants.remove(at: index)
                     }
+                    */
                 }
                 // Delete from filtered.
                 for (index, restaurant) in filteredRestaurants.enumerated() {
-                    if restaurant.name == cell.textLabel?.text {
+                    for (idx, member) in restaurant.restaurants.enumerated() {
+                        if member.name == cell.textLabel?.text {
+                            filteredRestaurants[index].restaurants.remove(at: idx)
+                        }
+                    }
+                    /*
+                    // Delete section when there is no members in it.
+                    if filteredRestaurants[index].restaurants.count == 0 {
                         filteredRestaurants.remove(at: index)
                     }
+                    */
                 }
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 // Remove from DB.

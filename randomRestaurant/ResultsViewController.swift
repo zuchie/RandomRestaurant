@@ -77,7 +77,7 @@ class ResultsViewController: UIViewController {
         navigationController?.isNavigationBarHidden = false
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
         if name == nil {
             bizInfo.text = "No restaurant found"
