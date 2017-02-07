@@ -10,51 +10,40 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class FavoriteTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate {
+class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    fileprivate var historyRestaurant: HistoryTableViewController?
-    
-    //fileprivate var favoriteRestaurants = [Restaurant]()
+    //fileprivate var favoriteRestaurants = [(category: String, restaurants: [Restaurant])]()
     //fileprivate var filteredRestaurants = [Restaurant]()
-    
-    fileprivate var favoriteRestaurants = [(category: String, restaurants: [Restaurant])]()
-    fileprivate var filteredRestaurants = [Restaurant]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("favorite view did load")
-
         searchBar.delegate = self
-        
-        historyRestaurant = SlotMachineViewController.historyTableVC
+        initializeFetchedResultsController()
+    }
+    /*
+    override func viewWillAppear(_ animated: Bool) {
         //updateUI()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        updateUI()
-    }
-    
+    */
     // Fetch data from DB and reload table view.
-    fileprivate func updateUI() {
-        if let context = DataBase.managedObjectContext {
-            let request = NSFetchRequest<Favorite>(entityName: "Favorite")
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            print("updating favorite UI")
-            
-            fetchedResultsController = NSFetchedResultsController(
-                fetchRequest: request,
-                managedObjectContext: context,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
-            
-        } else {
-            fetchedResultsController = nil
-            print("managedObjectContext is nil")
-        }
+    fileprivate func initializeFetchedResultsController() {
+        //print("updating favorite UI")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
+        let categorySort = NSSortDescriptor(key: "category", ascending: true)
+        let nameSort = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [categorySort, nameSort]
         
+        let moc = DataBase.managedObjectContext!
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: moc,
+            sectionNameKeyPath: "category",
+            cacheName: nil
+        )
+        
+        /*
         favoriteRestaurants.removeAll()
         
         for obj in fetchedResultsController!.fetchedObjects! {
@@ -74,7 +63,6 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
             restaurant?.isFavorite = nil
             
             var newCategory = true
-            //favoriteRestaurants.append(restaurant!)
             for (index, member) in favoriteRestaurants.enumerated() {
                 if restaurant?.category == member.category {
                     newCategory = false
@@ -85,9 +73,75 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
                 favoriteRestaurants.append((category: (restaurant?.category)!, restaurants: [restaurant!]))
             }
         }
-        tableView.reloadData()
+        */
+        //tableView.reloadData()
     }
     
+    fileprivate func removeFromFavorites(_ name: String) {
+        let restaurant = Restaurant()
+        restaurant!.name = name
+        restaurant!.isFavorite = false
+        
+        DataBase.delete(restaurant!, in: "favorite")
+        DataBase.updateInstanceState(restaurant!, in: "history")
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return fetchedResultsController?.sections?[section].name.uppercased()
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cellID = "favorite"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
+        // Configure the cell...
+        let restau: Favorite
+        
+        restau = fetchedResultsController?.sections?[indexPath.section].objects![indexPath.row] as! Favorite
+        cell.textLabel?.text = restau.name
+        
+        //print("restau url: \(restau.url), restau category: \(restau.category)")
+        cell.url = restau.url
+        cell.rating = restau.rating
+        cell.reviewCount = restau.reviewCount
+        cell.price = restau.price
+        cell.address = restau.address
+        cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!.doubleValue, restau.longitude!.doubleValue)
+        cell.category = restau.category
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! FavoriteTableViewCell
+        
+        // Get results.
+        SlotMachineViewController.resultsVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+        
+        //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
+        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
+    }
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle:  UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            if let cell = tableView.cellForRow(at: indexPath) {
+                //tableView.deleteRows(at: [indexPath], with: .fade)
+                // Remove from DB.
+                removeFromFavorites((cell.textLabel?.text)!)
+            }
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    
+    /*
     // MARK: Model
     fileprivate var fetchedResultsController: NSFetchedResultsController<Favorite>? {
         didSet {
@@ -102,7 +156,8 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
             }
         }
     }
-    
+    */
+    /*
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         /*
          filteredRestaurants = favoriteRestaurants.filter { restaurant in
@@ -125,15 +180,14 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         
         tableView.reloadData()
     }
-
-
+    */
+    /*
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         if searchBar.text != "" {
             return 1
         } else {
-            print("number of sections: \(favoriteRestaurants.count)")
             return favoriteRestaurants.count
         }
     }
@@ -146,7 +200,9 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
             return favoriteRestaurants[section].restaurants.count
         }
     }
+    */
     
+    /*
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if searchBar.text != "" {
         
@@ -185,7 +241,6 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         return cell
     }
     
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! FavoriteTableViewCell
         
@@ -201,23 +256,13 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         
         if editingStyle == .delete {
             if let cell = tableView.cellForRow(at: indexPath) {
-                // Remove star from History table cell.
-                //print("delete from favorite and filtered: \((cell.textLabel?.text)!)")
                 // Delete from favorite.
                 for (index, restaurant) in favoriteRestaurants.enumerated() {
                     for (idx, member) in restaurant.restaurants.enumerated() {
                         if member.name == cell.textLabel?.text {
-                            print("remove at: \(indexPath.section, indexPath.row)")
                             favoriteRestaurants[index].restaurants.remove(at: idx)
-                            print("index: \(index)")
                         }
                     }
-                    /*
-                    // Delete section when there is no members in it.
-                    if restaurant.restaurants.count == 0 {
-                        favoriteRestaurants.remove(at: index)
-                    }
-                    */
                 }
                 // Delete from filtered.
                 for (index, restaurant) in filteredRestaurants.enumerated() {
@@ -225,13 +270,6 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
                     if restaurant.name == cell.textLabel?.text {
                         filteredRestaurants.remove(at: index)
                     }
-                    
-                    /*
-                     // Delete section when there is no members in it.
-                     if filteredRestaurants[index].restaurants.count == 0 {
-                     filteredRestaurants.remove(at: index)
-                     }
-                     */
                 }
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 // Remove from DB.
@@ -247,5 +285,45 @@ class FavoriteTableViewController: UITableViewController, NSFetchedResultsContro
         // Return false if you do not want the specified item to be editable.
         return true
     }
-
+    */
+    /*
+    // MARK: NSFetchedResultsControllerDelegate
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("fav table view begin updates")
+        tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert: tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        print("fav insert section: \(sectionIndex)")
+        case .delete: tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        print("fav delete section: \(sectionIndex)")
+        default: break
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            print("fav insert row \((newIndexPath! as NSIndexPath).row)")
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            print("fav delete row \((indexPath! as NSIndexPath).row)")
+        case .update:
+            tableView.reloadRows(at: [indexPath!], with: .fade)
+            print("fav update row \((indexPath! as NSIndexPath).row)")
+        case .move:
+            print("fav move row \((indexPath! as NSIndexPath).row) to row \((newIndexPath! as NSIndexPath).row)")
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("fav table view end updates")
+        tableView.endUpdates()
+    }
+    */
 }

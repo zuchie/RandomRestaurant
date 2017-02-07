@@ -20,43 +20,38 @@ class HistoryTableViewController: CoreDataTableViewController {
         print("history view did load")
         
         //favoriteRestaurant = SlotMachineViewController.favoriteTableVC
-        updateUI()
+        initializeFetchedResultsController()
     }
     
-    // Fetch data from DB and reload table view.
-    func updateUI() {
-        if let context = DataBase.managedObjectContext {
-            let request = NSFetchRequest<NSManagedObject>(entityName: "History")
-            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-            print("updating history UI")
-            
-            fetchedResultsController = NSFetchedResultsController(
-                fetchRequest: request,
-                managedObjectContext: context,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
-            
-        } else {
-            fetchedResultsController = nil
-            print("managedObjectContext is nil")
-        }
+    // Fetch data from DB..
+    func initializeFetchedResultsController() {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "History")
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        
+        let moc = DataBase.managedObjectContext!
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: moc,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
     }
 
+    /*
     func removeFromFavorites(_ name: String) {
         let restaurant = Restaurant()
         restaurant!.name = name
         restaurant!.isFavorite = false
         
         DataBase.updateInstanceState(restaurant!, in: "history")
-        updateUI()
+        //updateUI()
         
         DataBase.delete(restaurant!, in: "favorite")
         
         // Delete from Favorite list.
         //favoriteRestaurant!.removeFromFavorites(restaurant!)
     }
-    
+    */
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -143,7 +138,7 @@ class HistoryTableViewController: CoreDataTableViewController {
         found.isFavorite = sender.isSelected
         
         DataBase.updateInstanceState(found, in: "history")
-        updateUI()
+        //updateUI()
         
         // Update favorite restaurant list and update table view.
         if found.isFavorite! {

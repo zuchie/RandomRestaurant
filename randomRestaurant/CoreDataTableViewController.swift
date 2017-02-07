@@ -48,17 +48,16 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     }
     */
     
-    // Fetch all instances from entity and update Table View.
-    var fetchedResultsController: NSFetchedResultsController<NSManagedObject>? {
+    // Retrieve the initial data to be displayed, and start monitoring moc for changes.
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>? {
         didSet {
-            do {
-                if let frc = fetchedResultsController {
-                    frc.delegate = self
+            if let frc = fetchedResultsController {
+                frc.delegate = self
+                do {
                     try frc.performFetch()
+                } catch {
+                    print("Failed to initialize FetchedResultsController: \(error)")
                 }
-                tableView.reloadData()
-            } catch let error {
-                print("NSFetchedResultsController.performFetch() failed: \(error)")
             }
         }
     }
@@ -70,7 +69,7 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if let sections = fetchedResultsController?.sections , sections.count > 0 {
+        if let sections = fetchedResultsController?.sections, sections.count > 0 {
             return sections[section].numberOfObjects
         } else {
             return 0
