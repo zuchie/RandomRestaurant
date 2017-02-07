@@ -68,14 +68,12 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if let sections = fetchedResultsController?.sections, sections.count > 0 {
-            return sections[section].numberOfObjects
-        } else {
-            return 0
-        }
+        return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
     }
 
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return fetchedResultsController?.sections?[section].name.uppercased()
+    }
     
     // MARK: NSFetchedResultsControllerDelegate
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

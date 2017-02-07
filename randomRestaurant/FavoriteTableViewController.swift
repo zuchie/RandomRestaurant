@@ -86,9 +86,11 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDeleg
         DataBase.updateInstanceState(restaurant!, in: "history")
     }
     
+    /*
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return fetchedResultsController?.sections?[section].name.uppercased()
     }
+    */
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -126,7 +128,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDeleg
         
         if editingStyle == .delete {
             if let cell = tableView.cellForRow(at: indexPath) {
-                //tableView.deleteRows(at: [indexPath], with: .fade)
                 // Remove from DB.
                 removeFromFavorites((cell.textLabel?.text)!)
             }
@@ -141,22 +142,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDeleg
         return true
     }
     
-    /*
-    // MARK: Model
-    fileprivate var fetchedResultsController: NSFetchedResultsController<Favorite>? {
-        didSet {
-            do {
-                if let frc = fetchedResultsController {
-                    frc.delegate = self
-                    try frc.performFetch()
-                }
-                //tableView.reloadData()
-            } catch let error {
-                print("NSFetchedResultsController.performFetch() failed: \(error)")
-            }
-        }
-    }
-    */
     /*
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         /*
