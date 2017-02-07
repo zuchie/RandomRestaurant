@@ -19,6 +19,7 @@
 		B906DBAE1D8294740021B025 /* MachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBAD1D8294740021B025 /* MachineViewController.swift */; };
 		B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */; };
 		B906DBB41D863E0A0021B025 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */; };
+		B90799771E49A500000A7EF8 /* SearchResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90799761E49A4FF000A7EF8 /* SearchResultsTableViewController.swift */; };
 		B916A5171E3C1BF800923032 /* History+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B916A5161E3C1BF800923032 /* History+CoreDataClass.swift */; };
 		B916A5191E401C7E00923032 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B916A5181E401C7E00923032 /* ResultsViewController.swift */; };
 		B916A51B1E41536300923032 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */; };
@@ -59,6 +60,7 @@
 		B906DBAD1D8294740021B025 /* MachineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachineViewController.swift; sourceTree = "<group>"; };
 		B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		B906DBB31D863E0A0021B025 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
+		B90799761E49A4FF000A7EF8 /* SearchResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsTableViewController.swift; sourceTree = "<group>"; };
 		B916A5161E3C1BF800923032 /* History+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B916A5181E401C7E00923032 /* ResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				B9F133AB1DA09BE500708D69 /* Restaurant.swift */,
 				B916A5181E401C7E00923032 /* ResultsViewController.swift */,
 				B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */,
+				B90799761E49A4FF000A7EF8 /* SearchResultsTableViewController.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */,
 				B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */,
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
+				B90799771E49A500000A7EF8 /* SearchResultsTableViewController.swift in Sources */,
 				B982EEBD1DDE9F2D00382EB9 /* GooglePlaceDetails.swift in Sources */,
 				B916A51B1E41536300923032 /* FavoriteTableViewCell.swift in Sources */,
 				B9488F0B1D9137DF000DB973 /* HistoryTableViewCell.swift in Sources */,
