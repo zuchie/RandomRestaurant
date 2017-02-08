@@ -17,12 +17,10 @@ class SearchResultsTableViewController: UITableViewController {
         }
     }
     
-    //fileprivate var restaurant: Restaurant?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("search results view did load")
+        //print("search results view did load")
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -30,21 +28,6 @@ class SearchResultsTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        print("search results view will appear====")
-        //self.navigationController?.isNavigationBarHidden = true
-        //print("1 self.navigationC: \(self.navigationController)")
-        //SlotMachineViewController.favoriteTableVC.navigationController?.isNavigationBarHidden = true
-        //SlotMachineViewController.segmentedControl.isHidden = true
-
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        print("search results view will disappear====")
-        //self.navigationController?.isNavigationBarHidden = false
-        //SlotMachineViewController.favoriteTableVC.navigationController?.isNavigationBarHidden = false
-        //SlotMachineViewController.segmentedControl.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {

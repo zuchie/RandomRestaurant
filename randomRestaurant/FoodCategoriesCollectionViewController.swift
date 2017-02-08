@@ -27,13 +27,19 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         for categoryName in foodCategoriesName.enumerated() {
             loadFoodCategories(categoryName.element)
         }
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         // Preserve selection between presentations.
         // Only false can make didDeselectItemAt work.
         // When select a different cell, the previously selected cell will be deselected first.
         self.clearsSelectionOnViewWillAppear = false
     }
 
+    // Restore.
+    override func viewWillDisappear(_ animated: Bool) {
+        self.clearsSelectionOnViewWillAppear = true
+    }
     
     func loadFoodCategories(_ name: String) {
         let photo = UIImage(named: name.lowercased())!

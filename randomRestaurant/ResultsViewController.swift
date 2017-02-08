@@ -51,10 +51,8 @@ class ResultsViewController: UIViewController {
     // Dismiss view controller.
     @IBAction func dismiss(_ sender: UIButton) {
         if self.navigationController != nil {
-            print("pop navi")
             _ = self.navigationController?.popViewController(animated: false)
         } else {
-            print("dismiss navi")
             self.dismiss(animated: false, completion: nil)
         }
     }
@@ -80,20 +78,16 @@ class ResultsViewController: UIViewController {
     
     // Restore Navi Bar.
     override func viewWillDisappear(_ animated: Bool) {
-        print("results view will disappear")
         if !isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
-            print("results navi hidden \(navigationController?.isNavigationBarHidden)")
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("results view will appear")
         isNavigationBarHidden = navigationController?.isNavigationBarHidden
 
         if !isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = true
-            print("results navi hidden \(navigationController?.isNavigationBarHidden)")
         }
         if name == nil {
             bizInfo.text = "No restaurant found"

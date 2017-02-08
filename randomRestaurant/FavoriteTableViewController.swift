@@ -21,9 +21,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.clearsSelectionOnViewWillAppear = true
-        //self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
         initializeFetchedResultsController()
         
         searchResultsVC = self.storyboard?.instantiateViewController(withIdentifier: "searchResultsVC") as? SearchResultsTableViewController
@@ -35,21 +32,11 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         definesPresentationContext = true
         
         searchController?.delegate = self
-        //searchController?.searchBar.delegate = self
         
         searchController?.hidesNavigationBarDuringPresentation = false
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        print("fav view will appear")
-        print("fav navi hidden \(navigationController?.isNavigationBarHidden)")
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        print("fav view did disappear")
     }
     
     // Fetch data from DB and reload table view.
@@ -129,8 +116,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     // Method to conform to UISearchResultsUpdating protocol.
     public func updateSearchResults(for searchController: UISearchController) {
-        print("==update search results")
-        
         if let searchText = searchController.searchBar.text {
             let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
@@ -143,8 +128,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
     
+    // Notifications to hide/show navigation bar & segmented titles.
     func willPresentSearchController(_ searchController: UISearchController) {
-        print("****will present search controller")
         favoriteRestaurants.removeAll()
         for obj in (fetchedResultsController?.fetchedObjects)! {
             favoriteRestaurants.append(obj as! Favorite)
@@ -154,7 +139,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        print("****will dismiss search controller")
         navigationController?.isNavigationBarHidden = false
         SlotMachineViewController.segmentedControl.isHidden = false
     }
