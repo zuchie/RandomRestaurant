@@ -75,21 +75,25 @@ class ResultsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-        isNavigationBarHidden = navigationController?.isNavigationBarHidden
     }
     
     // Restore Navi Bar.
     override func viewWillDisappear(_ animated: Bool) {
+        print("results view will disappear")
         if !isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
+            print("results navi hidden \(navigationController?.isNavigationBarHidden)")
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("results view will appear")
+        isNavigationBarHidden = navigationController?.isNavigationBarHidden
+
         if !isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = true
+            print("results navi hidden \(navigationController?.isNavigationBarHidden)")
         }
         if name == nil {
             bizInfo.text = "No restaurant found"

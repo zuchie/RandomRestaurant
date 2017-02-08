@@ -45,6 +45,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
 
     override func viewWillAppear(_ animated: Bool) {
         print("fav view will appear")
+        print("fav navi hidden \(navigationController?.isNavigationBarHidden)")
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -141,23 +142,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         }
         searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
-
-    /*
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("searchbar text did begin editing")
-        navigationController?.isNavigationBarHidden = true
-
-        favoriteRestaurants.removeAll()
-        for obj in (fetchedResultsController?.fetchedObjects)! {
-            favoriteRestaurants.append(obj as! Favorite)
-        }
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("searchbar text did end editing")
-        //navigationController?.isNavigationBarHidden = false
-    }
-    */
     
     func willPresentSearchController(_ searchController: UISearchController) {
         print("****will present search controller")

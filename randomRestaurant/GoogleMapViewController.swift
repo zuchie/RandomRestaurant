@@ -41,6 +41,7 @@ class GoogleMapViewController: UIViewController {
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
+        isNavigationBarHidden = navigationController?.isNavigationBarHidden
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
         }
@@ -141,8 +142,6 @@ class GoogleMapViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.adjustsFontSizeToFitWidth = true
-        
-        isNavigationBarHidden = navigationController?.isNavigationBarHidden
         
         view.addSubview(label)
     }
