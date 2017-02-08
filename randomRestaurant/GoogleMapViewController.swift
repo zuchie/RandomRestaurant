@@ -17,7 +17,8 @@ class GoogleMapViewController: UIViewController {
     fileprivate var departureTime: Int?
     fileprivate var drawRoute = GetDirection()
     fileprivate var mapView: GMSMapView!
-    
+    fileprivate var isNavigationBarHidden: Bool?
+
     fileprivate var label = UILabel()
     //fileprivate var button = UIButton()
     
@@ -40,14 +41,20 @@ class GoogleMapViewController: UIViewController {
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
+        if isNavigationBarHidden! {
+            navigationController?.isNavigationBarHidden = false
+        }
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
     }
-    /*
-    // Deregister observer.
-    override func viewWillDisappear(animated: Bool) {
-        view.removeObserver(self, forKeyPath: "myLocation")
+
+    // Restore navigation bar status.
+    override func viewWillDisappear(_ animated: Bool) {
+        if isNavigationBarHidden! {
+            navigationController?.isNavigationBarHidden = true
+        }
+        //view.removeObserver(self, forKeyPath: "myLocation")
     }
-    */
+
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
@@ -134,6 +141,8 @@ class GoogleMapViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.adjustsFontSizeToFitWidth = true
+        
+        isNavigationBarHidden = navigationController?.isNavigationBarHidden
         
         view.addSubview(label)
     }

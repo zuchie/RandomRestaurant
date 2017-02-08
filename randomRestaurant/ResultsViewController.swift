@@ -23,6 +23,8 @@ class ResultsViewController: UIViewController {
     private var totalBiz: Int?
     private var randomNo: Int?
     private var category: String?
+    
+    fileprivate var isNavigationBarHidden: Bool?
         
     func getResults(name: String?, price: String?, rating: String?, reviewCount: String?, url: String?, address: String?, coordinate: CLLocationCoordinate2D?, totalBiz: Int?, randomNo: Int?, category: String?) {
 
@@ -75,15 +77,20 @@ class ResultsViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        isNavigationBarHidden = navigationController?.isNavigationBarHidden
     }
     
     // Restore Navi Bar.
     override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = false
+        if !isNavigationBarHidden! {
+            navigationController?.isNavigationBarHidden = false
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = true
+        if !isNavigationBarHidden! {
+            navigationController?.isNavigationBarHidden = true
+        }
         if name == nil {
             bizInfo.text = "No restaurant found"
         } else {

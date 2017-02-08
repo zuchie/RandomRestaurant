@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDelegate, UISearchResultsUpdating {
+class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
     
     fileprivate var favoriteRestaurants = [Favorite]()
     fileprivate var filteredRestaurants = [Favorite]()
@@ -34,31 +34,21 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDeleg
         tableView.tableHeaderView = searchController?.searchBar
         definesPresentationContext = true
         
-        searchController?.searchBar.delegate = self
+        searchController?.delegate = self
+        //searchController?.searchBar.delegate = self
         
-        searchController?.hidesNavigationBarDuringPresentation = true
+        searchController?.hidesNavigationBarDuringPresentation = false
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
     }
-    /*
-    func packedSearchController() -> UIViewController {
-        let searchContainer = UISearchContainerViewController(searchController: searchController!)
-        searchContainer.title = NSLocalizedString("Search", comment: "")
-        return searchContainer
-    }
-    */
+
     override func viewWillAppear(_ animated: Bool) {
         print("fav view will appear")
-
-        // Use this VC as covered VC so that SearchResultsVC could use "SlotMachineViewController.favoriteTableVC.navigationController" to present resultsVC.
-        //print("0 self.navigationC: \(self.navigationController)")
-
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         print("fav view did disappear")
-        //definesPresentationContext = false
     }
     
     // Fetch data from DB and reload table view.
@@ -152,12 +142,37 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDeleg
         searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
 
+    /*
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         print("searchbar text did begin editing")
+        navigationController?.isNavigationBarHidden = true
+
         favoriteRestaurants.removeAll()
         for obj in (fetchedResultsController?.fetchedObjects)! {
             favoriteRestaurants.append(obj as! Favorite)
         }
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        print("searchbar text did end editing")
+        //navigationController?.isNavigationBarHidden = false
+    }
+    */
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        print("****will present search controller")
+        favoriteRestaurants.removeAll()
+        for obj in (fetchedResultsController?.fetchedObjects)! {
+            favoriteRestaurants.append(obj as! Favorite)
+        }
+        navigationController?.isNavigationBarHidden = true
+        SlotMachineViewController.segmentedControl.isHidden = true
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        print("****will dismiss search controller")
+        navigationController?.isNavigationBarHidden = false
+        SlotMachineViewController.segmentedControl.isHidden = false
     }
 
 }

@@ -21,6 +21,8 @@ class SlotMachineViewController: UIViewController {
     
     fileprivate var ratingBar = 0.0
     
+    static var segmentedControl = UISegmentedControl()
+    
     fileprivate var bizName = ""
     fileprivate var bizPrice = ""
     fileprivate var bizRating = ""
@@ -101,6 +103,7 @@ class SlotMachineViewController: UIViewController {
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        SlotMachineViewController.segmentedControl = sender
         switch sender.selectedSegmentIndex {
         case 0:
             //let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Machine")

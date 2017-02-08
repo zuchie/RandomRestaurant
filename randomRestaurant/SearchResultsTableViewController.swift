@@ -32,15 +32,19 @@ class SearchResultsTableViewController: UITableViewController {
 
     }
     override func viewWillAppear(_ animated: Bool) {
-        print("search results view will appear")
+        print("search results view will appear====")
         //self.navigationController?.isNavigationBarHidden = true
         //print("1 self.navigationC: \(self.navigationController)")
+        //SlotMachineViewController.favoriteTableVC.navigationController?.isNavigationBarHidden = true
+        //SlotMachineViewController.segmentedControl.isHidden = true
 
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        print("search results view did disappear")
+    override func viewWillDisappear(_ animated: Bool) {
+        print("search results view will disappear====")
         //self.navigationController?.isNavigationBarHidden = false
+        //SlotMachineViewController.favoriteTableVC.navigationController?.isNavigationBarHidden = false
+        //SlotMachineViewController.segmentedControl.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -88,6 +92,7 @@ class SearchResultsTableViewController: UITableViewController {
         
         SlotMachineViewController.resultsVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
  
+        //print("self.navi: \(self.navigationController)")
         //print("perform segue")
         //self.performSegue(withIdentifier: "resultsVC", sender: self)
         

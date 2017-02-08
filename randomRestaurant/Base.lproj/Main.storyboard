@@ -404,7 +404,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tA0-Tj-M8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6014" y="1711"/>
+            <point key="canvasLocation" x="6952.8000000000002" y="1710.4947526236883"/>
         </scene>
         <!--Search Results Table View Controller-->
         <scene sceneID="M5T-lh-5PX">
@@ -429,11 +429,12 @@
                             <outlet property="delegate" destination="cAa-FS-d1x" id="Hds-lE-mjM"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="9du-jR-CPl"/>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R92-pB-1AA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4468" y="1710"/>
+            <point key="canvasLocation" x="5407.1999999999998" y="1710.4947526236883"/>
         </scene>
         <!--Machine View Controller-->
         <scene sceneID="D8j-jt-vlz">
@@ -556,7 +557,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ifW-xX-bQb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5249" y="1711"/>
+            <point key="canvasLocation" x="6188" y="1710.4947526236883"/>
         </scene>
         <!--Favorite Table View Controller-->
         <scene sceneID="DC5-rs-M54">
