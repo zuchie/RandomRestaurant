@@ -17,6 +17,8 @@ class SearchResultsTableViewController: UITableViewController {
         }
     }
     
+    //fileprivate var restaurant: Restaurant?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,13 +29,25 @@ class SearchResultsTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        print("search results view will appear")
+        //self.navigationController?.isNavigationBarHidden = true
+        //print("1 self.navigationC: \(self.navigationController)")
+
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        print("search results view did disappear")
+        //self.navigationController?.isNavigationBarHidden = false
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+ 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -48,7 +62,7 @@ class SearchResultsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellID = "searchResults"
-        tableView.register(FavoriteTableViewCell.self, forCellReuseIdentifier: cellID)
+        //tableView.register(FavoriteTableViewCell.self, forCellReuseIdentifier: cellID)
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
         
@@ -70,14 +84,39 @@ class SearchResultsTableViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath) as! FavoriteTableViewCell
         
         // Get results.
+        //restaurant = Restaurant(name: (cell.textLabel?.text)!, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, address: cell.address, isFavorite: false, date: 0, url: cell.url, latitude: cell.coordinate.latitude, longitude: cell.coordinate.longitude, category: cell.category)
+        
         SlotMachineViewController.resultsVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+ 
+        //print("perform segue")
+        //self.performSegue(withIdentifier: "resultsVC", sender: self)
         
         //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
         //self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
+        //view.addSubview(SlotMachineViewController.resultsVC.view)
         // self.navigationController is nil, have to use favoriteVC's navigationController to present resultsVC.
+        
         SlotMachineViewController.favoriteTableVC.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
+        //print("navi: \(self.navigationController)")
+        //self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
     }
-    
+    /*
+    // Method to conform to UISearchResultsUpdating protocol.
+    public func updateSearchResults(for searchController: UISearchController) {
+        print("==update search results")
+        
+        if let searchText = searchController.searchBar.text {
+            let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            
+            filteredRestaurants = favoriteRestaurants.filter { restaurant in
+                //print("filtered: \(filteredRestaurants)")
+                
+                return restaurant.name!.lowercased().contains(inputText.lowercased())
+            }
+        }
+        //searchResultsVC?.filteredRestaurants = filteredRestaurants
+    }
+    */
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -115,12 +154,17 @@ class SearchResultsTableViewController: UITableViewController {
 
     /*
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if let resultsVC = segue.destination as? ResultsViewController {
+            if let id = segue.identifier, id == "resultsVC" {
+                print("prepare segue")
+                let coordinate = CLLocationCoordinate2DMake((restaurant?.latitude)!, (restaurant?.longitude)!)
+                resultsVC.getResults(name: restaurant?.name, price: restaurant?.price, rating: restaurant?.rating, reviewCount: restaurant?.reviewCount, url: restaurant?.url, address: restaurant?.address, coordinate: coordinate, totalBiz: 0, randomNo: 0, category: restaurant?.category)
+            }
+        }
     }
     */
-
 }

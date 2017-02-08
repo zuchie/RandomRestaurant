@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+class FavoriteTableViewController: CoreDataTableViewController, UISearchBarDelegate, UISearchResultsUpdating {
     
     fileprivate var favoriteRestaurants = [Favorite]()
     fileprivate var filteredRestaurants = [Favorite]()
@@ -22,29 +22,45 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         super.viewDidLoad()
         
         //self.clearsSelectionOnViewWillAppear = true
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        //self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         initializeFetchedResultsController()
         
-        searchResultsVC = SearchResultsTableViewController()
-        searchController = UISearchController(searchResultsController: searchResultsVC)
+        searchResultsVC = self.storyboard?.instantiateViewController(withIdentifier: "searchResultsVC") as? SearchResultsTableViewController
         
+        //searchResultsVC = SearchResultsTableViewController()
+        searchController = UISearchController(searchResultsController: searchResultsVC)
         searchController?.searchResultsUpdater = self
         tableView.tableHeaderView = searchController?.searchBar
+        definesPresentationContext = true
         
         searchController?.searchBar.delegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        print("fav view will appear")
+        
         searchController?.hidesNavigationBarDuringPresentation = true
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
+    }
+    /*
+    func packedSearchController() -> UIViewController {
+        let searchContainer = UISearchContainerViewController(searchController: searchController!)
+        searchContainer.title = NSLocalizedString("Search", comment: "")
+        return searchContainer
+    }
+    */
+    override func viewWillAppear(_ animated: Bool) {
+        print("fav view will appear")
+
         // Use this VC as covered VC so that SearchResultsVC could use "SlotMachineViewController.favoriteTableVC.navigationController" to present resultsVC.
-        definesPresentationContext = true
+        //print("0 self.navigationC: \(self.navigationController)")
+
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        print("fav view did disappear")
+        //definesPresentationContext = false
+    }
+    
     // Fetch data from DB and reload table view.
     fileprivate func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
@@ -135,7 +151,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         }
         searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
-    
+
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         print("searchbar text did begin editing")
         favoriteRestaurants.removeAll()
