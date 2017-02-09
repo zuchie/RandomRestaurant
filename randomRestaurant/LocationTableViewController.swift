@@ -1,41 +1,24 @@
 //
-//  LocationsTableViewController.swift
+//  LocationTableViewController.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 8/21/16.
-//  Copyright © 2016 Zhe Cui. All rights reserved.
+//  Created by Zhe Cui on 2/9/17.
+//  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
 import UIKit
 import GooglePlaces
 import CoreLocation
 
-class LocationsTableViewController: UITableViewController, UISearchBarDelegate, CLLocationManagerDelegate {
+class LocationTableViewController: UITableViewController, CLLocationManagerDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
 
-    // MARK: Properties
-    
-    @IBOutlet weak var locationsTable: UITableView!
-    @IBOutlet weak var inputLocation: UISearchBar!
-    
-    // Used for getting current location coordinates.
+    fileprivate var searchController: UISearchController?
     let locationManager = CLLocationManager()
-    
+    private var currentLocationCoordinations: CLLocationCoordinate2D?
+
     let googlePlaceDetails = GooglePlaceDetails()
     
-    fileprivate var imageView: UIImageView?
-    private var visualEffectView: UIVisualEffectView?
-    
-    fileprivate enum VisualEffect {
-        case blur
-    }
-    
-    // Search radius: 40000 meters(25 mi), return 50 businesses.
-    //var urlQueryParameters = YelpUrlQueryParameters(coordinates: kCLLocationCoordinate2DInvalid, category: "", radius: 40000, limit: 50, openAt: 0)
-    
-    // Locations for locationsTable - 2D array of arrays of type (String, String) tuple.
-    var filteredLocations = [[(name: String, placeID: String)]]()
-    
-    private var currentLocationCoordinations: CLLocationCoordinate2D?
+    var filteredLocations = [[(name: String, placeID: String)](), [(name: String, placeID: String)]()]
     
     // Used for Google Places Autocomplete feature.
     fileprivate var fetcher: GMSAutocompleteFetcher!
@@ -43,27 +26,43 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
     fileprivate enum Locations: Int {
         case current, other
     }
- 
+    
+    fileprivate var imageView: UIImageView?
+    private var visualEffectView: UIVisualEffectView?
+    fileprivate enum VisualEffect {
+        case blur
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Hide Nav bar.
-        //self.navigationController!.setNavigationBarHidden(true, animated: true)
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        // Hide empty cells.
-        locationsTable.tableFooterView = UIView(frame: CGRect.zero)
-        // Keep image aspect and fit instead of streched image by default.
+        // Search controller setup.
+        searchController = UISearchController(searchResultsController: nil)
+        searchController?.searchResultsUpdater = self
+        tableView.tableHeaderView = searchController?.searchBar
+        definesPresentationContext = true
+        
+        searchController?.delegate = self
+        
+        searchController?.hidesNavigationBarDuringPresentation = true
+        searchController?.obscuresBackgroundDuringPresentation = false
+        searchController?.searchBar.searchBarStyle = .default
+        searchController?.searchBar.sizeToFit()
+        
+        // Table view setup.
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        // Set BG image.
         imageView = UIImageView(image: UIImage(named: "globe"))
         imageView?.contentMode = .scaleAspectFit
-        locationsTable.backgroundView = imageView
-
-        locationsTable.isHidden = false
-        locationsTable.isScrollEnabled = true
+        tableView.backgroundView = imageView
         
-        inputLocation.delegate = self
-        
-        filteredLocations[Locations.current.rawValue].append((name: "Current Location", placeID: ""))
-        
+        // Location manager setup.
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
@@ -85,30 +84,17 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         fetcher = GMSAutocompleteFetcher(bounds: bounds, filter: filter)
         fetcher.delegate = self
         
+        filteredLocations[Locations.current.rawValue].append((name: "Current Location", placeID: ""))
+        
         makeVisualEffectView(effect: .blur)
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        // Empty cells.
-        filteredLocations[Locations.other.rawValue].removeAll(keepingCapacity: false)
-        locationsTable.reloadData()
-        
-        // Remove blur effect when there is one.
-        if imageView?.subviews.count != 0 {
-            removeVisualEffectView(visualEffectView!)
-        }
-    }
     
-    // MARK: Memory.
-    
-    // Purge cache when memory is full.
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
         URLCache.shared.removeAllCachedResponses()
     }
-    
-    // MARK: - Core Location.
-    
+
     // Asking for access of user's location.
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
@@ -151,53 +137,51 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         currentLocationCoordinations = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
         
     }
-    
-    // TODO: Add func here when location changes, start updating location again.
-    
-    
-    // MARK: - Search bar.
-    
-    // Feed Searchbar input to Fetcher.
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        fetcher?.sourceTextHasChanged(inputText)
-    }
 
+    // Method to conform to UISearchResultsUpdating protocol.
+    public func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.text {
+            let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            
+            fetcher?.sourceTextHasChanged(inputText)
+        }
+    }
     
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
         return filteredLocations.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
         return filteredLocations[section].count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellID = "LocationTableViewCell"
+        let cellID = "locationCell"
+        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-        cell.textLabel!.text = filteredLocations[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row].name
+
+        // Configure the cell...
+        cell.textLabel!.text = filteredLocations[indexPath.section][indexPath.row].name
+
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCell = tableView.cellForRow(at: indexPath)!
-        
         // Get coordinates of chosen location.
-        if (indexPath as NSIndexPath).section == Locations.current.rawValue {
-             YelpUrlQueryParameters.coordinates = currentLocationCoordinations
+        if indexPath.section == Locations.current.rawValue {
+            YelpUrlQueryParameters.coordinates = currentLocationCoordinations
         } else {
-            let placeID = filteredLocations[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row].placeID
+            let placeID = filteredLocations[indexPath.section][indexPath.row].placeID
             
             googlePlaceDetails.getCoordinates(from: placeID) { coordinates in
                 YelpUrlQueryParameters.coordinates = coordinates
                 print("***coordinates updated")
             }
         }
-        
-        inputLocation.text = selectedCell.textLabel!.text
-        view.endEditing(true) // Hide keyboard.
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -206,9 +190,22 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
         cell.contentView.backgroundColor = UIColor(white: 1, alpha: 0.5)
     }
     
+    // Notifications to blur/clear BG image.
+    func willPresentSearchController(_ searchController: UISearchController) {
+        // Blur background image if it hasn't done so.
+        if imageView?.subviews.count == 0 {
+            addVisualEffectView(effect: .blur, to: imageView!)
+        }
+    }
     
+    func willDismissSearchController(_ searchController: UISearchController) {
+        // Remove blur effect when there is any.
+        if imageView?.subviews.count != 0 {
+            removeVisualEffectView(visualEffectView!)
+        }
+    }
+
     // MARK: Visual Effect View.
-    
     private func makeVisualEffectView(effect: VisualEffect) {
         switch effect {
         case .blur:
@@ -228,48 +225,55 @@ class LocationsTableViewController: UITableViewController, UISearchBarDelegate, 
     private func removeVisualEffectView(_ view: UIVisualEffectView) {
         view.removeFromSuperview()
     }
-    
-    
+
     /*
-    // MARK: - Alert.
-    
-    fileprivate func alert() {
-        // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "Loading current location...", preferredStyle: UIAlertControllerStyle.alert)
-        
-        // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
-        }))
-        
-        // Show the alert.
-        self.present(alert, animated: true, completion: nil)
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
     }
     */
-    
+
+    /*
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }    
+    }
+    */
+
+    /*
+    // Override to support rearranging the table view.
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+
+    }
+    */
+
+    /*
+    // Override to support conditional rearranging of the table view.
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the item to be re-orderable.
+        return true
+    }
+    */
+
     /*
     // MARK: - Navigation
-    
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var destinationVC = segue.destination
-        if let navCtrl = destinationVC as? UINavigationController {
-            destinationVC = navCtrl.visibleViewController ?? destinationVC
-        }
-        
-        if let foodCategoriesVC = destinationVC as? FoodCategoriesViewController {
-            if let id = segue.identifier {
-                if id == "foodCategories" {
-                    urlQueryParameters?.coordinates = coordinates
-                    print("coordinates: \(urlQueryParameters?.coordinates)")
-                    foodCategoriesVC.setYelpUrlQueryParameters(urlQueryParameters!)
-                }
-            }
-        }
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
     }
     */
 }
 
 // Google Places autocomplete.
-extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
+extension LocationTableViewController: GMSAutocompleteFetcherDelegate {
     /**
      * Called when an autocomplete request returns an error.
      * @param error the error that was received.
@@ -277,7 +281,7 @@ extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
     public func didFailAutocompleteWithError(_ error: Error) {
         print("autocomplete error: \(error.localizedDescription)")
     }
-
+    
     // Google Places autocomplete.
     func didAutocomplete(with predictions: [GMSAutocompletePrediction]) {
         // Clear previously appended places.
@@ -288,11 +292,6 @@ extension LocationsTableViewController: GMSAutocompleteFetcherDelegate {
             let resultsStr = prediction.attributedFullText.string
             filteredLocations[Locations.other.rawValue].append((name: resultsStr, placeID: placeID!))
         }
-        // Blur background image when it hasn't been done & Update table.
-        if imageView?.subviews.count == 0 {
-            addVisualEffectView(effect: .blur, to: imageView!)
-        }
-        locationsTable.reloadData()
+        tableView.reloadData()
     }
 }
-

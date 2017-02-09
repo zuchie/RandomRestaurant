@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pdi-8i-KGA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Tv0-K5-l11">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -16,7 +16,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -77,7 +77,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f5h-yq-hNL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3901.5999999999999" y="358.4707646176912"/>
+            <point key="canvasLocation" x="4840.8000000000002" y="358.4707646176912"/>
         </scene>
         <!--When to eat?-->
         <scene sceneID="0Km-Qz-qbG">
@@ -178,7 +178,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="4584.8000000000002" y="354.87256371814095"/>
+            <point key="canvasLocation" x="5524" y="354.87256371814095"/>
         </scene>
         <!--What's the rating?-->
         <scene sceneID="oRf-90-amh">
@@ -258,7 +258,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZET-NZ-dcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5248.8000000000002" y="358.4707646176912"/>
+            <point key="canvasLocation" x="6188" y="358.4707646176912"/>
         </scene>
         <!--Pick A Restaurant-->
         <scene sceneID="tne-QT-ifu">
@@ -325,59 +325,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5927.1999999999998" y="349.47526236881561"/>
-        </scene>
-        <!--Where to eat?-->
-        <scene sceneID="C3e-TK-HNr">
-            <objects>
-                <tableViewController id="6BY-rH-MSK" customClass="LocationsTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="NbT-Du-No7">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="1Vz-eV-DRP">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </searchBar>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="LocationTableViewCell" textLabel="fn9-qh-Twu" style="IBUITableViewCellStyleDefault" id="0U0-lH-xuv">
-                                <rect key="frame" x="0.0" y="72" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0U0-lH-xuv" id="wAF-lt-Nne">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fn9-qh-Twu">
-                                            <rect key="frame" x="15" y="0.0" width="345" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="0l4-Wv-HR4" kind="show" id="jKw-Q0-ekG"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="6BY-rH-MSK" id="atk-0J-MTe"/>
-                            <outlet property="delegate" destination="6BY-rH-MSK" id="yaP-wE-rO9"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Where to eat?" id="jKj-Xl-gKT">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="CfQ-yP-5qD"/>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="inputLocation" destination="1Vz-eV-DRP" id="hiy-Xa-b3B"/>
-                        <outlet property="locationsTable" destination="NbT-Du-No7" id="TrV-aW-AYN"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="r1I-t8-A4x" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3183.5" y="359.5"/>
+            <point key="canvasLocation" x="6866.3999999999996" y="349.47526236881561"/>
         </scene>
         <!--Map-->
         <scene sceneID="ofu-rG-FBP">
@@ -499,7 +447,7 @@
                                 <rect key="frame" x="0.0" y="395" width="375" height="94"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VMh-kt-lfV">
-                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="94"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="188" height="94"/>
                                         <color key="backgroundColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Yelp"/>
                                         <connections>
@@ -507,7 +455,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RoK-eD-bWL">
-                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="94"/>
+                                        <rect key="frame" x="188" y="0.0" width="187" height="94"/>
                                         <color key="backgroundColor" red="0.1423353235" green="0.51616383990000003" blue="0.90085078529999996" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Map"/>
                                         <connections>
@@ -520,7 +468,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKV-tA-91H">
-                                <rect key="frame" x="20" y="497" width="335" height="83.5"/>
+                                <rect key="frame" x="20" y="497" width="335" height="84"/>
                                 <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="dKV-tA-91H" secondAttribute="height" multiplier="4:1" id="zvb-zZ-n0h"/>
@@ -642,23 +590,57 @@
             </objects>
             <point key="canvasLocation" x="6590" y="1029"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="ja7-Zq-5vm">
+        <!--Where to eat?-->
+        <scene sceneID="dh3-qc-2aV">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pdi-8i-KGA" sceneMemberID="viewController">
+                <tableViewController id="oZz-iw-vUY" customClass="LocationTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Xg7-xp-YfK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="locationCell" id="4iK-VR-ynm">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4iK-VR-ynm" id="PVO-AK-ls0">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="0l4-Wv-HR4" kind="show" id="7wn-LJ-OAc"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="oZz-iw-vUY" id="smH-XU-dT6"/>
+                            <outlet property="delegate" destination="oZz-iw-vUY" id="k0y-QY-BXB"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Where to eat?" id="eW7-KY-pt1">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="ZAZ-w1-xhH"/>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JOd-2D-Qe0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4116" y="359.37031484257875"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="sfX-VA-A64">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tv0-K5-l11" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="yig-np-s8Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jFQ-Co-jc6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="6BY-rH-MSK" kind="relationship" relationship="rootViewController" id="aF5-hN-Ldv"/>
+                        <segue destination="oZz-iw-vUY" kind="relationship" relationship="rootViewController" id="Jhu-OV-HIY"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bIa-vt-aBn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IDX-ZZ-9v5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2478" y="359"/>
+            <point key="canvasLocation" x="3176.8000000000002" y="359.37031484257875"/>
         </scene>
     </scenes>
     <resources>
