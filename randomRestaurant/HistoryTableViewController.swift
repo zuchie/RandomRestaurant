@@ -37,21 +37,11 @@ class HistoryTableViewController: CoreDataTableViewController {
         )
     }
 
-    /*
-    func removeFromFavorites(_ name: String) {
-        let restaurant = Restaurant()
-        restaurant!.name = name
-        restaurant!.isFavorite = false
-        
-        DataBase.updateInstanceState(restaurant!, in: "history")
-        //updateUI()
-        
-        DataBase.delete(restaurant!, in: "favorite")
-        
-        // Delete from Favorite list.
-        //favoriteRestaurant!.removeFromFavorites(restaurant!)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        navigationController?.navigationBar.topItem?.title = "History"
     }
-    */
+    
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         

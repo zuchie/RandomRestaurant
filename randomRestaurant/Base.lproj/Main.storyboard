@@ -16,7 +16,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -499,7 +499,7 @@
                                 <rect key="frame" x="0.0" y="395" width="375" height="94"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VMh-kt-lfV">
-                                        <rect key="frame" x="0.0" y="0.0" width="188" height="94"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="94"/>
                                         <color key="backgroundColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Yelp"/>
                                         <connections>
@@ -507,7 +507,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RoK-eD-bWL">
-                                        <rect key="frame" x="188" y="0.0" width="187" height="94"/>
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="94"/>
                                         <color key="backgroundColor" red="0.1423353235" green="0.51616383990000003" blue="0.90085078529999996" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Map"/>
                                         <connections>
@@ -520,7 +520,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKV-tA-91H">
-                                <rect key="frame" x="20" y="497" width="335" height="84"/>
+                                <rect key="frame" x="20" y="497" width="335" height="83.5"/>
                                 <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="dKV-tA-91H" secondAttribute="height" multiplier="4:1" id="zvb-zZ-n0h"/>
@@ -647,7 +647,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pdi-8i-KGA" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yig-np-s8Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="yig-np-s8Q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

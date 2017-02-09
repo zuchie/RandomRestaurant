@@ -23,6 +23,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         
         initializeFetchedResultsController()
         
+        //self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
         searchResultsVC = self.storyboard?.instantiateViewController(withIdentifier: "searchResultsVC") as? SearchResultsTableViewController
         
         //searchResultsVC = SearchResultsTableViewController()
@@ -37,6 +39,11 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        navigationController?.navigationBar.topItem?.title = "Favorite"
     }
 
     // Fetch data from DB and reload table view.
@@ -82,6 +89,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         cell.address = restau.address
         cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!.doubleValue, restau.longitude!.doubleValue)
         cell.category = restau.category
+        
         return cell
     }
     

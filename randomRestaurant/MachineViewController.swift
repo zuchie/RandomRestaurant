@@ -47,6 +47,11 @@ class MachineViewController: UIViewController {
         animation.startAnimating()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        navigationController?.navigationBar.topItem?.title = "Pick a restaurant"
+    }
+    
     /*
     override func viewDidAppear(_ animated: Bool) {
      
