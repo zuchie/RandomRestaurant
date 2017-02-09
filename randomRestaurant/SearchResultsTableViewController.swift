@@ -64,6 +64,9 @@ class SearchResultsTableViewController: UITableViewController {
         cell.coordinate = CLLocationCoordinate2DMake(restaurant.latitude!.doubleValue, restaurant.longitude!.doubleValue)
         cell.category = restaurant.category
         
+        // No swipe to delete and its sign for the cell.
+        cell.accessoryView = nil
+        
         return cell
     }
     
