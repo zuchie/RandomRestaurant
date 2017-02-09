@@ -38,7 +38,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
     }
-    
+
     // Fetch data from DB and reload table view.
     fileprivate func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
@@ -106,6 +106,13 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
+    }
+    
+    // Customize section header, make sure all the headers are rendered when they are inserted.
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = UIColor.lightGray
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = UIColor.white
     }
     
     // Override to support conditional editing of the table view.
