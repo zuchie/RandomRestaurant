@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
-		B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB821D6990A60021B025 /* LocationsTableViewController.swift */; };
 		B906DB891D6AD0530021B025 /* GetNearbyBusinesses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */; };
 		B906DB991D6C3DBC0021B025 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DB981D6C3DBC0021B025 /* FoodCategories.swift */; };
 		B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */; };
@@ -50,7 +49,6 @@
 		A5CEEFFD83C11D5C4928E23A /* Pods-randomRestaurant.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-randomRestaurant.release.xcconfig"; path = "Pods/Target Support Files/Pods-randomRestaurant/Pods-randomRestaurant.release.xcconfig"; sourceTree = "<group>"; };
 		B253D8D0E02E0864ACF7B4A8 /* Pods-randomRestaurant.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-randomRestaurant.debug.xcconfig"; path = "Pods/Target Support Files/Pods-randomRestaurant/Pods-randomRestaurant.debug.xcconfig"; sourceTree = "<group>"; };
 		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
-		B906DB821D6990A60021B025 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
 		B906DB881D6AD0530021B025 /* GetNearbyBusinesses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetNearbyBusinesses.swift; sourceTree = "<group>"; };
 		B906DB981D6C3DBC0021B025 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
 		B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlQueryParameters.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		B906DB7F1D698E630021B025 /* Locations */ = {
 			isa = PBXGroup;
 			children = (
-				B906DB821D6990A60021B025 /* LocationsTableViewController.swift */,
 				B982EEBC1DDE9F2D00382EB9 /* GooglePlaceDetails.swift */,
 				B907997A1E4C60E9000A7EF8 /* LocationTableViewController.swift */,
 			);
@@ -363,7 +360,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9F133AC1DA09BE500708D69 /* Restaurant.swift in Sources */,
-				B906DB831D6990A60021B025 /* LocationsTableViewController.swift in Sources */,
 				B91AC8591D4EAC4600B0476E /* SlotMachineViewController.swift in Sources */,
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
 				B90799771E49A500000A7EF8 /* SearchResultsTableViewController.swift in Sources */,
