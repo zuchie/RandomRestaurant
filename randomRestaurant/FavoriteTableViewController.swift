@@ -43,7 +43,19 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
+        
+        // Enable rightBarButton when there is some cells in table.
         navigationController?.navigationBar.topItem?.title = "Favorite"
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = editButtonItem
+        if tableView.numberOfSections != 0 {
+            navigationController?.navigationBar.topItem?.rightBarButtonItem?.isEnabled = true
+        } else {
+            navigationController?.navigationBar.topItem?.rightBarButtonItem?.isEnabled = false
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = nil
     }
 
     // Fetch data from DB and reload table view.
@@ -113,6 +125,10 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             }
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+        // Disable rightBarButton when there isn't any cells left in table.
+        if tableView.numberOfSections == 0 {
+            navigationController?.navigationBar.topItem?.rightBarButtonItem?.isEnabled = false
         }
     }
     

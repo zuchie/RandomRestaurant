@@ -22,10 +22,6 @@ class FavoriteTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        let imageView = UIImageView()
-        imageView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 10.0, height: 10.0))
-        imageView.image = UIImage(named: "leftArrow")
-        accessoryView = imageView
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
