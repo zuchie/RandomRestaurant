@@ -16,7 +16,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -241,7 +241,7 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="AmP-7y-wdY"/>
                         <barButtonItem key="rightBarButtonItem" title="Next &gt;" id="IOq-mL-h8d">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" identifier="slotMachine" id="YmZ-fa-QkO"/>
+                                <segue destination="Po6-ip-XoN" kind="show" identifier="slotMachine" id="D6c-Xc-Ydj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -273,7 +273,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iqt-jy-E0a">
-                                <rect key="frame" x="0.0" y="64" width="375" height="29"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="iqt-jy-E0a" secondAttribute="height" multiplier="375:28" id="bGM-4b-EDg"/>
                                 </constraints>
@@ -287,7 +287,7 @@
                                 </connections>
                             </segmentedControl>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KuC-ft-5iz">
-                                <rect key="frame" x="0.0" y="92" width="375" height="575"/>
+                                <rect key="frame" x="0.0" y="48" width="375" height="619"/>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HyB-Jj-k9x">
                                 <rect key="frame" x="0.0" y="619" width="375" height="48"/>
@@ -384,10 +384,29 @@
             </objects>
             <point key="canvasLocation" x="5407.1999999999998" y="1710.4947526236883"/>
         </scene>
-        <!--Machine View Controller-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="z9E-p5-EfW">
+            <objects>
+                <tabBarController id="Po6-ip-XoN" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="LWe-Id-eec">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="uWf-Jb-JbX" kind="relationship" relationship="viewControllers" id="3TL-0Y-LKM"/>
+                        <segue destination="9Ww-aC-vSP" kind="relationship" relationship="viewControllers" id="bgl-ql-03F"/>
+                        <segue destination="AfL-pR-sEH" kind="relationship" relationship="viewControllers" id="QQE-aB-QQN"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mf0-ch-V3t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3623" y="1678"/>
+        </scene>
+        <!--Pick a restaurant-->
         <scene sceneID="D8j-jt-vlz">
             <objects>
-                <viewController storyboardIdentifier="Machine" id="uWf-Jb-JbX" customClass="MachineViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Machine" title="Pick a restaurant" id="uWf-Jb-JbX" customClass="MachineViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0qi-sN-JjF"/>
                         <viewControllerLayoutGuide type="bottom" id="mqO-mu-hbP"/>
@@ -397,7 +416,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image0" translatesAutoresizingMaskIntoConstraints="NO" id="CJr-EU-XNa">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -408,13 +427,14 @@
                             <constraint firstItem="CJr-EU-XNa" firstAttribute="top" secondItem="0qi-sN-JjF" secondAttribute="bottom" id="qf5-xp-NOa"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Slot Machine" id="19h-gj-Z6c"/>
                     <connections>
                         <outlet property="animation" destination="CJr-EU-XNa" id="oOP-U3-iln"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6uW-Us-P90" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5249" y="1029"/>
+            <point key="canvasLocation" x="4630" y="995"/>
         </scene>
         <!--Our Recommendation-->
         <scene sceneID="ArI-ZP-5Wh">
@@ -447,7 +467,7 @@
                                 <rect key="frame" x="0.0" y="395" width="375" height="94"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VMh-kt-lfV">
-                                        <rect key="frame" x="0.0" y="0.0" width="188" height="94"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="94"/>
                                         <color key="backgroundColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Yelp"/>
                                         <connections>
@@ -455,7 +475,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RoK-eD-bWL">
-                                        <rect key="frame" x="188" y="0.0" width="187" height="94"/>
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="94"/>
                                         <color key="backgroundColor" red="0.1423353235" green="0.51616383990000003" blue="0.90085078529999996" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Map"/>
                                         <connections>
@@ -468,7 +488,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKV-tA-91H">
-                                <rect key="frame" x="20" y="497" width="335" height="84"/>
+                                <rect key="frame" x="20" y="497" width="335" height="83.5"/>
                                 <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="dKV-tA-91H" secondAttribute="height" multiplier="4:1" id="zvb-zZ-n0h"/>
@@ -507,10 +527,10 @@
             </objects>
             <point key="canvasLocation" x="6188" y="1710.4947526236883"/>
         </scene>
-        <!--Favorite Table View Controller-->
+        <!--Favorites-->
         <scene sceneID="DC5-rs-M54">
             <objects>
-                <tableViewController storyboardIdentifier="Favorite" id="9Ww-aC-vSP" customClass="FavoriteTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Favorite" title="Favorites" id="9Ww-aC-vSP" customClass="FavoriteTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="INi-mj-jl3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -530,15 +550,16 @@
                             <outlet property="delegate" destination="9Ww-aC-vSP" id="5Bt-Yt-rKU"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tY1-tH-yEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5932" y="1029"/>
+            <point key="canvasLocation" x="4631" y="1679"/>
         </scene>
-        <!--History Table View Controller-->
+        <!--Recents-->
         <scene sceneID="1Ih-nG-QYb">
             <objects>
-                <tableViewController storyboardIdentifier="History" id="AfL-pR-sEH" customClass="HistoryTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="History" title="Recents" id="AfL-pR-sEH" customClass="HistoryTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="RDe-XE-yQx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -585,10 +606,11 @@
                             <outlet property="delegate" destination="AfL-pR-sEH" id="qzw-Vq-MRc"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" systemItem="recents" id="FwR-fb-dR7"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yv0-x5-1xs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6590" y="1029"/>
+            <point key="canvasLocation" x="4630" y="2364"/>
         </scene>
         <!--Where to eat?-->
         <scene sceneID="dh3-qc-2aV">
@@ -629,7 +651,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tv0-K5-l11" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jFQ-Co-jc6">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="jFQ-Co-jc6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

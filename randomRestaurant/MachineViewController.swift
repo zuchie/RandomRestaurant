@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MachineViewController: UIViewController {
+class MachineViewController: UIViewController, UITabBarControllerDelegate {
     
     //var imageView: UIImageView!
     //fileprivate var viewEverAppeared = false
@@ -24,18 +24,10 @@ class MachineViewController: UIViewController {
         UIImage(named: "image6")!
     ]
     
-    /*
-    static var imageViews = [UIImageView]()
-    static var imagesFrameY = [CGFloat]()
-    
-    fileprivate var imageViewFrameWidth: CGFloat = 0.0
-    fileprivate var imageViewFrameHeight: CGFloat = 0.0
-    fileprivate var imageViewFrameX: CGFloat = 0.0
-    fileprivate var imageViewFrameY: CGFloat = 0.0
-    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
     
     func startAnimation() {
@@ -49,7 +41,7 @@ class MachineViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
-        navigationController?.navigationBar.topItem?.title = "Pick a restaurant"
+        //navigationController?.navigationBar.topItem?.title = "Pick a restaurant"
     }
     
     /*

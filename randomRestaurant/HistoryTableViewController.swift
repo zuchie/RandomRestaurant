@@ -37,10 +37,12 @@ class HistoryTableViewController: CoreDataTableViewController {
         )
     }
 
+    /*
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         navigationController?.navigationBar.topItem?.title = "History"
     }
+    */
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
