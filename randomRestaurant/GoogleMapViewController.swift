@@ -41,18 +41,22 @@ class GoogleMapViewController: UIViewController {
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
+        /*
         isNavigationBarHidden = navigationController?.isNavigationBarHidden
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
         }
+        */
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
     }
 
     // Restore navigation bar status.
     override func viewWillDisappear(_ animated: Bool) {
+        /*
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = true
         }
+        */
         //view.removeObserver(self, forKeyPath: "myLocation")
     }
 

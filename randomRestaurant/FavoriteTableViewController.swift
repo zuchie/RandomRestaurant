@@ -21,9 +21,9 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = editButtonItem
+
         initializeFetchedResultsController()
-        
-        //self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         searchResultsVC = self.storyboard?.instantiateViewController(withIdentifier: "searchResultsVC") as? SearchResultsTableViewController
         
@@ -35,29 +35,10 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         
         searchController?.delegate = self
         
-        searchController?.hidesNavigationBarDuringPresentation = false
+        searchController?.hidesNavigationBarDuringPresentation = true
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(false)
-        
-        /*
-        // Enable rightBarButton when there is some cells in table.
-        navigationController?.navigationBar.topItem?.title = "Favorite"
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = editButtonItem
-        if tableView.numberOfSections != 0 {
-            navigationController?.navigationBar.topItem?.rightBarButtonItem?.isEnabled = true
-        } else {
-            navigationController?.navigationBar.topItem?.rightBarButtonItem?.isEnabled = false
-        }
-        */
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        //navigationController?.navigationBar.topItem?.rightBarButtonItem = nil
     }
 
     // Fetch data from DB and reload table view.
@@ -107,16 +88,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! FavoriteTableViewCell
-        
-        // Get results.
-        SlotMachineViewController.resultsVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
-        
-        //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
-        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
-    }
-    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle:  UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
@@ -128,12 +99,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
-        /*
-        // Disable rightBarButton when there isn't any cells left in table.
-        if tableView.numberOfSections == 0 {
-            navigationController?.navigationBar.topItem?.rightBarButtonItem?.isEnabled = false
-        }
-        */
     }
     
     // Customize section header, make sure all the headers are rendered when they are inserted.
@@ -169,13 +134,19 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         for obj in (fetchedResultsController?.fetchedObjects)! {
             favoriteRestaurants.append(obj as! Favorite)
         }
-        navigationController?.isNavigationBarHidden = true
-        SlotMachineViewController.segmentedControl.isHidden = true
+        //navigationController?.isNavigationBarHidden = true
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        navigationController?.isNavigationBarHidden = false
-        SlotMachineViewController.segmentedControl.isHidden = false
+        //navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+            if let cell = sender as? FavoriteTableViewCell {
+                destinationVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+            }
+        }
     }
 
 }

@@ -67,6 +67,7 @@ class SearchResultsTableViewController: UITableViewController {
         return cell
     }
     
+    /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! FavoriteTableViewCell
         
@@ -88,6 +89,7 @@ class SearchResultsTableViewController: UITableViewController {
         //print("navi: \(self.navigationController)")
         //self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
     }
+    */
     /*
     // Method to conform to UISearchResultsUpdating protocol.
     public func updateSearchResults(for searchController: UISearchController) {
@@ -140,19 +142,15 @@ class SearchResultsTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let resultsVC = segue.destination as? ResultsViewController {
-            if let id = segue.identifier, id == "resultsVC" {
-                print("prepare segue")
-                let coordinate = CLLocationCoordinate2DMake((restaurant?.latitude)!, (restaurant?.longitude)!)
-                resultsVC.getResults(name: restaurant?.name, price: restaurant?.price, rating: restaurant?.rating, reviewCount: restaurant?.reviewCount, url: restaurant?.url, address: restaurant?.address, coordinate: coordinate, totalBiz: 0, randomNo: 0, category: restaurant?.category)
+        if let resultsVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+            if let restaurant = sender as? FavoriteTableViewCell {
+                resultsVC.getResults(name: restaurant.textLabel?.text, price: restaurant.price, rating: restaurant.rating, reviewCount: restaurant.reviewCount, url: restaurant.url, address: restaurant.address, coordinate: restaurant.coordinate, totalBiz: 0, randomNo: 0, category: restaurant.category)
             }
         }
     }
-    */
 }

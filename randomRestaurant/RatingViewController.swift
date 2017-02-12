@@ -125,21 +125,22 @@ class RatingViewController: UIViewController {
         }
     }
     
+    @IBAction func unwindToRating(sender: UIStoryboardSegue) {
+        if let _ = sender.source as? MachineViewController {
+            
+        }
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let destinationVC = segue.destination
         
-        if let slotMachineVC = destinationVC as? SlotMachineViewController {
+        if let slotMachineVC = destinationVC as? MachineViewController {
             if let id = segue.identifier, id == "slotMachine" {
                 slotMachineVC.getRatingBar(getRating())
                 
-                /*
-                //print("url params: \(urlQueryParameters!)")
-                print("category: \(urlQueryParameters!.category), location: \(urlQueryParameters!.coordinates), radius: \(urlQueryParameters!.radius), limit: \(urlQueryParameters!.limit), time: \(urlQueryParameters!.openAt)")
-                slotMachineVC.setYelpUrlQueryParameters(urlQueryParameters!)
-                */
             }
         }
     }

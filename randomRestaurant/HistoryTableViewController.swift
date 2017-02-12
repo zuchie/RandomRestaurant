@@ -36,13 +36,6 @@ class HistoryTableViewController: CoreDataTableViewController {
             cacheName: nil
         )
     }
-
-    /*
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(false)
-        navigationController?.navigationBar.topItem?.title = "History"
-    }
-    */
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -90,23 +83,8 @@ class HistoryTableViewController: CoreDataTableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! HistoryTableViewCell
-        
-        // Get results.
-        SlotMachineViewController.resultsVC.getResults(name: cell.historyLabel.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
-        
-        //self.present(SlotMachineViewController.resultsVC, animated: false, completion: nil)
-        self.navigationController?.pushViewController(SlotMachineViewController.resultsVC, animated: false)
-    }
-    
     fileprivate func updateButtonStatus(_ button: UIButton) {
-
-        if button.isSelected == false {
-            button.isSelected = true
-        } else {
-            button.isSelected = false
-        }
+        button.isSelected = button.isSelected ? false : true
     }
     
     func buttonTapped(_ sender: HistoryCellButton) {
@@ -137,6 +115,14 @@ class HistoryTableViewController: CoreDataTableViewController {
             DataBase.add(favoriteRest!, to: "favorite")
         } else {
             DataBase.delete(favoriteRest!, in: "favorite")
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+            if let cell = sender as? HistoryTableViewCell {
+                destinationVC.getResults(name: cell.historyLabel.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+            }
         }
     }
 
