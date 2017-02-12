@@ -41,6 +41,7 @@ class MachineViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("machine navi \(navigationController?.viewControllers)")
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
@@ -58,7 +59,7 @@ class MachineViewController: UIViewController {
     }
     
     func afterAnimation() {
-        performSegue(withIdentifier: "results", sender: self)
+        performSegue(withIdentifier: "machineToResults", sender: self)
     }
     
     @IBAction func start(_ sender: UIButton) {
@@ -128,7 +129,7 @@ class MachineViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "machineToResults" {
                 destinationVC.getResults(name: pickedRestaurant?.name, price: pickedRestaurant?.price, rating: pickedRestaurant?.rating, reviewCount: pickedRestaurant?.reviewCount, url: pickedRestaurant?.url, address: pickedRestaurant?.address, coordinate: bizCoordinate2D, totalBiz: pickedRestaurant?.total, randomNo: pickedRestaurant?.number, category: pickedRestaurant?.category)
         }
     }

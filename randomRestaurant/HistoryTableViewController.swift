@@ -18,6 +18,7 @@ class HistoryTableViewController: CoreDataTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("history view did load")
+        print("history navi \(navigationController?.viewControllers)")
         
         //favoriteRestaurant = SlotMachineViewController.favoriteTableVC
         initializeFetchedResultsController()
@@ -119,7 +120,7 @@ class HistoryTableViewController: CoreDataTableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "recentsToResults" {
             if let cell = sender as? HistoryTableViewCell {
                 destinationVC.getResults(name: cell.historyLabel.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
             }

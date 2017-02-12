@@ -120,8 +120,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
             filteredRestaurants = favoriteRestaurants.filter { restaurant in
-                //print("filtered: \(filteredRestaurants)")
-                
                 return restaurant.name!.lowercased().contains(inputText.lowercased())
             }
         }
@@ -140,9 +138,9 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     func willDismissSearchController(_ searchController: UISearchController) {
         //navigationController?.isNavigationBarHidden = false
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "favoritesToResults" {
             if let cell = sender as? FavoriteTableViewCell {
                 destinationVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
             }

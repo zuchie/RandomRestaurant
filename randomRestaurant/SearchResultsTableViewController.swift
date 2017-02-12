@@ -147,7 +147,7 @@ class SearchResultsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let resultsVC = segue.destination as? ResultsViewController, segue.identifier == "results" {
+        if let resultsVC = segue.destination as? ResultsViewController, segue.identifier == "searchToResultss" {
             if let restaurant = sender as? FavoriteTableViewCell {
                 resultsVC.getResults(name: restaurant.textLabel?.text, price: restaurant.price, rating: restaurant.rating, reviewCount: restaurant.reviewCount, url: restaurant.url, address: restaurant.address, coordinate: restaurant.coordinate, totalBiz: 0, randomNo: 0, category: restaurant.category)
             }
