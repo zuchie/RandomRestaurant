@@ -61,7 +61,7 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
             }
         }
     }
-    
+    /*
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedResultsController?.sections?.count ?? 1
@@ -74,6 +74,7 @@ class CoreDataTableViewController: UITableViewController, NSFetchedResultsContro
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return fetchedResultsController?.sections?[section].name.uppercased()
     }
+    */
     
     // MARK: NSFetchedResultsControllerDelegate
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

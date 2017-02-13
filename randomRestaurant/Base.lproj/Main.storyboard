@@ -16,7 +16,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -287,39 +287,6 @@
             </objects>
             <point key="canvasLocation" x="7386" y="1735"/>
         </scene>
-        <!--Search Results Table View Controller-->
-        <scene sceneID="M5T-lh-5PX">
-            <objects>
-                <tableViewController storyboardIdentifier="searchResultsVC" id="cAa-FS-d1x" customClass="SearchResultsTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="LUL-Qg-YF1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="searchResults" id="eAb-Ck-Sya" customClass="FavoriteTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eAb-Ck-Sya" id="aPu-Q7-4gC">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="jiX-AL-im1" kind="show" identifier="searchToResultss" id="Xyd-14-rYi"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="cAa-FS-d1x" id="ZdT-Qn-n67"/>
-                            <outlet property="delegate" destination="cAa-FS-d1x" id="Hds-lE-mjM"/>
-                        </connections>
-                    </tableView>
-                    <toolbarItems/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="R92-pB-1AA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6622" y="2437"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="z9E-p5-EfW">
             <objects>
@@ -352,10 +319,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image0" translatesAutoresizingMaskIntoConstraints="NO" id="CJr-EU-XNa">
-                                <rect key="frame" x="0.0" y="64" width="375" height="463"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="463.5"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OFE-Df-sq7">
-                                <rect key="frame" x="16" y="535" width="343" height="75"/>
+                                <rect key="frame" x="16" y="535.5" width="343" height="74.5"/>
                                 <color key="backgroundColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="OFE-Df-sq7" secondAttribute="height" multiplier="23:5" id="Ruw-CA-ibJ"/>
@@ -409,13 +376,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image3" translatesAutoresizingMaskIntoConstraints="NO" id="1Ms-y8-jmP">
-                                <rect key="frame" x="0.0" y="20" width="375" height="375"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="375"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="1Ms-y8-jmP" secondAttribute="height" multiplier="1:1" id="snk-4B-EO7"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="TkH-Fs-Whc">
-                                <rect key="frame" x="0.0" y="20" width="375" height="375"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="375"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="TkH-Fs-Whc" secondAttribute="height" multiplier="1:1" id="jqs-4D-T0f"/>
                                 </constraints>
@@ -424,10 +391,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="6FP-hc-ygJ">
-                                <rect key="frame" x="0.0" y="395" width="375" height="94"/>
+                                <rect key="frame" x="0.0" y="439" width="375" height="94"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VMh-kt-lfV">
-                                        <rect key="frame" x="0.0" y="0.0" width="188" height="94"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="94"/>
                                         <color key="backgroundColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Yelp"/>
                                         <connections>
@@ -435,7 +402,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RoK-eD-bWL">
-                                        <rect key="frame" x="188" y="0.0" width="187" height="94"/>
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="94"/>
                                         <color key="backgroundColor" red="0.1423353235" green="0.51616383990000003" blue="0.90085078529999996" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Map"/>
                                         <connections>
@@ -616,7 +583,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tv0-K5-l11" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jFQ-Co-jc6">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="jFQ-Co-jc6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -635,7 +602,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZVP-DS-R1z" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Slot Machine" id="19h-gj-Z6c"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tk0-LQ-Fsi">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Tk0-LQ-Fsi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -654,7 +621,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u6W-H1-ax6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="recents" id="FwR-fb-dR7"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uQb-EZ-npM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="uQb-EZ-npM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -673,7 +640,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YiH-Zj-usg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -698,6 +665,6 @@
         <image name="image3" width="137" height="91"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Xyd-14-rYi"/>
+        <segue reference="tjL-YG-wTx"/>
     </inferredMetricsTieBreakers>
 </document>

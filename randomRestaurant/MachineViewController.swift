@@ -41,7 +41,6 @@ class MachineViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("machine navi \(navigationController?.viewControllers)")
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     

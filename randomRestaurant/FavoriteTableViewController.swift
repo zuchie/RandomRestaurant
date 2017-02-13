@@ -15,7 +15,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     fileprivate var favoriteRestaurants = [Favorite]()
     fileprivate var filteredRestaurants = [Favorite]()
     
-    fileprivate var searchResultsVC: SearchResultsTableViewController?
+    fileprivate var searchResultsVC: UITableViewController?
     fileprivate var searchController: UISearchController?
     
     override func viewDidLoad() {
@@ -25,9 +25,11 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
 
         initializeFetchedResultsController()
         
-        searchResultsVC = self.storyboard?.instantiateViewController(withIdentifier: "searchResultsVC") as? SearchResultsTableViewController
+        searchResultsVC = UITableViewController(style: .plain)
+        searchResultsVC?.tableView.register(FavoriteTableViewCell.self, forCellReuseIdentifier: "filtered")
+        searchResultsVC?.tableView.dataSource = self
+        searchResultsVC?.tableView.delegate = self
         
-        //searchResultsVC = SearchResultsTableViewController()
         searchController = UISearchController(searchResultsController: searchResultsVC)
         searchController?.searchResultsUpdater = self
         tableView.tableHeaderView = searchController?.searchBar
@@ -39,7 +41,9 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
+
     }
+
 
     // Fetch data from DB and reload table view.
     fileprivate func initializeFetchedResultsController() {
@@ -66,14 +70,46 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         DataBase.updateInstanceState(restaurant!, in: "history")
     }
     
+    // MARK: - Table view data source
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView == self.tableView {
+            return fetchedResultsController?.sections?.count ?? 0
+        } else {
+            return 1
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == self.tableView {
+            return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
+        } else {
+            return filteredRestaurants.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == self.tableView {
+            return fetchedResultsController?.sections?[section].name.uppercased()
+        } else {
+            return "Restaurants found"
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cellID = "favorite"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
-        // Configure the cell...
         let restau: Favorite
+        let cellID: String
         
-        restau = fetchedResultsController?.sections?[indexPath.section].objects![indexPath.row] as! Favorite
+        // Configure the cell...
+        if tableView == self.tableView {
+            cellID = "favorite"
+            restau = fetchedResultsController?.sections?[indexPath.section].objects![indexPath.row] as! Favorite
+
+        } else {
+            cellID = "filtered"
+            restau = filteredRestaurants[indexPath.row]
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
         cell.textLabel?.text = restau.name
         
         //print("restau url: \(restau.url), restau category: \(restau.category)")
@@ -84,8 +120,13 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         cell.address = restau.address
         cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!.doubleValue, restau.longitude!.doubleValue)
         cell.category = restau.category
-        
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == searchResultsVC?.tableView {
+            performSegue(withIdentifier: "favoritesToResults", sender: tableView.cellForRow(at: indexPath))
+        }
     }
     
     // Override to support editing the table view.
@@ -122,8 +163,10 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             filteredRestaurants = favoriteRestaurants.filter { restaurant in
                 return restaurant.name!.lowercased().contains(inputText.lowercased())
             }
+            //print("filtered: \(filteredRestaurants)")
         }
-        searchResultsVC?.filteredRestaurants = filteredRestaurants
+        searchResultsVC?.tableView.reloadData()
+        //searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
     
     // Notifications to hide/show navigation bar & segmented titles.
@@ -132,6 +175,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         for obj in (fetchedResultsController?.fetchedObjects)! {
             favoriteRestaurants.append(obj as! Favorite)
         }
+        //searchResultsVC?.favorites = favoriteRestaurants
         //navigationController?.isNavigationBarHidden = true
     }
     
