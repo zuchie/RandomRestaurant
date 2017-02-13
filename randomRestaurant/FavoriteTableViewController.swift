@@ -18,6 +18,19 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     fileprivate var searchResultsVC: UITableViewController?
     fileprivate var searchController: UISearchController?
     
+    fileprivate var mySectionsCount = 0 {
+        willSet {
+            if newValue == 0 {
+                setEditing(false, animated: false)
+                editButtonItem.isEnabled = false
+            } else {
+                editButtonItem.isEnabled = true
+            }
+        }
+    }
+
+    //var objToObserve = MyObjectToObserve()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,10 +54,23 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
-
+        
+        //objToObserve.addObserver(self, forKeyPath: "myTableView", options: .new, context: nil)
     }
-
-
+    /*
+    override func viewWillAppear(_ animated: Bool) {
+        //tableView.addObserver(tableView, forKeyPath: "numberOfSections", options: .new, context: nil)
+        objToObserve.updateTableView()
+    }
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        print("hello====")
+        if keyPath == "numberOfSections" && object is UITableView {
+            print("hello 1====")
+            setEditing(false, animated: false)
+        }
+        objToObserve.removeObserver(self, forKeyPath: "myTableView")
+    }
+    */
     // Fetch data from DB and reload table view.
     fileprivate func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
@@ -73,6 +99,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == self.tableView {
+            mySectionsCount = (fetchedResultsController?.sections?.count)!
             return fetchedResultsController?.sections?.count ?? 0
         } else {
             return 1
