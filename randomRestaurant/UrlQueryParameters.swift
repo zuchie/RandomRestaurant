@@ -17,6 +17,8 @@ class YelpUrlQueryParameters {
     static var radius = 10000
     static var limit = 50
     static var openAt: Int?
+    
+    static var rating = 0.0
 
     /*
     // MARK: Properties.

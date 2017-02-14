@@ -92,6 +92,7 @@ class RatingViewController: UIViewController {
             rating! -= 0.5
         }
         print("rating: \(rating!)")
+        YelpUrlQueryParameters.rating = rating!
         
         updateButtonSelectionStates()
         
@@ -115,7 +116,7 @@ class RatingViewController: UIViewController {
             button.isSelected = Double(index) < rating!
         }
     }
-    
+    /*
     func getRating() -> Double {
         // When no rating has been chosen, use 0.5 as default value.
         if rating != nil {
@@ -125,15 +126,17 @@ class RatingViewController: UIViewController {
             return 0.5
         }
     }
-    
+    */
     @IBAction func unwindToRating(sender: UIStoryboardSegue) {
+        /*
         if let _ = sender.source as? MachineViewController {
             
         }
+        */
     }
-    
+    /*
     // MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("hello")
         let destinationVC = segue.destination
@@ -141,11 +144,10 @@ class RatingViewController: UIViewController {
             print("hello 1")
             if let id = segue.identifier, id == "slotMachine" {
                 print("hello 2")
-                machineVC.getRatingBar(getRating())
-                
+                YelpUrlQueryParameters.rating = getRating()
             }
         }
     }
-    
+    */
 
 }

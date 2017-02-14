@@ -25,7 +25,6 @@ class GetNearbyBusinesses {
     }
     
     fileprivate var pickedBusiness: [String:AnyObject]? = nil
-    fileprivate var ratingBar: Double?
     fileprivate var totalSortedBiz = 0
     fileprivate var randomNo = 0
 
@@ -38,11 +37,11 @@ class GetNearbyBusinesses {
             pickedBusiness = newValue
         }
     }
-    
+    /*
     func setRatingBar(_ ratingBar: Double) {
         self.ratingBar = ratingBar
     }
-    
+    */
     fileprivate enum OperationTypes {
         case getStrByKey(([String:AnyObject], String) -> String)
         case getIntByKey(([String:AnyObject], String) -> String)
@@ -184,8 +183,8 @@ class GetNearbyBusinesses {
         for (index, business) in sortedBusinesses.enumerated() {
             let businessRating = business["rating"] as! Double
             // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
-            print("===biz rating: \(businessRating), bar: \(ratingBar)")
-            if businessRating < ratingBar! || index == sortedBusinesses.count - 1 {
+            //print("===biz rating: \(businessRating), bar: \(YelpUrlQueryParameters.rating)")
+            if (businessRating < YelpUrlQueryParameters.rating) || (index == sortedBusinesses.count - 1) {
                 //print("index: \(index)")
                 indx = index
                 break

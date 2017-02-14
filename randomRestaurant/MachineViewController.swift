@@ -30,8 +30,8 @@ class MachineViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("set rating bar: \(ratingBar)")
-        nearbyBusinesses.setRatingBar(ratingBar)
+        //print("set rating bar: \(ratingBar)")
+        //nearbyBusinesses.setRatingBar(ratingBar)
     }
     
     fileprivate func startAnimation() {
@@ -42,12 +42,12 @@ class MachineViewController: UIViewController {
         
         animation.startAnimating()
     }
-    
+    /*
     func getRatingBar(_ rating: Double) {
         print("get rating bar: \(ratingBar)")
         ratingBar = rating
     }
-    
+    */
     func afterAnimation() {
         performSegue(withIdentifier: "machineToResults", sender: self)
     }
