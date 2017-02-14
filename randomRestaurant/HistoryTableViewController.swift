@@ -12,15 +12,11 @@ import CoreLocation
 
 class HistoryTableViewController: CoreDataTableViewController {
     
-    //private var favoriteRestaurant: FavoriteTableViewController?
     fileprivate var favoriteRest = Restaurant()
+    var favoriteVC = FavoriteTableViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("history view did load")
-        print("history navi \(navigationController?.viewControllers)")
-        
-        //favoriteRestaurant = SlotMachineViewController.favoriteTableVC
         initializeFetchedResultsController()
     }
     
@@ -57,7 +53,8 @@ class HistoryTableViewController: CoreDataTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "history", for: indexPath) as! HistoryTableViewCell
         
         // Configure the cell...
-        if let historyRestaurant = fetchedResultsController?.object(at: indexPath) as? History {
+        if let fetched = fetchedResultsController?.object(at: indexPath) as? History {
+            /*
             var name: String!
             var isFavorite: Bool!
             var url: String!
@@ -67,7 +64,7 @@ class HistoryTableViewController: CoreDataTableViewController {
             var address: String!
             var coordinate: CLLocationCoordinate2D!
             var category: String!
-            
+ 
             historyRestaurant.managedObjectContext?.performAndWait {
                 name = historyRestaurant.name
                 isFavorite = historyRestaurant.isFavorite?.boolValue
@@ -79,6 +76,7 @@ class HistoryTableViewController: CoreDataTableViewController {
                 coordinate = CLLocationCoordinate2DMake((historyRestaurant.latitude?.doubleValue)!, (historyRestaurant.longitude?.doubleValue)!)
                 category = historyRestaurant.category
             }
+ 
             cell.addToFav.isSelected = isFavorite!
             cell.historyLabel.text = name
             cell.url = url
@@ -88,9 +86,29 @@ class HistoryTableViewController: CoreDataTableViewController {
             cell.address = address
             cell.coordinate = coordinate
             cell.category = category
+            */
+            cell.historyLabel.text = fetched.name
+            cell.url = fetched.url
+            cell.rating = fetched.rating
+            cell.reviewCount = fetched.reviewCount
+            cell.price = fetched.price
+            cell.address = fetched.address
+            cell.coordinate = CLLocationCoordinate2DMake((fetched.latitude?.doubleValue)!, (fetched.longitude?.doubleValue)!)
+            cell.category = fetched.category
             
-            cell.addToFav.cellText = cell.historyLabel.text
-            cell.addToFav.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
+            cell.favoriteButton.cellText = cell.historyLabel.text
+            cell.favoriteButton.rating = cell.rating
+            cell.favoriteButton.reviewCount = cell.reviewCount
+            cell.favoriteButton.url = cell.url
+            cell.favoriteButton.price = cell.price
+            cell.favoriteButton.address = cell.address
+            cell.favoriteButton.latitude = cell.coordinate.latitude
+            cell.favoriteButton.longitude = cell.coordinate.longitude
+            cell.favoriteButton.category = cell.category
+            cell.favoriteButton.isSelected = (fetched.isFavorite?.boolValue)!
+            
+            cell.favoriteButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
+            cell.favoriteButton.addTarget(favoriteVC, action: #selector(favoriteVC.updateDB(button:)), for: .touchDown)
         }
         
         return cell
@@ -104,9 +122,8 @@ class HistoryTableViewController: CoreDataTableViewController {
         
         // Update database with isFavorite status change.
         favoriteRest!.name = sender.cellText
-        
         let found = DataBase.retrieve(favoriteRest!, in: "history")
-        
+        /*
         favoriteRest!.price = found.price
         favoriteRest!.address = found.address
         favoriteRest!.rating = found.rating
@@ -116,19 +133,19 @@ class HistoryTableViewController: CoreDataTableViewController {
         favoriteRest!.latitude = found.latitude
         favoriteRest!.longitude = found.longitude
         favoriteRest!.url = found.url
-        
+        */
         updateButtonStatus(sender)
         found.isFavorite = sender.isSelected
         
         DataBase.updateInstanceState(found, in: "history")
-        //updateUI()
-        
+        /*
         // Update favorite restaurant list and update table view.
         if found.isFavorite! {
             DataBase.add(favoriteRest!, to: "favorite")
         } else {
             DataBase.delete(favoriteRest!, in: "favorite")
         }
+        */
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

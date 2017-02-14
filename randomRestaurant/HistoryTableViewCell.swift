@@ -12,7 +12,7 @@ import CoreLocation
 class HistoryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var historyLabel: UILabel!
-    @IBOutlet weak var addToFav: HistoryCellButton!
+    @IBOutlet weak var favoriteButton: HistoryCellButton!
     
     var rating: String!
     var reviewCount: String!
@@ -30,8 +30,8 @@ class HistoryTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        addToFav.setImage(emptyStar, for: UIControlState())
-        addToFav.setImage(filledStar, for: .selected)
+        favoriteButton.setImage(emptyStar, for: .normal)
+        favoriteButton.setImage(filledStar, for: .selected)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

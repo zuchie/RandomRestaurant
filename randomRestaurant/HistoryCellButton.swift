@@ -13,4 +13,12 @@ import UIKit
 class HistoryCellButton: UIButton {
     //var index: Int?
     var cellText: String?
+    var rating: String!
+    var reviewCount: String!
+    var url: String!
+    var price: String!
+    var address: String!
+    var latitude: Double!
+    var longitude: Double!
+    var category: String!
 }

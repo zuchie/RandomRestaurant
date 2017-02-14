@@ -87,6 +87,26 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         )
     }
     
+    func updateDB(button: HistoryCellButton) {
+        let restaurant = Restaurant()
+        
+        restaurant?.name = button.cellText
+        restaurant?.price = button.price
+        restaurant?.address = button.address
+        restaurant?.rating = button.rating
+        restaurant?.reviewCount = button.reviewCount
+        restaurant?.category = button.category
+        restaurant?.latitude = button.latitude
+        restaurant?.longitude = button.longitude
+        restaurant?.url = button.url
+        
+        if button.isSelected {
+            DataBase.add(restaurant!, to: "favorite")
+        } else {
+            DataBase.delete(restaurant!, in: "favorite")
+        }
+    }
+    
     fileprivate func removeFromFavorites(_ name: String) {
         let restaurant = Restaurant()
         restaurant!.name = name
