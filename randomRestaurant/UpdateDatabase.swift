@@ -44,31 +44,31 @@ class DataBase {
             }
         }
     }
-    
+    /*
     class func retrieve(_ instance: Restaurant, in entity: String) -> Restaurant {
         var found: History?
-        let restaurant = Restaurant()!
+        let restaurant = Restaurant()
         managedObjectContext?.performAndWait {
             if entity == "history" {
                 found = History.retrieve(instance, inManagedObjectContext: self.managedObjectContext!)!
                 print("DB retrieved instance in history entity")
             }
         }
-        restaurant.name = found?.name
-        restaurant.address = found?.address
-        restaurant.category = found?.category
-        restaurant.date = found?.date?.intValue
-        restaurant.isFavorite = found?.isFavorite?.boolValue
-        restaurant.latitude = found?.latitude?.doubleValue
-        restaurant.longitude = found?.longitude?.doubleValue
-        restaurant.price = found?.price
-        restaurant.rating = found?.rating
-        restaurant.reviewCount = found?.reviewCount
-        restaurant.url = found?.url
+        restaurant.name = (found?.name)!
+        restaurant.address = (found?.address)!
+        restaurant.category = (found?.category)!
+        restaurant.date = (found?.date?.intValue)!
+        restaurant.isFavorite = (found?.isFavorite?.boolValue)!
+        restaurant.latitude = (found?.latitude?.doubleValue)!
+        restaurant.longitude = (found?.longitude?.doubleValue)!
+        restaurant.price = (found?.price)!
+        restaurant.rating = (found?.rating)!
+        restaurant.reviewCount = (found?.reviewCount)!
+        restaurant.url = (found?.url)!
         
         return restaurant
     }
-    
+    */
     class func updateInstanceState(_ instance: Restaurant, in entity: String) {
         managedObjectContext?.performAndWait {
             if entity == "history" {

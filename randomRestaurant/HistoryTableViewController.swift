@@ -8,11 +8,10 @@
 
 import UIKit
 import CoreData
-import CoreLocation
 
 class HistoryTableViewController: CoreDataTableViewController {
     
-    fileprivate var favoriteRest = Restaurant()
+    //fileprivate var favoriteRest = Restaurant()
     var favoriteVC = FavoriteTableViewController()
     
     override func viewDidLoad() {
@@ -87,25 +86,13 @@ class HistoryTableViewController: CoreDataTableViewController {
             cell.coordinate = coordinate
             cell.category = category
             */
-            cell.historyLabel.text = fetched.name
-            cell.url = fetched.url
-            cell.rating = fetched.rating
-            cell.reviewCount = fetched.reviewCount
-            cell.price = fetched.price
-            cell.address = fetched.address
-            cell.coordinate = CLLocationCoordinate2DMake((fetched.latitude?.doubleValue)!, (fetched.longitude?.doubleValue)!)
-            cell.category = fetched.category
             
-            cell.favoriteButton.cellText = cell.historyLabel.text
-            cell.favoriteButton.rating = cell.rating
-            cell.favoriteButton.reviewCount = cell.reviewCount
-            cell.favoriteButton.url = cell.url
-            cell.favoriteButton.price = cell.price
-            cell.favoriteButton.address = cell.address
-            cell.favoriteButton.latitude = cell.coordinate.latitude
-            cell.favoriteButton.longitude = cell.coordinate.longitude
-            cell.favoriteButton.category = cell.category
+            //cell.restaurant = Restaurant(name: fetched.name!, price: fetched.price!, rating: fetched.rating!, reviewCount: fetched.reviewCount!, address: fetched.address!, isFavorite: (fetched.isFavorite?.boolValue)!, date: (fetched.date?.intValue)!, url: fetched.url!, latitude: (fetched.latitude?.doubleValue)!, longitude: (fetched.longitude?.doubleValue)!, category: fetched.category!)
+            
+            cell.historyLabel.text = fetched.name
             cell.favoriteButton.isSelected = (fetched.isFavorite?.boolValue)!
+            
+            cell.favoriteButton.restaurant = Restaurant(name: fetched.name!, price: fetched.price!, rating: fetched.rating!, reviewCount: fetched.reviewCount!, address: fetched.address!, url: fetched.url!, latitude: (fetched.latitude?.doubleValue)!, longitude: (fetched.longitude?.doubleValue)!, category: fetched.category!)
             
             cell.favoriteButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
             cell.favoriteButton.addTarget(favoriteVC, action: #selector(favoriteVC.updateDB(button:)), for: .touchDown)
@@ -121,8 +108,8 @@ class HistoryTableViewController: CoreDataTableViewController {
     func buttonTapped(_ sender: HistoryCellButton) {
         
         // Update database with isFavorite status change.
-        favoriteRest!.name = sender.cellText
-        let found = DataBase.retrieve(favoriteRest!, in: "history")
+        //favoriteRest!.name = sender.cellText
+        //let found = DataBase.retrieve(sender.restaurant!, in: "history")
         /*
         favoriteRest!.price = found.price
         favoriteRest!.address = found.address
@@ -135,9 +122,10 @@ class HistoryTableViewController: CoreDataTableViewController {
         favoriteRest!.url = found.url
         */
         updateButtonStatus(sender)
-        found.isFavorite = sender.isSelected
+        let restaurant = sender.restaurant
+        restaurant?.isFavorite = sender.isSelected
         
-        DataBase.updateInstanceState(found, in: "history")
+        DataBase.updateInstanceState(restaurant!, in: "history")
         /*
         // Update favorite restaurant list and update table view.
         if found.isFavorite! {
@@ -150,8 +138,8 @@ class HistoryTableViewController: CoreDataTableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "recentsToResults" {
-            if let cell = sender as? HistoryTableViewCell {
-                destinationVC.getResults(name: cell.historyLabel.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+            if let cell = sender as? HistoryTableViewCell, let restaurant = cell.favoriteButton.restaurant {
+                destinationVC.getResults(name: restaurant.name, price: restaurant.price, rating: restaurant.rating, reviewCount: restaurant.reviewCount, url: restaurant.url, address: restaurant.address, isFavorite: restaurant.isFavorite, latitude: restaurant.latitude, longitude: restaurant.longitude, totalBiz: 0, randomNo: 0, category: restaurant.category)
             }
         }
     }

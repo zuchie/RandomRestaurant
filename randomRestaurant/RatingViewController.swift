@@ -119,6 +119,7 @@ class RatingViewController: UIViewController {
     func getRating() -> Double {
         // When no rating has been chosen, use 0.5 as default value.
         if rating != nil {
+            print("rating returned: \(rating)")
             return rating!
         } else {
             return 0.5
@@ -134,12 +135,13 @@ class RatingViewController: UIViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        print("hello")
         let destinationVC = segue.destination
-        
-        if let slotMachineVC = destinationVC as? MachineViewController {
+        if let machineVC = destinationVC as? UITabBarController {
+            print("hello 1")
             if let id = segue.identifier, id == "slotMachine" {
-                slotMachineVC.getRatingBar(getRating())
+                print("hello 2")
+                machineVC.getRatingBar(getRating())
                 
             }
         }

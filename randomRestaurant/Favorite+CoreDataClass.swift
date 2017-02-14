@@ -14,7 +14,7 @@ public class Favorite: NSManagedObject {
     
     class func addNew(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> Favorite? {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Favorite")
-        request.predicate = NSPredicate(format: "name = %@", instance.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name)
         
         if let instanceFound = (try? context.fetch(request))?.first as? Favorite {
             print("found instance in favoirte entity")
@@ -41,7 +41,7 @@ public class Favorite: NSManagedObject {
 
     class func delete(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Favorite")
-        request.predicate = NSPredicate(format: "name = %@", instance.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name)
         
         if let instanceFound = (try? context.fetch(request))?.first as? Favorite {
             context.delete(instanceFound)

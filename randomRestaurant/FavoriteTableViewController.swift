@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import CoreLocation
 
 class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
     
@@ -28,8 +27,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             }
         }
     }
-
-    //var objToObserve = MyObjectToObserve()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,22 +52,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchController?.searchBar.searchBarStyle = .default
         searchController?.searchBar.sizeToFit()
         
-        //objToObserve.addObserver(self, forKeyPath: "myTableView", options: .new, context: nil)
     }
-    /*
-    override func viewWillAppear(_ animated: Bool) {
-        //tableView.addObserver(tableView, forKeyPath: "numberOfSections", options: .new, context: nil)
-        objToObserve.updateTableView()
-    }
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        print("hello====")
-        if keyPath == "numberOfSections" && object is UITableView {
-            print("hello 1====")
-            setEditing(false, animated: false)
-        }
-        objToObserve.removeObserver(self, forKeyPath: "myTableView")
-    }
-    */
+
     // Fetch data from DB and reload table view.
     fileprivate func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
@@ -90,30 +73,30 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     func updateDB(button: HistoryCellButton) {
         let restaurant = Restaurant()
         
-        restaurant?.name = button.cellText
-        restaurant?.price = button.price
-        restaurant?.address = button.address
-        restaurant?.rating = button.rating
-        restaurant?.reviewCount = button.reviewCount
-        restaurant?.category = button.category
-        restaurant?.latitude = button.latitude
-        restaurant?.longitude = button.longitude
-        restaurant?.url = button.url
+        restaurant.name = (button.restaurant?.name)!
+        restaurant.price = (button.restaurant?.price)!
+        restaurant.address = (button.restaurant?.address)!
+        restaurant.rating = (button.restaurant?.rating)!
+        restaurant.reviewCount = (button.restaurant?.reviewCount)!
+        restaurant.category = (button.restaurant?.category)!
+        restaurant.latitude = (button.restaurant?.latitude)!
+        restaurant.longitude = (button.restaurant?.longitude)!
+        restaurant.url = (button.restaurant?.url)!
         
         if button.isSelected {
-            DataBase.add(restaurant!, to: "favorite")
+            DataBase.add(restaurant, to: "favorite")
         } else {
-            DataBase.delete(restaurant!, in: "favorite")
+            DataBase.delete(restaurant, in: "favorite")
         }
     }
     
     fileprivate func removeFromFavorites(_ name: String) {
         let restaurant = Restaurant()
-        restaurant!.name = name
-        restaurant!.isFavorite = false
+        restaurant.name = name
+        restaurant.isFavorite = false
         
-        DataBase.delete(restaurant!, in: "favorite")
-        DataBase.updateInstanceState(restaurant!, in: "history")
+        DataBase.delete(restaurant, in: "favorite")
+        DataBase.updateInstanceState(restaurant, in: "history")
     }
     
     // MARK: - Table view data source
@@ -143,30 +126,24 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let restau: Favorite
+        let restaurant: Favorite
         let cellID: String
         
         // Configure the cell...
         if tableView == self.tableView {
             cellID = "favorite"
-            restau = fetchedResultsController?.sections?[indexPath.section].objects![indexPath.row] as! Favorite
+            restaurant = fetchedResultsController?.sections?[indexPath.section].objects![indexPath.row] as! Favorite
 
         } else {
             cellID = "filtered"
-            restau = filteredRestaurants[indexPath.row]
+            restaurant = filteredRestaurants[indexPath.row]
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
-        cell.textLabel?.text = restau.name
         
-        //print("restau url: \(restau.url), restau category: \(restau.category)")
-        cell.url = restau.url
-        cell.rating = restau.rating
-        cell.reviewCount = restau.reviewCount
-        cell.price = restau.price
-        cell.address = restau.address
-        cell.coordinate = CLLocationCoordinate2DMake(restau.latitude!.doubleValue, restau.longitude!.doubleValue)
-        cell.category = restau.category
+        cell.textLabel?.text = restaurant.name
+        cell.restaurant = Restaurant(name: restaurant.name!, price: restaurant.price!, rating: restaurant.rating!, reviewCount: restaurant.reviewCount!, address: restaurant.address!, url: restaurant.url!, latitude: (restaurant.latitude?.doubleValue)!, longitude: (restaurant.longitude?.doubleValue)!, category: restaurant.category!)
+        
         return cell
     }
     
@@ -225,15 +202,15 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         //searchResultsVC?.favorites = favoriteRestaurants
         //navigationController?.isNavigationBarHidden = true
     }
-    
+    /*
     func willDismissSearchController(_ searchController: UISearchController) {
         //navigationController?.isNavigationBarHidden = false
     }
-
+    */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "favoritesToResults" {
-            if let cell = sender as? FavoriteTableViewCell {
-                destinationVC.getResults(name: cell.textLabel?.text, price: cell.price, rating: cell.rating, reviewCount: cell.reviewCount, url: cell.url, address: cell.address, coordinate: cell.coordinate, totalBiz: 0, randomNo: 0, category: cell.category)
+            if let cell = sender as? FavoriteTableViewCell, let restaurant = cell.restaurant {
+                destinationVC.getResults(name: restaurant.name, price: restaurant.price, rating: restaurant.rating, reviewCount: restaurant.reviewCount, url: restaurant.url, address: restaurant.address, isFavorite: restaurant.isFavorite, latitude: restaurant.latitude, longitude: restaurant.longitude, totalBiz: 0, randomNo: 0, category: restaurant.category)
             }
         }
     }

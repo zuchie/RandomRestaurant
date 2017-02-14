@@ -13,36 +13,20 @@ class ResultsViewController: UIViewController {
     
     @IBOutlet weak var bizInfo: UILabel!
     
-    private var name: String?
-    private var price: String?
-    private var rating: String?
-    private var reviewCount: String?
-    private var url: String?
-    private var address: String?
     private var coordinate: CLLocationCoordinate2D?
-    private var totalBiz: Int?
-    private var randomNo: Int?
-    private var category: String?
-    
+    fileprivate var restaurant: Restaurant!
     fileprivate var isNavigationBarHidden: Bool?
         
-    func getResults(name: String?, price: String?, rating: String?, reviewCount: String?, url: String?, address: String?, coordinate: CLLocationCoordinate2D?, totalBiz: Int?, randomNo: Int?, category: String?) {
-
-        self.name = name
-        self.price = price
-        self.rating = rating
-        self.reviewCount = reviewCount
-        self.url = url
-        self.address = address
-        self.coordinate = coordinate
-        self.totalBiz = totalBiz
-        self.randomNo = randomNo
-        self.category = category
+    func getResults(name: String, price: String, rating: String, reviewCount: String, url: String, address: String, isFavorite: Bool, latitude: Double, longitude: Double, totalBiz: Int, randomNo: Int, category: String) {
+        
+        restaurant = Restaurant(name: name, price: price, rating: rating, reviewCount: reviewCount, address: address, isFavorite: false, date: 0, url: url, latitude: latitude, longitude: longitude, category: category, total: totalBiz, number: randomNo)
+        
+        coordinate = CLLocationCoordinate2DMake(restaurant.latitude, restaurant.longitude)
     }
     
     @IBAction func linkToYelp(_ sender: UIButton) {
-        if let yelpUrl = url {
-            UIApplication.shared.openURL(URL(string: yelpUrl)!)
+        if restaurant.url != "" {
+            UIApplication.shared.openURL(URL(string: restaurant.url)!)
         } else {
             alert()
         }
@@ -65,16 +49,14 @@ class ResultsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("*****results view did load*******")
-        print("navi: \(navigationController?.viewControllers)")
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if name == nil {
+        if restaurant.name == "" {
             bizInfo.text = "No restaurant found"
         } else {
-            bizInfo.text = "\(name!)\nprice: \(price!), rating: \(rating!), review count: \(reviewCount!)\ntotal found: \(totalBiz!), picked no.: \(randomNo!)\naddress: \(address!)\ncategory: \(category!)"
+            bizInfo.text = "\(restaurant.name)\nprice: \(restaurant.price), rating: \(restaurant.rating), review count: \(restaurant.reviewCount)\ntotal found: \(restaurant.total), picked no.: \(restaurant.number)\naddress: \(restaurant.address)\ncategory: \(restaurant.category)"
         }
     }
     
@@ -92,14 +74,14 @@ class ResultsViewController: UIViewController {
         // Pass the selected object to the new view controller.
         let destinationVC = segue.destination
         
-        if address == nil || coordinate == nil {
+        if restaurant.address == "" || coordinate == nil {
             alert()
         } else {
             if let mapVC = destinationVC as? GoogleMapViewController {
                 if let id = segue.identifier, id == "googleMap" {
-                    mapVC.setBizLocation(address!)
+                    mapVC.setBizLocation(restaurant.address)
                     mapVC.setBizCoordinate2D(coordinate!)
-                    mapVC.setBizName(name!)
+                    mapVC.setBizName(restaurant.name)
                     mapVC.setDepartureTime(YelpUrlQueryParameters.openAt!)
                 }
             }

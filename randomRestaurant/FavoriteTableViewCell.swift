@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import CoreLocation
 
 class FavoriteTableViewCell: UITableViewCell {
 
+    /*
     var rating: String!
     var reviewCount: String!
     var url: String!
@@ -18,6 +18,9 @@ class FavoriteTableViewCell: UITableViewCell {
     var address: String!
     var coordinate: CLLocationCoordinate2D!
     var category: String!
+    */
+    
+    var restaurant: Restaurant?
     
     override func awakeFromNib() {
         super.awakeFromNib()

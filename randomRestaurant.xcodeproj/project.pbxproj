@@ -35,7 +35,6 @@
 		B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */; };
 		B96AE9961D8E9CC600257751 /* Restaurant.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B96AE9941D8E9CC600257751 /* Restaurant.xcdatamodeld */; };
 		B982EEBD1DDE9F2D00382EB9 /* GooglePlaceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = B982EEBC1DDE9F2D00382EB9 /* GooglePlaceDetails.swift */; };
-		B98485171E5264BE00B3CC50 /* ObjectToObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98485161E5264BE00B3CC50 /* ObjectToObserve.swift */; };
 		B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */; };
 		B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */; };
 		B9A760601DF2488B005BBA2A /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605F1DF2488B005BBA2A /* DateViewController.swift */; };
@@ -77,7 +76,6 @@
 		B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		B96AE9951D8E9CC600257751 /* Restaurant.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Restaurant.xcdatamodel; sourceTree = "<group>"; };
 		B982EEBC1DDE9F2D00382EB9 /* GooglePlaceDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GooglePlaceDetails.swift; sourceTree = "<group>"; };
-		B98485161E5264BE00B3CC50 /* ObjectToObserve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectToObserve.swift; sourceTree = "<group>"; };
 		B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewController.swift; sourceTree = "<group>"; };
 		B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		B9A7605F1DF2488B005BBA2A /* DateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
@@ -121,7 +119,6 @@
 				B9F133AB1DA09BE500708D69 /* Restaurant.swift */,
 				B916A5181E401C7E00923032 /* ResultsViewController.swift */,
 				B916A51A1E41536300923032 /* FavoriteTableViewCell.swift */,
-				B98485161E5264BE00B3CC50 /* ObjectToObserve.swift */,
 			);
 			name = SlotMachine;
 			sourceTree = "<group>";
@@ -366,7 +363,6 @@
 				B9488F0E1D93A0BB000DB973 /* History+CoreDataProperties.swift in Sources */,
 				B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */,
 				B916A51F1E42D14400923032 /* Favorite+CoreDataProperties.swift in Sources */,
-				B98485171E5264BE00B3CC50 /* ObjectToObserve.swift in Sources */,
 				B916A51E1E42D14400923032 /* Favorite+CoreDataClass.swift in Sources */,
 				B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */,
 				B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */,

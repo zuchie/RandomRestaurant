@@ -14,7 +14,7 @@ public class History: NSManagedObject {
     // Insert code here to add functionality to your managed object subclass
     class func addNew(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
-        request.predicate = NSPredicate(format: "name = %@", instance.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name)
         
         if let instanceFound = (try? context.fetch(request))?.first as? History {
             print("found instance in history entity")
@@ -39,10 +39,10 @@ public class History: NSManagedObject {
         
         return nil
     }
-    
+    /*
     class func retrieve(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
-        request.predicate = NSPredicate(format: "name = %@", instance.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name)
         
         if let instanceFound = (try? context.fetch(request))?.first as? History {
             print("found instance in history entity")
@@ -52,11 +52,11 @@ public class History: NSManagedObject {
             return nil
         }
     }
-    
+    */
     class func updateState(_ instance: Restaurant, inManagedObjectContext context: NSManagedObjectContext) -> History? {
         
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "History")
-        request.predicate = NSPredicate(format: "name = %@", instance.name!)
+        request.predicate = NSPredicate(format: "name = %@", instance.name)
         
         if let instanceFound = (try? context.fetch(request))?.first as? History {
             instanceFound.isFavorite = instance.isFavorite as NSNumber?

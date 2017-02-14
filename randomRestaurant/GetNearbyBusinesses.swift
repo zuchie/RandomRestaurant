@@ -123,7 +123,7 @@ class GetNearbyBusinesses {
         businessesSearchUrl = baseUrl
         
         businessesSearchUrl += urlParams.coordinates?.latitude != nil ? "&latitude=\(urlParams.coordinates!.latitude)" : ""
-        businessesSearchUrl += urlParams.coordinates?.longitude != nil ? "&longitude=\(urlParams.coordinates!   .longitude)" : ""
+        businessesSearchUrl += urlParams.coordinates?.longitude != nil ? "&longitude=\(urlParams.coordinates!.longitude)" : ""
         businessesSearchUrl += urlParams.categories != nil ? "&categories=\(urlParams.categories!)" : ""
         businessesSearchUrl += urlParams.radius != nil ? "&radius=\(urlParams.radius!)" : ""
         businessesSearchUrl += urlParams.limit != nil ? "&limit=\(urlParams.limit!)" : ""
@@ -131,7 +131,7 @@ class GetNearbyBusinesses {
         // Convert string to URL query allowed string to escape spaces.
         businessesSearchUrl = businessesSearchUrl.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         
-        //print("***url: \(businessesSearchUrl)")
+        print("***business search url: \(businessesSearchUrl)")
     }
     
     // Make own completionHandler function.
@@ -182,9 +182,9 @@ class GetNearbyBusinesses {
     fileprivate func pickRandomBusiness(_ sortedBusinesses: [Dictionary<String, AnyObject>]) -> Dictionary<String, AnyObject>? {
         var indx = 0
         for (index, business) in sortedBusinesses.enumerated() {
-            
             let businessRating = business["rating"] as! Double
             // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
+            print("===biz rating: \(businessRating), bar: \(ratingBar)")
             if businessRating < ratingBar! || index == sortedBusinesses.count - 1 {
                 //print("index: \(index)")
                 indx = index

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
 
 class MachineViewController: UIViewController {
     
@@ -25,22 +24,13 @@ class MachineViewController: UIViewController {
     
     fileprivate var ratingBar = 0.0
     fileprivate var nearbyBusinesses = GetNearbyBusinesses()
-    fileprivate var pickedRestaurant: Restaurant?
+    fileprivate var restaurant = Restaurant()
 
-    fileprivate var bizName = ""
-    fileprivate var bizPrice = ""
-    fileprivate var bizRating = ""
-    fileprivate var bizReviewCount = ""
     fileprivate var bizLocationObj: PickedBusinessLocation?
-    fileprivate var bizAddress = ""
-    fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
-    fileprivate var bizUrl = ""
-    fileprivate var bizCategory = ""
-    fileprivate var total: Int?
-    fileprivate var random: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("set rating bar: \(ratingBar)")
         nearbyBusinesses.setRatingBar(ratingBar)
     }
     
@@ -54,6 +44,7 @@ class MachineViewController: UIViewController {
     }
     
     func getRatingBar(_ rating: Double) {
+        print("get rating bar: \(ratingBar)")
         ratingBar = rating
     }
     
@@ -74,45 +65,38 @@ class MachineViewController: UIViewController {
         nearbyBusinesses.getUrlParameters(YelpUrlQueryParameters.coordinates, categories: YelpUrlQueryParameters.category, radius: YelpUrlQueryParameters.radius, limit: YelpUrlQueryParameters.limit, open_at: YelpUrlQueryParameters.openAt)
         
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
-        
         nearbyBusinesses.makeUrlRequest(access_token) { totalBiz, randomNo in
             
-            //print("total biz: \(totalBiz), random no.: \(randomNo)")
             if let returnedBusiness = self.nearbyBusinesses.result {
-                //print("business picked: \(returnedBusiness)")
                 
-                self.bizName = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "name")
-                self.bizPrice = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "price")
-                self.bizRating = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "rating")
-                self.bizReviewCount = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "review_count")
+                self.restaurant.name = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "name")
+                self.restaurant.price = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "price")
+                self.restaurant.rating = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "rating")
+                self.restaurant.reviewCount = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "review_count")
                 
                 // Get picked business location object and convert to address string.
                 if let pickedBizLocationObj = returnedBusiness["location"] as? NSDictionary {
                     self.bizLocationObj = PickedBusinessLocation(businessObj: pickedBizLocationObj)
-                    
-                    self.bizAddress = self.bizLocationObj!.getBizAddressString()
-                    print("biz location: \(self.bizAddress)")
+                    self.restaurant.address = self.bizLocationObj!.getBizAddressString()
                 } else {
                     print("No location information of picked business")
                 }
                 
                 if let pickedBusinessCoordinatesObj = returnedBusiness["coordinates"] as? NSDictionary {
-                    self.bizCoordinate2D = CLLocationCoordinate2DMake((pickedBusinessCoordinatesObj["latitude"] as? CLLocationDegrees)!, (pickedBusinessCoordinatesObj["longitude"] as? CLLocationDegrees)!)
-                    print("biz latitude: \(self.bizCoordinate2D!.latitude), longitude: \(self.bizCoordinate2D!.longitude)")
+                    self.restaurant.latitude = (pickedBusinessCoordinatesObj["latitude"] as? Double)!
+                    self.restaurant.longitude = (pickedBusinessCoordinatesObj["longitude"] as? Double)!
                 }
                 
-                self.bizUrl = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
-                
-                self.bizCategory = YelpUrlQueryParameters.category!
-                
-                // Params going to pass to Core Data of History Restaurant.
-                self.pickedRestaurant = Restaurant(name: self.bizName, price: self.bizPrice, rating: self.bizRating, reviewCount: self.bizReviewCount, address: self.bizAddress, isFavorite: false, date: Int(Date().timeIntervalSince1970), url: self.bizUrl, latitude: (self.bizCoordinate2D?.latitude)!, longitude: (self.bizCoordinate2D?.longitude)!, category: self.bizCategory, total: totalBiz, number: randomNo)
+                self.restaurant.url = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
+                self.restaurant.category = YelpUrlQueryParameters.category!
+                self.restaurant.total = totalBiz
+                self.restaurant.number = randomNo
+                self.restaurant.date = Int(Date().timeIntervalSince1970)
                 
                 // Update History database.
-                DataBase.add(self.pickedRestaurant!, to: "history")
+                DataBase.add(self.restaurant, to: "history")
             } else {
                 print("Couldn't get a restaurant")
-                //self.pickedRestaurant = Restaurant(name: "", price: "", rating: "", reviewCount: "", address: "", isFavorite: false, date: 0, url: "", latitude: 0, longitude: 0, category: "", total: 0, number: 0)
             }
         }
     }
@@ -129,7 +113,7 @@ class MachineViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "machineToResults" {
-                destinationVC.getResults(name: pickedRestaurant?.name, price: pickedRestaurant?.price, rating: pickedRestaurant?.rating, reviewCount: pickedRestaurant?.reviewCount, url: pickedRestaurant?.url, address: pickedRestaurant?.address, coordinate: bizCoordinate2D, totalBiz: pickedRestaurant?.total, randomNo: pickedRestaurant?.number, category: pickedRestaurant?.category)
+                destinationVC.getResults(name: restaurant.name, price: restaurant.price, rating: restaurant.rating, reviewCount: restaurant.reviewCount, url: restaurant.url, address: restaurant.address, isFavorite: restaurant.isFavorite, latitude: restaurant.latitude, longitude: restaurant.longitude, totalBiz: restaurant.total, randomNo: restaurant.number, category: restaurant.category)
         }
     }
 
