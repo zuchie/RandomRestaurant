@@ -33,7 +33,6 @@ class ResultsViewController: UIViewController {
     }
     
     fileprivate func alert() {
-        
         // Create the alert.
         let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
         
