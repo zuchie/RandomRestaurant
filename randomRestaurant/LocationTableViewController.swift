@@ -27,11 +27,12 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         case current, other
     }
     
-    fileprivate var imageView: UIImageView?
     private var visualEffectView: UIVisualEffectView?
     fileprivate enum VisualEffect {
         case blur
     }
+    
+    fileprivate var videoBG: VideoViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,9 +59,9 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         // Table view setup.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         // Set BG image.
-        imageView = UIImageView(image: UIImage(named: "globe"))
-        imageView?.contentMode = .scaleAspectFit
-        tableView.backgroundView = imageView
+        //imageView = UIImageView(image: UIImage(named: "globe"))
+        //imageView?.contentMode = .scaleAspectFit
+        //tableView.backgroundView = imageView
         
         // Location manager setup.
         locationManager.delegate = self
@@ -87,6 +88,32 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         filteredLocations[Locations.current.rawValue].append((name: "Current Location", placeID: ""))
         
         makeVisualEffectView(effect: .blur)
+        
+        // Add video to background.
+        videoBG = VideoViewController(fileName: "locationVideo", fileExt: "m4v", directory: "Videos")
+        videoBG?.playerVC.showsPlaybackControls = false
+        tableView.backgroundView = videoBG?.playerVC.view
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        /*
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        
+        visualEffectView.frame = (videoBG?.playerVC.view.bounds)!
+        
+        videoBG?.playerVC.view.addSubview(visualEffectView)
+        */
+        if #available(iOS 10.0, *) {
+            videoBG?.playerVC.player?.playImmediately(atRate: 1.0)
+        } else {
+            // Fallback on earlier versions
+            videoBG?.playerVC.player?.rate = 1.0
+            videoBG?.playerVC.player?.play()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        videoBG?.playerVC.player?.pause()
     }
     
     override func didReceiveMemoryWarning() {
@@ -192,19 +219,14 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     
     // Notifications to blur/clear BG image.
     func willPresentSearchController(_ searchController: UISearchController) {
-        // Blur background image if it hasn't done so.
-        if imageView?.subviews.count == 0 {
-            addVisualEffectView(effect: .blur, to: imageView!)
-        }
+        // Blur background video.
+        addVisualEffectView(effect: .blur, to: (videoBG?.playerVC.view)!)
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        // Remove blur effect when there is any.
-        if imageView?.subviews.count != 0 {
-            removeVisualEffectView(visualEffectView!)
-        }
+        // Remove blur effect.
+        removeVisualEffectView(visualEffectView!)
     }
-
     // MARK: Visual Effect View.
     private func makeVisualEffectView(effect: VisualEffect) {
         switch effect {
@@ -214,7 +236,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         }
     }
     
-    fileprivate func addVisualEffectView(effect: VisualEffect, to view: UIImageView) {
+    fileprivate func addVisualEffectView(effect: VisualEffect, to view: UIView) {
         switch effect {
         case .blur:
             visualEffectView?.frame = view.bounds
@@ -225,7 +247,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     private func removeVisualEffectView(_ view: UIVisualEffectView) {
         view.removeFromSuperview()
     }
-
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
