@@ -52,7 +52,6 @@ class VideoViewController: AVPlayerViewController {
         item.seek(to: kCMTimeZero)
     }
     
-    // TODO: this won't be called, why?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("==video view will appear==")

@@ -91,15 +91,19 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         
         // Add video to background.
         videoBG = VideoViewController(fileName: "locationVideo", fileExt: "m4v", directory: "Videos")
+        addChildViewController(videoBG!)
+        videoBG?.didMove(toParentViewController: self)
+
         tableView.backgroundView = videoBG?.view
     }
     
+    /*
     override func viewWillAppear(_ animated: Bool) {
         print("**location view will appear**")
         // Start to play, because videoBG's viewWillAppear won't be called so it won't be able to start by itself.
         videoBG?.player?.play()
     }
-    
+    */
     /*
     override func viewWillDisappear(_ animated: Bool) {
         //videoBG?.playerVC.player?.pause()
