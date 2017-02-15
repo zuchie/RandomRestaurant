@@ -91,30 +91,20 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         
         // Add video to background.
         videoBG = VideoViewController(fileName: "locationVideo", fileExt: "m4v", directory: "Videos")
-        videoBG?.playerVC.showsPlaybackControls = false
-        tableView.backgroundView = videoBG?.playerVC.view
+        tableView.backgroundView = videoBG?.view
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        /*
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        
-        visualEffectView.frame = (videoBG?.playerVC.view.bounds)!
-        
-        videoBG?.playerVC.view.addSubview(visualEffectView)
-        */
-        if #available(iOS 10.0, *) {
-            videoBG?.playerVC.player?.playImmediately(atRate: 1.0)
-        } else {
-            // Fallback on earlier versions
-            videoBG?.playerVC.player?.rate = 1.0
-            videoBG?.playerVC.player?.play()
-        }
+        print("**location view will appear**")
+        // Start to play, because videoBG's viewWillAppear won't be called so it won't be able to start by itself.
+        videoBG?.player?.play()
     }
     
+    /*
     override func viewWillDisappear(_ animated: Bool) {
-        videoBG?.playerVC.player?.pause()
+        //videoBG?.playerVC.player?.pause()
     }
+    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -220,7 +210,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     // Notifications to blur/clear BG image.
     func willPresentSearchController(_ searchController: UISearchController) {
         // Blur background video.
-        addVisualEffectView(effect: .blur, to: (videoBG?.playerVC.view)!)
+        addVisualEffectView(effect: .blur, to: (videoBG?.view)!)
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
