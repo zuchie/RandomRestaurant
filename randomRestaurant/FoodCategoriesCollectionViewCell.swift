@@ -12,6 +12,6 @@ class FoodCategoriesCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties.
     
-    @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+
 }

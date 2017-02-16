@@ -34,34 +34,25 @@
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="By0-zr-DvO">
-                                            <rect key="frame" x="-13" y="-12" width="184" height="167"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Im-EN-hQW">
-                                                    <rect key="frame" x="0.0" y="0.0" width="150" height="116"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="116" id="SVA-zN-pyh"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="J3d-d8-xhv">
-                                                    <rect key="frame" x="0.0" y="121" width="150" height="29"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </stackView>
+                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="J3d-d8-xhv">
+                                            <rect key="frame" x="0.0" y="121" width="150" height="29"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="J3d-d8-xhv" secondAttribute="height" multiplier="150:29" id="RYY-3p-uMb"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="By0-zr-DvO" firstAttribute="leading" secondItem="MjY-Xp-siz" secondAttribute="leading" id="2Rl-U0-Tu1"/>
-                                    <constraint firstItem="By0-zr-DvO" firstAttribute="top" secondItem="MjY-Xp-siz" secondAttribute="top" id="obB-Ph-hnc"/>
-                                    <constraint firstAttribute="trailing" secondItem="By0-zr-DvO" secondAttribute="trailing" id="pIQ-vf-foA"/>
-                                    <constraint firstAttribute="bottom" secondItem="By0-zr-DvO" secondAttribute="bottom" id="rYN-VT-89a"/>
+                                    <constraint firstAttribute="trailing" secondItem="J3d-d8-xhv" secondAttribute="trailing" id="A2E-p5-9C3"/>
+                                    <constraint firstItem="J3d-d8-xhv" firstAttribute="leading" secondItem="MjY-Xp-siz" secondAttribute="leading" id="Fg1-Wc-2hf"/>
+                                    <constraint firstAttribute="bottom" secondItem="J3d-d8-xhv" secondAttribute="bottom" id="OjT-Pc-7D5"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="nameLabel" destination="J3d-d8-xhv" id="yYK-WR-Noe"/>
-                                    <outlet property="photoImageView" destination="7Im-EN-hQW" id="Lgp-4v-OPG"/>
                                     <segue destination="VJg-eE-0oq" kind="show" id="mz0-qT-PnF"/>
                                 </connections>
                             </collectionViewCell>
@@ -652,6 +643,19 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0m3-cm-6RP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4687" y="1734"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="JKO-TW-Sy4">
+            <objects>
+                <viewController id="tAR-Dz-gAu" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FRc-k0-dqI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sTd-ah-XqE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <resources>

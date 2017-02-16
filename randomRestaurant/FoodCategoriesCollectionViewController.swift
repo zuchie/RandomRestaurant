@@ -23,27 +23,54 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
 
         print("categories category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
-        
-        for categoryName in foodCategoriesName.enumerated() {
-            loadFoodCategories(categoryName.element)
+        /*
+        for categoryName in foodCategoriesName {
+            loadFoodCategories(categoryName)
         }
+        */
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //super.viewWillAppear(animated)
         // Preserve selection between presentations.
         // Only false can make didDeselectItemAt work.
         // When select a different cell, the previously selected cell will be deselected first.
-        self.clearsSelectionOnViewWillAppear = false
+        print("category view will appear")
+        //self.clearsSelectionOnViewWillAppear = false
+
+        foodCategories.removeAll()
+        for categoryName in foodCategoriesName {
+            loadFoodCategories(categoryName)
+        }
+        collectionView?.reloadData()
+        /*
+        for item in foodCategories {
+            addChildViewController(item.videoVC)
+            item.videoVC.didMove(toParentViewController: self)
+        }
+        */
+        //collectionView?.reloadData()
     }
 
     // Restore.
     override func viewWillDisappear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = true
+        //super.viewWillDisappear(animated)
+        print("category view will disappear========")
+        //self.clearsSelectionOnViewWillAppear = true
+        /*
+        for item in foodCategories {
+            item.videoVC.removeFromParentViewController()
+        }
+        */
     }
     
     func loadFoodCategories(_ name: String) {
-        let photo = UIImage(named: name.lowercased())!
-        let food = FoodCategories(name: name, photo: photo)!
+        //let photo = UIImage(named: name.lowercased())!
+        let videoVC = VideoViewController(fileName: "locationVideo", fileExt: "m4v", directory: "Videos")
+        //videoVC.willMove(toParentViewController: self)
+        //addChildViewController(videoVC)
+        //videoVC.didMove(toParentViewController: self)
+        let food = FoodCategories(name: name, vc: videoVC)!
         foodCategories += [food]
     }
 
@@ -71,7 +98,19 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         let foodCategory = foodCategories[(indexPath as NSIndexPath).row]
         
         cell.nameLabel.text = foodCategory.name
-        cell.photoImageView.image = foodCategory.photo
+        //foodCategory.videoVC.willMove(toParentViewController: self)
+        //addChildViewController(foodCategory.videoVC)
+        //foodCategory.videoVC.view.frame = cell.bounds
+        //cell.contentView.addSubview(foodCategory.videoVC.view)
+        //foodCategory.videoVC.didMove(toParentViewController: self)
+        //addChildViewController(foodCategory.videoVC)
+        //foodCategory.videoVC.didMove(toParentViewController: self)
+
+        //foodCategory.videoVC.loadViewIfNeeded()
+        //cell.inputViewController?.addChildViewController(foodCategory.videoVC)
+        //foodCategory.videoVC.didMove(toParentViewController: cell.inputViewController)
+        cell.backgroundView = foodCategory.videoVC.view
+        //cell.inputView?.addSubview(foodCategory.videoVC.view)
         
         return cell
     }

@@ -41,7 +41,7 @@
 		B9F133AC1DA09BE500708D69 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F133AB1DA09BE500708D69 /* Restaurant.swift */; };
 		B9F508BB1DFB6D8100ACCD73 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F508BA1DFB6D8100ACCD73 /* Clock.swift */; };
 		B9F984BE1E54405100C6CA04 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984BD1E54405100C6CA04 /* VideoViewController.swift */; };
-		B9F984C01E545EE700C6CA04 /* Videos in Resources */ = {isa = PBXBuildFile; fileRef = B9F984BF1E545EE700C6CA04 /* Videos */; };
+		B9F984C21E558F1700C6CA04 /* Videos in Resources */ = {isa = PBXBuildFile; fileRef = B9F984C11E558F1600C6CA04 /* Videos */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
@@ -84,7 +84,7 @@
 		B9F133AB1DA09BE500708D69 /* Restaurant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		B9F508BA1DFB6D8100ACCD73 /* Clock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
 		B9F984BD1E54405100C6CA04 /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
-		B9F984BF1E545EE700C6CA04 /* Videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Videos; sourceTree = "<group>"; };
+		B9F984C11E558F1600C6CA04 /* Videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Videos; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -214,10 +214,10 @@
 				B906DB761D5D80F20021B025 /* Map */,
 				B906DB751D5D80B10021B025 /* SlotMachine */,
 				B91AC8561D4EAC4600B0476E /* AppDelegate.swift */,
-				B9F984BF1E545EE700C6CA04 /* Videos */,
 				B91AC85A1D4EAC4600B0476E /* Main.storyboard */,
 				B906DB731D5D80170021B025 /* Default-568h@2x.png */,
 				B91AC85D1D4EAC4600B0476E /* Assets.xcassets */,
+				B9F984C11E558F1600C6CA04 /* Videos */,
 				B91AC85F1D4EAC4600B0476E /* LaunchScreen.storyboard */,
 				B91AC8621D4EAC4600B0476E /* Info.plist */,
 				B9F984BD1E54405100C6CA04 /* VideoViewController.swift */,
@@ -297,7 +297,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9F984C01E545EE700C6CA04 /* Videos in Resources */,
+				B9F984C21E558F1700C6CA04 /* Videos in Resources */,
 				B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */,
 				B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */,
 				B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */,

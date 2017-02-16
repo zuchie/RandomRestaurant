@@ -12,12 +12,12 @@ class FoodCategories {
     // MARK: Properties
     
     var name: String
-    var photo: UIImage?
+    var videoVC: VideoViewController
     
     // MARK: Initialization
-    init?(name: String, photo: UIImage?) {
+    init?(name: String, vc: VideoViewController) {
         self.name = name
-        self.photo = photo
+        self.videoVC = vc
         
         // Initialization should fail if there is no name or if the rating is negative.
         if name.isEmpty {
