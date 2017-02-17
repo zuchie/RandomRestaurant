@@ -17,7 +17,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
 
     fileprivate var foodCategories = [FoodCategories]()
     
-    fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "NewAmerican", "TradAmerican", "French"]
+    fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +66,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     
     func loadFoodCategories(_ name: String) {
         //let photo = UIImage(named: name.lowercased())!
-        let videoVC = VideoViewController(fileName: "locationVideo", fileExt: "m4v", directory: "Videos")
+        let videoVC = VideoViewController(fileName: name.lowercased(), fileExt: "mp4", directory: "Videos")
         //videoVC.willMove(toParentViewController: self)
         //addChildViewController(videoVC)
         //videoVC.didMove(toParentViewController: self)
@@ -141,8 +141,8 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCell = collectionView.cellForItem(at: indexPath) as! FoodCategoriesCollectionViewCell
         
-        selectedCell.layer.borderWidth = 2.0
-        selectedCell.layer.borderColor = UIColor.brown.cgColor
+        //selectedCell.layer.borderWidth = 2.0
+        //selectedCell.layer.borderColor = UIColor.brown.cgColor
         
         YelpUrlQueryParameters.category = selectedCell.nameLabel.text?.lowercased()
     }

@@ -105,6 +105,9 @@ class GetNearbyBusinesses {
         }
         if categories != nil {
             urlParams.categories = categories
+            if urlParams.categories! == "american" {
+                urlParams.categories! = "newamerican,tradamerican"
+            }
         }
         if radius != nil {
             urlParams.radius = radius

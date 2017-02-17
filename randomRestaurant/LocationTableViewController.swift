@@ -90,7 +90,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         makeVisualEffectView(effect: .blur)
         
         // Add video to background and play.
-        videoBG = VideoViewController(fileName: "locationVideo", fileExt: "m4v", directory: "Videos")
+        videoBG = VideoViewController(fileName: "city", fileExt: "mp4", directory: "Videos")
         addChildViewController(videoBG!)
         videoBG?.didMove(toParentViewController: self)
 
