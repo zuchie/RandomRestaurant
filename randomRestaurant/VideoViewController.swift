@@ -12,13 +12,13 @@ import AVFoundation
 class VideoViewController: AVPlayerViewController {
     
     //var playerVC: AVPlayerViewController!
-    fileprivate var url: URL!
+    var name: String
+    fileprivate var myUrl: URL!
     //fileprivate var player: AVPlayer!
 
     init(fileName: String, fileExt: String, directory: String) {
-        url = Bundle.main.url(forResource: fileName, withExtension: fileExt, subdirectory: directory)
-        
-        //playerVC = AVPlayerViewController()
+        name = fileName
+        myUrl = Bundle.main.url(forResource: fileName.lowercased(), withExtension: fileExt, subdirectory: directory)
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -28,10 +28,12 @@ class VideoViewController: AVPlayerViewController {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         print("==video view did load==")
-        player = AVPlayer(url: url)
+        player = AVPlayer(url: myUrl)
         player?.volume = 0
         player?.actionAtItemEnd = .none
+
         videoGravity = AVLayerVideoGravityResizeAspectFill
         showsPlaybackControls = false
 
@@ -53,21 +55,25 @@ class VideoViewController: AVPlayerViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillAppear(false)
         print("==video view will appear==")
-        if #available(iOS 10.0, *) {
-            player?.playImmediately(atRate: 1.0)
-        } else {
-            // Fallback on earlier versions
-            player?.rate = 1.0
-            player?.play()
+        if player?.rate == 0 || player?.error != nil {
+            if #available(iOS 10.0, *) {
+                player?.playImmediately(atRate: 1.0)
+            } else {
+                // Fallback on earlier versions
+                player?.rate = 1.0
+                player?.play()
+            }
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewWillDisappear(false)
         print("==video view will disappear==")
-        player?.pause()
+        if player?.rate != 0 && player?.error == nil {
+            player?.pause()
+        }
     }
     
 }

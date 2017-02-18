@@ -7,71 +7,61 @@
 //
 
 import UIKit
-
+import AVKit
+import AVFoundation
 
 class FoodCategoriesCollectionViewController: UICollectionViewController {
     
     // MARK: - Properties
     fileprivate let sectionInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
     fileprivate let itemsPerRow = 3
-
-    fileprivate var foodCategories = [FoodCategories]()
     
     fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
+    
+    fileprivate var videoVCs = [VideoViewController]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("categories category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
-        /*
+        //print("categories category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         for categoryName in foodCategoriesName {
-            loadFoodCategories(categoryName)
+            setupVideos(categoryName)
         }
-        */
+    }
+    
+    func setupVideos(_ name: String) {
+        let videoVC = VideoViewController(fileName: name, fileExt: "mp4", directory: "Videos")
+        videoVCs.append(videoVC)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //super.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         // Preserve selection between presentations.
         // Only false can make didDeselectItemAt work.
         // When select a different cell, the previously selected cell will be deselected first.
         print("category view will appear")
-        //self.clearsSelectionOnViewWillAppear = false
-
-        foodCategories.removeAll()
-        for categoryName in foodCategoriesName {
-            loadFoodCategories(categoryName)
+        self.clearsSelectionOnViewWillAppear = false
+        
+        // Play cell background video which has been paused.
+        for cell in (collectionView?.visibleCells)! {
+            guard let myCell = cell as? FoodCategoriesCollectionViewCell
+                else {
+                    fatalError("Unexpected cell: \(cell)")
+            }
+            if let player = myCell.videoBG.player {
+                if player.rate == 0 || player.error != nil {
+                    //print("@@name: \(myCell.videoBG.name)")
+                    player.play()
+                }
+            }
         }
-        collectionView?.reloadData()
-        /*
-        for item in foodCategories {
-            addChildViewController(item.videoVC)
-            item.videoVC.didMove(toParentViewController: self)
-        }
-        */
-        //collectionView?.reloadData()
     }
 
     // Restore.
     override func viewWillDisappear(_ animated: Bool) {
-        //super.viewWillDisappear(animated)
+        super.viewWillDisappear(animated)
         print("category view will disappear========")
-        //self.clearsSelectionOnViewWillAppear = true
-        /*
-        for item in foodCategories {
-            item.videoVC.removeFromParentViewController()
-        }
-        */
-    }
-    
-    func loadFoodCategories(_ name: String) {
-        //let photo = UIImage(named: name.lowercased())!
-        let videoVC = VideoViewController(fileName: name.lowercased(), fileExt: "mp4", directory: "Videos")
-        //videoVC.willMove(toParentViewController: self)
-        //addChildViewController(videoVC)
-        //videoVC.didMove(toParentViewController: self)
-        let food = FoodCategories(name: name, vc: videoVC)!
-        foodCategories += [food]
+        self.clearsSelectionOnViewWillAppear = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,29 +78,19 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return foodCategories.count
+        return foodCategoriesName.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FoodCategoriesCell", for: indexPath) as! FoodCategoriesCollectionViewCell
     
         // Configure the cell
-        let foodCategory = foodCategories[(indexPath as NSIndexPath).row]
+        let video = videoVCs[indexPath.row]
         
-        cell.nameLabel.text = foodCategory.name
-        //foodCategory.videoVC.willMove(toParentViewController: self)
-        //addChildViewController(foodCategory.videoVC)
-        //foodCategory.videoVC.view.frame = cell.bounds
+        cell.nameLabel.text = video.name
+        cell.videoBG =  video
+        cell.backgroundView = cell.videoBG.view
         //cell.contentView.addSubview(foodCategory.videoVC.view)
-        //foodCategory.videoVC.didMove(toParentViewController: self)
-        //addChildViewController(foodCategory.videoVC)
-        //foodCategory.videoVC.didMove(toParentViewController: self)
-
-        //foodCategory.videoVC.loadViewIfNeeded()
-        //cell.inputViewController?.addChildViewController(foodCategory.videoVC)
-        //foodCategory.videoVC.didMove(toParentViewController: cell.inputViewController)
-        cell.backgroundView = foodCategory.videoVC.view
-        //cell.inputView?.addSubview(foodCategory.videoVC.view)
         
         return cell
     }
@@ -141,8 +121,8 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCell = collectionView.cellForItem(at: indexPath) as! FoodCategoriesCollectionViewCell
         
-        //selectedCell.layer.borderWidth = 2.0
-        //selectedCell.layer.borderColor = UIColor.brown.cgColor
+        selectedCell.layer.borderWidth = 2.0
+        selectedCell.layer.borderColor = UIColor.brown.cgColor
         
         YelpUrlQueryParameters.category = selectedCell.nameLabel.text?.lowercased()
     }
@@ -153,7 +133,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
             deselectedCell.layer.borderColor = UIColor.clear.cgColor
         }
     }
- 
+    
     /*
     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
