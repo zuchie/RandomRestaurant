@@ -97,13 +97,17 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         tableView.backgroundView = videoBG?.view
     }
     
-    /*
     override func viewWillAppear(_ animated: Bool) {
         print("**location view will appear**")
         // Start to play, because videoBG's viewWillAppear won't be called so it won't be able to start by itself.
-        videoBG?.player?.play()
+        //videoBG?.player?.play()
     }
-    */
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // Activate search controller in order to activate search bar.
+        searchController?.isActive = true
+    }
+    
     /*
     override func viewWillDisappear(_ animated: Bool) {
         //videoBG?.playerVC.player?.pause()
@@ -215,6 +219,11 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     func willPresentSearchController(_ searchController: UISearchController) {
         // Blur background video.
         addVisualEffectView(effect: .blur, to: (videoBG?.view)!)
+    }
+    
+    // Activate search bar.
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.becomeFirstResponder()
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
