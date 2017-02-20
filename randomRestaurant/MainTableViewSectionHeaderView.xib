@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="MainTableViewSectionHeaderView" customModule="randomRestaurant" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="i8q-pN-gkK">
+                    <rect key="frame" x="20" y="8" width="335" height="56"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lvF-nw-jmL">
+                            <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="lvF-nw-jmL" secondAttribute="height" multiplier="1:1" id="f7e-34-Agc"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6tN-sY-Nls">
+                            <rect key="frame" x="61" y="0.0" width="274" height="56"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="56" id="nns-ix-Vq4"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="i8q-pN-gkK" secondAttribute="trailing" constant="20" symbolic="YES" id="Unx-2W-l6R"/>
+                <constraint firstItem="i8q-pN-gkK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="W7S-oX-JBE"/>
+                <constraint firstItem="i8q-pN-gkK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" id="zFy-92-Zul"/>
+            </constraints>
+            <connections>
+                <outlet property="imageView" destination="lvF-nw-jmL" id="ELx-yT-zfv"/>
+                <outlet property="label" destination="6tN-sY-Nls" id="zFT-cg-g5Z"/>
+                <outlet property="stackView" destination="i8q-pN-gkK" id="HSa-Yn-PP7"/>
+                <outlet property="stackViewHeight" destination="nns-ix-Vq4" id="D40-73-OIe"/>
+            </connections>
+            <point key="canvasLocation" x="52.5" y="59.5"/>
+        </view>
+    </objects>
+</document>

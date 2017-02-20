@@ -42,6 +42,9 @@
 		B9F508BB1DFB6D8100ACCD73 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F508BA1DFB6D8100ACCD73 /* Clock.swift */; };
 		B9F984BE1E54405100C6CA04 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984BD1E54405100C6CA04 /* VideoViewController.swift */; };
 		B9F984C21E558F1700C6CA04 /* Videos in Resources */ = {isa = PBXBuildFile; fileRef = B9F984C11E558F1600C6CA04 /* Videos */; };
+		B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */; };
+		B9F984EE1E5B912300C6CA04 /* MainTableViewSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9F984ED1E5B912300C6CA04 /* MainTableViewSectionHeaderView.xib */; };
+		B9F984F01E5B923800C6CA04 /* MainTableViewSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984EF1E5B923800C6CA04 /* MainTableViewSectionHeaderView.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +88,9 @@
 		B9F508BA1DFB6D8100ACCD73 /* Clock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
 		B9F984BD1E54405100C6CA04 /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		B9F984C11E558F1600C6CA04 /* Videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Videos; sourceTree = "<group>"; };
+		B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		B9F984ED1E5B912300C6CA04 /* MainTableViewSectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainTableViewSectionHeaderView.xib; sourceTree = "<group>"; };
+		B9F984EF1E5B923800C6CA04 /* MainTableViewSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewSectionHeaderView.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -207,6 +213,7 @@
 		B91AC8551D4EAC4600B0476E /* randomRestaurant */ = {
 			isa = PBXGroup;
 			children = (
+				B9F984EA1E5A8A9900C6CA04 /* Main */,
 				B906DBA41D728C880021B025 /* Rating */,
 				B906DB9F1D7272850021B025 /* Time */,
 				B906DB7F1D698E630021B025 /* Locations */,
@@ -223,6 +230,16 @@
 				B9F984BD1E54405100C6CA04 /* VideoViewController.swift */,
 			);
 			path = randomRestaurant;
+			sourceTree = "<group>";
+		};
+		B9F984EA1E5A8A9900C6CA04 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */,
+				B9F984ED1E5B912300C6CA04 /* MainTableViewSectionHeaderView.xib */,
+				B9F984EF1E5B923800C6CA04 /* MainTableViewSectionHeaderView.swift */,
+			);
+			name = Main;
 			sourceTree = "<group>";
 		};
 		D19EF44F0B4595709F1C3F5C /* Pods */ = {
@@ -301,6 +318,7 @@
 				B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */,
 				B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */,
 				B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */,
+				B9F984EE1E5B912300C6CA04 /* MainTableViewSectionHeaderView.xib in Resources */,
 				B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,6 +382,7 @@
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
 				B982EEBD1DDE9F2D00382EB9 /* GooglePlaceDetails.swift in Sources */,
 				B916A51B1E41536300923032 /* FavoriteTableViewCell.swift in Sources */,
+				B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */,
 				B9488F0B1D9137DF000DB973 /* HistoryTableViewCell.swift in Sources */,
 				B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */,
 				B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */,
@@ -375,6 +394,7 @@
 				B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */,
 				B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */,
 				B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */,
+				B9F984F01E5B923800C6CA04 /* MainTableViewSectionHeaderView.swift in Sources */,
 				B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */,
 				B96AE9961D8E9CC600257751 /* Restaurant.xcdatamodeld in Sources */,
 				B916A5171E3C1BF800923032 /* History+CoreDataClass.swift in Sources */,
