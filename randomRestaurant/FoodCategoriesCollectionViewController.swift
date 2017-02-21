@@ -19,6 +19,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
     
     fileprivate var videoVCs = [VideoViewController]()
+    fileprivate var category: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,6 +118,11 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     }
     */
     
+    func getCategory() -> String {
+        print("return category: \(category)")
+        return category
+    }
+    
     // Highlight selected cell & pass data.
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCell = collectionView.cellForItem(at: indexPath) as! FoodCategoriesCollectionViewCell
@@ -124,7 +130,13 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         selectedCell.layer.borderWidth = 2.0
         selectedCell.layer.borderColor = UIColor.brown.cgColor
         
-        YelpUrlQueryParameters.category = selectedCell.nameLabel.text?.lowercased()
+        //YelpUrlQueryParameters.category = selectedCell.nameLabel.text?.lowercased()
+        category = selectedCell.nameLabel.text
+        
+        /* 
+         Set unwind segue from collection cell to Exit, it'll segue before collection view finish doing didSelectItemAt so category will be nil. Changed to segue from view controller instead of from cell to Exit, and manually trigger segue here to make it work.
+        */
+        performSegue(withIdentifier: "backFromWhat", sender: self)
     }
     
     // Clear highlight.
@@ -149,6 +161,19 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     }
     */
 
+    /*
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        print("category segue")
+        if let destinationVC = segue.destination as? MainTableViewController {
+            destinationVC.category = getCategory()
+        }
+    }
+    */
 }
 
 // Flow Layout.

@@ -17,6 +17,10 @@ class MainTableViewController: UITableViewController {
     fileprivate let list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
     fileprivate var headerHeight: CGFloat!
 
+    fileprivate var yelpQueryParams = YelpUrlQueryParameters()
+    
+    var category: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -167,8 +171,29 @@ class MainTableViewController: UITableViewController {
         }
     }
     */
-    override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
-        // Get search results and sort.
+    
+    @IBAction func unwindToMain(sender: UIStoryboardSegue) {
+        let sourceVC = sender.source
+        switch (sender.identifier)! {
+        case "backFromWhat":
+            let vc = sourceVC as! FoodCategoriesCollectionViewController
+            yelpQueryParams.category = vc.getCategory()
+            print("**category: \(yelpQueryParams.category)")
+        case "backFromWhere":
+            let vc = sourceVC as! LocationTableViewController
+            yelpQueryParams.coordinates = vc.getLocationCoordinates()
+            print("**coordinate: \(yelpQueryParams.coordinates)")
+        case "backFromWhen":
+            let vc = sourceVC as! DateViewController
+            yelpQueryParams.openAt = vc.getDate()
+            print("**open at: \(yelpQueryParams.openAt)")
+        case "backFromRating":
+            let vc = sourceVC as! RatingViewController
+            yelpQueryParams.rating = vc.getRating()
+            print("**rating: \(yelpQueryParams.rating)")
+        default:
+            fatalError("Unexpected returning segue: \((sender.identifier)!)")
+        }
     }
 
 }

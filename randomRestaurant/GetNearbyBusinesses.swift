@@ -187,11 +187,15 @@ class GetNearbyBusinesses {
             let businessRating = business["rating"] as! Double
             // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
             //print("===biz rating: \(businessRating), bar: \(YelpUrlQueryParameters.rating)")
+            
+            /***********
             if (businessRating < YelpUrlQueryParameters.rating) || (index == sortedBusinesses.count - 1) {
                 //print("index: \(index)")
                 indx = index
                 break
             }
+            */
+            
             // TODO: Another way to sort, but not work, why?
             //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 })
             //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")

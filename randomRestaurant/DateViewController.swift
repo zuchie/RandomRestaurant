@@ -18,6 +18,8 @@ class DateViewController: UIViewController {
     
     @IBOutlet weak var hourArmBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var minuteArmBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var saveButtonHeight: NSLayoutConstraint!
     
     private let calendar = Calendar.current
     private let date = Date()
@@ -332,7 +334,7 @@ class DateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Date category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
+        //print("Date category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
         clock.clockTime.hour = calendar.component(.hour, from: date)
         clock.clockTime.minute = calendar.component(.minute, from: date)
@@ -366,15 +368,22 @@ class DateViewController: UIViewController {
         
         // Set rotation anchor point to the arm head.
         clockArmHour.layer.anchorPoint.y = 1
-        hourArmBottomConstraint.constant += clockArmHour.frame.height / 2
+        hourArmBottomConstraint.constant += 0.5 * clockArmHour.frame.height
         // Rotate.
         //clockArmHour.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmHourRad!))
 
         clockArmMinute.layer.anchorPoint.y = 1
-        minuteArmBottomConstraint.constant += clockArmMinute.frame.height / 2
+        minuteArmBottomConstraint.constant += 0.5 * clockArmMinute.frame.height
         //clockArmMinute.transform = CGAffineTransform(rotationAngle: CGFloat(clockArmMinuteRad!))
         
         setClockArms(hourArmRad: clockArmHourRad!, minuteArmRad: clockArmMinuteRad!)
+        
+        // Round button.
+        saveButtonHeight.constant = 0.1 * view.bounds.height
+        saveButton.layer.cornerRadius = 0.5 * saveButtonHeight.constant
+        saveButton.layer.borderWidth = 1
+        saveButton.layer.borderColor = UIColor.white.cgColor
+        saveButton.clipsToBounds = true
     }
     
     fileprivate func setClockArms(hourArmRad: Float?, minuteArmRad: Float?) {
@@ -391,6 +400,13 @@ class DateViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func getDate() -> Int {
+        // Minutes precision, in order to use cached data when re-query is made in 1 min.
+        let proposedDate = calendar.date(bySettingHour: clock.clockTime.hour!, minute: clock.clockTime.minute!, second: 0, of: date)
+        print("proposed hour, min: \(clock.clockTime.hour, clock.clockTime.minute)")
+        return Int(proposedDate!.timeIntervalSince1970)
+    }
+    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -409,7 +425,8 @@ class DateViewController: UIViewController {
         // Minutes precision, in order to use cached data when re-query is made in 1 min.
         if let proposedDate = calendar.date(bySettingHour: clock.clockTime.hour!, minute: clock.clockTime.minute!, second: 0, of: date) {
             print("proposed hour, min: \(clock.clockTime.hour, clock.clockTime.minute)")
-            YelpUrlQueryParameters.openAt = Int(proposedDate.timeIntervalSince1970)
+            //YelpUrlQueryParameters.openAt = Int(proposedDate.timeIntervalSince1970)
         }
     }
+    */
 }

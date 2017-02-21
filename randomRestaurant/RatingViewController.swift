@@ -20,6 +20,8 @@ class RatingViewController: UIViewController {
     @IBOutlet weak var animation: UIImageView!
     @IBOutlet weak var animationWidth: NSLayoutConstraint!
     @IBOutlet weak var animationLeading: NSLayoutConstraint!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var saveButtonHeight: NSLayoutConstraint!
     
     private var animationLeadingSpace: CGFloat!
     
@@ -42,7 +44,7 @@ class RatingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("rating category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
+        //print("rating category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
         
         ratingButtons += [button0, button1, button2, button3, button4]
         
@@ -56,6 +58,13 @@ class RatingViewController: UIViewController {
         // Animation image view is the same size with button.
         animationWidth.constant = button0.frame.width
         animationLeadingSpace = animationLeading.constant
+        
+        // Round button.
+        saveButtonHeight.constant = 0.1 * view.bounds.height
+        saveButton.layer.cornerRadius = 0.5 * saveButtonHeight.constant
+        saveButton.layer.borderWidth = 1
+        saveButton.layer.borderColor = UIColor.white.cgColor
+        saveButton.clipsToBounds = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -92,7 +101,7 @@ class RatingViewController: UIViewController {
             rating! -= 0.5
         }
         print("rating: \(rating!)")
-        YelpUrlQueryParameters.rating = rating!
+        //YelpUrlQueryParameters.rating = rating!
         
         updateButtonSelectionStates()
         
@@ -116,17 +125,16 @@ class RatingViewController: UIViewController {
             button.isSelected = Double(index) < rating!
         }
     }
-    /*
+    
     func getRating() -> Double {
         // When no rating has been chosen, use 0.5 as default value.
         if rating != nil {
-            print("rating returned: \(rating)")
             return rating!
         } else {
             return 0.5
         }
     }
-    */
+    
     @IBAction func unwindToRating(sender: UIStoryboardSegue) {
         /*
         if let _ = sender.source as? MachineViewController {

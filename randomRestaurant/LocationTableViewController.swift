@@ -15,6 +15,8 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     fileprivate var searchController: UISearchController?
     let locationManager = CLLocationManager()
     private var currentLocationCoordinations: CLLocationCoordinate2D?
+    
+    fileprivate var location: CLLocationCoordinate2D!
 
     let googlePlaceDetails = GooglePlaceDetails()
     
@@ -198,13 +200,19 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Get coordinates of chosen location.
         if indexPath.section == Locations.current.rawValue {
-            YelpUrlQueryParameters.coordinates = currentLocationCoordinations
+            //YelpUrlQueryParameters.coordinates = currentLocationCoordinations
+            location = currentLocationCoordinations
+            performSegue(withIdentifier: "backFromWhere", sender: self)
         } else {
             let placeID = filteredLocations[indexPath.section][indexPath.row].placeID
             
             googlePlaceDetails.getCoordinates(from: placeID) { coordinates in
-                YelpUrlQueryParameters.coordinates = coordinates
-                print("***coordinates updated")
+                //YelpUrlQueryParameters.coordinates = coordinates
+                self.location = coordinates
+                //print("***coordinates updated")
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "backFromWhere", sender: self)
+                }
             }
         }
     }
@@ -249,6 +257,10 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     
     private func removeVisualEffectView(_ view: UIVisualEffectView) {
         view.removeFromSuperview()
+    }
+    
+    func getLocationCoordinates() -> CLLocationCoordinate2D {
+        return location
     }
     
     /*

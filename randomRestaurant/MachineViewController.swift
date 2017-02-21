@@ -62,7 +62,7 @@ class MachineViewController: UIViewController {
         let access_token = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
         
         // Get businesses from Yelp API v3.
-        nearbyBusinesses.getUrlParameters(YelpUrlQueryParameters.coordinates, categories: YelpUrlQueryParameters.category, radius: YelpUrlQueryParameters.radius, limit: YelpUrlQueryParameters.limit, open_at: YelpUrlQueryParameters.openAt)
+        //********nearbyBusinesses.getUrlParameters(YelpUrlQueryParameters.coordinates, categories: YelpUrlQueryParameters.category, radius: YelpUrlQueryParameters.radius, limit: YelpUrlQueryParameters.limit, open_at: YelpUrlQueryParameters.openAt)
         
         nearbyBusinesses.makeBusinessesSearchUrl("https://api.yelp.com/v3/businesses/search?")
         nearbyBusinesses.makeUrlRequest(access_token) { totalBiz, randomNo in
@@ -88,7 +88,7 @@ class MachineViewController: UIViewController {
                 }
                 
                 self.restaurant.url = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
-                self.restaurant.category = YelpUrlQueryParameters.category!
+                //********self.restaurant.category = YelpUrlQueryParameters.category!
                 self.restaurant.total = totalBiz
                 self.restaurant.number = randomNo
                 self.restaurant.date = Int(Date().timeIntervalSince1970)

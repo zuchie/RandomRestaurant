@@ -81,7 +81,7 @@ class ResultsViewController: UIViewController {
                     mapVC.setBizLocation(restaurant.address)
                     mapVC.setBizCoordinate2D(coordinate!)
                     mapVC.setBizName(restaurant.name)
-                    mapVC.setDepartureTime(YelpUrlQueryParameters.openAt!)
+                    //********mapVC.setDepartureTime(YelpUrlQueryParameters.openAt!)
                 }
             }
         }
