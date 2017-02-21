@@ -443,7 +443,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23J-X6-kUM" id="eyb-YP-067">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -483,7 +483,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NBY-AP-VtY" id="WyT-S0-w9x">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BdF-og-VP3" customClass="HistoryCellButton" customModule="randomRestaurant" customModuleProvider="target">
@@ -548,7 +548,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4iK-VR-ynm" id="PVO-AK-ls0">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -583,7 +583,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2S4-F2-68x" id="iIX-oh-nAf">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -595,7 +595,10 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="gcO-Ox-xEb"/>
                     <connections>
-                        <segue destination="oZz-iw-vUY" kind="presentation" id="aRW-NO-OA1"/>
+                        <segue destination="oZz-iw-vUY" kind="presentation" identifier="where" id="aRW-NO-OA1"/>
+                        <segue destination="0l4-Wv-HR4" kind="presentation" identifier="what" id="TTp-UT-Q2J"/>
+                        <segue destination="VJg-eE-0oq" kind="presentation" identifier="when" id="VeN-Hd-fSU"/>
+                        <segue destination="vAp-XE-6Pg" kind="presentation" identifier="rating" id="rTW-HC-VXC"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dAG-yp-WnP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -689,6 +692,9 @@
         <image name="image3" width="137" height="91"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6kG-0u-2ek"/>
+        <segue reference="VeN-Hd-fSU"/>
+        <segue reference="TTp-UT-Q2J"/>
+        <segue reference="rTW-HC-VXC"/>
+        <segue reference="tjL-YG-wTx"/>
     </inferredMetricsTieBreakers>
 </document>

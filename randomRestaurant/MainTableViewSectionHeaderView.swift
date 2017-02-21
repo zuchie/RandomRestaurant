@@ -14,6 +14,8 @@ class MainTableViewSectionHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var stackViewHeight: NSLayoutConstraint!
+    
+    var headerName: String!
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

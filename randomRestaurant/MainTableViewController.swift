@@ -91,12 +91,13 @@ class MainTableViewController: UITableViewController {
         if section < 4 {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MainTableViewSectionHeaderView
 
-            let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleHeaderTap(_:)))
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
             header.addGestureRecognizer(tap)
             
             header.stackViewHeight.constant = headerHeight
             header.imageView.image = UIImage(named: headers[section].img)
             header.label.text = headers[section].txt
+            header.headerName = headers[section].img
          
             return header
         } else {
@@ -109,11 +110,12 @@ class MainTableViewController: UITableViewController {
     }
 
     
-    func handleHeaderTap(_ sender: UITapGestureRecognizer) {
-        let headerView = sender.view as! MainTableViewSectionHeaderView
-        if headerView.label.text == "Chinese" {
-            print("hello&&&&&")
+    @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
+        guard let headerView = sender.view as? MainTableViewSectionHeaderView else {
+            fatalError("Unexpected view: \(sender.view)")
         }
+        
+        performSegue(withIdentifier: headerView.headerName.lowercased(), sender: self)
     }
     /*
     // Override to support conditional editing of the table view.
