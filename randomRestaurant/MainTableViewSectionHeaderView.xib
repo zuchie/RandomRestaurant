@@ -33,11 +33,13 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
+                    <gestureRecognizers/>
                     <constraints>
                         <constraint firstAttribute="height" constant="56" id="nns-ix-Vq4"/>
                     </constraints>
                 </stackView>
             </subviews>
+            <gestureRecognizers/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="i8q-pN-gkK" secondAttribute="trailing" constant="20" symbolic="YES" id="Unx-2W-l6R"/>
                 <constraint firstItem="i8q-pN-gkK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="W7S-oX-JBE"/>

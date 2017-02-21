@@ -24,6 +24,13 @@ class MainTableViewController: UITableViewController {
         tableView.register(nib, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         
         headerHeight = tableView.frame.height / 12
+        
+        /*
+        for index in 0..<headers.count {
+            let tap = UITapGestureRecognizer(target: tableView.headerView(forSection: index), action: #selector(handleHeaderTap(_:index:)))
+            tableView.headerView(forSection: index)?.addGestureRecognizer(tap)
+        }
+        */
         /*
         for header in headers {
             
@@ -38,7 +45,7 @@ class MainTableViewController: UITableViewController {
         }
         */
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -83,6 +90,9 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section < 4 {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MainTableViewSectionHeaderView
+
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleHeaderTap(_:)))
+            header.addGestureRecognizer(tap)
             
             header.stackViewHeight.constant = headerHeight
             header.imageView.image = UIImage(named: headers[section].img)
@@ -99,6 +109,12 @@ class MainTableViewController: UITableViewController {
     }
 
     
+    func handleHeaderTap(_ sender: UITapGestureRecognizer) {
+        let headerView = sender.view as! MainTableViewSectionHeaderView
+        if headerView.label.text == "Chinese" {
+            print("hello&&&&&")
+        }
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -141,9 +157,14 @@ class MainTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if sender is UITableViewHeaderFooterView {
+            let headerView = sender as! MainTableViewSectionHeaderView
+            if headerView.img == "Where" {
+                segue.destination
+            }
+        }
     }
     */
-    
     override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
         // Get search results and sort.
     }
