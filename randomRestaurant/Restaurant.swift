@@ -21,8 +21,11 @@ class Restaurant {
     var latitude: Double
     var longitude: Double
     var category: String
-    var total: Int
-    var number: Int
+    //var distance: Int
+    //var phone: String
+    //var imageUrl: String
+    //var total: Int
+
     
     init(name: String, price: String, rating: String, reviewCount: String, address: String, isFavorite: Bool, date: Int, url: String, latitude: Double, longitude: Double, category: String, total: Int, number: Int) {
         self.name = name
@@ -36,8 +39,8 @@ class Restaurant {
         self.latitude = latitude
         self.longitude = longitude
         self.category = category
-        self.total = total
-        self.number = number
+        //self.total = total
+        //self.number = number
     }
     
     // Initializer for Restaurants in History DB.

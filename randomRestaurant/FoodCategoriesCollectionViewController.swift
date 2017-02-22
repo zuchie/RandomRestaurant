@@ -119,6 +119,12 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     */
     
     func getCategory() -> String {
+        if category == "American" {
+            category = "newamerican,tradamerican"
+        }
+        if category == "Indian" {
+            category = "indpak"
+        }
         print("return category: \(category)")
         return category
     }

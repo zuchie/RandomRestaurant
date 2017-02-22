@@ -27,15 +27,13 @@ class GetNearbyBusinesses {
     fileprivate var pickedBusiness: [String:AnyObject]? = nil
     fileprivate var totalSortedBiz = 0
     fileprivate var randomNo = 0
-
-    var result: [String:AnyObject]? {
-        get {
-            //print("picked business: \(self.pickedBusiness)")
-            return pickedBusiness
+    fileprivate var businesses: [String: Any]?
+    
+    var results: [String: Any]? {
+        if businesses == nil {
+            print("nil businesses")
         }
-        set {
-            pickedBusiness = newValue
-        }
+        return businesses
     }
     /*
     func setRatingBar(_ ratingBar: Double) {
@@ -130,6 +128,9 @@ class GetNearbyBusinesses {
         businessesSearchUrl += urlParams.radius != nil ? "&radius=\(urlParams.radius!)" : ""
         businessesSearchUrl += urlParams.limit != nil ? "&limit=\(urlParams.limit!)" : ""
         businessesSearchUrl += urlParams.open_at != nil ? "&open_at=\(urlParams.open_at!)" : ""
+        // Sort by Yelp's rating
+        businessesSearchUrl += "&sort_by=rating"
+
         // Convert string to URL query allowed string to escape spaces.
         businessesSearchUrl = businessesSearchUrl.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         
@@ -139,7 +140,7 @@ class GetNearbyBusinesses {
     // Make own completionHandler function.
     typealias completion = (_ totalBiz: Int, _ randomNo: Int) -> Void
     
-    func makeUrlRequest(_ token: String, completionHanlder: @escaping completion) {
+    func makeUrlRequest(_ token: String) {
         
         let urlObj = URL(string: businessesSearchUrl)
         var request = URLRequest(url: urlObj!)
@@ -170,14 +171,14 @@ class GetNearbyBusinesses {
                 self.sortAndRandomlyPickBiz(data)
                 print("non-cached response data")
                 print("current disk usage: \(URLCache.shared.currentDiskUsage), mem usage: \(URLCache.shared.currentMemoryUsage)")
-                completionHanlder(self.totalSortedBiz, self.randomNo)
+                //completionHanlder(self.totalSortedBiz, self.randomNo)
             }) 
             task.resume()
         } else {
             self.sortAndRandomlyPickBiz(cachedURLResponse?.data)
             print("cached response data")
             print("current disk usage: \(URLCache.shared.currentDiskUsage), mem usage: \(URLCache.shared.currentMemoryUsage)")
-            completionHanlder(totalSortedBiz, randomNo)
+            //completionHanlder(totalSortedBiz, randomNo)
         }
     }
 
@@ -187,15 +188,13 @@ class GetNearbyBusinesses {
             let businessRating = business["rating"] as! Double
             // Pick randomly from biz with rating >= rating bar, if all biz with rating >= rating bar, pick amongst all of them.
             //print("===biz rating: \(businessRating), bar: \(YelpUrlQueryParameters.rating)")
-            
-            /***********
+            /*
             if (businessRating < YelpUrlQueryParameters.rating) || (index == sortedBusinesses.count - 1) {
                 //print("index: \(index)")
                 indx = index
                 break
             }
             */
-            
             // TODO: Another way to sort, but not work, why?
             //let indexOfFisrtUnqualifiedBusiness = sortedBusinesses.indexOfObjectPassingTest({ $0["rating"] < 4.5 })
             //print("indexOfFisrtUnqualifiedBusiness: \(indexOfFisrtUnqualifiedBusiness)")
@@ -211,6 +210,21 @@ class GetNearbyBusinesses {
         return sortedBusinesses[randomNumber]
     }
     
+    fileprivate func jsonToDictionary(_ data: Data?) {
+        // Convert server json response to NSDictionary
+        var json: Any?
+        do {
+            json = try JSONSerialization.jsonObject(with: data!, options: [])
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        guard let item = json as? [String: Any],
+            let businesses = item["businesses"] as? [String: Any] else {
+                fatalError("Unexpected JSON: \(json)")
+        }
+        self.businesses = businesses
+    }
     fileprivate func sortAndRandomlyPickBiz(_ data: Data?) -> Void {
         // Convert server json response to NSDictionary
         do {
@@ -233,7 +247,6 @@ class GetNearbyBusinesses {
         }
         
     }
-
     fileprivate func sortBusinesses(_ businesses: [[String:AnyObject]]) -> [[String:AnyObject]] {
         return businesses.sorted(by: {$0["rating"] as! Double == $1["rating"] as! Double ?
             $0["review_count"] as! Int > $1["review_count"] as! Int : $0["rating"] as! Double > $1["rating"] as! Double})

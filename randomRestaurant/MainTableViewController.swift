@@ -7,19 +7,23 @@
 //
 
 import UIKit
+import CoreLocation
+
+private var myContext = 0
 
 class MainTableViewController: UITableViewController {
     
     fileprivate var sectionHeaders = [UIView]()
-    fileprivate var results = [Restaurant]()
-    fileprivate let headers: [(img: String, txt: String)] = [("What", "Chinese"), ("Where", "Here"), ("When", "Now"), ("Rating", "4.0")]
+    //fileprivate var results = [Restaurant]()
+    fileprivate let headers: [(img: String, txt: String)] = [("What", "What (Chinese)"), ("Where", "Where (Here)"), ("When", "When (Now)"), ("Rating", "Rating (4.0)")]
 
-    fileprivate let list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+    //fileprivate let list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
     fileprivate var headerHeight: CGFloat!
 
     fileprivate var yelpQueryParams = YelpUrlQueryParameters()
-    
-    var category: String?
+    fileprivate var yelpQuery = YelpQuery()
+    fileprivate var restaurants = [[String: Any]]()
+    fileprivate var hereAndNow = HereAndNow()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,26 +32,58 @@ class MainTableViewController: UITableViewController {
         tableView.register(nib, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         
         headerHeight = tableView.frame.height / 12
-        
-        /*
-        for index in 0..<headers.count {
-            let tap = UITapGestureRecognizer(target: tableView.headerView(forSection: index), action: #selector(handleHeaderTap(_:index:)))
-            tableView.headerView(forSection: index)?.addGestureRecognizer(tap)
-        }
-        */
-        /*
-        for header in headers {
-            
-            let headerVC = storyboard?.instantiateViewController(withIdentifier: "sectionHeader") as! MainTableViewSectionHeaderViewController
-            headerVC.img = UIImage(named: header.img)
-            headerVC.labelText = header.txt
-            headerVC.loadViewIfNeeded()
 
-            headerVC.stackView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.frame.width / 6)
-            
-            sectionHeaders.append(headerVC.stackView)
+        yelpQuery.addObserver(self, forKeyPath: "queryDone", options: .new, context: &myContext)
+        hereAndNow.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
+        
+        hereAndNow.loadViewIfNeeded()
+        
+        if headers[0].txt == "What (Chinese)" {
+            yelpQueryParams.category.value = "Chinese"
         }
-        */
+        if headers[2].txt == "When (Now)" {
+            yelpQueryParams.openAt.value = Int(hereAndNow.date)
+        }
+        if headers[3].txt == "Rating (4.0)" {
+            yelpQueryParams.rating = 4.0
+        }
+    
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        print("KVO triggered")
+        if context == &myContext {
+            print("keyPath: \(keyPath), object: \(object)")
+            if keyPath == "queryDone" && object is YelpQuery {
+                if let newValue = change?[.newKey] {
+                    print("query busy changed to: \(newValue)")
+                    if (newValue as! Bool) {
+                        print("query done")
+                        // Process results.
+                        restaurants = yelpQuery.results!
+                        DispatchQueue.main.async {
+                            self.tableView.reloadSections(IndexSet(integer: 4), with: .automatic)
+                        }
+                        
+                    }
+                }
+            }
+            if keyPath == "coordinate" && object is HereAndNow {
+                if let newValue = change?[.newKey] {
+                    print("coordinate updated")
+                    if headers[1].txt == "Where (Here)" {
+                        yelpQueryParams.latitude.value = (newValue as! CLLocationCoordinate2D).latitude
+                        yelpQueryParams.longitude.value = (newValue as! CLLocationCoordinate2D).longitude
+                    }
+                }
+            }
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+    
+    deinit {
+        yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
     }
     
     override func didReceiveMemoryWarning() {
@@ -64,7 +100,7 @@ class MainTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return section < 4 ? 1 : list.count
+        return section < 4 ? 1 : restaurants.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,7 +112,7 @@ class MainTableViewController: UITableViewController {
             
         } else {
             //tableView.rowHeight = 80.0
-            cell.textLabel?.text = list[indexPath.row]
+            cell.textLabel?.text = restaurants[indexPath.row]["name"] as! String?
         }
 
         return cell
@@ -110,7 +146,7 @@ class MainTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section < 4 ? nil : "Restaurants:"
+        return section < 4 ? nil : "Restaurants: \(restaurants.count)"
     }
 
     
@@ -177,16 +213,17 @@ class MainTableViewController: UITableViewController {
         switch (sender.identifier)! {
         case "backFromWhat":
             let vc = sourceVC as! FoodCategoriesCollectionViewController
-            yelpQueryParams.category = vc.getCategory()
-            print("**category: \(yelpQueryParams.category)")
+            yelpQueryParams.category.value = vc.getCategory()
+            print("**category: \(yelpQueryParams.category.value)")
         case "backFromWhere":
             let vc = sourceVC as! LocationTableViewController
-            yelpQueryParams.coordinates = vc.getLocationCoordinates()
-            print("**coordinate: \(yelpQueryParams.coordinates)")
+            yelpQueryParams.latitude.value = vc.getLocationCoordinates().latitude
+            yelpQueryParams.longitude.value = vc.getLocationCoordinates().longitude
+            print("**latitude: \(yelpQueryParams.latitude.value), longitude: \(yelpQueryParams.longitude.value)")
         case "backFromWhen":
             let vc = sourceVC as! DateViewController
-            yelpQueryParams.openAt = vc.getDate()
-            print("**open at: \(yelpQueryParams.openAt)")
+            yelpQueryParams.openAt.value = vc.getDate()
+            print("**open at: \(yelpQueryParams.openAt.value)")
         case "backFromRating":
             let vc = sourceVC as! RatingViewController
             yelpQueryParams.rating = vc.getRating()
@@ -194,6 +231,10 @@ class MainTableViewController: UITableViewController {
         default:
             fatalError("Unexpected returning segue: \((sender.identifier)!)")
         }
+        
+        // TODO: Start Yelp search.
+        yelpQuery.parameters = yelpQueryParams
+        yelpQuery.startQuery()
     }
 
 }

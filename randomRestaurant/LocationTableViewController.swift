@@ -10,7 +10,7 @@ import UIKit
 import GooglePlaces
 import CoreLocation
 
-class LocationTableViewController: UITableViewController, CLLocationManagerDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
+class LocationTableViewController: UITableViewController, UISearchControllerDelegate, UISearchResultsUpdating {
 
     fileprivate var searchController: UISearchController?
     let locationManager = CLLocationManager()
@@ -34,7 +34,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         case blur
     }
     
-    fileprivate var videoBG: VideoViewController?
+    //fileprivate var videoBG: VideoViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,13 +60,14 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         
         // Table view setup.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
         // Set BG image.
-        //imageView = UIImageView(image: UIImage(named: "globe"))
-        //imageView?.contentMode = .scaleAspectFit
-        //tableView.backgroundView = imageView
+        let imageView = UIImageView(image: UIImage(named: "globe"))
+        imageView.contentMode = .scaleAspectFit
+        tableView.backgroundView = imageView
         
         // Location manager setup.
-        locationManager.delegate = self
+        //locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         // Allocate cache here for URL responses so that cache data won't get lost.
@@ -91,12 +92,14 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         
         makeVisualEffectView(effect: .blur)
         
+        /*
         // Add video to background and play.
         videoBG = VideoViewController(fileName: "city", fileExt: "mp4", directory: "Videos")
         addChildViewController(videoBG!)
         videoBG?.didMove(toParentViewController: self)
 
         tableView.backgroundView = videoBG?.view
+        */
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,7 +124,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         // Dispose of any resources that can be recreated.
         URLCache.shared.removeAllCachedResponses()
     }
-
+    /*
     // Asking for access of user's location.
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
@@ -164,7 +167,7 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
         currentLocationCoordinations = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
         
     }
-
+    */
     // Method to conform to UISearchResultsUpdating protocol.
     public func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text {
@@ -226,7 +229,8 @@ class LocationTableViewController: UITableViewController, CLLocationManagerDeleg
     // Notifications to blur/clear BG image.
     func willPresentSearchController(_ searchController: UISearchController) {
         // Blur background video.
-        addVisualEffectView(effect: .blur, to: (videoBG?.view)!)
+        //addVisualEffectView(effect: .blur, to: (videoBG?.view)!)
+        addVisualEffectView(effect: .blur, to: tableView.backgroundView!)
     }
     
     // Activate search bar.

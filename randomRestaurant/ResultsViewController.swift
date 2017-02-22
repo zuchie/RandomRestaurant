@@ -55,7 +55,7 @@ class ResultsViewController: UIViewController {
         if restaurant.name == "" {
             bizInfo.text = "No restaurant found"
         } else {
-            bizInfo.text = "\(restaurant.name)\nprice: \(restaurant.price), rating: \(restaurant.rating), review count: \(restaurant.reviewCount)\ntotal found: \(restaurant.total), picked no.: \(restaurant.number)\naddress: \(restaurant.address)\ncategory: \(restaurant.category)"
+            //bizInfo.text = "\(restaurant.name)\nprice: \(restaurant.price), rating: \(restaurant.rating), review count: \(restaurant.reviewCount)\ntotal found: \(restaurant.total), picked no.: \(restaurant.number)\naddress: \(restaurant.address)\ncategory: \(restaurant.category)"
         }
     }
     

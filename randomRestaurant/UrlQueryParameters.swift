@@ -7,37 +7,29 @@
 //
 
 import Foundation
-import CoreLocation
 
 class YelpUrlQueryParameters {
     
     // MARK: Properties
-    var coordinates: CLLocationCoordinate2D?
-    var category: String?
-    var radius = 10000
-    var limit = 50
-    var openAt: Int?
+    var latitude = Parameter(name: "latitude", value: nil)
+    var longitude = Parameter(name: "longitude", value: nil)
+    var category = Parameter(name: "categories", value: nil)
+    var radius = Parameter(name: "radius", value: 20000)
+    var limit = Parameter(name: "limit", value: 20)
+    var openAt = Parameter(name: "open_at", value: nil)
+    
     var rating = 0.0
 
-    /*
-    // MARK: Properties.
-    
-    var coordinates: CLLocationCoordinate2D?
-    var category: String?
-    var radius: Int?
-    var limit: Int?
-    var openAt: Int?
-    
-    
-    // MARK: Initialization
-    
-    init?(coordinates: CLLocationCoordinate2D, category: String, radius: Int, limit: Int, openAt: Int) {
-        self.coordinates = coordinates
-        self.category = category
-        self.radius = radius
-        self.limit = limit
-        self.openAt = openAt
-
+    struct Parameter {
+        var name: String
+        var value: Any?
+        var queryString: String {
+            // Make a url query format string: "&name=value" or, "" if value == nil.
+            if let myValue = value {
+                return "&\(name)=\(myValue)".lowercased()
+            } else {
+                return ""
+            }
+        }
     }
-    */
 }
