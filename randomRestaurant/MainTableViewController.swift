@@ -109,7 +109,7 @@ class MainTableViewController: UITableViewController {
         // Configure the cell...
         if indexPath.section < 4 {
             //tableView.rowHeight = 10.0
-            
+            cell.textLabel?.text = ""
         } else {
             //tableView.rowHeight = 80.0
             cell.textLabel?.text = restaurants[indexPath.row]["name"] as! String?
