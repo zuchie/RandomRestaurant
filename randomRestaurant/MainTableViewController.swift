@@ -259,9 +259,15 @@ class MainTableViewController: UITableViewController {
     }
     
     fileprivate func updateHeader(category: String?, location: (description: String, coordinate: CLLocationCoordinate2D)?, date: Date?, rating: Float?) {
-        if let value = category {
-            yelpQueryParams.category.value = value
+        if var value = category {
             updateHeaderLabelText(ofSection: 0, toText: value)
+            if value == "American" {
+                value = "newamerican,tradamerican"
+            }
+            if value == "Indian" {
+                value = "indpak"
+            }
+            yelpQueryParams.category.value = value
             print("**category: \(value)")
         } else {
             updateHeaderLabelText(ofSection: 0, toText: "What: all")
