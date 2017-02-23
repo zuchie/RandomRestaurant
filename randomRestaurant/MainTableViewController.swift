@@ -15,7 +15,7 @@ class MainTableViewController: UITableViewController {
     
     fileprivate var sectionHeaders = [UIView]()
     //fileprivate var results = [Restaurant]()
-    fileprivate let headers: [(img: String, txt: String)] = [("What", "What (Chinese)"), ("Where", "Where (Here)"), ("When", "When (Now)"), ("Rating", "Rating (4.0)")]
+    fileprivate var headers: [(img: String, txt: String)] = [("What", "What"), ("Where", "Where"), ("When", "When"), ("Rating", "Rating")]
 
     //fileprivate let list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
     fileprivate var headerHeight: CGFloat!
@@ -23,7 +23,15 @@ class MainTableViewController: UITableViewController {
     fileprivate var yelpQueryParams = YelpUrlQueryParameters()
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
-    fileprivate var hereAndNow = HereAndNow()
+    fileprivate var myCoordinate = MyCoordinate()
+    fileprivate var coordinate: CLLocationCoordinate2D?
+    
+    //fileprivate var calendar = Calendar.current
+    //fileprivate var date = Date()
+    fileprivate var category: String?
+    fileprivate var location: (description: String, coordinate: CLLocationCoordinate2D)?
+    fileprivate var date: Date?
+    fileprivate var rating: Float?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,31 +42,28 @@ class MainTableViewController: UITableViewController {
         headerHeight = tableView.frame.height / 12
 
         yelpQuery.addObserver(self, forKeyPath: "queryDone", options: .new, context: &myContext)
-        hereAndNow.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
+        myCoordinate.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
         
-        hereAndNow.loadViewIfNeeded()
+        myCoordinate.loadViewIfNeeded()
         
-        if headers[0].txt == "What (Chinese)" {
-            yelpQueryParams.category.value = "Chinese"
+        /*
+        // Placeholder in case no user inputs.
+        if headers[0].txt == "What: all" {
+            yelpQueryParams.category.value = "restaurants"
         }
-        if headers[2].txt == "When (Now)" {
-            yelpQueryParams.openAt.value = Int(hereAndNow.date)
+        
+        if headers[2].txt == "When: now" {
+            yelpQueryParams.openAt.value = Int(myCoordinate.date)
         }
-        if headers[3].txt == "Rating (4.0)" {
-            yelpQueryParams.rating = 4.0
-        }
-    
+        */
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        print("KVO triggered")
         if context == &myContext {
-            print("keyPath: \(keyPath), object: \(object)")
             if keyPath == "queryDone" && object is YelpQuery {
                 if let newValue = change?[.newKey] {
-                    print("query busy changed to: \(newValue)")
                     if (newValue as! Bool) {
-                        print("query done")
+                        print("url query done")
                         // Process results.
                         restaurants = yelpQuery.results!
                         DispatchQueue.main.async {
@@ -68,13 +73,16 @@ class MainTableViewController: UITableViewController {
                     }
                 }
             }
-            if keyPath == "coordinate" && object is HereAndNow {
+            if keyPath == "coordinate" && object is MyCoordinate {
                 if let newValue = change?[.newKey] {
                     print("coordinate updated")
-                    if headers[1].txt == "Where (Here)" {
+                    /*
+                    if headers[1].txt == "Where: here" {
                         yelpQueryParams.latitude.value = (newValue as! CLLocationCoordinate2D).latitude
                         yelpQueryParams.longitude.value = (newValue as! CLLocationCoordinate2D).longitude
                     }
+                    */
+                    coordinate = newValue as? CLLocationCoordinate2D
                 }
             }
         } else {
@@ -108,10 +116,8 @@ class MainTableViewController: UITableViewController {
 
         // Configure the cell...
         if indexPath.section < 4 {
-            //tableView.rowHeight = 10.0
             cell.textLabel?.text = ""
         } else {
-            //tableView.rowHeight = 80.0
             cell.textLabel?.text = restaurants[indexPath.row]["name"] as! String?
         }
 
@@ -208,36 +214,93 @@ class MainTableViewController: UITableViewController {
     }
     */
     
+    fileprivate func updateHeaderLabelText(ofSection section: Int, toText labelText: String) {
+        (tableView.headerView(forSection: section) as! MainTableViewSectionHeaderView).label.text = labelText
+        
+        headers[section].txt = labelText
+    }
+    
+    
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
+        
         let sourceVC = sender.source
         switch (sender.identifier)! {
         case "backFromWhat":
-            let vc = sourceVC as! FoodCategoriesCollectionViewController
-            yelpQueryParams.category.value = vc.getCategory()
-            print("**category: \(yelpQueryParams.category.value)")
+            category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
+            //yelpQueryParams.category.value = category
+            //updateHeaderLabelText(ofSection: 0, toText:  category)
+            //print("**category: \(category)")
         case "backFromWhere":
-            let vc = sourceVC as! LocationTableViewController
             // Keep current location if no updates.
-            if vc.getLocationCoordinates() != nil {
-                yelpQueryParams.latitude.value = vc.getLocationCoordinates()?.latitude
-                yelpQueryParams.longitude.value = vc.getLocationCoordinates()?.longitude
-                print("**latitude: \(yelpQueryParams.latitude.value), longitude: \(yelpQueryParams.longitude.value)")
-            }
+            location = (sourceVC as! LocationTableViewController).getLocation()
+                //yelpQueryParams.latitude.value = location.coordinate.latitude
+                //yelpQueryParams.longitude.value = location.coordinate.longitude
+                //updateHeaderLabelText(ofSection: 1, toText: location.description)
+                //print("**name: \(location.description), latitude: \(location.coordinate.latitude), longitude: \(location.coordinate.longitude)")
         case "backFromWhen":
-            let vc = sourceVC as! DateViewController
-            yelpQueryParams.openAt.value = vc.getDate()
-            print("**open at: \(yelpQueryParams.openAt.value)")
+            date = (sourceVC as! DateViewController).getDate()
+            //yelpQueryParams.openAt.value = date.unix
+            //updateHeaderLabelText(ofSection: 2, toText: date.formatted)
+            //print("**open at: \(date.formatted)")
         case "backFromRating":
-            let vc = sourceVC as! RatingViewController
-            yelpQueryParams.rating = vc.getRating()
-            print("**rating: \(yelpQueryParams.rating)")
+            rating = (sourceVC as! RatingViewController).getRating()
+            //yelpQueryParams.rating = rating
+            //updateHeaderLabelText(ofSection: 3, toText: "\(rating)")
+            //print("**rating: \(rating)")
         default:
             fatalError("Unexpected returning segue: \((sender.identifier)!)")
         }
         
-        // TODO: Start Yelp search.
+        updateHeader(category: category, location: location, date: date, rating: rating)
+        
+        // Start Yelp search.
         yelpQuery.parameters = yelpQueryParams
         yelpQuery.startQuery()
+    }
+    
+    fileprivate func updateHeader(category: String?, location: (description: String, coordinate: CLLocationCoordinate2D)?, date: Date?, rating: Float?) {
+        if let value = category {
+            yelpQueryParams.category.value = value
+            updateHeaderLabelText(ofSection: 0, toText: value)
+            print("**category: \(value)")
+        } else {
+            updateHeaderLabelText(ofSection: 0, toText: "What: all")
+        }
+        if let value = location {
+            yelpQueryParams.latitude.value = value.coordinate.latitude
+            yelpQueryParams.longitude.value = value.coordinate.longitude
+            updateHeaderLabelText(ofSection: 1, toText: value.description)
+            print("**location: \(value.description), latitude: \(value.coordinate.latitude), longitude: \(value.coordinate.longitude)")
+        } else {
+            yelpQueryParams.latitude.value = coordinate?.latitude
+            yelpQueryParams.longitude.value = coordinate?.longitude
+            updateHeaderLabelText(ofSection: 1, toText: "Where: here")
+        }
+        if let value = date {
+            if Calendar.current.compare(value, to: Date(), toGranularity: .minute) == .orderedSame  {
+                yelpQueryParams.openAt.value = Int(value.timeIntervalSince1970)
+                updateHeaderLabelText(ofSection: 2, toText: "When: now")
+                print("**date is now")
+            } else {
+                yelpQueryParams.openAt.value = Int(value.timeIntervalSince1970)
+                let dateFormatter = DateFormatter()
+                dateFormatter.timeStyle = .short
+                let date = dateFormatter.string(from: value)
+ 
+                updateHeaderLabelText(ofSection: 2, toText: date)
+                print("**open at: \(value)")
+            }
+        } else {
+            yelpQueryParams.openAt.value = Int(Date().timeIntervalSince1970)
+            updateHeaderLabelText(ofSection: 2, toText: "When: now")
+        }
+        if let value = rating {
+            yelpQueryParams.rating = value
+            updateHeaderLabelText(ofSection: 3, toText: "\(value)")
+            print("**rating: \(value)")
+        } else {
+            updateHeaderLabelText(ofSection: 3, toText: "Rating: all")
+        }
     }
 
 }

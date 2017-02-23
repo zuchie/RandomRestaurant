@@ -18,7 +18,7 @@ class YelpUrlQueryParameters {
     var limit = Parameter(name: "limit", value: 20)
     var openAt = Parameter(name: "open_at", value: nil)
     
-    var rating = 0.0
+    var rating: Float = 0.0
 
     struct Parameter {
         var name: String

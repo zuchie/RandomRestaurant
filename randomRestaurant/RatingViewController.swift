@@ -33,7 +33,7 @@ class RatingViewController: UIViewController {
     fileprivate var buttonConsecutiveTapCount = 0
     fileprivate var tappedButtonIndex: Int?
     
-    fileprivate var rating: Double?
+    fileprivate var rating: Float?
     
     private let animationImages = [
         UIImage(named: "filledStar")!,
@@ -96,11 +96,11 @@ class RatingViewController: UIViewController {
             }
         }
         tappedButtonIndex = buttonIndex
-        rating = Double(buttonIndex) + 1.0
+        rating = Float(buttonIndex) + 1.0
         if ratingMinusPointFive {
             rating! -= 0.5
         }
-        print("rating: \(rating!)")
+        print("rating: \(rating)")
         //YelpUrlQueryParameters.rating = rating!
         
         updateButtonSelectionStates()
@@ -122,17 +122,13 @@ class RatingViewController: UIViewController {
     fileprivate func updateButtonSelectionStates() {
         for (index, button) in ratingButtons.enumerated() {
             // If the index of a button is less than the rating, that button should be selected.
-            button.isSelected = Double(index) < rating!
+            button.isSelected = Float(index) < rating!
         }
     }
     
-    func getRating() -> Double {
-        // When no rating has been chosen, use 0.5 as default value.
-        if rating != nil {
-            return rating!
-        } else {
-            return 0.5
-        }
+    func getRating() -> Float? {
+        // When no rating has been chosen, use 0 as default value.
+        return rating
     }
     
     @IBAction func unwindToRating(sender: UIStoryboardSegue) {

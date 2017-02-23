@@ -14,7 +14,7 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
 
     fileprivate var searchController: UISearchController?
     
-    fileprivate var location: CLLocationCoordinate2D?
+    fileprivate var location: (description: String, coordinate: CLLocationCoordinate2D)?
 
     let googlePlaceDetails = GooglePlaceDetails()
     
@@ -204,10 +204,13 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
             performSegue(withIdentifier: "backFromWhere", sender: self)
         } else {
             let placeID = filteredLocations[indexPath.section][indexPath.row].placeID
-            
+            //location?.description = filteredLocations[indexPath.section][indexPath.row].name
+            //print("==filtered name: \(filteredLocations[indexPath.section][indexPath.row].name)")
             googlePlaceDetails.getCoordinates(from: placeID) { coordinates in
                 //YelpUrlQueryParameters.coordinates = coordinates
-                self.location = coordinates
+                //self.location?.coordinate = coordinates
+                self.location = (description: self.filteredLocations[indexPath.section][indexPath.row].name, coordinate: coordinates)
+                print("==location name: \(self.location?.description)")
                 //print("***coordinates updated")
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "backFromWhere", sender: self)
@@ -261,7 +264,7 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
         view.removeFromSuperview()
     }
     */
-    func getLocationCoordinates() -> CLLocationCoordinate2D? {
+    func getLocation() -> (description: String, coordinate: CLLocationCoordinate2D)? {
         return location
     }
     

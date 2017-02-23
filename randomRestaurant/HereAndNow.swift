@@ -10,20 +10,24 @@ import UIKit
 import Foundation
 import CoreLocation
 
-class HereAndNow: UIViewController, CLLocationManagerDelegate {
+class MyCoordinate: UIViewController, CLLocationManagerDelegate {
     fileprivate let locationManager = CLLocationManager()
     
     dynamic var coordinate = CLLocationCoordinate2D()
-    
+    /*
+    fileprivate var nowDate = Date()
+    fileprivate var calendar = Calendar.current
     fileprivate var now = Date().timeIntervalSince1970
     var date: Double {
         return now
     }
+    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
     // Asking for access of user's location.

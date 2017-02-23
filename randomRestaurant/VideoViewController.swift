@@ -29,7 +29,7 @@ class VideoViewController: AVPlayerViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("==video view did load==")
+        //print("==video view did load==")
         player = AVPlayer(url: myUrl)
         player?.volume = 0
         player?.actionAtItemEnd = .none
@@ -56,7 +56,7 @@ class VideoViewController: AVPlayerViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
-        print("==video view will appear==")
+        //print("==video view will appear==")
         if player?.rate == 0 || player?.error != nil {
             if #available(iOS 10.0, *) {
                 player?.playImmediately(atRate: 1.0)
@@ -70,7 +70,7 @@ class VideoViewController: AVPlayerViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(false)
-        print("==video view will disappear==")
+        //print("==video view will disappear==")
         if player?.rate != 0 && player?.error == nil {
             player?.pause()
         }

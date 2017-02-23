@@ -400,11 +400,17 @@ class DateViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func getDate() -> Int {
+    func getDate() -> Date? {
         // Minutes precision, in order to use cached data when re-query is made in 1 min.
-        let proposedDate = calendar.date(bySettingHour: clock.clockTime.hour!, minute: clock.clockTime.minute!, second: 0, of: date)
+        let proposedCoarseDate = calendar.date(bySettingHour: clock.clockTime.hour!, minute: clock.clockTime.minute!, second: 0, of: date)
         print("proposed hour, min: \(clock.clockTime.hour, clock.clockTime.minute)")
-        return Int(proposedDate!.timeIntervalSince1970)
+        /*
+        let dateFormatter = DateFormatter()
+        //dateFormatter.dateStyle = DateFormatter.Style.long
+        dateFormatter.timeStyle = DateFormatter.Style.short
+        let formatted = dateFormatter.string(from: proposedDate!)
+        */
+        return proposedCoarseDate
     }
     /*
     // MARK: - Navigation

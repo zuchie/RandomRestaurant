@@ -19,7 +19,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
     
     fileprivate var videoVCs = [VideoViewController]()
-    fileprivate var category: String!
+    fileprivate var category: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +61,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     // Restore.
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("category view will disappear========")
+        //print("category view will disappear========")
         self.clearsSelectionOnViewWillAppear = true
     }
 
@@ -118,12 +118,14 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     }
     */
     
-    func getCategory() -> String {
-        if category == "American" {
-            category = "newamerican,tradamerican"
-        }
-        if category == "Indian" {
-            category = "indpak"
+    func getCategory() -> String? {
+        if let value = category {
+            if value == "American" {
+                category = "newamerican,tradamerican"
+            }
+            if value == "Indian" {
+                category = "indpak"
+            }
         }
         print("return category: \(category)")
         return category
