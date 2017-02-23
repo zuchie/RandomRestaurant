@@ -217,9 +217,12 @@ class MainTableViewController: UITableViewController {
             print("**category: \(yelpQueryParams.category.value)")
         case "backFromWhere":
             let vc = sourceVC as! LocationTableViewController
-            yelpQueryParams.latitude.value = vc.getLocationCoordinates().latitude
-            yelpQueryParams.longitude.value = vc.getLocationCoordinates().longitude
-            print("**latitude: \(yelpQueryParams.latitude.value), longitude: \(yelpQueryParams.longitude.value)")
+            // Keep current location if no updates.
+            if vc.getLocationCoordinates() != nil {
+                yelpQueryParams.latitude.value = vc.getLocationCoordinates()?.latitude
+                yelpQueryParams.longitude.value = vc.getLocationCoordinates()?.longitude
+                print("**latitude: \(yelpQueryParams.latitude.value), longitude: \(yelpQueryParams.longitude.value)")
+            }
         case "backFromWhen":
             let vc = sourceVC as! DateViewController
             yelpQueryParams.openAt.value = vc.getDate()

@@ -13,10 +13,8 @@ import CoreLocation
 class LocationTableViewController: UITableViewController, UISearchControllerDelegate, UISearchResultsUpdating {
 
     fileprivate var searchController: UISearchController?
-    let locationManager = CLLocationManager()
-    private var currentLocationCoordinations: CLLocationCoordinate2D?
     
-    fileprivate var location: CLLocationCoordinate2D!
+    fileprivate var location: CLLocationCoordinate2D?
 
     let googlePlaceDetails = GooglePlaceDetails()
     
@@ -28,12 +26,12 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
     fileprivate enum Locations: Int {
         case current, other
     }
-    
+    /*
     private var visualEffectView: UIVisualEffectView?
     fileprivate enum VisualEffect {
         case blur
     }
-    
+    */
     //fileprivate var videoBG: VideoViewController?
     
     override func viewDidLoad() {
@@ -44,7 +42,7 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
+
         // Search controller setup.
         searchController = UISearchController(searchResultsController: nil)
         searchController?.searchResultsUpdater = self
@@ -60,15 +58,15 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
         
         // Table view setup.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-        
+        /*
         // Set BG image.
         let imageView = UIImageView(image: UIImage(named: "globe"))
         imageView.contentMode = .scaleAspectFit
         tableView.backgroundView = imageView
-        
+        */
         // Location manager setup.
         //locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        //locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         // Allocate cache here for URL responses so that cache data won't get lost.
         let cacheSizeMemory = 5 * 1024 * 1024
@@ -90,7 +88,7 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
         
         filteredLocations[Locations.current.rawValue].append((name: "Current Location", placeID: ""))
         
-        makeVisualEffectView(effect: .blur)
+        //makeVisualEffectView(effect: .blur)
         
         /*
         // Add video to background and play.
@@ -113,11 +111,10 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
         searchController?.isActive = true
     }
     
-    /*
     override func viewWillDisappear(_ animated: Bool) {
         //videoBG?.playerVC.player?.pause()
+        searchController?.isActive = false
     }
-    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -204,7 +201,6 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
         // Get coordinates of chosen location.
         if indexPath.section == Locations.current.rawValue {
             //YelpUrlQueryParameters.coordinates = currentLocationCoordinations
-            location = currentLocationCoordinations
             performSegue(withIdentifier: "backFromWhere", sender: self)
         } else {
             let placeID = filteredLocations[indexPath.section][indexPath.row].placeID
@@ -219,29 +215,31 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
             }
         }
     }
-    
+    /*
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = .clear
         //cell.backgroundColor = UIColor(white: 1, alpha: 0.5)
         cell.contentView.backgroundColor = UIColor(white: 1, alpha: 0.5)
     }
-    
+    */
+    /*
     // Notifications to blur/clear BG image.
     func willPresentSearchController(_ searchController: UISearchController) {
         // Blur background video.
         //addVisualEffectView(effect: .blur, to: (videoBG?.view)!)
         addVisualEffectView(effect: .blur, to: tableView.backgroundView!)
     }
-    
+    */
     // Activate search bar.
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
     }
-    
     func willDismissSearchController(_ searchController: UISearchController) {
         // Remove blur effect.
-        removeVisualEffectView(visualEffectView!)
+        //removeVisualEffectView(visualEffectView!)
+        searchController.searchBar.resignFirstResponder()
     }
+    /*
     // MARK: Visual Effect View.
     private func makeVisualEffectView(effect: VisualEffect) {
         switch effect {
@@ -262,8 +260,8 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
     private func removeVisualEffectView(_ view: UIVisualEffectView) {
         view.removeFromSuperview()
     }
-    
-    func getLocationCoordinates() -> CLLocationCoordinate2D {
+    */
+    func getLocationCoordinates() -> CLLocationCoordinate2D? {
         return location
     }
     
