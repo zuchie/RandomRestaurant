@@ -33,6 +33,8 @@ class MainTableViewController: UITableViewController {
     fileprivate var date: Date?
     fileprivate var rating: Float?
     
+    fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,6 +47,8 @@ class MainTableViewController: UITableViewController {
         myCoordinate.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
         
         myCoordinate.loadViewIfNeeded()
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headerCell")
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -101,20 +105,33 @@ class MainTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultsCell", for: indexPath)
 
+        
         // Configure the cell...
         if indexPath.section < 4 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell", for: indexPath)
             cell.textLabel?.text = ""
+            return cell
         } else {
-            cell.textLabel?.text = restaurants[indexPath.row]["name"] as! String?
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultsCell", for: indexPath) as! MainTableViewCell
+            let content = restaurants[indexPath.row]
+            cell.mainImage.loadImage(from: content["image_url"] as! String)
+            cell.name.text = content["name"] as? String
+            var categories = String()
+            for category in content["categories"] as! [[String: Any]] {
+                categories += (category)["title"] as! String
+            }
+            cell.category.text = categories
+            cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
+            cell.reviewCount.text = String(content["review_count"] as! Int) + " reviews"
+            cell.price.text = content["price"] as? String
+            return cell
         }
 
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section < 4 ? 10.0 : 80.0
+        return indexPath.section < 4 ? 10.0 : 380.0
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -258,7 +275,7 @@ class MainTableViewController: UITableViewController {
             yelpQueryParams.category.value = value
             print("**category: \(value)")
         } else {
-            yelpQueryParams.category.value = nil
+            yelpQueryParams.category.value = "restaurants"
             updateHeaderLabelText(ofSection: 0, toText: "What: all")
         }
         if let value = location {
@@ -299,4 +316,21 @@ class MainTableViewController: UITableViewController {
         }
     }
 
+}
+
+extension UIImageView {
+    public func loadImage(from urlString: String) {
+        guard let url = URL(string: urlString) else {
+            fatalError("Unexpected url string: \(urlString)")
+        }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard error == nil, let imageData = data else {
+                fatalError("error while getting url response: \(error?.localizedDescription)")
+            }
+            let image = UIImage(data: imageData)
+            DispatchQueue.main.async {
+                self.image = image
+            }
+        }.resume()
+    }
 }
