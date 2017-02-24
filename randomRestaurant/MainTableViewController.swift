@@ -45,17 +45,6 @@ class MainTableViewController: UITableViewController {
         myCoordinate.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
         
         myCoordinate.loadViewIfNeeded()
-        
-        /*
-        // Placeholder in case no user inputs.
-        if headers[0].txt == "What: all" {
-            yelpQueryParams.category.value = "restaurants"
-        }
-        
-        if headers[2].txt == "When: now" {
-            yelpQueryParams.openAt.value = Int(myCoordinate.date)
-        }
-        */
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -160,7 +149,6 @@ class MainTableViewController: UITableViewController {
         guard let headerView = sender.view as? MainTableViewSectionHeaderView else {
             fatalError("Unexpected view: \(sender.view)")
         }
-        
         performSegue(withIdentifier: headerView.headerName.lowercased(), sender: self)
     }
     /*
@@ -270,6 +258,7 @@ class MainTableViewController: UITableViewController {
             yelpQueryParams.category.value = value
             print("**category: \(value)")
         } else {
+            yelpQueryParams.category.value = nil
             updateHeaderLabelText(ofSection: 0, toText: "What: all")
         }
         if let value = location {
@@ -305,6 +294,7 @@ class MainTableViewController: UITableViewController {
             updateHeaderLabelText(ofSection: 3, toText: "\(value)")
             print("**rating: \(value)")
         } else {
+            yelpQueryParams.rating = 0
             updateHeaderLabelText(ofSection: 3, toText: "Rating: all")
         }
     }

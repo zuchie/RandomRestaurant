@@ -15,8 +15,8 @@
         <!--What to eat?-->
         <scene sceneID="I0C-bA-gge">
             <objects>
-                <collectionViewController id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                <collectionViewController clearsSelectionOnViewWillAppear="NO" id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -76,7 +76,7 @@
         <!--When to eat?-->
         <scene sceneID="0Km-Qz-qbG">
             <objects>
-                <viewController id="VJg-eE-0oq" customClass="DateViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="whenToEat" id="VJg-eE-0oq" customClass="DateViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kPm-oz-A89"/>
                         <viewControllerLayoutGuide type="bottom" id="GIw-QZ-nZW"/>
@@ -574,7 +574,7 @@
         <!--Where to eat?-->
         <scene sceneID="dh3-qc-2aV">
             <objects>
-                <tableViewController id="oZz-iw-vUY" customClass="LocationTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="oZz-iw-vUY" customClass="LocationTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Xg7-xp-YfK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -702,13 +702,17 @@
         <!--Navigation Controller-->
         <scene sceneID="Tru-Jo-M7d">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" hidesBarsOnSwipe="YES" hidesBarsOnTap="YES" id="fMY-P1-Xr7" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="fMY-P1-Xr7" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="w0E-s0-UDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="9A2-NC-mM2">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="wH5-b3-TbF" kind="relationship" relationship="rootViewController" id="23Z-kv-GVw"/>
                     </connections>
@@ -730,7 +734,7 @@
         <image name="image3" width="137" height="91"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="7KB-U8-aef"/>
         <segue reference="dvD-F8-sKe"/>
+        <segue reference="rTW-HC-VXC"/>
     </inferredMetricsTieBreakers>
 </document>

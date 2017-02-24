@@ -53,11 +53,11 @@ class LocationTableViewController: UITableViewController, UISearchControllerDele
         
         searchController?.hidesNavigationBarDuringPresentation = true
         searchController?.obscuresBackgroundDuringPresentation = false
-        searchController?.searchBar.searchBarStyle = .default
+        searchController?.searchBar.searchBarStyle = .minimal
         searchController?.searchBar.sizeToFit()
         
         // Table view setup.
-        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        //tableView.tableFooterView = UIView(frame: CGRect.zero)
         /*
         // Set BG image.
         let imageView = UIImageView(image: UIImage(named: "globe"))

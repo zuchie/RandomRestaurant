@@ -14,8 +14,8 @@ class YelpUrlQueryParameters {
     var latitude = Parameter(name: "latitude", value: nil)
     var longitude = Parameter(name: "longitude", value: nil)
     var category = Parameter(name: "categories", value: nil)
-    var radius = Parameter(name: "radius", value: 20000)
-    var limit = Parameter(name: "limit", value: 20)
+    var radius = Parameter(name: "radius", value: 10000)
+    var limit = Parameter(name: "limit", value: 30)
     var openAt = Parameter(name: "open_at", value: nil)
     
     var rating: Float = 0.0

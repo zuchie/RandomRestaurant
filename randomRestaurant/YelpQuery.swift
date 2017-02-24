@@ -176,7 +176,7 @@ class YelpQuery: NSObject {
     fileprivate func filterByRating() {
         queryResults = [[String: Any]]()
         queryResults = businesses.filter { $0["rating"] as! Float >= (queryParameters?.rating)! }
-        print("rating: \(queryParameters?.rating)")
+        print("query rating: \(queryParameters?.rating)")
         print("filtered: \(queryResults)")
     }
     /*
