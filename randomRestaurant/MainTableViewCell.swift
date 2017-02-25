@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol MainTableViewCellDelegate: class {
+    func linkToYelp(cell: MainTableViewCell)
+    func showMap(cell: MainTableViewCell)
+}
+
 class MainTableViewCell: UITableViewCell {
     @IBOutlet weak var mainImage: UIImageView!
     @IBOutlet weak var name: UILabel!
@@ -18,6 +23,25 @@ class MainTableViewCell: UITableViewCell {
     @IBOutlet weak var price: UILabel!
     
     
+    var yelpUrl: String!
+    var latitude: Double!
+    var longitude: Double!
+    var address: String!
+    
+    var delegate: MainTableViewCellDelegate?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.delegate = nil
+    }
+    
+    @IBAction func handleMapButton(_ sender: UIButton) {
+        self.delegate?.showMap(cell: self)
+    }
+
+    @IBAction func handleYelpButton(_ sender: UIButton) {
+        self.delegate?.linkToYelp(cell: self)
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

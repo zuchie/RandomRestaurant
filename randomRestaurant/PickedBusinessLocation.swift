@@ -17,7 +17,7 @@ class PickedBusinessLocation {
     var zip_code = ""
     var country = ""
     
-    init?(businessObj: NSDictionary) {
+    init?(businessObj: [String: Any]) {
         
         if let addr1 = businessObj["address1"] as? String {
             self.address1 = addr1

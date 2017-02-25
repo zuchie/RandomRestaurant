@@ -11,7 +11,7 @@ import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
     fileprivate var sectionHeaders = [UIView]()
     //fileprivate var results = [Restaurant]()
@@ -32,6 +32,7 @@ class MainTableViewController: UITableViewController {
     fileprivate var location: (description: String, coordinate: CLLocationCoordinate2D)?
     fileprivate var date: Date?
     fileprivate var rating: Float?
+    fileprivate var shouldSegue: Bool!
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
     
@@ -49,6 +50,10 @@ class MainTableViewController: UITableViewController {
         myCoordinate.loadViewIfNeeded()
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headerCell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        shouldSegue = false
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -85,6 +90,32 @@ class MainTableViewController: UITableViewController {
     
     deinit {
         yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
+    }
+    
+    func showMap(cell: MainTableViewCell) {
+        shouldSegue = true
+        performSegue(withIdentifier: "showMap", sender: cell)
+    }
+    
+    func linkToYelp(cell: MainTableViewCell) {
+        if cell.yelpUrl != "" {
+            UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
+        } else {
+            alert()
+        }
+    }
+    
+    fileprivate func alert() {
+        // Create the alert.
+        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Add an action(button).
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
+            
+        }))
+        
+        // Show the alert.
+        self.present(alert, animated: false, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -125,6 +156,16 @@ class MainTableViewController: UITableViewController {
             cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
             cell.reviewCount.text = String(content["review_count"] as! Int) + " reviews"
             cell.price.text = content["price"] as? String
+            cell.yelpUrl = content["url"] as? String
+            cell.latitude = (content["coordinates"] as? [String: Double])?["latitude"]
+            cell.longitude = (content["coordinates"] as? [String: Double])?["longitude"]
+            
+            //let location = content["location"] as? [String: Any]
+            
+            let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (content["location"] as? [String: Any])!)!
+            cell.address = location.getBizAddressString()
+            cell.delegate = self
+            
             return cell
         }
 
@@ -157,6 +198,11 @@ class MainTableViewController: UITableViewController {
         }
     }
 
+    /*
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        shouldSegue = false
+    }
+    */
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return section < 4 ? nil : "Restaurants: \(restaurants.count)"
     }
@@ -203,21 +249,39 @@ class MainTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if sender is UITableViewHeaderFooterView {
-            let headerView = sender as! MainTableViewSectionHeaderView
-            if headerView.img == "Where" {
-                segue.destination
+        print("==sender: \(sender)")
+        print("==id: \(segue.identifier)")
+        if segue.identifier == "showMap" && sender is MainTableViewCell {
+            print("hello")
+            guard let cell = sender as? MainTableViewCell else {
+                fatalError("Unexpected sender: \(sender)")
+            }
+            
+            let destinationVC = segue.destination
+            if cell.address == "" {
+                alert()
+            } else {
+                if let mapVC = destinationVC as? GoogleMapViewController {
+                    
+                    mapVC.setBizLocation(cell.address)
+                    mapVC.setBizCoordinate2D(CLLocationCoordinate2DMake(cell.latitude
+                        , cell.longitude))
+                    mapVC.setBizName(cell.name.text!)
+                    mapVC.setDepartureTime(yelpQueryParams.openAt.value as! Int)
+                }
             }
         }
     }
-    */
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        return shouldSegue
+    }
     
     fileprivate func updateHeaderLabelText(ofSection section: Int, toText labelText: String) {
         (tableView.headerView(forSection: section) as! MainTableViewSectionHeaderView).label.text = labelText
