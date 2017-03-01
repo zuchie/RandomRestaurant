@@ -15,7 +15,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     fileprivate var savedRestaurants = [SavedMO]()
     fileprivate var filteredRestaurants = [SavedMO]()
     
-    //fileprivate var searchResultsVC: UITableViewController!
+    fileprivate var searchResultsVC: UITableViewController!
     fileprivate var searchController: UISearchController!
     
     fileprivate var mySectionsCount = 0 {
@@ -42,14 +42,13 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         
         let nib = UINib(nibName: "MainAndSavedTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
-        /*
+        
         searchResultsVC = UITableViewController(style: .plain)
-        searchResultsVC.tableView.register(MainAndSavedTableViewCell.self, forCellReuseIdentifier: "filtered")
+        searchResultsVC.tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
         searchResultsVC.tableView.dataSource = self
         searchResultsVC.tableView.delegate = self
-        */
-        //searchResultsVC = self
-        searchController = UISearchController(searchResultsController: nil)
+        
+        searchController = UISearchController(searchResultsController: searchResultsVC)
         searchController.searchResultsUpdater = self
         tableView.tableHeaderView = searchController?.searchBar
         definesPresentationContext = true
@@ -63,11 +62,13 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         
         /* [Warning] Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior (<UISearchController: 0x10194f3e0>), Bug: UISearchController doesn't load its view until it's be deallocated. Reference: http://www.openradar.me/22250107
         */
+        /*
         if #available(iOS 9.0, *) {
             searchController.loadViewIfNeeded()
         } else {
             let _ = searchController.view
         }
+        */
     }
     /*
     override func viewWillAppear(_ animated: Bool) {
@@ -150,19 +151,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         }
     }
     
-    fileprivate func alert() {
-        // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
-        
-        // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
-            
-        }))
-        
-        // Show the alert.
-        self.present(alert, animated: false, completion: nil)
-    }
-    
     func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
         if button.isSelected {
             print("Unexpected")
@@ -190,6 +178,20 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         }
     }
     
+    
+    fileprivate func alert() {
+        // Create the alert.
+        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Add an action(button).
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
+            
+        }))
+        
+        // Show the alert.
+        self.present(alert, animated: false, completion: nil)
+    }
+    
     // MARK: - Table view data source
     
     fileprivate func configureCell(cell: MainAndSavedTableViewCell, object: SavedMO) {
@@ -209,7 +211,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if !searchController.isActive {
+        if tableView == self.tableView {
             mySectionsCount = (fetchedResultsController?.sections?.count)!
             return fetchedResultsController?.sections?.count ?? 0
         } else {
@@ -218,7 +220,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !searchController.isActive {
+        if tableView == self.tableView {
             return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
         } else {
             return filteredRestaurants.count
@@ -226,7 +228,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if !searchController.isActive {
+        if tableView == self.tableView {
             return fetchedResultsController?.sections?[section].name.uppercased()
         } else {
             return "Restaurants found"
@@ -237,7 +239,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         let restaurant: SavedMO
         
         // Configure the cell...
-        if !searchController.isActive {
+        if tableView == self.tableView {
             guard let object = fetchedResultsController?.object(at: indexPath) as? SavedMO else {
                 fatalError("Unexpected object in FetchedResultsController")
             }
@@ -300,7 +302,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             }
             //print("filtered: \(filteredRestaurants)")
         }
-        tableView.reloadData()
+        searchResultsVC.tableView.reloadData()
         //searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
     
