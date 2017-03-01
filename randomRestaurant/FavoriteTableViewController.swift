@@ -162,19 +162,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     func updateSaved(cell: MainTableViewCell, button: UIButton) {
         if button.isSelected {
-            print("save object")
-            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: SavedTableViewController.moc!) as! SavedMO
+            print("Unexpected")
             
-            saved.name = cell.name.text
-            saved.address = cell.address
-            saved.category = cell.category.text
-            saved.imageUrl = cell.imageUrl
-            saved.price = cell.price.text
-            saved.rating = cell.rating
-            saved.reviewCount = Int16(cell.reviewsTotal)
-            saved.latitude = cell.latitude
-            saved.longitude = cell.longitude
-            saved.yelpUrl = cell.yelpUrl
         } else {
             print("delete object")
             let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
