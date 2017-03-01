@@ -1,24 +1,25 @@
 //
-//  MainTableViewCell.swift
+//  MainAndSavedTableViewCell.swift
 //  randomRestaurant
 //
-//  Created by Zhe Cui on 2/23/17.
+//  Created by Zhe Cui on 3/1/17.
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
 import UIKit
 
-protocol MainTableViewCellDelegate: class {
-    func linkToYelp(cell: MainTableViewCell)
-    func showMap(cell: MainTableViewCell)
-    func updateSaved(cell: MainTableViewCell, button: UIButton)
+protocol MainAndSavedTableViewCellDelegate: class {
+    func linkToYelp(cell: MainAndSavedTableViewCell)
+    func showMap(cell: MainAndSavedTableViewCell)
+    func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton)
 }
 
-class MainTableViewCell: UITableViewCell {
+class MainAndSavedTableViewCell: UITableViewCell {
+
     @IBOutlet weak var mainImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var category: UILabel!
-
+    
     @IBOutlet weak var ratingImage: UIImageView!
     @IBOutlet weak var reviewCount: UILabel!
     @IBOutlet weak var price: UILabel!
@@ -32,7 +33,7 @@ class MainTableViewCell: UITableViewCell {
     var reviewsTotal: Int!
     var imageUrl: String!
     
-    var delegate: MainTableViewCellDelegate?
+    var delegate: MainAndSavedTableViewCellDelegate?
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -45,7 +46,7 @@ class MainTableViewCell: UITableViewCell {
         print("delegate: \(self.delegate)")
         self.delegate?.showMap(cell: self)
     }
-
+    
     @IBAction func handleYelpButton(_ sender: UIButton) {
         print("handle yelp button")
         self.delegate?.linkToYelp(cell: self)
@@ -56,8 +57,8 @@ class MainTableViewCell: UITableViewCell {
         sender.isSelected = sender.isSelected ? false : true
         self.delegate?.updateSaved(cell: self, button: sender)
     }
-
     
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -68,5 +69,5 @@ class MainTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
 }

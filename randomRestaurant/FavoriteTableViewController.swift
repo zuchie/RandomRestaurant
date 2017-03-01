@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate, MainTableViewCellDelegate {
+class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate, MainAndSavedTableViewCellDelegate {
     
     fileprivate var savedRestaurants = [SavedMO]()
     fileprivate var filteredRestaurants = [SavedMO]()
@@ -39,9 +39,12 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         navigationItem.rightBarButtonItem = editButtonItem
 
         initializeFetchedResultsController()
+        
+        let nib = UINib(nibName: "MainAndSavedTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
         /*
         searchResultsVC = UITableViewController(style: .plain)
-        searchResultsVC.tableView.register(MainTableViewCell.self, forCellReuseIdentifier: "filtered")
+        searchResultsVC.tableView.register(MainAndSavedTableViewCell.self, forCellReuseIdentifier: "filtered")
         searchResultsVC.tableView.dataSource = self
         searchResultsVC.tableView.delegate = self
         */
@@ -94,7 +97,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         let nameSort = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [nameSort]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: SavedTableViewController.moc!, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: MainTableViewController.moc!, sectionNameKeyPath: nil, cacheName: nil)
     }
  
     /*
@@ -132,13 +135,13 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         return shouldSegue
     }
     */
-    func showMap(cell: MainTableViewCell) {
+    func showMap(cell: MainAndSavedTableViewCell) {
         print("show map from saved")
         //shouldSegue = true
         performSegue(withIdentifier: "toMap", sender: cell)
     }
     
-    func linkToYelp(cell: MainTableViewCell) {
+    func linkToYelp(cell: MainAndSavedTableViewCell) {
         print("link to yelp from saved")
         if cell.yelpUrl != "" {
             UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
@@ -160,7 +163,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         self.present(alert, animated: false, completion: nil)
     }
     
-    func updateSaved(cell: MainTableViewCell, button: UIButton) {
+    func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
         if button.isSelected {
             print("Unexpected")
             
@@ -169,17 +172,17 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
             request.predicate = NSPredicate(format: "name = %@", cell.name.text!)
             
-            guard let object = try? SavedTableViewController.moc?.fetch(request).first as? SavedMO else {
+            guard let object = try? MainTableViewController.moc?.fetch(request).first as? SavedMO else {
                 fatalError("Didn't find object in context")
             }
             
-            SavedTableViewController.moc?.delete(object!)
+            MainTableViewController.moc?.delete(object!)
             print("deleted from Saved entity")
         }
         
-        if (SavedTableViewController.moc?.hasChanges)! {
+        if (MainTableViewController.moc?.hasChanges)! {
             do {
-                try SavedTableViewController.moc?.save()
+                try MainTableViewController.moc?.save()
                 print("context saved")
             } catch {
                 fatalError("Failure to save context: \(error)")
@@ -189,7 +192,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     // MARK: - Table view data source
     
-    fileprivate func configureCell(cell: MainTableViewCell, object: SavedMO) {
+    fileprivate func configureCell(cell: MainAndSavedTableViewCell, object: SavedMO) {
         
         cell.name.text = object.name
         cell.address = object.address
@@ -232,23 +235,20 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let restaurant: SavedMO
-        let cellID: String
         
         // Configure the cell...
         if !searchController.isActive {
-            cellID = "saved"
             guard let object = fetchedResultsController?.object(at: indexPath) as? SavedMO else {
                 fatalError("Unexpected object in FetchedResultsController")
             }
             restaurant = object
         } else {
-            cellID = "saved"
             restaurant = filteredRestaurants[indexPath.row]
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mainAndSavedCell", for: indexPath)
         
-        configureCell(cell: cell as! MainTableViewCell, object: restaurant)
+        configureCell(cell: cell as! MainAndSavedTableViewCell, object: restaurant)
         
         return cell
     }
@@ -268,7 +268,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     override func tableView(_ tableView: UITableView, commit editingStyle:  UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            if let cell = tableView.cellForRow(at: indexPath) as? MainTableViewCell {
+            if let cell = tableView.cellForRow(at: indexPath) as? MainAndSavedTableViewCell {
                 // Remove from DB.
                 removeFromSaved(name: cell.name.text!)
             }
@@ -321,7 +321,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap" {
 
-            guard let cell = sender as? MainTableViewCell else {
+            guard let cell = sender as? MainAndSavedTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
             }
             let destinationVC = segue.destination

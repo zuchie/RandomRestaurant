@@ -12,8 +12,10 @@ import CoreData
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
+class MainTableViewController: UITableViewController, MainAndSavedTableViewCellDelegate {
     
+    static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
+
     fileprivate var sectionHeaders = [UIView]()
     //fileprivate var results = [Restaurant]()
     fileprivate var headers: [(img: String, txt: String)] = [("What", "What"), ("Where", "Where"), ("When", "When"), ("Rating", "Rating")]
@@ -42,6 +44,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         let nib = UINib(nibName: "MainTableViewSectionHeaderView", bundle: nil)
         tableView.register(nib, forHeaderFooterViewReuseIdentifier: "sectionHeader")
+        
+        let cellNib = UINib(nibName: "MainAndSavedTableViewCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "mainAndSavedCell")
         
         headerHeight = tableView.frame.height / 12
 
@@ -93,13 +98,13 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
     }
     
-    func showMap(cell: MainTableViewCell) {
+    func showMap(cell: MainAndSavedTableViewCell) {
         print("show map from main")
         shouldSegue = true
         performSegue(withIdentifier: "showMap", sender: cell)
     }
     
-    func linkToYelp(cell: MainTableViewCell) {
+    func linkToYelp(cell: MainAndSavedTableViewCell) {
         print("show yelp from main")
         if cell.yelpUrl != "" {
             UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
@@ -108,10 +113,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
     
-    func updateSaved(cell: MainTableViewCell, button: UIButton) {
+    func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
         if button.isSelected {
             print("save object")
-            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: SavedTableViewController.moc!) as! SavedMO
+            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: MainTableViewController.moc!) as! SavedMO
             
             saved.name = cell.name.text
             saved.address = cell.address
@@ -128,17 +133,17 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
             request.predicate = NSPredicate(format: "name = %@", cell.name.text!)
             
-            guard let object = try? SavedTableViewController.moc?.fetch(request).first as? SavedMO else {
+            guard let object = try? MainTableViewController.moc?.fetch(request).first as? SavedMO else {
                 fatalError("Didn't find object in context")
             }
             
-            SavedTableViewController.moc?.delete(object!)
+            MainTableViewController.moc?.delete(object!)
             print("deleted from Saved entity")
         }
         
-        if (SavedTableViewController.moc?.hasChanges)! {
+        if (MainTableViewController.moc?.hasChanges)! {
             do {
-                try SavedTableViewController.moc?.save()
+                try MainTableViewController.moc?.save()
                 print("context saved")
             } catch {
                 fatalError("Failure to save context: \(error)")
@@ -185,7 +190,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             cell.textLabel?.text = ""
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "resultsCell", for: indexPath) as! MainTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mainAndSavedCell", for: indexPath) as! MainAndSavedTableViewCell
             let content = restaurants[indexPath.row]
             cell.imageUrl = content["image_url"] as? String
             cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
@@ -299,9 +304,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         // Pass the selected object to the new view controller.
         print("==sender: \(sender)")
         print("==id: \(segue.identifier)")
-        if segue.identifier == "showMap" && sender is MainTableViewCell {
+        if segue.identifier == "showMap" && sender is MainAndSavedTableViewCell {
             print("hello")
-            guard let cell = sender as? MainTableViewCell else {
+            guard let cell = sender as? MainAndSavedTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
             }
             
