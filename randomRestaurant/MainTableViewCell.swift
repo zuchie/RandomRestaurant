@@ -11,6 +11,7 @@ import UIKit
 protocol MainTableViewCellDelegate: class {
     func linkToYelp(cell: MainTableViewCell)
     func showMap(cell: MainTableViewCell)
+    func updateSaved(cell: MainTableViewCell, button: UIButton)
 }
 
 class MainTableViewCell: UITableViewCell {
@@ -27,6 +28,9 @@ class MainTableViewCell: UITableViewCell {
     var latitude: Double!
     var longitude: Double!
     var address: String!
+    var rating: Float!
+    var reviewsTotal: Int!
+    var imageUrl: String!
     
     var delegate: MainTableViewCellDelegate?
     
@@ -36,12 +40,22 @@ class MainTableViewCell: UITableViewCell {
     }
     
     @IBAction func handleMapButton(_ sender: UIButton) {
+        print("handle map button")
         self.delegate?.showMap(cell: self)
     }
 
     @IBAction func handleYelpButton(_ sender: UIButton) {
+        print("handle yelp button")
         self.delegate?.linkToYelp(cell: self)
     }
+    
+    @IBAction func handleLikeButton(_ sender: UIButton) {
+        print("handle like button")
+        sender.isSelected = sender.isSelected ? false : true
+        self.delegate?.updateSaved(cell: self, button: sender)
+    }
+
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

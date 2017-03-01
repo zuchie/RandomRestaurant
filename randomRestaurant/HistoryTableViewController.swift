@@ -95,7 +95,7 @@ class HistoryTableViewController: CoreDataTableViewController {
             cell.favoriteButton.restaurant = Restaurant(name: fetched.name!, price: fetched.price!, rating: fetched.rating!, reviewCount: fetched.reviewCount!, address: fetched.address!, url: fetched.url!, latitude: (fetched.latitude?.doubleValue)!, longitude: (fetched.longitude?.doubleValue)!, category: fetched.category!)
             
             cell.favoriteButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchDown)
-            cell.favoriteButton.addTarget(favoriteVC, action: #selector(favoriteVC.updateDB(button:)), for: .touchDown)
+            //cell.favoriteButton.addTarget(favoriteVC, action: #selector(favoriteVC.updateDB(button:)), for: .touchDown)
         }
         
         return cell

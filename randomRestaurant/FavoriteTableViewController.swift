@@ -8,13 +8,14 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
-class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
+class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate, MainTableViewCellDelegate {
     
-    fileprivate var favoriteRestaurants = [Favorite]()
-    fileprivate var filteredRestaurants = [Favorite]()
+    fileprivate var savedRestaurants = [SavedMO]()
+    fileprivate var filteredRestaurants = [SavedMO]()
     
-    fileprivate var searchResultsVC: UITableViewController!
+    //fileprivate var searchResultsVC: UITableViewController!
     fileprivate var searchController: UISearchController!
     
     fileprivate var mySectionsCount = 0 {
@@ -28,19 +29,24 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         }
     }
     
+    fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
+    
+    //fileprivate var shouldSegue: Bool!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = editButtonItem
 
         initializeFetchedResultsController()
-        
+        /*
         searchResultsVC = UITableViewController(style: .plain)
-        searchResultsVC.tableView.register(FavoriteTableViewCell.self, forCellReuseIdentifier: "filtered")
+        searchResultsVC.tableView.register(MainTableViewCell.self, forCellReuseIdentifier: "filtered")
         searchResultsVC.tableView.dataSource = self
         searchResultsVC.tableView.delegate = self
-        
-        searchController = UISearchController(searchResultsController: searchResultsVC)
+        */
+        //searchResultsVC = self
+        searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         tableView.tableHeaderView = searchController?.searchBar
         definesPresentationContext = true
@@ -60,7 +66,12 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             let _ = searchController.view
         }
     }
-
+    /*
+    override func viewWillAppear(_ animated: Bool) {
+        shouldSegue = false
+    }
+    */
+    /*
     // Fetch data from DB and reload table view.
     fileprivate func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
@@ -76,7 +87,17 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             cacheName: nil
         )
     }
+    */
     
+    fileprivate func initializeFetchedResultsController() {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Saved")
+        let nameSort = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [nameSort]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: SavedTableViewController.moc!, sectionNameKeyPath: nil, cacheName: nil)
+    }
+ 
+    /*
     func updateDB(button: HistoryCellButton) {
         let restaurant = Restaurant()
         
@@ -96,19 +117,105 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             DataBase.delete(restaurant, in: "favorite")
         }
     }
-    
-    fileprivate func removeFromFavorites(_ name: String) {
+    */
+    /*
+    fileprivate func removeFromSaved(name: String) {
         let restaurant = Restaurant()
         restaurant.name = name
-        restaurant.isFavorite = false
         
         DataBase.delete(restaurant, in: "favorite")
         DataBase.updateInstanceState(restaurant, in: "history")
     }
+    */
+    /*
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        return shouldSegue
+    }
+    */
+    func showMap(cell: MainTableViewCell) {
+        print("show map from saved")
+        //shouldSegue = true
+        performSegue(withIdentifier: "toMap", sender: cell)
+    }
+    
+    func linkToYelp(cell: MainTableViewCell) {
+        print("link to yelp from saved")
+        if cell.yelpUrl != "" {
+            UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
+        } else {
+            alert()
+        }
+    }
+    
+    fileprivate func alert() {
+        // Create the alert.
+        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Add an action(button).
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
+            
+        }))
+        
+        // Show the alert.
+        self.present(alert, animated: false, completion: nil)
+    }
+    
+    func updateSaved(cell: MainTableViewCell, button: UIButton) {
+        if button.isSelected {
+            print("save object")
+            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: SavedTableViewController.moc!) as! SavedMO
+            
+            saved.name = cell.name.text
+            saved.address = cell.address
+            saved.category = cell.category.text
+            saved.imageUrl = cell.imageUrl
+            saved.price = cell.price.text
+            saved.rating = cell.rating
+            saved.reviewCount = Int16(cell.reviewsTotal)
+            saved.latitude = cell.latitude
+            saved.longitude = cell.longitude
+            saved.yelpUrl = cell.yelpUrl
+        } else {
+            print("delete object")
+            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
+            request.predicate = NSPredicate(format: "name = %@", cell.name.text!)
+            
+            guard let object = try? SavedTableViewController.moc?.fetch(request).first as? SavedMO else {
+                fatalError("Didn't find object in context")
+            }
+            
+            SavedTableViewController.moc?.delete(object!)
+            print("deleted from Saved entity")
+        }
+        
+        if (SavedTableViewController.moc?.hasChanges)! {
+            do {
+                try SavedTableViewController.moc?.save()
+                print("context saved")
+            } catch {
+                fatalError("Failure to save context: \(error)")
+            }
+        }
+    }
     
     // MARK: - Table view data source
+    
+    fileprivate func configureCell(cell: MainTableViewCell, object: SavedMO) {
+        
+        cell.name.text = object.name
+        cell.address = object.address
+        cell.mainImage.loadImage(from: "\(object.imageUrl!)")
+        cell.category.text = object.category
+        cell.reviewCount.text = String(object.reviewCount)
+        cell.ratingImage.image = UIImage(named: yelpStars[object.rating]!)
+        cell.price.text = object.price
+        cell.yelpUrl = object.yelpUrl
+        cell.latitude = object.latitude
+        cell.longitude = object.longitude
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if tableView == self.tableView {
+        if !searchController.isActive {
             mySectionsCount = (fetchedResultsController?.sections?.count)!
             return fetchedResultsController?.sections?.count ?? 0
         } else {
@@ -117,7 +224,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == self.tableView {
+        if !searchController.isActive {
             return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
         } else {
             return filteredRestaurants.count
@@ -125,7 +232,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView == self.tableView {
+        if !searchController.isActive {
             return fetchedResultsController?.sections?[section].name.uppercased()
         } else {
             return "Restaurants found"
@@ -133,46 +240,52 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let restaurant: Favorite
+        let restaurant: SavedMO
         let cellID: String
         
         // Configure the cell...
-        if tableView == self.tableView {
-            cellID = "favorite"
-            restaurant = fetchedResultsController?.sections?[indexPath.section].objects![indexPath.row] as! Favorite
-
+        if !searchController.isActive {
+            cellID = "saved"
+            guard let object = fetchedResultsController?.object(at: indexPath) as? SavedMO else {
+                fatalError("Unexpected object in FetchedResultsController")
+            }
+            restaurant = object
         } else {
-            cellID = "filtered"
+            cellID = "saved"
             restaurant = filteredRestaurants[indexPath.row]
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! FavoriteTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
-        cell.textLabel?.text = restaurant.name
-        cell.restaurant = Restaurant(name: restaurant.name!, price: restaurant.price!, rating: restaurant.rating!, reviewCount: restaurant.reviewCount!, address: restaurant.address!, url: restaurant.url!, latitude: (restaurant.latitude?.doubleValue)!, longitude: (restaurant.longitude?.doubleValue)!, category: restaurant.category!)
+        configureCell(cell: cell as! MainTableViewCell, object: restaurant)
         
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 380.0
+    }
+    /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == searchResultsVC?.tableView {
             performSegue(withIdentifier: "favoritesToResults", sender: tableView.cellForRow(at: indexPath))
         }
     }
-    
+    */
+    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle:  UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            if let cell = tableView.cellForRow(at: indexPath) {
+            if let cell = tableView.cellForRow(at: indexPath) as? MainTableViewCell {
                 // Remove from DB.
-                removeFromFavorites((cell.textLabel?.text)!)
+                removeFromSaved(name: cell.name.text!)
             }
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
-    
+    */
     // Customize section header, make sure all the headers are rendered when they are inserted.
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = UIColor.lightGray
@@ -191,22 +304,22 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         if let searchText = searchController.searchBar.text {
             let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
-            filteredRestaurants = favoriteRestaurants.filter { restaurant in
+            filteredRestaurants = savedRestaurants.filter { restaurant in
                 return restaurant.name!.lowercased().contains(inputText.lowercased())
             }
             //print("filtered: \(filteredRestaurants)")
         }
-        searchResultsVC?.tableView.reloadData()
+        tableView.reloadData()
         //searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
     
     // Notifications to hide/show navigation bar & segmented titles.
     func willPresentSearchController(_ searchController: UISearchController) {
-        favoriteRestaurants.removeAll()
+        savedRestaurants.removeAll()
         for obj in (fetchedResultsController?.fetchedObjects)! {
-            favoriteRestaurants.append(obj as! Favorite)
+            savedRestaurants.append(obj as! SavedMO)
         }
-        //searchResultsVC?.favorites = favoriteRestaurants
+        //searchResultsVC?.favorites = savedRestaurants
         //navigationController?.isNavigationBarHidden = true
     }
     /*
@@ -215,11 +328,25 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? ResultsViewController, segue.identifier == "favoritesToResults" {
-            if let cell = sender as? FavoriteTableViewCell, let restaurant = cell.restaurant {
-                destinationVC.getResults(name: restaurant.name, price: restaurant.price, rating: restaurant.rating, reviewCount: restaurant.reviewCount, url: restaurant.url, address: restaurant.address, isFavorite: restaurant.isFavorite, latitude: restaurant.latitude, longitude: restaurant.longitude, totalBiz: 0, randomNo: 0, category: restaurant.category)
+        if segue.identifier == "showMap" && sender is MainTableViewCell {
+
+            guard let cell = sender as? MainTableViewCell else {
+                fatalError("Unexpected sender: \(sender)")
+            }
+            let destinationVC = segue.destination
+
+            if cell.address == "" {
+                alert()
+            } else {
+                if let mapVC = destinationVC as? GoogleMapViewController {
+                    
+                    mapVC.setBizLocation(cell.address)
+                    mapVC.setBizCoordinate2D(CLLocationCoordinate2DMake(cell.latitude
+                        , cell.longitude))
+                    mapVC.setBizName(cell.name.text!)
+                    mapVC.setDepartureTime(Int(Date().timeIntervalSince1970))
+                }
             }
         }
     }
-
 }

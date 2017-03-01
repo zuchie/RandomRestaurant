@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CoreData
 
 private var myContext = 0
 
@@ -93,15 +94,55 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     func showMap(cell: MainTableViewCell) {
+        print("show map from main")
         shouldSegue = true
         performSegue(withIdentifier: "showMap", sender: cell)
     }
     
     func linkToYelp(cell: MainTableViewCell) {
+        print("show yelp from main")
         if cell.yelpUrl != "" {
             UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
         } else {
             alert()
+        }
+    }
+    
+    func updateSaved(cell: MainTableViewCell, button: UIButton) {
+        if button.isSelected {
+            print("save object")
+            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: SavedTableViewController.moc!) as! SavedMO
+            
+            saved.name = cell.name.text
+            saved.address = cell.address
+            saved.category = cell.category.text
+            saved.imageUrl = cell.imageUrl
+            saved.price = cell.price.text
+            saved.rating = cell.rating
+            saved.reviewCount = Int16(cell.reviewsTotal)
+            saved.latitude = cell.latitude
+            saved.longitude = cell.longitude
+            saved.yelpUrl = cell.yelpUrl
+        } else {
+            print("delete object")
+            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
+            request.predicate = NSPredicate(format: "name = %@", cell.name.text!)
+            
+            guard let object = try? SavedTableViewController.moc?.fetch(request).first as? SavedMO else {
+                fatalError("Didn't find object in context")
+            }
+            
+            SavedTableViewController.moc?.delete(object!)
+            print("deleted from Saved entity")
+        }
+        
+        if (SavedTableViewController.moc?.hasChanges)! {
+            do {
+                try SavedTableViewController.moc?.save()
+                print("context saved")
+            } catch {
+                fatalError("Failure to save context: \(error)")
+            }
         }
     }
     
@@ -146,22 +187,23 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "resultsCell", for: indexPath) as! MainTableViewCell
             let content = restaurants[indexPath.row]
-            cell.mainImage.loadImage(from: content["image_url"] as! String)
+            cell.imageUrl = content["image_url"] as? String
+            cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
             cell.name.text = content["name"] as? String
             var categories = String()
-            for category in content["categories"] as! [[String: Any]] {
-                categories += (category)["title"] as! String
+            for category in (content["categories"] as? [[String: Any]])! {
+                categories += ((category)["title"] as? String)!
             }
             cell.category.text = categories
+            cell.rating = content["rating"] as? Float
             cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
-            cell.reviewCount.text = String(content["review_count"] as! Int) + " reviews"
+            cell.reviewsTotal = content["review_count"] as? Int
+            cell.reviewCount.text = String(content["review_count"] as! Int) + " Reviews"
             cell.price.text = content["price"] as? String
             cell.yelpUrl = content["url"] as? String
             cell.latitude = (content["coordinates"] as? [String: Double])?["latitude"]
             cell.longitude = (content["coordinates"] as? [String: Double])?["longitude"]
-            
-            //let location = content["location"] as? [String: Any]
-            
+                        
             let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (content["location"] as? [String: Any])!)!
             cell.address = location.getBizAddressString()
             cell.delegate = self
