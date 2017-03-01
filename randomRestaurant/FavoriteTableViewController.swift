@@ -212,6 +212,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         cell.yelpUrl = object.yelpUrl
         cell.latitude = object.latitude
         cell.longitude = object.longitude
+        
+        cell.delegate = self
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -328,7 +330,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     }
     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showMap" && sender is MainTableViewCell {
+        if segue.identifier == "toMap" {
 
             guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
