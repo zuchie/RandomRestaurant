@@ -115,7 +115,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     
     func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
         if button.isSelected {
-            print("save object")
+            print("Save object")
             let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: MainTableViewController.moc!) as! SavedMO
             
             saved.name = cell.name.text
@@ -129,16 +129,20 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
             saved.longitude = cell.longitude
             saved.yelpUrl = cell.yelpUrl
         } else {
-            print("delete object")
-            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
-            request.predicate = NSPredicate(format: "name = %@", cell.name.text!)
+            let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
+            request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
             
-            guard let object = try? MainTableViewController.moc?.fetch(request).first as? SavedMO else {
-                fatalError("Didn't find object in context")
+            guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+                fatalError("Error fetching object in context")
             }
             
-            MainTableViewController.moc?.delete(object!)
-            print("deleted from Saved entity")
+            guard let obj = object else {
+                print("Didn't find object in context")
+                return
+            }
+            
+            MainTableViewController.moc?.delete(obj)
+            print("Deleted from Saved entity")
         }
         
         if (MainTableViewController.moc?.hasChanges)! {
@@ -164,6 +168,21 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
         self.present(alert, animated: false, completion: nil)
     }
     
+    // Is the object with name in Saved?
+    fileprivate func objectSaved(name: String) -> Bool {
+        let request = NSFetchRequest<SavedMO>(entityName: "Saved")
+        request.predicate = NSPredicate(format: "name == %@", name)
+        guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+            fatalError("Error fetching from context")
+        }
+        
+        guard (object != nil) else {
+            return false
+        }
+        
+        return true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -183,7 +202,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        
+        print("cell for row at")
         // Configure the cell...
         if indexPath.section < 4 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell", for: indexPath)
@@ -211,6 +230,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
                         
             let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (content["location"] as? [String: Any])!)!
             cell.address = location.getBizAddressString()
+            cell.likeButton.isSelected = objectSaved(name: cell.name.text!)
             cell.delegate = self
             
             return cell
@@ -302,10 +322,10 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        print("==sender: \(sender)")
-        print("==id: \(segue.identifier)")
+        //print("==sender: \(sender)")
+        //print("==id: \(segue.identifier)")
         if segue.identifier == "showMap" && sender is MainAndSavedTableViewCell {
-            print("hello")
+            //print("hello")
             guard let cell = sender as? MainAndSavedTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
             }

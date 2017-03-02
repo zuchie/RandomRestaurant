@@ -153,19 +153,23 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
         if button.isSelected {
-            print("Unexpected")
+            fatalError("Unexpected")
             
         } else {
-            print("delete object")
-            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Saved")
-            request.predicate = NSPredicate(format: "name = %@", cell.name.text!)
+            let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
+            request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
             
-            guard let object = try? MainTableViewController.moc?.fetch(request).first as? SavedMO else {
-                fatalError("Didn't find object in context")
+            guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+                fatalError("Error fetching from context")
             }
             
-            MainTableViewController.moc?.delete(object!)
-            print("deleted from Saved entity")
+            guard let obj = object else {
+                print("Didn't find object in context")
+                return
+            }
+            
+            MainTableViewController.moc?.delete(obj)
+            print("Deleted from Saved entity")
         }
         
         if (MainTableViewController.moc?.hasChanges)! {
@@ -206,6 +210,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         cell.yelpUrl = object.yelpUrl
         cell.latitude = object.latitude
         cell.longitude = object.longitude
+        cell.likeButton.isSelected = true
         
         cell.delegate = self
     }
@@ -297,8 +302,17 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         if let searchText = searchController.searchBar.text {
             let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
-            filteredRestaurants = savedRestaurants.filter { restaurant in
-                return restaurant.name!.lowercased().contains(inputText.lowercased())
+            filteredRestaurants = savedRestaurants.filter {
+                
+                guard let name = $0.name else {
+                    print("No restaurant found")
+                    return false
+                }
+                
+                //print("rest: \($0)")
+                return name.lowercased().contains(inputText.lowercased())
+ 
+                //return ($0.name?.lowercased().contains(inputText.lowercased()))!
             }
             //print("filtered: \(filteredRestaurants)")
         }

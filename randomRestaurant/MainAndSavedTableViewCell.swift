@@ -23,6 +23,7 @@ class MainAndSavedTableViewCell: UITableViewCell {
     @IBOutlet weak var ratingImage: UIImageView!
     @IBOutlet weak var reviewCount: UILabel!
     @IBOutlet weak var price: UILabel!
+    @IBOutlet weak var likeButton: UIButton!
     
     
     var yelpUrl: String!
@@ -34,6 +35,9 @@ class MainAndSavedTableViewCell: UITableViewCell {
     var imageUrl: String!
     
     var delegate: MainAndSavedTableViewCellDelegate?
+    
+    fileprivate let emptyStar = UIImage(named: "emptyStar")
+    fileprivate let filledStar = UIImage(named: "filledStar")
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -55,6 +59,7 @@ class MainAndSavedTableViewCell: UITableViewCell {
     @IBAction func handleLikeButton(_ sender: UIButton) {
         print("handle like button")
         sender.isSelected = sender.isSelected ? false : true
+
         self.delegate?.updateSaved(cell: self, button: sender)
     }
     
@@ -62,6 +67,8 @@ class MainAndSavedTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        likeButton.setImage(emptyStar, for: .normal)
+        likeButton.setImage(filledStar, for: .selected)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
