@@ -165,8 +165,7 @@ class YelpQuery: NSObject {
         }
         
         guard let item = json as? [String: Any],
-            let businesses = item["businesses"] as? [[String: Any]],
-            let total = item["total"] as? Int else {
+            let businesses = item["businesses"] as? [[String: Any]] else {
                 fatalError("Unexpected JSON: \(json)")
         }
         self.businesses = businesses

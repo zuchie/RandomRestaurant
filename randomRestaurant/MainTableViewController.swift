@@ -261,9 +261,10 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
             cell.name.text = content["name"] as? String
             var categories = String()
             for category in (content["categories"] as? [[String: Any]])! {
-                categories += ((category)["title"] as? String)!
+                categories += (category["title"] as! String) + ", "
             }
-            cell.category.text = categories
+            let categoriesString = categories.characters.dropLast(2)
+            cell.category.text = String(categoriesString)
             cell.rating = content["rating"] as? Float
             cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
             cell.reviewsTotal = content["review_count"] as? Int
