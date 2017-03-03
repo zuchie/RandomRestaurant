@@ -485,10 +485,10 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     }
 
 }
-/*
+
 extension UIImageView {
     public func loadImage(from urlString: String) {
-        print("load image from url")
+        //print("load image from url")
         guard let url = URL(string: urlString) else {
             fatalError("Unexpected url string: \(urlString)")
         }
@@ -503,4 +503,3 @@ extension UIImageView {
         }.resume()
     }
 }
-*/
