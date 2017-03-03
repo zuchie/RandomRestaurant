@@ -44,6 +44,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
         
         searchResultsVC = UITableViewController(style: .plain)
+        //searchResultsVC = CoreDataTableViewController()
         searchResultsVC.tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
         searchResultsVC.tableView.dataSource = self
         searchResultsVC.tableView.delegate = self
@@ -170,6 +171,12 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             
             MainTableViewController.moc?.delete(obj)
             print("Deleted from Saved entity")
+            
+            if let index = filteredRestaurants.index(of: obj) {
+                filteredRestaurants.remove(at: index)
+                searchResultsVC.tableView.reloadData()
+                print("Deleted from filtered")
+            }
         }
         
         if (MainTableViewController.moc?.hasChanges)! {

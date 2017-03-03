@@ -61,6 +61,8 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     
     override func viewWillAppear(_ animated: Bool) {
         shouldSegue = false
+        // Reload visible cells to sync like button status with Saved.
+        tableView.reloadData()
     }
     
     fileprivate func loadImagesToCache(from url: String, index: Int) {
