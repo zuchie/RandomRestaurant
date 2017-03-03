@@ -311,13 +311,14 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             
             filteredRestaurants = savedRestaurants.filter {
                 
-                guard let name = $0.name else {
+                guard let name = $0.name,
+                    let category = $0.category else {
                     print("No restaurant found")
                     return false
                 }
                 
                 //print("rest: \($0)")
-                return name.lowercased().contains(inputText.lowercased())
+                return (name.lowercased().contains(inputText.lowercased()) || category.lowercased().contains(inputText.lowercased()))
  
                 //return ($0.name?.lowercased().contains(inputText.lowercased()))!
             }
