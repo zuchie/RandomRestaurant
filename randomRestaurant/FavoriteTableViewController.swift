@@ -211,7 +211,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         cell.address = object.address
         cell.mainImage.loadImage(from: "\(object.imageUrl!)")
         cell.category.text = object.category
-        cell.reviewCount.text = String(object.reviewCount)
+        cell.reviewCount.text = String(object.reviewCount) + " Reviews"
         cell.ratingImage.image = UIImage(named: yelpStars[object.rating]!)
         cell.price.text = object.price
         cell.yelpUrl = object.yelpUrl
@@ -236,6 +236,14 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
         } else {
             return filteredRestaurants.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableView == self.tableView {
+            return 0
+        } else {
+            return 40
         }
     }
     
