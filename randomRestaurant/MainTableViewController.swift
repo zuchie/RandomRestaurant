@@ -26,6 +26,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     fileprivate var yelpQueryParams = YelpUrlQueryParameters()
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
+    fileprivate var imageCache = [UIImage]()
     fileprivate var myCoordinate = MyCoordinate()
     fileprivate var coordinate: CLLocationCoordinate2D?
     
@@ -62,6 +63,29 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
         shouldSegue = false
     }
     
+    fileprivate func loadImagesToCache(from url: String, index: Int) {
+        guard let urlString = URL(string: url) else {
+            fatalError("Unexpected url string: \(url)")
+        }
+        URLSession.shared.dataTask(with: urlString) { data, response, error in
+            guard error == nil, let imageData = data else {
+                fatalError("error while getting url response: \(error?.localizedDescription)")
+            }
+            if let image = UIImage(data: imageData) {
+                self.imageCache.append(image)
+                
+            }
+            // Reload tableView when first image is ready.
+            // Don't need to reload every time.
+            if index == 0 {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            
+        }.resume()
+    }
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &myContext {
             if keyPath == "queryDone" && object is YelpQuery {
@@ -70,10 +94,11 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
                         print("url query done")
                         // Process results.
                         restaurants = yelpQuery.results!
-                        DispatchQueue.main.async {
-                            self.tableView.reloadSections(IndexSet(integer: 4), with: .automatic)
+
+                        imageCache.removeAll(keepingCapacity: false)
+                        for (index, member) in restaurants.enumerated() {
+                            loadImagesToCache(from: member["image_url"] as! String, index: index)
                         }
-                        
                     }
                 }
             }
@@ -96,6 +121,8 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     
     deinit {
         yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
+        myCoordinate.removeObserver(self, forKeyPath: "coordinate", context: &myContext)
+
     }
     
     func showMap(cell: MainAndSavedTableViewCell) {
@@ -202,7 +229,6 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        print("cell for row at")
         // Configure the cell...
         if indexPath.section < 4 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell", for: indexPath)
@@ -212,7 +238,18 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainAndSavedCell", for: indexPath) as! MainAndSavedTableViewCell
             let content = restaurants[indexPath.row]
             cell.imageUrl = content["image_url"] as? String
-            cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
+            //cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
+            var image: UIImage?
+            if indexPath.row >= imageCache.count {
+                //print("nil image indexPath: \(indexPath.row)")
+                image = UIImage(named: "globe")
+            } else {
+                //print("indexPath: \(indexPath.row)")
+                image = imageCache[indexPath.row]
+            }
+            DispatchQueue.main.async {
+                cell.mainImage.image = image
+            }
             cell.name.text = content["name"] as? String
             var categories = String()
             for category in (content["categories"] as? [[String: Any]])! {
@@ -448,9 +485,10 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     }
 
 }
-
+/*
 extension UIImageView {
     public func loadImage(from urlString: String) {
+        print("load image from url")
         guard let url = URL(string: urlString) else {
             fatalError("Unexpected url string: \(urlString)")
         }
@@ -465,3 +503,4 @@ extension UIImageView {
         }.resume()
     }
 }
+*/

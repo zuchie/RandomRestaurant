@@ -59,7 +59,7 @@ class MyCoordinate: UIViewController, CLLocationManagerDelegate {
             
             self.present(alertController, animated: true, completion: nil)
         default:
-            print("Access request error")
+            print("Access request error, status: \(status)")
         }
     }
     

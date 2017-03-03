@@ -170,14 +170,14 @@ class YelpQuery: NSObject {
                 fatalError("Unexpected JSON: \(json)")
         }
         self.businesses = businesses
-        print("businesses: \(self.businesses), total: \(total)")
+        //print("businesses: \(self.businesses), total: \(total)")
     }
     
     fileprivate func filterByRating() {
         queryResults = [[String: Any]]()
         queryResults = businesses.filter { $0["rating"] as! Float >= (queryParameters?.rating)! }
         print("query rating: \(queryParameters?.rating)")
-        print("filtered: \(queryResults)")
+        //print("filtered: \(queryResults)")
     }
     /*
     fileprivate func sortBusinesses(_ businesses: [[String:AnyObject]]) -> [[String:AnyObject]] {

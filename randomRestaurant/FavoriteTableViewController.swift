@@ -10,10 +10,13 @@ import UIKit
 import CoreData
 import CoreLocation
 
+private var myContext = 0
+
 class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate, MainAndSavedTableViewCellDelegate {
     
     fileprivate var savedRestaurants = [SavedMO]()
     fileprivate var filteredRestaurants = [SavedMO]()
+    fileprivate var imageCache = [UIImage]()
     
     fileprivate var searchResultsVC: UITableViewController!
     fileprivate var searchController: UISearchController!
@@ -69,7 +72,92 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             let _ = searchController.view
         }
         */
+        // Update Caches.
+        //print("Update caches")
+        savedRestaurants = fetchedResultsController?.fetchedObjects as! [SavedMO]
+        for (index, member) in savedRestaurants.enumerated() {
+            loadImagesToCache(from: member.imageUrl!, index: index)
+        }
+        
+        MainTableViewController.moc?.addObserver(self, forKeyPath: "hasChanges", options: .new, context: &myContext)
     }
+    
+    deinit {
+        MainTableViewController.moc?.removeObserver(self, forKeyPath: "hasChanges", context: &myContext)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        print("context: \(context), newValue: \(change?[.newKey])")
+        guard context == &myContext,
+            let newValue = change?[.newKey] else {
+                print("Unexpected context")
+                super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+                return
+        }
+        
+        if (newValue as! Bool) == true {
+            // Update Caches.
+            print("====Update caches")
+            savedRestaurants.removeAll(keepingCapacity: false)
+            savedRestaurants = fetchedResultsController?.fetchedObjects as! [SavedMO]
+            imageCache.removeAll(keepingCapacity: false)
+            for (index, member) in savedRestaurants.enumerated() {
+                loadImagesToCache(from: member.imageUrl!, index: index)
+            }
+        }
+        
+        /*
+        if let objs = MainTableViewController.moc?.deletedObjects {
+            for obj in objs {
+                guard let url = (obj as! SavedMO).imageUrl else {
+                    fatalError("Couldn't get url from: \(obj)")
+                }
+                for (index, member) in imageCache.enumerated() {
+                    if member.url == url {
+                        imageCache.remove(at: index)
+                        print("delete obj: \(member)")
+                    }
+                }
+            }
+        }
+        
+        
+        if let objs = MainTableViewController.moc?.insertedObjects {
+            for obj in objs {
+                guard let url = (obj as! SavedMO).imageUrl else {
+                    fatalError("Couldn't get url from: \(obj)")
+                }
+                let image =
+            }
+        }
+        */
+    }
+    
+    fileprivate func loadImagesToCache(from url: String, index: Int) {
+        guard let urlString = URL(string: url) else {
+            fatalError("Unexpected url string: \(url)")
+        }
+        URLSession.shared.dataTask(with: urlString) { data, response, error in
+            guard error == nil, let imageData = data else {
+                fatalError("error while getting url response: \(error?.localizedDescription)")
+            }
+            if let image = UIImage(data: imageData) {
+                self.imageCache.append(image)
+                
+            }
+            /*
+            // Reload tableView when first image is ready.
+            // Don't need to reload every time.
+            if index == 0 {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            */
+        }.resume()
+    }
+    
     /*
     override func viewWillAppear(_ animated: Bool) {
         shouldSegue = false
@@ -174,8 +262,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         
         if (MainTableViewController.moc?.hasChanges)! {
             do {
+                print("try saving context")
                 try MainTableViewController.moc?.save()
-                print("context saved")
             } catch {
                 fatalError("Failure to save context: \(error)")
             }
@@ -198,11 +286,22 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     // MARK: - Table view data source
     
-    fileprivate func configureCell(cell: MainAndSavedTableViewCell, object: SavedMO) {
+    fileprivate func configureCell(cell: MainAndSavedTableViewCell, object: SavedMO, indexPath: IndexPath) {
         
         cell.name.text = object.name
         cell.address = object.address
-        cell.mainImage.loadImage(from: "\(object.imageUrl!)")
+        //cell.mainImage.loadImage(from: "\(object.imageUrl!)")
+        var image: UIImage?
+        if indexPath.row >= imageCache.count {
+            //print("nil image indexPath: \(indexPath.row)")
+            image = UIImage(named: "globe")
+        } else {
+            //print("indexPath: \(indexPath.row)")
+            image = imageCache[indexPath.row]
+        }
+        DispatchQueue.main.async {
+            cell.mainImage.image = image
+        }
         cell.category.text = object.category
         cell.reviewCount.text = String(object.reviewCount)
         cell.ratingImage.image = UIImage(named: yelpStars[object.rating]!)
@@ -255,7 +354,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "mainAndSavedCell", for: indexPath)
         
-        configureCell(cell: cell as! MainAndSavedTableViewCell, object: restaurant)
+        configureCell(cell: cell as! MainAndSavedTableViewCell, object: restaurant, indexPath: indexPath)
         
         return cell
     }
@@ -319,7 +418,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         searchResultsVC.tableView.reloadData()
         //searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
-    
+    /*
     // Notifications to hide/show navigation bar & segmented titles.
     func willPresentSearchController(_ searchController: UISearchController) {
         savedRestaurants.removeAll()
@@ -329,6 +428,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         //searchResultsVC?.favorites = savedRestaurants
         //navigationController?.isNavigationBarHidden = true
     }
+    */
     /*
     func willDismissSearchController(_ searchController: UISearchController) {
         //navigationController?.isNavigationBarHidden = false
