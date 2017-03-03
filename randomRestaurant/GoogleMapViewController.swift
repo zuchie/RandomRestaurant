@@ -45,6 +45,9 @@ class GoogleMapViewController: UIViewController {
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
         }
+        
+        tabBarController?.tabBar.isHidden = true
+        
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
     }
 
@@ -53,6 +56,7 @@ class GoogleMapViewController: UIViewController {
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = true
         }
+        tabBarController?.tabBar.isHidden = false
         //view.removeObserver(self, forKeyPath: "myLocation")
     }
 

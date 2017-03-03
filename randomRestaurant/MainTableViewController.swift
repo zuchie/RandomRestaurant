@@ -94,7 +94,9 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
                     if (newValue as! Bool) {
                         print("url query done")
                         // Process results.
+                        //restaurants.removeAll(keepingCapacity: false)
                         restaurants = yelpQuery.results!
+                        //tableView.reloadData()
 
                         imageCache.removeAll(keepingCapacity: false)
                         for (index, member) in restaurants.enumerated() {
@@ -229,7 +231,6 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         // Configure the cell...
         if indexPath.section < 4 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell", for: indexPath)
@@ -405,6 +406,8 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
         
+        restaurants.removeAll(keepingCapacity: false)
+
         let sourceVC = sender.source
         switch (sender.identifier)! {
         case "backFromWhat":
