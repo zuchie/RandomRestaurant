@@ -26,7 +26,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     fileprivate var yelpQueryParams = YelpUrlQueryParameters()
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
-    fileprivate var imageCache = [UIImage]()
+    fileprivate var imageCache = [String: UIImage]()
     fileprivate var myCoordinate = MyCoordinate()
     fileprivate var coordinate: CLLocationCoordinate2D?
     
@@ -74,8 +74,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
                 fatalError("error while getting url response: \(error?.localizedDescription)")
             }
             if let image = UIImage(data: imageData) {
-                self.imageCache.append(image)
-                
+                self.imageCache[url] = image
             }
             // Reload tableView when first image is ready.
             // Don't need to reload every time.
@@ -242,12 +241,19 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
             cell.imageUrl = content["image_url"] as? String
             //cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
             var image: UIImage?
+            /*
             if indexPath.row >= imageCache.count {
                 //print("nil image indexPath: \(indexPath.row)")
                 image = UIImage(named: "globe")
             } else {
                 //print("indexPath: \(indexPath.row)")
-                image = imageCache[indexPath.row]
+                image = imageCache[cell.imageUrl]
+            }
+            */
+            if let img = imageCache[cell.imageUrl] {
+               image = img
+            } else {
+                image = UIImage(named: "globe")
             }
             DispatchQueue.main.async {
                 cell.mainImage.image = image
