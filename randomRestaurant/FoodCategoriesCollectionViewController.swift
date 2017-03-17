@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import AVKit
-import AVFoundation
 
 class FoodCategoriesCollectionViewController: UICollectionViewController {
     
@@ -18,51 +16,10 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     
     fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
     
-    fileprivate var videoVCs = [VideoViewController]()
     fileprivate var category: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //print("categories category: \(YelpUrlQueryParameters.category), coordinates: \(YelpUrlQueryParameters.coordinates), radius: \(YelpUrlQueryParameters.radius), limit: \(YelpUrlQueryParameters.limit), time: \(YelpUrlQueryParameters.openAt)")
-        for categoryName in foodCategoriesName {
-            setupVideos(categoryName)
-        }
-    }
-    
-    func setupVideos(_ name: String) {
-        let videoVC = VideoViewController(fileName: name, fileExt: "mp4", directory: "Videos")
-        videoVCs.append(videoVC)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Preserve selection between presentations.
-        // Only false can make didDeselectItemAt work.
-        // When select a different cell, the previously selected cell will be deselected first.
-        print("category view will appear")
-        self.clearsSelectionOnViewWillAppear = false
-        
-        // Play cell background video which has been paused.
-        for cell in (collectionView?.visibleCells)! {
-            guard let myCell = cell as? FoodCategoriesCollectionViewCell
-                else {
-                    fatalError("Unexpected cell: \(cell)")
-            }
-            if let player = myCell.videoBG.player {
-                if player.rate == 0 || player.error != nil {
-                    //print("@@name: \(myCell.videoBG.name)")
-                    player.play()
-                }
-            }
-        }
-    }
-
-    // Restore.
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        //print("category view will disappear========")
-        self.clearsSelectionOnViewWillAppear = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,28 +27,27 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    
+    fileprivate func configureCell(_ cell: FoodCategoriesCollectionViewCell, _ indexPath: IndexPath) {
+        cell.backgroundView = UIImageView(image: UIImage(named: foodCategoriesName[indexPath.row].lowercased()))
+        cell.nameLabel.text = foodCategoriesName[indexPath.row]
+    }
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return foodCategoriesName.count
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FoodCategoriesCell", for: indexPath) as! FoodCategoriesCollectionViewCell
     
         // Configure the cell
-        let video = videoVCs[indexPath.row]
-        
-        cell.nameLabel.text = video.name
-        cell.videoBG =  video
-        cell.backgroundView = cell.videoBG.view
-        //cell.contentView.addSubview(foodCategory.videoVC.view)
+        configureCell(cell, indexPath)
         
         return cell
     }
@@ -119,16 +75,6 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     */
     
     func getCategory() -> String? {
-        /*
-        if let value = category {
-            if value == "American" {
-                category = "newamerican,tradamerican"
-            }
-            if value == "Indian" {
-                category = "indpak"
-            }
-        }
-        */
         print("return category: \(category)")
         return category
     }

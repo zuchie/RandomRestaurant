@@ -12,13 +12,13 @@ import CoreData
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainAndSavedTableViewCellDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
 
     fileprivate var sectionHeaders = [UIView]()
     //fileprivate var results = [Restaurant]()
-    fileprivate var headers: [(img: String, txt: String)] = [("What", "What"), ("Where", "Where"), ("When", "When"), ("Rating", "Rating")]
+    fileprivate var headers: [(img: String, txt: String)] = [("What", "What")]
 
     //fileprivate let list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
     fileprivate var headerHeight: CGFloat!
@@ -43,20 +43,20 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let nib = UINib(nibName: "MainTableViewSectionHeaderView", bundle: nil)
-        tableView.register(nib, forHeaderFooterViewReuseIdentifier: "sectionHeader")
+        //let nib = UINib(nibName: "MainTableViewHeaderView", bundle: nil)
+        //tableView.register(nib, forHeaderFooterViewReuseIdentifier: "tableHeader")
         
-        let cellNib = UINib(nibName: "MainAndSavedTableViewCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "mainAndSavedCell")
+        //let cellNib = UINib(nibName: "MainTableViewCell", bundle: nil)
+        //tableView.register(cellNib, forCellReuseIdentifier: "MainCell")
         
-        headerHeight = tableView.frame.height / 12
+        //headerHeight = tableView.frame.height / 12
 
         yelpQuery.addObserver(self, forKeyPath: "queryDone", options: .new, context: &myContext)
         myCoordinate.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
         
         myCoordinate.loadViewIfNeeded()
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headerCell")
+        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headerCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,13 +128,13 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
 
     }
     
-    func showMap(cell: MainAndSavedTableViewCell) {
+    func showMap(cell: MainTableViewCell) {
         print("show map from main")
         shouldSegue = true
         performSegue(withIdentifier: "showMap", sender: cell)
     }
     
-    func linkToYelp(cell: MainAndSavedTableViewCell) {
+    func linkToYelp(cell: MainTableViewCell) {
         print("show yelp from main")
         if cell.yelpUrl != "" {
             UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
@@ -143,7 +143,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
         }
     }
     
-    func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
+    func updateSaved(cell: MainTableViewCell, button: UIButton) {
         if button.isSelected {
             print("Save object")
             let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: MainTableViewController.moc!) as! SavedMO
@@ -218,82 +218,82 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
         // Dispose of any resources that can be recreated.
     }
 
+    fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
+        let content = restaurants[indexPath.row]
+        cell.imageUrl = content["image_url"] as? String
+        //cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
+        var image: UIImage?
+        /*
+         if indexPath.row >= imageCache.count {
+         //print("nil image indexPath: \(indexPath.row)")
+         image = UIImage(named: "globe")
+         } else {
+         //print("indexPath: \(indexPath.row)")
+         image = imageCache[cell.imageUrl]
+         }
+         */
+        if let img = imageCache[cell.imageUrl] {
+            image = img
+        } else {
+            image = UIImage(named: "globe")
+        }
+        DispatchQueue.main.async {
+            cell.mainImage.image = image
+        }
+        cell.name.text = content["name"] as? String
+        var categories = String()
+        for category in (content["categories"] as? [[String: Any]])! {
+            categories += (category["title"] as! String) + ", "
+        }
+        let categoriesString = categories.characters.dropLast(2)
+        cell.category.text = String(categoriesString)
+        cell.rating = content["rating"] as? Float
+        cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
+        cell.reviewsTotal = content["review_count"] as? Int
+        cell.reviewCount.text = String(content["review_count"] as! Int) + " Reviews"
+        cell.price.text = content["price"] as? String
+        cell.yelpUrl = content["url"] as? String
+        cell.latitude = (content["coordinates"] as? [String: Double])?["latitude"]
+        cell.longitude = (content["coordinates"] as? [String: Double])?["longitude"]
+        
+        let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (content["location"] as? [String: Any])!)!
+        cell.address = location.getBizAddressString()
+        cell.likeButton.isSelected = objectSaved(name: cell.name.text!)
+        cell.delegate = self
+
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 5
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return section < 4 ? 1 : restaurants.count
+        return restaurants.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
-        if indexPath.section < 4 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell", for: indexPath)
-            cell.textLabel?.text = ""
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "mainAndSavedCell", for: indexPath) as! MainAndSavedTableViewCell
-            let content = restaurants[indexPath.row]
-            cell.imageUrl = content["image_url"] as? String
-            //cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
-            var image: UIImage?
-            /*
-            if indexPath.row >= imageCache.count {
-                //print("nil image indexPath: \(indexPath.row)")
-                image = UIImage(named: "globe")
-            } else {
-                //print("indexPath: \(indexPath.row)")
-                image = imageCache[cell.imageUrl]
-            }
-            */
-            if let img = imageCache[cell.imageUrl] {
-               image = img
-            } else {
-                image = UIImage(named: "globe")
-            }
-            DispatchQueue.main.async {
-                cell.mainImage.image = image
-            }
-            cell.name.text = content["name"] as? String
-            var categories = String()
-            for category in (content["categories"] as? [[String: Any]])! {
-                categories += (category["title"] as! String) + ", "
-            }
-            let categoriesString = categories.characters.dropLast(2)
-            cell.category.text = String(categoriesString)
-            cell.rating = content["rating"] as? Float
-            cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
-            cell.reviewsTotal = content["review_count"] as? Int
-            cell.reviewCount.text = String(content["review_count"] as! Int) + " Reviews"
-            cell.price.text = content["price"] as? String
-            cell.yelpUrl = content["url"] as? String
-            cell.latitude = (content["coordinates"] as? [String: Double])?["latitude"]
-            cell.longitude = (content["coordinates"] as? [String: Double])?["longitude"]
-                        
-            let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (content["location"] as? [String: Any])!)!
-            cell.address = location.getBizAddressString()
-            cell.likeButton.isSelected = objectSaved(name: cell.name.text!)
-            cell.delegate = self
-            
-            return cell
-        }
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath) as! MainTableViewCell
+        
+        configureCell(cell, indexPath)
+        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section < 4 ? 10.0 : 380.0
+        return 380.0
     }
-    
+    /*
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return section < 4 ? headerHeight: 20.0
     }
-    
+    */
+    /*
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section < 4 {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MainTableViewSectionHeaderView
@@ -311,16 +311,17 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
             return nil
         }
     }
-
+    */
     /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         shouldSegue = false
     }
     */
+    /*
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return section < 4 ? nil : "Restaurants: \(restaurants.count)"
     }
-
+    */
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard let headerView = sender.view as? MainTableViewSectionHeaderView else {
@@ -371,9 +372,9 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
         // Pass the selected object to the new view controller.
         //print("==sender: \(sender)")
         //print("==id: \(segue.identifier)")
-        if segue.identifier == "showMap" && sender is MainAndSavedTableViewCell {
+        if segue.identifier == "showMap" && sender is MainTableViewCell {
             //print("hello")
-            guard let cell = sender as? MainAndSavedTableViewCell else {
+            guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
             }
             
@@ -409,41 +410,27 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
         restaurants.removeAll(keepingCapacity: false)
 
         let sourceVC = sender.source
-        switch (sender.identifier)! {
-        case "backFromWhat":
-            category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
-            //yelpQueryParams.category.value = category
-            //updateHeaderLabelText(ofSection: 0, toText:  category)
-            //print("**category: \(category)")
-        case "backFromWhere":
-            // Keep current location if no updates.
-            location = (sourceVC as! LocationTableViewController).getLocation()
-                //yelpQueryParams.latitude.value = location.coordinate.latitude
-                //yelpQueryParams.longitude.value = location.coordinate.longitude
-                //updateHeaderLabelText(ofSection: 1, toText: location.description)
-                //print("**name: \(location.description), latitude: \(location.coordinate.latitude), longitude: \(location.coordinate.longitude)")
-        case "backFromWhen":
-            date = (sourceVC as! DateViewController).getDate()
-            //yelpQueryParams.openAt.value = date.unix
-            //updateHeaderLabelText(ofSection: 2, toText: date.formatted)
-            //print("**open at: \(date.formatted)")
-        case "backFromRating":
-            rating = (sourceVC as! RatingViewController).getRating()
-            //yelpQueryParams.rating = rating
-            //updateHeaderLabelText(ofSection: 3, toText: "\(rating)")
-            //print("**rating: \(rating)")
-        default:
-            fatalError("Unexpected returning segue: \((sender.identifier)!)")
+        guard sender.identifier == "backFromWhat" else {
+            fatalError("Unexpeted id: \(sender.identifier)")
         }
         
-        updateHeader(category: category, location: location, date: date, rating: rating)
+        category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
+        
+        updateHeader(category: category)
+        getTimeAndLocation()
         
         // Start Yelp search.
         yelpQuery.parameters = yelpQueryParams
         yelpQuery.startQuery()
     }
     
-    fileprivate func updateHeader(category: String?, location: (description: String, coordinate: CLLocationCoordinate2D)?, date: Date?, rating: Float?) {
+    fileprivate func getTimeAndLocation() {
+            yelpQueryParams.latitude.value = coordinate?.latitude
+            yelpQueryParams.longitude.value = coordinate?.longitude
+            yelpQueryParams.openAt.value = Int(Date().timeIntervalSince1970)
+    }
+    
+    fileprivate func updateHeader(category: String?) {
         if var value = category {
             updateHeaderLabelText(ofSection: 0, toText: value)
             if value == "American" {
@@ -458,42 +445,7 @@ class MainTableViewController: UITableViewController, MainAndSavedTableViewCellD
             yelpQueryParams.category.value = "restaurants"
             updateHeaderLabelText(ofSection: 0, toText: "What: all")
         }
-        if let value = location {
-            yelpQueryParams.latitude.value = value.coordinate.latitude
-            yelpQueryParams.longitude.value = value.coordinate.longitude
-            updateHeaderLabelText(ofSection: 1, toText: value.description)
-            print("**location: \(value.description), latitude: \(value.coordinate.latitude), longitude: \(value.coordinate.longitude)")
-        } else {
-            yelpQueryParams.latitude.value = coordinate?.latitude
-            yelpQueryParams.longitude.value = coordinate?.longitude
-            updateHeaderLabelText(ofSection: 1, toText: "Where: here")
-        }
-        if let value = date {
-            if Calendar.current.compare(value, to: Date(), toGranularity: .minute) == .orderedSame  {
-                yelpQueryParams.openAt.value = Int(value.timeIntervalSince1970)
-                updateHeaderLabelText(ofSection: 2, toText: "When: now")
-                print("**date is now")
-            } else {
-                yelpQueryParams.openAt.value = Int(value.timeIntervalSince1970)
-                let dateFormatter = DateFormatter()
-                dateFormatter.timeStyle = .short
-                let date = dateFormatter.string(from: value)
- 
-                updateHeaderLabelText(ofSection: 2, toText: date)
-                print("**open at: \(value)")
-            }
-        } else {
-            yelpQueryParams.openAt.value = Int(Date().timeIntervalSince1970)
-            updateHeaderLabelText(ofSection: 2, toText: "When: now")
-        }
-        if let value = rating {
-            yelpQueryParams.rating = value
-            updateHeaderLabelText(ofSection: 3, toText: "\(value)")
-            print("**rating: \(value)")
-        } else {
-            yelpQueryParams.rating = 0
-            updateHeaderLabelText(ofSection: 3, toText: "Rating: all")
-        }
+
     }
 
 }

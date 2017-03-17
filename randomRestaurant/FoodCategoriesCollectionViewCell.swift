@@ -13,6 +13,5 @@ class FoodCategoriesCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties.
     
     @IBOutlet weak var nameLabel: UILabel!
-    var videoBG: VideoViewController!
 
 }
