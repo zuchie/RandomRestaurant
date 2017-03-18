@@ -12,7 +12,7 @@
 		B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */; };
 		B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */; };
 		B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBAB1D76BAF80021B025 /* GetDirection.swift */; };
-		B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */; };
+		B906DBB21D863B7B0021B025 /* SavedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB11D863B7B0021B025 /* SavedTableViewController.swift */; };
 		B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AC8561D4EAC4600B0476E /* AppDelegate.swift */; };
 		B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85A1D4EAC4600B0476E /* Main.storyboard */; };
 		B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B91AC85D1D4EAC4600B0476E /* Assets.xcassets */; };
@@ -39,7 +39,7 @@
 		B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickedBusinessLocation.swift; sourceTree = "<group>"; };
 		B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapViewController.swift; sourceTree = "<group>"; };
 		B906DBAB1D76BAF80021B025 /* GetDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDirection.swift; sourceTree = "<group>"; };
-		B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
+		B906DBB11D863B7B0021B025 /* SavedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedTableViewController.swift; sourceTree = "<group>"; };
 		B91AC8531D4EAC4600B0476E /* randomRestaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = randomRestaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91AC8561D4EAC4600B0476E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B91AC85B1D4EAC4600B0476E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				B906DBDD1D8B32EF0021B025 /* Core Data */,
-				B906DBB11D863B7B0021B025 /* FavoriteTableViewController.swift */,
+				B906DBB11D863B7B0021B025 /* SavedTableViewController.swift */,
 				B93728691E7D475900B911E5 /* SavedTableViewCell.swift */,
 				B937286A1E7D475900B911E5 /* SavedTableViewCell.xib */,
 			);
@@ -328,7 +328,7 @@
 				B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */,
 				B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */,
 				B937286B1E7D475900B911E5 /* SavedTableViewCell.swift in Sources */,
-				B906DBB21D863B7B0021B025 /* FavoriteTableViewController.swift in Sources */,
+				B906DBB21D863B7B0021B025 /* SavedTableViewController.swift in Sources */,
 				B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */,
 				B965C9681E5CEF4C0015E2AC /* YelpQuery.swift in Sources */,
 				B9F508BB1DFB6D8100ACCD73 /* Clock.swift in Sources */,

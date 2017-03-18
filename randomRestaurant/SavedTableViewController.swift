@@ -1,5 +1,5 @@
 //
-//  FavoriteTableViewController.swift
+//  SavedTableViewController.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 9/11/16.
@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
+class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
     
     fileprivate var savedRestaurants = [SavedMO]()
     fileprivate var filteredRestaurants = [SavedMO]()
@@ -21,11 +21,9 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     fileprivate var rowCount = 0 {
         willSet {
             if newValue == 0 {
-                print("disable editing")
                 setEditing(false, animated: false)
                 editButtonItem.isEnabled = false
             } else {
-                print("enable editing")
                 editButtonItem.isEnabled = true
             }
         }

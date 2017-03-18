@@ -97,10 +97,10 @@
             </objects>
             <point key="canvasLocation" x="4937" y="1469"/>
         </scene>
-        <!--Favorites-->
+        <!--Saved-->
         <scene sceneID="DC5-rs-M54">
             <objects>
-                <tableViewController storyboardIdentifier="Favorite" title="Favorites" id="9Ww-aC-vSP" customClass="FavoriteTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Saved" title="Saved" id="9Ww-aC-vSP" customClass="SavedTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="INi-mj-jl3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -302,13 +302,13 @@
             </objects>
             <point key="canvasLocation" x="3585" y="754"/>
         </scene>
-        <!--MainNavigationController-->
+        <!--SavedNavigationController-->
         <scene sceneID="aS7-FX-fyb">
             <objects>
-                <navigationController title="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
+                <navigationController title="SavedNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YiH-Zj-usg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
