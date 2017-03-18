@@ -106,7 +106,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="50" id="Hdf-NF-CEb" customClass="MainAndSavedTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="savedCell" rowHeight="50" id="Hdf-NF-CEb" customClass="SavedTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hdf-NF-CEb" id="YJh-rc-S2K">
@@ -166,7 +166,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="mainCell" rowHeight="380" id="c7P-ll-Ld1" customClass="MainTableViewCell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="mainCell" rowHeight="380" id="c7P-ll-Ld1" customClass="MainTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="375" height="380"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c7P-ll-Ld1" id="uzd-V5-ivn">
@@ -293,6 +293,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                     <connections>
+                        <outlet property="category" destination="mmS-rv-ZHK" id="cjb-yj-Iq7"/>
                         <outlet property="header" destination="xVk-Gw-N5K" id="pB6-aG-S99"/>
                         <segue destination="0l4-Wv-HR4" kind="presentation" identifier="segueToCategories" id="TTp-UT-Q2J"/>
                     </connections>

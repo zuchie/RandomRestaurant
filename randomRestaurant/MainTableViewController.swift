@@ -15,6 +15,7 @@ private var myContext = 0
 class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
     @IBOutlet weak var header: UIView!
+    @IBOutlet weak var category: UILabel!
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
 
     //fileprivate var sectionHeaders = [UIView]()
@@ -33,11 +34,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     //fileprivate var calendar = Calendar.current
     //fileprivate var date = Date()
-    fileprivate var category: String?
+    //fileprivate var category: String?
     fileprivate var location: (description: String, coordinate: CLLocationCoordinate2D)?
     fileprivate var date: Date?
     //fileprivate var rating: Float?
-    fileprivate var shouldSegue: Bool!
+    //fileprivate var shouldSegue: Bool!
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
     
@@ -52,7 +53,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         //headerHeight = tableView.frame.height / 12
 
-        let tap = UIGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
         header.addGestureRecognizer(tap)
         
         yelpQuery.addObserver(self, forKeyPath: "queryDone", options: .new, context: &myContext)
@@ -63,8 +64,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headerCell")
     }
     
+    
+    @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
+        guard (sender.view != nil) else {
+            fatalError("Unexpected view: \(sender.view)")
+        }
+        performSegue(withIdentifier: "segueToCategories", sender: self)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        shouldSegue = false
+        //shouldSegue = false
         // Reload visible cells to sync like button status with Saved.
         tableView.reloadData()
     }
@@ -134,7 +143,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     func showMap(cell: MainTableViewCell) {
         print("show map from main")
-        shouldSegue = true
+        //shouldSegue = true
         performSegue(withIdentifier: "segueToMap", sender: cell)
     }
     
@@ -319,13 +328,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         return section < 4 ? nil : "Restaurants: \(restaurants.count)"
     }
     */
-    
-    @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
-        guard let headerView = sender.view as? UIView else {
-            fatalError("Unexpected view: \(sender.view)")
-        }
-        performSegue(withIdentifier: "segueToCategories", sender: self)
-    }
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -370,7 +373,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         //print("==sender: \(sender)")
         //print("==id: \(segue.identifier)")
         if segue.identifier == "segueToMap" && sender is MainTableViewCell {
-            //print("hello")
             guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
             }
@@ -392,13 +394,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return shouldSegue
+        if identifier == "segueToMap" && sender is MainTableViewCell {
+            return true
+        } else {
+            return false
+        }
     }
     
-    fileprivate func updateHeaderLabelText(ofSection section: Int, toText labelText: String) {
-        (tableView.headerView(forSection: section) as! MainTableViewSectionHeaderView).label.text = labelText
-        
-        headers[section].txt = labelText
+    fileprivate func updateHeaderLabelText(toText labelText: String) {
+        category.text = labelText
     }
     
     
@@ -411,7 +415,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             fatalError("Unexpeted id: \(sender.identifier)")
         }
         
-        category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
+        let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
         
         updateHeader(category: category)
         getTimeAndLocation()
@@ -429,7 +433,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func updateHeader(category: String?) {
         if var value = category {
-            updateHeaderLabelText(ofSection: 0, toText: value)
+            updateHeaderLabelText(toText: value)
             if value == "American" {
                 value = "newamerican,tradamerican"
             }
@@ -440,7 +444,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             print("**category: \(value)")
         } else {
             yelpQueryParams.category.value = "restaurants"
-            updateHeaderLabelText(ofSection: 0, toText: "What: all")
+            updateHeaderLabelText(toText: "What: all")
         }
 
     }

@@ -38,12 +38,12 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
 
         initializeFetchedResultsController()
         
-        let nib = UINib(nibName: "MainAndSavedTableViewCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
+        let nib = UINib(nibName: "SavedTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "savedCell")
         
         searchResultsVC = UITableViewController(style: .plain)
         //searchResultsVC = CoreDataTableViewController()
-        searchResultsVC.tableView.register(nib, forCellReuseIdentifier: "mainAndSavedCell")
+        searchResultsVC.tableView.register(nib, forCellReuseIdentifier: "savedCell")
         searchResultsVC.tableView.dataSource = self
         searchResultsVC.tableView.delegate = self
         
@@ -135,46 +135,28 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         return shouldSegue
     }
     */
-    func showMap(cell: MainAndSavedTableViewCell) {
-        print("show map from saved")
-        //shouldSegue = true
-        performSegue(withIdentifier: "toMap", sender: cell)
-    }
     
-    func linkToYelp(cell: MainAndSavedTableViewCell) {
-        print("link to yelp from saved")
-        if cell.yelpUrl != "" {
-            UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
-        } else {
-            alert()
+    fileprivate func updateSaved(cell: SavedTableViewCell) {
+        
+        let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
+        request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
+        
+        guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+            fatalError("Error fetching from context")
         }
-    }
-    
-    func updateSaved(cell: MainAndSavedTableViewCell, button: UIButton) {
-        if button.isSelected {
-            fatalError("Unexpected")
-            
-        } else {
-            let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
-            request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
-            
-            guard let object = try? MainTableViewController.moc?.fetch(request).first else {
-                fatalError("Error fetching from context")
-            }
-            
-            guard let obj = object else {
-                print("Didn't find object in context")
-                return
-            }
-            
-            MainTableViewController.moc?.delete(obj)
-            print("Deleted from Saved entity")
-            
-            if let index = filteredRestaurants.index(of: obj) {
-                filteredRestaurants.remove(at: index)
-                searchResultsVC.tableView.reloadData()
-                print("Deleted from filtered")
-            }
+        
+        guard let obj = object else {
+            print("Didn't find object in context")
+            return
+        }
+        
+        MainTableViewController.moc?.delete(obj)
+        print("Deleted from Saved entity")
+        
+        if let index = filteredRestaurants.index(of: obj) {
+            filteredRestaurants.remove(at: index)
+            searchResultsVC.tableView.reloadData()
+            print("Deleted from filtered")
         }
         
         if (MainTableViewController.moc?.hasChanges)! {
@@ -203,21 +185,11 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     // MARK: - Table view data source
     
-    fileprivate func configureCell(cell: MainAndSavedTableViewCell, object: SavedMO) {
+    fileprivate func configureCell(_ cell: SavedTableViewCell, _ object: SavedMO) {
         
         cell.name.text = object.name
-        cell.address = object.address
-        cell.mainImage.loadImage(from: "\(object.imageUrl!)")
-        cell.category.text = object.category
-        cell.reviewCount.text = String(object.reviewCount) + " Reviews"
-        cell.ratingImage.image = UIImage(named: yelpStars[object.rating]!)
-        cell.price.text = object.price
+        cell.categories.text = object.categories
         cell.yelpUrl = object.yelpUrl
-        cell.latitude = object.latitude
-        cell.longitude = object.longitude
-        cell.likeButton.isSelected = true
-        
-        cell.delegate = self
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -236,7 +208,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             return filteredRestaurants.count
         }
     }
-    
+    /*
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if tableView == self.tableView {
             return 0
@@ -244,7 +216,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             return 40
         }
     }
-    
+    */
+    /*
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if tableView == self.tableView {
             return fetchedResultsController?.sections?[section].name.uppercased()
@@ -252,7 +225,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             return "Restaurants found"
         }
     }
-    
+    */
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let restaurant: SavedMO
         
@@ -266,44 +239,52 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             restaurant = filteredRestaurants[indexPath.row]
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "mainAndSavedCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "savedCell", for: indexPath) as! SavedTableViewCell
         
-        configureCell(cell: cell as! MainAndSavedTableViewCell, object: restaurant)
+        configureCell(cell, restaurant)
         
         return cell
     }
-    
+    /*
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 380.0
     }
-    /*
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == searchResultsVC?.tableView {
-            performSegue(withIdentifier: "favoritesToResults", sender: tableView.cellForRow(at: indexPath))
-        }
-    }
     */
-    /*
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? SavedTableViewCell else {
+            fatalError("Unexpected indexPath: \(indexPath)")
+        }
+        
+        guard let url = cell.yelpUrl else {
+            fatalError("Unexpected url: \(cell.yelpUrl)")
+        }
+        
+        UIApplication.shared.openURL(URL(string: url)!)
+    }
+    
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle:  UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            if let cell = tableView.cellForRow(at: indexPath) as? MainAndSavedTableViewCell {
-                // Remove from DB.
-                removeFromSaved(name: cell.name.text!)
+            guard let cell = tableView.cellForRow(at: indexPath) as? SavedTableViewCell else {
+                fatalError("Unexpected indexPath: \(indexPath)")
             }
+            // Remove from DB.
+            updateSaved(cell: cell)
+
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
-    */
+    /*
     // Customize section header, make sure all the headers are rendered when they are inserted.
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = UIColor.lightGray
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = UIColor.white
     }
-    
+    */
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
@@ -318,13 +299,13 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             filteredRestaurants = savedRestaurants.filter {
                 
                 guard let name = $0.name,
-                    let category = $0.category else {
+                    let categories = $0.categories else {
                     print("No restaurant found")
                     return false
                 }
                 
                 //print("rest: \($0)")
-                return (name.lowercased().contains(inputText.lowercased()) || category.lowercased().contains(inputText.lowercased()))
+                return (name.lowercased().contains(inputText.lowercased()) || categories.lowercased().contains(inputText.lowercased()))
  
                 //return ($0.name?.lowercased().contains(inputText.lowercased()))!
             }
@@ -348,6 +329,7 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
         //navigationController?.isNavigationBarHidden = false
     }
     */
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap" {
 
@@ -370,4 +352,5 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
             }
         }
     }
+    */
 }
