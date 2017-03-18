@@ -18,12 +18,14 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     fileprivate var searchResultsVC: UITableViewController!
     fileprivate var searchController: UISearchController!
     
-    fileprivate var mySectionsCount = 0 {
+    fileprivate var rowCount = 0 {
         willSet {
             if newValue == 0 {
+                print("disable editing")
                 setEditing(false, animated: false)
                 editButtonItem.isEnabled = false
             } else {
+                print("enable editing")
                 editButtonItem.isEnabled = true
             }
         }
@@ -194,7 +196,6 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == self.tableView {
-            mySectionsCount = (fetchedResultsController?.sections?.count)!
             return fetchedResultsController?.sections?.count ?? 0
         } else {
             return 1
@@ -203,7 +204,8 @@ class FavoriteTableViewController: CoreDataTableViewController, UISearchResultsU
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
-            return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
+            rowCount = fetchedResultsController?.sections?[section].numberOfObjects ?? 0
+            return rowCount
         } else {
             return filteredRestaurants.count
         }

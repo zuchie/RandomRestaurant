@@ -142,13 +142,13 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="What" translatesAutoresizingMaskIntoConstraints="NO" id="B8y-Uf-MmS">
-                                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                    <rect key="frame" x="8" y="0.0" width="44" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="B8y-Uf-MmS" secondAttribute="height" multiplier="1:1" id="ZtI-oH-0sM"/>
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mmS-rv-ZHK">
-                                    <rect key="frame" x="49" y="0.0" width="326" height="44"/>
+                                    <rect key="frame" x="57" y="0.0" width="310" height="44"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -160,9 +160,9 @@
                                 <constraint firstAttribute="bottom" secondItem="B8y-Uf-MmS" secondAttribute="bottom" id="PlD-25-hYf"/>
                                 <constraint firstItem="mmS-rv-ZHK" firstAttribute="top" secondItem="xVk-Gw-N5K" secondAttribute="top" id="bhF-yh-tyD"/>
                                 <constraint firstItem="B8y-Uf-MmS" firstAttribute="top" secondItem="xVk-Gw-N5K" secondAttribute="top" id="f9O-vI-Jvn"/>
-                                <constraint firstItem="B8y-Uf-MmS" firstAttribute="leading" secondItem="xVk-Gw-N5K" secondAttribute="leading" id="pSh-yd-BsT"/>
+                                <constraint firstAttribute="trailingMargin" secondItem="mmS-rv-ZHK" secondAttribute="trailing" id="pjh-Fr-vq4"/>
                                 <constraint firstAttribute="bottom" secondItem="mmS-rv-ZHK" secondAttribute="bottom" id="uC3-Oa-s1Y"/>
-                                <constraint firstAttribute="trailing" secondItem="mmS-rv-ZHK" secondAttribute="trailing" id="zFM-gB-Bjf"/>
+                                <constraint firstItem="B8y-Uf-MmS" firstAttribute="leading" secondItem="xVk-Gw-N5K" secondAttribute="leadingMargin" id="yag-32-Wt8"/>
                             </constraints>
                         </view>
                         <prototypes>
