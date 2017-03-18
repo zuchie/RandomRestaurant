@@ -113,9 +113,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="dqH-Fl-zN4" kind="show" identifier="toMap" id="BAN-mU-bdl"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -144,7 +141,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="What" translatesAutoresizingMaskIntoConstraints="NO" id="B8y-Uf-MmS">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="What" translatesAutoresizingMaskIntoConstraints="NO" id="B8y-Uf-MmS">
                                     <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="B8y-Uf-MmS" secondAttribute="height" multiplier="1:1" id="ZtI-oH-0sM"/>
@@ -242,6 +239,7 @@
                                                                     <state key="normal" title="Map"/>
                                                                     <connections>
                                                                         <action selector="handleMapButton:" destination="c7P-ll-Ld1" eventType="touchUpInside" id="JQd-4W-5A6"/>
+                                                                        <segue destination="dqH-Fl-zN4" kind="show" identifier="segueToMap" id="zyl-Mm-apN"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -291,10 +289,12 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="aVD-fr-j4H"/>
                     </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="z0z-3k-j3V">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                     <connections>
-                        <segue destination="0l4-Wv-HR4" kind="presentation" identifier="what" id="TTp-UT-Q2J"/>
+                        <outlet property="header" destination="xVk-Gw-N5K" id="pB6-aG-S99"/>
+                        <segue destination="0l4-Wv-HR4" kind="presentation" identifier="segueToCategories" id="TTp-UT-Q2J"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dAG-yp-WnP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -304,7 +304,7 @@
         <!--MainNavigationController-->
         <scene sceneID="aS7-FX-fyb">
             <objects>
-                <navigationController title="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="pVw-sx-tf2" sceneMemberID="viewController">
+                <navigationController title="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">

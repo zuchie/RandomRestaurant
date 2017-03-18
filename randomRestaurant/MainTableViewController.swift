@@ -14,14 +14,15 @@ private var myContext = 0
 
 class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
+    @IBOutlet weak var header: UIView!
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
 
-    fileprivate var sectionHeaders = [UIView]()
+    //fileprivate var sectionHeaders = [UIView]()
     //fileprivate var results = [Restaurant]()
-    fileprivate var headers: [(img: String, txt: String)] = [("What", "What")]
+    //fileprivate var headers: [(img: String, txt: String)] = [("What", "What")]
 
     //fileprivate let list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
-    fileprivate var headerHeight: CGFloat!
+    //fileprivate var headerHeight: CGFloat!
 
     fileprivate var yelpQueryParams = YelpUrlQueryParameters()
     fileprivate var yelpQuery = YelpQuery()
@@ -35,7 +36,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var category: String?
     fileprivate var location: (description: String, coordinate: CLLocationCoordinate2D)?
     fileprivate var date: Date?
-    fileprivate var rating: Float?
+    //fileprivate var rating: Float?
     fileprivate var shouldSegue: Bool!
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
@@ -51,6 +52,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         //headerHeight = tableView.frame.height / 12
 
+        let tap = UIGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
+        header.addGestureRecognizer(tap)
+        
         yelpQuery.addObserver(self, forKeyPath: "queryDone", options: .new, context: &myContext)
         myCoordinate.addObserver(self, forKeyPath: "coordinate", options: .new, context: &myContext)
         
@@ -131,7 +135,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     func showMap(cell: MainTableViewCell) {
         print("show map from main")
         shouldSegue = true
-        performSegue(withIdentifier: "showMap", sender: cell)
+        performSegue(withIdentifier: "segueToMap", sender: cell)
     }
     
     func linkToYelp(cell: MainTableViewCell) {
@@ -149,14 +153,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: MainTableViewController.moc!) as! SavedMO
             
             saved.name = cell.name.text
-            saved.address = cell.address
-            saved.category = cell.category.text
-            saved.imageUrl = cell.imageUrl
-            saved.price = cell.price.text
-            saved.rating = cell.rating
-            saved.reviewCount = Int16(cell.reviewsTotal)
-            saved.latitude = cell.latitude
-            saved.longitude = cell.longitude
+            saved.categories = cell.category.text
             saved.yelpUrl = cell.yelpUrl
         } else {
             let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
@@ -324,10 +321,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     */
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
-        guard let headerView = sender.view as? MainTableViewSectionHeaderView else {
+        guard let headerView = sender.view as? UIView else {
             fatalError("Unexpected view: \(sender.view)")
         }
-        performSegue(withIdentifier: headerView.headerName.lowercased(), sender: self)
+        performSegue(withIdentifier: "segueToCategories", sender: self)
     }
     /*
     // Override to support conditional editing of the table view.
@@ -372,7 +369,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         // Pass the selected object to the new view controller.
         //print("==sender: \(sender)")
         //print("==id: \(segue.identifier)")
-        if segue.identifier == "showMap" && sender is MainTableViewCell {
+        if segue.identifier == "segueToMap" && sender is MainTableViewCell {
             //print("hello")
             guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
