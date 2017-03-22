@@ -52,43 +52,6 @@ class YelpQuery: NSObject {
         makeQueryUrl()
         // Make url request.
         makeUrlRequest()
-        // Get query results, query done.
-        /*
-        nearbyBusinesses.makeUrlRequest(queryInputs) { totalBiz, randomNo in
-            
-            if let returnedBusiness = self.nearbyBusinesses.result {
-                
-                self.restaurant.name = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "name")
-                self.restaurant.price = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "price")
-                self.restaurant.rating = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "rating")
-                self.restaurant.reviewCount = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "review_count")
-                
-                // Get picked business location object and convert to address string.
-                if let pickedBizLocationObj = returnedBusiness["location"] as? NSDictionary {
-                    self.bizLocationObj = PickedBusinessLocation(businessObj: pickedBizLocationObj)
-                    self.restaurant.address = self.bizLocationObj!.getBizAddressString()
-                } else {
-                    print("No location information of picked business")
-                }
-                
-                if let pickedBusinessCoordinatesObj = returnedBusiness["coordinates"] as? NSDictionary {
-                    self.restaurant.latitude = (pickedBusinessCoordinatesObj["latitude"] as? Double)!
-                    self.restaurant.longitude = (pickedBusinessCoordinatesObj["longitude"] as? Double)!
-                }
-                
-                self.restaurant.url = self.nearbyBusinesses.getReturnedBusiness(returnedBusiness, key: "url")
-                self.restaurant.category = self.queryParams.category!
-                self.restaurant.total = totalBiz
-                self.restaurant.number = randomNo
-                self.restaurant.date = Int(Date().timeIntervalSince1970)
-                
-                // Update History database.
-                DataBase.add(self.restaurant, to: "history")
-            } else {
-                print("Couldn't get a restaurant")
-            }
-        }
-        */
     }
     
     fileprivate func makeQueryUrl() {
