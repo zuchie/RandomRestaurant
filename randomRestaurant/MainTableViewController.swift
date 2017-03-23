@@ -124,7 +124,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         manager.stopUpdatingLocation()
         
         coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude)
-        locationReady = true
     }
     
     
@@ -261,6 +260,61 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    fileprivate func updateHeaderLabelText(toText labelText: String) {
+        category.text = labelText
+    }
+    
+    
+    @IBAction func unwindToMain(sender: UIStoryboardSegue) {
+        
+        restaurants.removeAll(keepingCapacity: false)
+        
+        let sourceVC = sender.source
+        guard sender.identifier == "backFromWhat" else {
+            fatalError("Unexpeted id: \(sender.identifier)")
+        }
+        
+        yelpCategory = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
+        
+        //updateHeader(category)
+        doYelpQuery()
+    }
+    
+    fileprivate func doYelpQuery() {
+        timeReady = false
+        
+        updateHeader(yelpCategory)
+        getTimeAndLocation()
+        
+        // Start Yelp search.
+        yelpQuery.parameters = yelpQueryParams
+        yelpQuery.startQuery()
+    }
+    
+    fileprivate func getTimeAndLocation() {
+        yelpQueryParams.latitude.value = coordinate?.latitude
+        yelpQueryParams.longitude.value = coordinate?.longitude
+        yelpQueryParams.openAt.value = Int(Date().timeIntervalSince1970)
+    }
+    
+    fileprivate func updateHeader(_ category: String?) {
+        if var value = category {
+            updateHeaderLabelText(toText: value)
+            if value == "American" {
+                value = "newamerican,tradamerican"
+            }
+            if value == "Indian" {
+                value = "indpak"
+            }
+            yelpQueryParams.category.value = value
+            print("**category: \(value)")
+        } else {
+            yelpQueryParams.category.value = "restaurants"
+            updateHeaderLabelText(toText: "What: all")
+        }
+        
     }
 
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
@@ -440,60 +494,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         }
     }
     
-    fileprivate func updateHeaderLabelText(toText labelText: String) {
-        category.text = labelText
-    }
-    
-    
-    @IBAction func unwindToMain(sender: UIStoryboardSegue) {
-        
-        restaurants.removeAll(keepingCapacity: false)
-
-        let sourceVC = sender.source
-        guard sender.identifier == "backFromWhat" else {
-            fatalError("Unexpeted id: \(sender.identifier)")
-        }
-        
-        yelpCategory = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
-        
-        //updateHeader(category)
-        doYelpQuery()
-    }
-    
-    fileprivate func doYelpQuery() {
-        timeReady = false
-        
-        updateHeader(yelpCategory)
-        getTimeAndLocation()
-        
-        // Start Yelp search.
-        yelpQuery.parameters = yelpQueryParams
-        yelpQuery.startQuery()
-    }
-    
-    fileprivate func getTimeAndLocation() {
-            yelpQueryParams.latitude.value = coordinate?.latitude
-            yelpQueryParams.longitude.value = coordinate?.longitude
-            yelpQueryParams.openAt.value = Int(Date().timeIntervalSince1970)
-    }
-    
-    fileprivate func updateHeader(_ category: String?) {
-        if var value = category {
-            updateHeaderLabelText(toText: value)
-            if value == "American" {
-                value = "newamerican,tradamerican"
-            }
-            if value == "Indian" {
-                value = "indpak"
-            }
-            yelpQueryParams.category.value = value
-            print("**category: \(value)")
-        } else {
-            yelpQueryParams.category.value = "restaurants"
-            updateHeaderLabelText(toText: "What: all")
-        }
-
-    }
 
 }
 
