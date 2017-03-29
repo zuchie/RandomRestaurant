@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B902484F1E84E40700212F12 /* randomRestaurantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902484E1E84E40700212F12 /* randomRestaurantTests.swift */; };
 		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
 		B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */; };
 		B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */; };
@@ -31,9 +32,22 @@
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B90248511E84E40700212F12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B91AC84B1D4EAC4600B0476E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B91AC8521D4EAC4600B0476E;
+			remoteInfo = randomRestaurant;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A5CEEFFD83C11D5C4928E23A /* Pods-randomRestaurant.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-randomRestaurant.release.xcconfig"; path = "Pods/Target Support Files/Pods-randomRestaurant/Pods-randomRestaurant.release.xcconfig"; sourceTree = "<group>"; };
 		B253D8D0E02E0864ACF7B4A8 /* Pods-randomRestaurant.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-randomRestaurant.debug.xcconfig"; path = "Pods/Target Support Files/Pods-randomRestaurant/Pods-randomRestaurant.debug.xcconfig"; sourceTree = "<group>"; };
+		B902484C1E84E40700212F12 /* randomRestaurantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = randomRestaurantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B902484E1E84E40700212F12 /* randomRestaurantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = randomRestaurantTests.swift; sourceTree = "<group>"; };
+		B90248501E84E40700212F12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlQueryParameters.swift; sourceTree = "<group>"; };
 		B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickedBusinessLocation.swift; sourceTree = "<group>"; };
@@ -61,6 +75,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B90248491E84E40700212F12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B91AC8501D4EAC4600B0476E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,6 +99,15 @@
 				BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B902484D1E84E40700212F12 /* randomRestaurantTests */ = {
+			isa = PBXGroup;
+			children = (
+				B902484E1E84E40700212F12 /* randomRestaurantTests.swift */,
+				B90248501E84E40700212F12 /* Info.plist */,
+			);
+			path = randomRestaurantTests;
 			sourceTree = "<group>";
 		};
 		B906DB751D5D80B10021B025 /* Saved */ = {
@@ -130,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				B91AC8551D4EAC4600B0476E /* randomRestaurant */,
+				B902484D1E84E40700212F12 /* randomRestaurantTests */,
 				B91AC8541D4EAC4600B0476E /* Products */,
 				D19EF44F0B4595709F1C3F5C /* Pods */,
 				9806CD1560404FB89B0E505A /* Frameworks */,
@@ -140,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				B91AC8531D4EAC4600B0476E /* randomRestaurant.app */,
+				B902484C1E84E40700212F12 /* randomRestaurantTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,6 +227,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B902484B1E84E40700212F12 /* randomRestaurantTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B90248551E84E40700212F12 /* Build configuration list for PBXNativeTarget "randomRestaurantTests" */;
+			buildPhases = (
+				B90248481E84E40700212F12 /* Sources */,
+				B90248491E84E40700212F12 /* Frameworks */,
+				B902484A1E84E40700212F12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B90248521E84E40700212F12 /* PBXTargetDependency */,
+			);
+			name = randomRestaurantTests;
+			productName = randomRestaurantTests;
+			productReference = B902484C1E84E40700212F12 /* randomRestaurantTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B91AC8521D4EAC4600B0476E /* randomRestaurant */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B91AC8651D4EAC4600B0476E /* Build configuration list for PBXNativeTarget "randomRestaurant" */;
@@ -221,10 +271,16 @@
 		B91AC84B1D4EAC4600B0476E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Zhe Cui";
 				TargetAttributes = {
+					B902484B1E84E40700212F12 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = TYA2375JGG;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B91AC8521D4EAC4600B0476E;
+					};
 					B91AC8521D4EAC4600B0476E = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = TYA2375JGG;
@@ -246,11 +302,19 @@
 			projectRoot = "";
 			targets = (
 				B91AC8521D4EAC4600B0476E /* randomRestaurant */,
+				B902484B1E84E40700212F12 /* randomRestaurantTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B902484A1E84E40700212F12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B91AC8511D4EAC4600B0476E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -315,6 +379,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B90248481E84E40700212F12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B902484F1E84E40700212F12 /* randomRestaurantTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B91AC84F1D4EAC4600B0476E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -339,6 +411,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B90248521E84E40700212F12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B91AC8521D4EAC4600B0476E /* randomRestaurant */;
+			targetProxy = B90248511E84E40700212F12 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		B91AC85A1D4EAC4600B0476E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -359,6 +439,39 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B90248531E84E40700212F12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEVELOPMENT_TEAM = TYA2375JGG;
+				INFOPLIST_FILE = randomRestaurantTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhecui.randomRestaurantTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/randomRestaurant.app/randomRestaurant";
+			};
+			name = Debug;
+		};
+		B90248541E84E40700212F12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEVELOPMENT_TEAM = TYA2375JGG;
+				INFOPLIST_FILE = randomRestaurantTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhecui.randomRestaurantTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/randomRestaurant.app/randomRestaurant";
+			};
+			name = Release;
+		};
 		B91AC8631D4EAC4600B0476E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -485,6 +598,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B90248551E84E40700212F12 /* Build configuration list for PBXNativeTarget "randomRestaurantTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B90248531E84E40700212F12 /* Debug */,
+				B90248541E84E40700212F12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B91AC84E1D4EAC4600B0476E /* Build configuration list for PBXProject "randomRestaurant" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
