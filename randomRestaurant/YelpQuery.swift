@@ -23,14 +23,14 @@ class YelpQuery: NSObject {
         return queryResults
     }
     
-    fileprivate var queryParameters: YelpUrlQueryParameters?
-    var parameters: YelpUrlQueryParameters? {
+    fileprivate var queryStr: String?
+    var queryString: String? {
         get {
-            return queryParameters
+            return queryStr
         }
         set {
-            queryParameters = newValue
-            if queryParameters == nil {
+            queryStr = newValue
+            if queryStr == nil {
                 print("No query parameters")
             }
         }
@@ -55,17 +55,13 @@ class YelpQuery: NSObject {
     }
     
     fileprivate func makeQueryUrl() {
-        if let param = queryParameters {
-            url = "https://api.yelp.com/v3/businesses/search?"
-            url += param.latitude.queryString + param.longitude.queryString + param.category.queryString + param.radius.queryString + param.limit.queryString + param.openAt.queryString + "&sort_by=rating"
-            
-            // Convert string to URL query allowed string to escape spaces.
-            url = url.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-            
-            print("Yelp query url: \(url)")
-        } else {
+        guard let queryString = queryStr else {
             print("No query parameters.")
+            return
         }
+        // Convert string to URL query allowed string to escape spaces.
+        url = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        print("Yelp query url: \(url)")
     }
 
     // Make own completionHandler function.
@@ -88,7 +84,7 @@ class YelpQuery: NSObject {
                 // Check for error
                 if error != nil
                 {
-                    print("error while retrieving URL response: \(error)")
+                    print("error while retrieving URL response: \(String(describing: error))")
                     return
                 }
                 
@@ -103,7 +99,7 @@ class YelpQuery: NSObject {
                 print("current disk usage: \(URLCache.shared.currentDiskUsage), mem usage: \(URLCache.shared.currentMemoryUsage)")
                 //completionHanlder(self.totalSortedBiz, self.randomNo)
                 self.jsonToDictionary(data)
-                self.filterByRating()
+                //self.filterByRating()
                 self.queryDone = true
             })
             task.resume()
@@ -113,7 +109,7 @@ class YelpQuery: NSObject {
             print("current disk usage: \(URLCache.shared.currentDiskUsage), mem usage: \(URLCache.shared.currentMemoryUsage)")
             //completionHanlder(totalSortedBiz, randomNo)
             self.jsonToDictionary(cachedURLResponse?.data)
-            filterByRating()
+            //filterByRating()
             self.queryDone = true
         }
     }
@@ -129,18 +125,19 @@ class YelpQuery: NSObject {
         
         guard let item = json as? [String: Any],
             let businesses = item["businesses"] as? [[String: Any]] else {
-                fatalError("Unexpected JSON: \(json)")
+                fatalError("Unexpected JSON: \(String(describing: json))")
         }
         self.businesses = businesses
         //print("businesses: \(self.businesses), total: \(total)")
     }
-    
+    /*
     fileprivate func filterByRating() {
         queryResults = [[String: Any]]()
         queryResults = businesses.filter { $0["rating"] as! Float >= (queryParameters?.rating)! }
         print("query rating: \(queryParameters?.rating)")
         //print("filtered: \(queryResults)")
     }
+    */
     /*
     fileprivate func sortBusinesses(_ businesses: [[String:AnyObject]]) -> [[String:AnyObject]] {
         return businesses.sorted(by: {$0["rating"] as! Double == $1["rating"] as! Double ?

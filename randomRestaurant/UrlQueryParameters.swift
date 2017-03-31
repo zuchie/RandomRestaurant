@@ -20,8 +20,9 @@ class YelpUrlQueryParameters {
     var openAt: Double?
     var sortBy: String?
     
+    fileprivate var queryStr = ""
     var queryString: String {
-        return buildQueryString()
+        return queryStr
     }
     
     init(latitude: Double?, longitude: Double?, category: String?, radius: Int?, limit: Int?, openAt: Double?, sortBy: String?) {
@@ -32,10 +33,15 @@ class YelpUrlQueryParameters {
         self.limit = limit
         self.openAt = openAt
         self.sortBy = sortBy
+        
+        queryStr = buildQueryString()
     }
     
+}
+
+extension YelpUrlQueryParameters {
     // Compose legit Yelp Url query string
-    private func buildQueryString() -> String {
+    fileprivate func buildQueryString() -> String {
         let parameters: [(Any?, String)] = [(latitude, "latitude"),  (longitude, "longitude"), (category, "categories"), (radius, "radius"), (limit, "limit"), (openAt, "open_at"), (sortBy, "sort_by")]
         
         func formatParameter(parameter: (Any?, String)) -> String {

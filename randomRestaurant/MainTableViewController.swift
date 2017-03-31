@@ -21,7 +21,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     fileprivate let locationManager = CLLocationManager()
     fileprivate var coordinate: CLLocationCoordinate2D?
 
-    fileprivate var yelpQueryParams = YelpUrlQueryParameters()
+    fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
     fileprivate var imageCache = [String: UIImage]()
@@ -69,7 +69,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
-            fatalError("Unexpected view: \(sender.view)")
+            fatalError("Unexpected view: \(String(describing: sender.view))")
         }
         performSegue(withIdentifier: "segueToCategories", sender: self)
     }
@@ -133,7 +133,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         }
         URLSession.shared.dataTask(with: urlString) { data, response, error in
             guard error == nil, let imageData = data else {
-                fatalError("error while getting url response: \(error?.localizedDescription)")
+                fatalError("error while getting url response: \(String(describing: error?.localizedDescription))")
             }
             if let image = UIImage(data: imageData) {
                 self.imageCache[url] = image
@@ -273,48 +273,33 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         let sourceVC = sender.source
         guard sender.identifier == "backFromWhat" else {
-            fatalError("Unexpeted id: \(sender.identifier)")
+            fatalError("Unexpeted id: \(String(describing: sender.identifier))")
         }
         
         yelpCategory = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
         
-        //updateHeader(category)
+        updateHeader(yelpCategory)
         doYelpQuery()
     }
     
     fileprivate func doYelpQuery() {
         timeReady = false
         
-        updateHeader(yelpCategory)
-        getTimeAndLocation()
+        let date = Date().timeIntervalSince1970
+        
+        yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: date, sortBy: "rating")
         
         // Start Yelp search.
-        yelpQuery.parameters = yelpQueryParams
+        yelpQuery.queryString = yelpQueryParams?.queryString
         yelpQuery.startQuery()
     }
-    
-    fileprivate func getTimeAndLocation() {
-        yelpQueryParams.latitude.value = coordinate?.latitude
-        yelpQueryParams.longitude.value = coordinate?.longitude
-        yelpQueryParams.openAt.value = Int(Date().timeIntervalSince1970)
-    }
-    
+
     fileprivate func updateHeader(_ category: String?) {
-        if var value = category {
-            updateHeaderLabelText(toText: value)
-            if value == "American" {
-                value = "newamerican,tradamerican"
-            }
-            if value == "Indian" {
-                value = "indpak"
-            }
-            yelpQueryParams.category.value = value
-            print("**category: \(value)")
-        } else {
-            yelpQueryParams.category.value = "restaurants"
+        guard let value = category else {
             updateHeaderLabelText(toText: "What: all")
+            return
         }
-        
+        updateHeaderLabelText(toText: value)
     }
 
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
@@ -467,7 +452,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         //print("==id: \(segue.identifier)")
         if segue.identifier == "segueToMap" && sender is MainTableViewCell {
             guard let cell = sender as? MainTableViewCell else {
-                fatalError("Unexpected sender: \(sender)")
+                fatalError("Unexpected sender: \(String(describing: sender))")
             }
             
             let destinationVC = segue.destination
@@ -480,7 +465,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
                     mapVC.setBizCoordinate2D(CLLocationCoordinate2DMake(cell.latitude
                         , cell.longitude))
                     mapVC.setBizName(cell.name.text!)
-                    mapVC.setDepartureTime(yelpQueryParams.openAt.value as! Int)
+                    mapVC.setDepartureTime(Int((yelpQueryParams?.openAt)!))
                 }
             }
         }
@@ -505,7 +490,7 @@ extension UIImageView {
         }
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard error == nil, let imageData = data else {
-                fatalError("error while getting url response: \(error?.localizedDescription)")
+                fatalError("error while getting url response: \(String(describing: error?.localizedDescription))")
             }
             let image = UIImage(data: imageData)
             DispatchQueue.main.async {
