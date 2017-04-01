@@ -75,7 +75,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     */
     
     func getCategory() -> String? {
-        print("return category: \(category)")
+        print("return category: \(String(describing: category))")
         return category
     }
     

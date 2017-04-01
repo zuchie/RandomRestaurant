@@ -31,9 +31,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     //fileprivate var date = Date()
     //fileprivate var date: Date?
     
-    fileprivate var locationReady = false
-    fileprivate var timeReady = false
-    
     fileprivate var timeAndLocationReady = false {
         didSet {
             if timeAndLocationReady {
@@ -63,7 +60,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        doYelpQuery()
+        //getLocation()
     }
     
     
@@ -75,11 +72,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     }
     
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
-        doYelpQuery()
+        print("handle refresh")
+        getLocation()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //shouldSegue = false
         // Reload visible cells to sync like button status with Saved.
         tableView.reloadData()
     }
@@ -119,11 +116,24 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let userLocation = locations.first! as CLLocation
+        let userLocation = locations.last!
         
         manager.stopUpdatingLocation()
         
-        coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude)
+        if let coord = coordinate {
+            let oldLoc = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
+            let newLoc = CLLocation(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
+            let distance = newLoc.distance(from: oldLoc)
+            if distance > 50.0 {
+                coordinate = userLocation.coordinate
+            } else {
+                return
+            }
+        } else {
+            coordinate = userLocation.coordinate
+        }
+        // Start Yelp query only when app launches & there is significant changes(distance > 50m)
+        doYelpQuery()
     }
     
     
@@ -161,7 +171,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
                         //tableView.reloadData()
                         
                         //refreshControl?.endRefreshing()
-                        timeReady = true
                         
                         imageCache.removeAll(keepingCapacity: false)
                         for (index, member) in restaurants.enumerated() {
@@ -279,15 +288,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         yelpCategory = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
         
         updateHeader(yelpCategory)
-        doYelpQuery()
+        getLocation()
+    }
+    
+    fileprivate func getLocation() {
+        locationManager.startUpdatingLocation()
     }
     
     fileprivate func doYelpQuery() {
-        timeReady = false
         
-        let date = Date().timeIntervalSince1970
-        
-        yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: date, sortBy: "rating")
+        yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: Int(Date().timeIntervalSince1970), sortBy: "rating")
         
         // Start Yelp search.
         yelpQuery.queryString = yelpQueryParams?.queryString

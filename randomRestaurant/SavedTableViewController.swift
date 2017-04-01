@@ -256,7 +256,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
         
         guard let url = cell.yelpUrl else {
-            fatalError("Unexpected url: \(cell.yelpUrl)")
+            fatalError("Unexpected url: \(String(describing: cell.yelpUrl))")
         }
         
         UIApplication.shared.openURL(URL(string: url)!)

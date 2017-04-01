@@ -17,7 +17,7 @@ class YelpUrlQueryParameters {
     var category: String?
     var radius: Int?
     var limit: Int?
-    var openAt: Double?
+    var openAt: Int?
     var sortBy: String?
     
     fileprivate var queryStr = ""
@@ -25,7 +25,7 @@ class YelpUrlQueryParameters {
         return queryStr
     }
     
-    init(latitude: Double?, longitude: Double?, category: String?, radius: Int?, limit: Int?, openAt: Double?, sortBy: String?) {
+    init(latitude: Double?, longitude: Double?, category: String?, radius: Int?, limit: Int?, openAt: Int?, sortBy: String?) {
         self.latitude = latitude
         self.longitude = longitude
         self.category = category
@@ -49,7 +49,7 @@ extension YelpUrlQueryParameters {
             guard let value = param.0 else {
                 // If no category specified, cover all restaurants
                 if param.1 == "categories" {
-                    return "restaurants"
+                    return "&categories=restaurants"
                 }
                 return ""
             }

@@ -15,7 +15,7 @@ class YelpQuery: NSObject {
     
     
     // Properties.
-    fileprivate var queryResults: [[String: Any]]?
+    fileprivate var queryResults: [[String: Any]]? = [[String: Any]]()
     var results: [[String: Any]]? {
         if queryResults == nil {
             print("No query results")
@@ -41,7 +41,7 @@ class YelpQuery: NSObject {
     fileprivate let access_token = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
     
     fileprivate var url = String()
-    fileprivate var businesses = [[String: Any]]()
+    //fileprivate var businesses = [[String: Any]]()
 
     
     // Methods.
@@ -125,9 +125,10 @@ class YelpQuery: NSObject {
         
         guard let item = json as? [String: Any],
             let businesses = item["businesses"] as? [[String: Any]] else {
+                queryResults = nil
                 fatalError("Unexpected JSON: \(String(describing: json))")
         }
-        self.businesses = businesses
+        queryResults = businesses
         //print("businesses: \(self.businesses), total: \(total)")
     }
     /*

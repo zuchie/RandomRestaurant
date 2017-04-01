@@ -47,7 +47,7 @@ class MainTableViewCell: UITableViewCell {
     @IBAction func handleMapButton(_ sender: UIButton) {
         print("handle map button")
         print("self: \(self)")
-        print("delegate: \(self.delegate)")
+        print("delegate: \(String(describing: self.delegate))")
         self.delegate?.showMap(cell: self)
     }
     

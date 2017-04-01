@@ -49,8 +49,8 @@ class Clock {
     }
     
     func getClockDate(from hrRadDelta: Float, and minRadDelta: Float) -> Date {
-        let hrDelta = Int(hrRadDelta * 6.0 / Float(M_PI))
-        let minDelta = Int(minRadDelta * 30.0 / Float(M_PI))
+        let hrDelta = Int(hrRadDelta * 6.0 / Float(Double.pi))
+        let minDelta = Int(minRadDelta * 30.0 / Float(Double.pi))
         
         //print("clockTime hour: \(clockTime.hour!)")
         //print("hour delta: \(hrDelta)")
@@ -87,7 +87,7 @@ class Clock {
     // Get current clock arms angle.
     func getHourMinuteAnglesAMPM(from hr: Int, _ min: Int) -> (hour: Float, minute: Float, isAM: Bool) {
         //print("current Hour: Min: \(hour, minute)")
-        let minuteArmAngle = Float(min) * Float(M_PI) / 30.0
+        let minuteArmAngle = Float(min) * Float(Double.pi) / 30.0
         //print("==hour: \(hr)")
 
         // Round Hour to less than 12.
@@ -101,7 +101,7 @@ class Clock {
             isAM = true
         }
         
-        let hourArmAngle = Float(myHr) * Float(M_PI) / 6.0 + minuteArmAngle / 12.0
+        let hourArmAngle = Float(myHr) * Float(Double.pi) / 6.0 + minuteArmAngle / 12.0
         return (hourArmAngle, minuteArmAngle, isAM)
     }
     

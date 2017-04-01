@@ -81,7 +81,7 @@ class GetDirection {
             data, response, error in
             
             if error != nil {
-                print("error while getting Google Directions URL response: \(error)")
+                print("error while getting Google Directions URL response: \(String(describing: error))")
                 return
             }
             
@@ -98,7 +98,7 @@ class GetDirection {
                         self.getViewport(routes!)
                         completionHandler(self.routesPoints, self.distances, self.durationInTraffic, self.viewport)
                     } else {
-                        print("Google Directions returned status: \(status)")
+                        print("Google Directions returned status: \(String(describing: status))")
                     }
                     
                     
