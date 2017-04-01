@@ -45,8 +45,8 @@ extension YelpUrlQueryParameters {
         let parameters: [(Any?, String)] = [(latitude, "latitude"),  (longitude, "longitude"), (category, "categories"), (radius, "radius"), (limit, "limit"), (openAt, "open_at"), (sortBy, "sort_by")]
         
         func formatParameter(parameter: (Any?, String)) -> String {
-            var param = parameter
-            guard let value = param.0 else {
+            let param = parameter
+            guard var value = param.0 else {
                 // If no category specified, cover all restaurants
                 if param.1 == "categories" {
                     return "&categories=restaurants"
@@ -54,11 +54,11 @@ extension YelpUrlQueryParameters {
                 return ""
             }
             // Use Yelp required strings for special cases
-            if param.1 == "American" {
-                param.1 = "newamerican,tradamerican"
+            if value as? String == "American" {
+                value = "newamerican,tradamerican"
             }
-            if param.1 == "Indian" {
-                param.1 = "indpak"
+            if value as? String == "Indian" {
+                value = "indpak"
             }
             
             return "&\(param.1)=\(value)".lowercased()

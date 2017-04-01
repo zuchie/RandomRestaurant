@@ -20,16 +20,21 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     fileprivate let locationManager = CLLocationManager()
     fileprivate var coordinate: CLLocationCoordinate2D?
+    fileprivate var oldLocation = CLLocationCoordinate2DMake(0, 0)
 
+    fileprivate var yelpCategory: String?
+    fileprivate var oldCategory = ""
+    
+    fileprivate var date: Int?
+    fileprivate var oldTime = 0
+    
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
     fileprivate var imageCache = [String: UIImage]()
     
-    fileprivate var yelpCategory: String?
     //fileprivate var calendar = Calendar.current
     //fileprivate var date = Date()
-    //fileprivate var date: Date?
     
     fileprivate var timeAndLocationReady = false {
         didSet {
@@ -60,7 +65,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        //getLocation()
+        yelpCategory = "restaurants"
+        updateHeader(yelpCategory)
+        getDate()
+        doYelpQuery()
     }
     
     
@@ -73,7 +81,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         print("handle refresh")
+        getDate()
         getLocation()
+        doYelpQuery()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -120,6 +130,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         manager.stopUpdatingLocation()
         
+        // Only update when there is significant changes(distance > 50m)
         if let coord = coordinate {
             let oldLoc = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
             let newLoc = CLLocation(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
@@ -132,8 +143,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         } else {
             coordinate = userLocation.coordinate
         }
-        // Start Yelp query only when app launches & there is significant changes(distance > 50m)
-        doYelpQuery()
     }
     
     
@@ -288,28 +297,66 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         yelpCategory = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
         
         updateHeader(yelpCategory)
+        getDate()
         getLocation()
+        doYelpQuery()
     }
     
     fileprivate func getLocation() {
         locationManager.startUpdatingLocation()
     }
     
+    fileprivate func getDate() {
+        let calendar = Calendar.current
+        let myDate = Date()
+        let hour = calendar.component(.hour, from: myDate)
+        let min = calendar.component(.minute, from: myDate)
+        
+        guard let dat = calendar.date(bySettingHour: hour, minute: min, second: 0, of: myDate) else {
+            fatalError("Couldn't get date")
+        }
+        date = Int(dat.timeIntervalSince1970)
+        print("date: \(String(describing: date))")
+    }
+    
     fileprivate func doYelpQuery() {
+        if #available(iOS 10.0, *) {
+            let _ = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false, block: { _ in startQuery() })
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: { startQuery() })
+        }
         
-        yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: Int(Date().timeIntervalSince1970), sortBy: "rating")
-        
-        // Start Yelp search.
-        yelpQuery.queryString = yelpQueryParams?.queryString
-        yelpQuery.startQuery()
+        func startQuery() {
+            guard let coord = coordinate,
+                let dat = date,
+                let cat = yelpCategory else {
+                    print("Not enough params, quit query")
+                    return
+            }
+            if (coord.latitude, coord.longitude, dat, cat) == (oldLocation.latitude, oldLocation.longitude, oldTime, oldCategory) {
+                print("Params no change, skip query")
+                return
+            } else {
+                (oldLocation.latitude, oldLocation.longitude, oldTime, oldCategory) = (coord.latitude, coord.longitude, dat, cat)
+            }
+            
+            yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: Int(Date().timeIntervalSince1970), sortBy: "rating")
+            
+            // Start Yelp search.
+            yelpQuery.queryString = yelpQueryParams?.queryString
+            yelpQuery.startQuery()
+        }
     }
 
     fileprivate func updateHeader(_ category: String?) {
         guard let value = category else {
-            updateHeaderLabelText(toText: "What: all")
             return
         }
-        updateHeaderLabelText(toText: value)
+        if value == "restaurants" {
+            updateHeaderLabelText(toText: "What: all")
+        } else {
+            updateHeaderLabelText(toText: value)
+        }
     }
 
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
