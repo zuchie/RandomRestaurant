@@ -7,12 +7,19 @@
 //
 
 import XCTest
+@testable import randomRestaurant
 
 class randomRestaurantTests: XCTestCase {
+    
+    var vc: MainTableViewController!
+    var yelpQueryStr: YelpUrlQueryParameters!
     
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainVC") as! MainTableViewController
+        
+        yelpQueryStr = YelpUrlQueryParameters(latitude: nil, longitude: nil, category: nil, radius: nil, limit: nil, openAt: nil, sortBy: nil)
     }
     
     override func tearDown() {
@@ -20,6 +27,13 @@ class randomRestaurantTests: XCTestCase {
         super.tearDown()
     }
     
+    func testQueryStrFormatter() {
+        let param = yelpQueryStr.formatParameter(parameter: ("American", "categories"))
+        
+        XCTAssert(param == "&categories=newamerican,tradamerican", "Failed")
+    }
+    
+    /*
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -32,5 +46,5 @@ class randomRestaurantTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-    
+    */
 }

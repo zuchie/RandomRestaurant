@@ -41,30 +41,29 @@ class YelpUrlQueryParameters {
 
 extension YelpUrlQueryParameters {
     // Compose legit Yelp Url query string
-    fileprivate func buildQueryString() -> String {
+    func buildQueryString() -> String {
         let parameters: [(Any?, String)] = [(latitude, "latitude"),  (longitude, "longitude"), (category, "categories"), (radius, "radius"), (limit, "limit"), (openAt, "open_at"), (sortBy, "sort_by")]
-        
-        func formatParameter(parameter: (Any?, String)) -> String {
-            let param = parameter
-            guard var value = param.0 else {
-                // If no category specified, cover all restaurants
-                if param.1 == "categories" {
-                    return "&categories=restaurants"
-                }
-                return ""
-            }
-            // Use Yelp required strings for special cases
-            if value as? String == "American" {
-                value = "newamerican,tradamerican"
-            }
-            if value as? String == "Indian" {
-                value = "indpak"
-            }
-            
-            return "&\(param.1)=\(value)".lowercased()
-        }
         
         return parameters.map(formatParameter).reduce("https://api.yelp.com/v3/businesses/search?", {$0 + $1})
     }
     
+    func formatParameter(parameter: (Any?, String)) -> String {
+        let param = parameter
+        guard var value = param.0 else {
+            // If no category specified, cover all restaurants
+            if param.1 == "categories" {
+                return "&categories=restaurants"
+            }
+            return ""
+        }
+        // Use Yelp required strings for special cases
+        if value as? String == "American" {
+            value = "newamerican,tradamerican"
+        }
+        if value as? String == "Indian" {
+            value = "indpak"
+        }
+        
+        return "&\(param.1)=\(value)".lowercased()
+    }
 }

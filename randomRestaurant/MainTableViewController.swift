@@ -540,7 +540,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
 }
 
 extension UIImageView {
-    public func loadImage(from urlString: String) {
+    func loadImage(from urlString: String) {
         //print("load image from url")
         guard let url = URL(string: urlString) else {
             fatalError("Unexpected url string: \(urlString)")
