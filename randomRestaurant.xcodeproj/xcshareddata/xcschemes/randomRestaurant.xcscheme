@@ -38,6 +38,16 @@
                ReferencedContainer = "container:randomRestaurant.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B93D33281EA6C84A007EAD5A"
+               BuildableName = "randomRestaurantUITests.xctest"
+               BlueprintName = "randomRestaurantUITests"
+               ReferencedContainer = "container:randomRestaurant.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

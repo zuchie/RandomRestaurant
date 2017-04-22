@@ -32,10 +32,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
     fileprivate var imageCache = [String: UIImage]()
-    
-    //fileprivate var calendar = Calendar.current
-    //fileprivate var date = Date()
-    
+        
     fileprivate var timeAndLocationReady = false {
         didSet {
             if timeAndLocationReady {
