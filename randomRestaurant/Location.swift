@@ -48,6 +48,7 @@ class Location: NSObject, CLLocationManagerDelegate {
         counter += 1
         if self.currentLocation != nil || self.error != nil || counter > 1_000 {
             timer?.invalidate()
+            counter = 0
         }
     }
     

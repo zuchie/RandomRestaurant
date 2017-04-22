@@ -7,39 +7,32 @@
 //
 
 import UIKit
-import CoreLocation
 import CoreData
+import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate, CLLocationManagerDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
     
-    fileprivate let locationManager = CLLocationManager()
-    fileprivate var coordinate: CLLocationCoordinate2D?
-    fileprivate var oldLocation = CLLocationCoordinate2DMake(0, 0)
-
     fileprivate var yelpCategory: String?
-    fileprivate var oldCategory = ""
+    fileprivate var previousCategory = ""
+    
+    fileprivate let location = Location()
+    
+    fileprivate var coordinate: CLLocationCoordinate2D?
+    fileprivate var previousCoordinate = CLLocationCoordinate2DMake(0, 0)
     
     fileprivate var date: Int?
-    fileprivate var oldTime = 0
+    fileprivate var previousDate = 0
     
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery = YelpQuery()
     fileprivate var restaurants = [[String: Any]]()
     fileprivate var imageCache = [String: UIImage]()
-        
-    fileprivate var timeAndLocationReady = false {
-        didSet {
-            if timeAndLocationReady {
-                refreshControl?.endRefreshing()
-            }
-        }
-    }
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
     
@@ -49,10 +42,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         // tableView Cell
         let cellNib = UINib(nibName: "MainTableViewCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "mainCell")
-        
-        // Location
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         // Header
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
@@ -65,9 +54,41 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         yelpCategory = "restaurants"
         updateHeader(yelpCategory)
         getDate()
-        doYelpQuery()
+        location.getLocation { (currentLocation, error) in
+            positioning(currentLocation, error)
+            doYelpQuery()
+        }
     }
     
+    fileprivate func positioning(_ currentLocation: CLLocationCoordinate2D?, _ error: Error?) {
+        if let err = error {
+            let alert = Alert(title: "Error",
+                              message: "Error when getting current location: \(err)",
+                              actions: [.ok]
+            )
+            alert.presentAlert()
+            return
+        }
+        
+        guard let currentCoordinate = currentLocation else {
+            let alert = Alert(title: "Alert",
+                              message: "Couldn't get current location, make sure the device is connected to the network",
+                              actions: [.ok]
+            )
+            alert.presentAlert()
+            return
+        }
+        
+        let previous = CLLocation(latitude: previousCoordinate.latitude, longitude: previousCoordinate.longitude)
+        let new = CLLocation(latitude: currentCoordinate.latitude, longitude: currentCoordinate.longitude)
+        let distance = new.distance(from: previous)
+        if distance > 50.0 {
+            coordinate = currentCoordinate
+        } else {
+            return
+        }
+        
+    }
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
@@ -79,69 +100,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         print("handle refresh")
         getDate()
-        getLocation()
-        doYelpQuery()
+        location.getLocation { (currentLocation, error) in
+            positioning(currentLocation, error)
+            doYelpQuery()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         // Reload visible cells to sync like button status with Saved.
         tableView.reloadData()
     }
-    
-    // Location Manager Delegate
-    // Asking for access of user's location.
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse:
-            locationManager.startUpdatingLocation()
-        case .denied:
-            // Asking users to enable location access from Settings.
-            let alertController = UIAlertController(
-                title: "Location Access Disabled",
-                message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
-                preferredStyle: .alert
-            )
-            let cancelAction = UIAlertAction(
-                title: "Cancel",
-                style: .cancel,
-                handler: nil
-            )
-            let openAction = UIAlertAction(title: "Open Settings", style: .default) { action in
-                if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                    UIApplication.shared.openURL(url)
-                }
-            }
-            alertController.addAction(cancelAction)
-            alertController.addAction(openAction)
-            
-            self.present(alertController, animated: true, completion: nil)
-        default:
-            print("Access request error, status: \(status)")
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let userLocation = locations.last!
-        
-        manager.stopUpdatingLocation()
-        
-        // Only update when there is significant changes(distance > 50m)
-        if let coord = coordinate {
-            let oldLoc = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
-            let newLoc = CLLocation(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
-            let distance = newLoc.distance(from: oldLoc)
-            if distance > 50.0 {
-                coordinate = userLocation.coordinate
-            } else {
-                return
-            }
-        } else {
-            coordinate = userLocation.coordinate
-        }
-    }
-    
     
     fileprivate func loadImagesToCache(from url: String, index: Int) {
         guard let urlString = URL(string: url) else {
@@ -295,12 +263,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         updateHeader(yelpCategory)
         getDate()
-        getLocation()
-        doYelpQuery()
-    }
-    
-    fileprivate func getLocation() {
-        locationManager.startUpdatingLocation()
+        location.getLocation { (currentLocation, error) in
+            positioning(currentLocation, error)
+            doYelpQuery()
+        }
     }
     
     fileprivate func getDate() {
@@ -317,32 +283,24 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     }
     
     fileprivate func doYelpQuery() {
-        if #available(iOS 10.0, *) {
-            let _ = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false, block: { _ in startQuery() })
+        guard let currentCoordinate = coordinate,
+            let currentDate = date,
+            let currentCategory = yelpCategory else {
+                print("Not enough params, quit query")
+                return
+        }
+        if (previousCoordinate.latitude, previousCoordinate.longitude, previousDate, previousCategory) == (currentCoordinate.latitude, currentCoordinate.longitude, currentDate, currentCategory) {
+            print("Params no change, skip query")
+            return
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: { startQuery() })
+            (previousCoordinate.latitude, previousCoordinate.longitude, previousDate, previousCategory) = (currentCoordinate.latitude, currentCoordinate.longitude, currentDate, currentCategory)
         }
         
-        func startQuery() {
-            guard let coord = coordinate,
-                let dat = date,
-                let cat = yelpCategory else {
-                    print("Not enough params, quit query")
-                    return
-            }
-            if (coord.latitude, coord.longitude, dat, cat) == (oldLocation.latitude, oldLocation.longitude, oldTime, oldCategory) {
-                print("Params no change, skip query")
-                return
-            } else {
-                (oldLocation.latitude, oldLocation.longitude, oldTime, oldCategory) = (coord.latitude, coord.longitude, dat, cat)
-            }
-            
-            yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: Int(Date().timeIntervalSince1970), sortBy: "rating")
-            
-            // Start Yelp search.
-            yelpQuery.queryString = yelpQueryParams?.queryString
-            yelpQuery.startQuery()
-        }
+        yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: date, sortBy: "rating")
+        
+        // Start Yelp search.
+        yelpQuery.queryString = yelpQueryParams?.queryString
+        yelpQuery.startQuery()
     }
 
     fileprivate func updateHeader(_ category: String?) {
