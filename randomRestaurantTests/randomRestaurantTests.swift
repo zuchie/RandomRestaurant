@@ -13,6 +13,7 @@ class randomRestaurantTests: XCTestCase {
     
     var vc: MainTableViewController!
     var yelpQueryStr: YelpUrlQueryParameters!
+    var location: Location!
     
     override func setUp() {
         super.setUp()
@@ -20,17 +21,30 @@ class randomRestaurantTests: XCTestCase {
         vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainVC") as! MainTableViewController
         
         yelpQueryStr = YelpUrlQueryParameters(latitude: nil, longitude: nil, category: nil, radius: nil, limit: nil, openAt: nil, sortBy: nil)
+        
+        location = Location()
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        
+        vc = nil
+        yelpQueryStr = nil
+        location = nil
     }
     
     func testQueryStrFormatter() {
         let param = yelpQueryStr.formatParameter(parameter: ("American", "categories"))
         
         XCTAssert(param == "&categories=newamerican,tradamerican", "Failed")
+    }
+    
+    func testLocation() {
+        location.getLocation { (location, error) in
+            XCTAssertNotNil(location, "location is nil")
+            XCTAssertNil(error, "error is: \(error!)")
+        }
     }
     
     /*

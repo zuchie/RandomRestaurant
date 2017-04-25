@@ -9,46 +9,31 @@
 import Foundation
 import CoreLocation
 
-class Location: NSObject, CLLocationManagerDelegate {
-    fileprivate let locationManager = CLLocationManager()
-    fileprivate var currentLocation: CLLocationCoordinate2D?
-    fileprivate var error: Error?
-    fileprivate var timer: Timer?
-    fileprivate var counter = 0
+protocol LocationControllerDelegate {
+    func updateLocation(location: CLLocation?)
+    func updateLocationError(error: Error?)
+}
 
+class LocationController: NSObject, CLLocationManagerDelegate {
+    fileprivate var locationManager = CLLocationManager()
+    var delegate: LocationControllerDelegate?
+    
     override init() {
         super.init()
+        
         locationManager.delegate = self
     }
     
-    func getLocation(closure: (CLLocationCoordinate2D?, Error?) -> Void) {
-        if CLLocationManager.locationServicesEnabled() {
-            currentLocation = nil
-            error = nil
+    func requestLocation() {
+        if CLLocationManager.locationServicesEnabled() && CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             
-            locationManager.requestLocation() // iOS 9 and later
-            
-            if #available(iOS 10.0, *) {
-                timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { _ in self.pollingLocation() })
-            } else {
-                timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(pollingLocation), userInfo: nil, repeats: true)
-            }
-            closure(currentLocation, error)
+            locationManager.requestLocation()
         } else {
             let alert = Alert(title: "Location Services not available",
-                          message: "Please make sure that your device is connected to the network",
-                          actions: [.ok]
+                              message: "Please make sure that your device is connected to the network",
+                              actions: [.ok]
             )
             alert.presentAlert()
-        }
-        
-    }
-    
-    func pollingLocation() {
-        counter += 1
-        if self.currentLocation != nil || self.error != nil || counter > 1_000 {
-            timer?.invalidate()
-            counter = 0
         }
     }
     
@@ -57,8 +42,8 @@ class Location: NSObject, CLLocationManagerDelegate {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse:
-            break
-        case .denied:
+            locationManager.requestLocation()
+        case .denied, .restricted:
             let alert = Alert(
                 title: "Location Access Disabled",
                 message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
@@ -71,16 +56,15 @@ class Location: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        self.error = error
+
+        self.delegate?.updateLocationError(error: error)
         print("Location updating error: \(error.localizedDescription)")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {
-            fatalError("No location's been updated")
-        }
         
-        currentLocation = location.coordinate
+        self.delegate?.updateLocation(location: locations.last)
+        //print("Location: \(String(describing: locations.last))")
     }
     
 }

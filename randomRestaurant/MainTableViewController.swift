@@ -12,22 +12,20 @@ import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationControllerDelegate {
     
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
     
-    fileprivate var yelpCategory: String?
-    fileprivate var previousCategory = ""
+    fileprivate var queryCategory = ""
     
-    fileprivate let location = Location()
+    fileprivate var locationController = LocationController()
+    fileprivate var queryLocation = CLLocation()
     
-    fileprivate var coordinate: CLLocationCoordinate2D?
-    fileprivate var previousCoordinate = CLLocationCoordinate2DMake(0, 0)
+    fileprivate var queryDate = Date()
     
-    fileprivate var date: Int?
-    fileprivate var previousDate = 0
+    fileprivate var anyParamUpdate = false
     
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery = YelpQuery()
@@ -51,26 +49,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        yelpCategory = "restaurants"
-        updateHeader(yelpCategory)
+        locationController.delegate = self
+
+        getCategory(category: "restaurants")
+        updateHeader(queryCategory)
         getDate()
-        location.getLocation { (currentLocation, error) in
-            positioning(currentLocation, error)
-            doYelpQuery()
-        }
     }
     
-    fileprivate func positioning(_ currentLocation: CLLocationCoordinate2D?, _ error: Error?) {
-        if let err = error {
-            let alert = Alert(title: "Error",
-                              message: "Error when getting current location: \(err)",
-                              actions: [.ok]
-            )
-            alert.presentAlert()
-            return
-        }
-        
-        guard let currentCoordinate = currentLocation else {
+    func updateLocation(location: CLLocation?) {
+        guard let currentLocation = location else {
             let alert = Alert(title: "Alert",
                               message: "Couldn't get current location, make sure the device is connected to the network",
                               actions: [.ok]
@@ -79,15 +66,28 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             return
         }
         
-        let previous = CLLocation(latitude: previousCoordinate.latitude, longitude: previousCoordinate.longitude)
-        let new = CLLocation(latitude: currentCoordinate.latitude, longitude: currentCoordinate.longitude)
-        let distance = new.distance(from: previous)
+        let distance = currentLocation.distance(from: queryLocation)
         if distance > 50.0 {
-            coordinate = currentCoordinate
+            queryLocation = currentLocation
+            anyParamUpdate = true
         } else {
+            print("Distance difference < 50m, no update")
+        }
+        // Start Yelp Query
+        doYelpQuery()
+    }
+    
+    func updateLocationError(error: Error?) {
+        guard let err = error else {
             return
         }
-        
+
+        let alert = Alert(title: "Error",
+                          message: "Error when getting current location: \(err)",
+            actions: [.ok]
+        )
+        alert.presentAlert()
+        return
     }
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
@@ -100,10 +100,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         print("handle refresh")
         getDate()
-        location.getLocation { (currentLocation, error) in
-            positioning(currentLocation, error)
-            doYelpQuery()
-        }
+        getLocationAndStartQuery()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -259,13 +256,23 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             fatalError("Unexpeted id: \(String(describing: sender.identifier))")
         }
         
-        yelpCategory = (sourceVC as! FoodCategoriesCollectionViewController).getCategory()
+        guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
+            fatalError("Couldn't get category")
+        }
         
-        updateHeader(yelpCategory)
+        getCategory(category: category)
+        updateHeader(category)
         getDate()
-        location.getLocation { (currentLocation, error) in
-            positioning(currentLocation, error)
-            doYelpQuery()
+        getLocationAndStartQuery()
+    }
+    
+    fileprivate func getCategory(category: String) {
+        if queryCategory == category {
+            print("Same category, no update")
+        } else {
+            queryCategory = category
+            anyParamUpdate = true
+            print("category: \(queryCategory)")
         }
     }
     
@@ -275,42 +282,50 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         let hour = calendar.component(.hour, from: myDate)
         let min = calendar.component(.minute, from: myDate)
         
-        guard let dat = calendar.date(bySettingHour: hour, minute: min, second: 0, of: myDate) else {
+        guard let date = calendar.date(bySettingHour: hour, minute: min, second: 0, of: myDate) else {
             fatalError("Couldn't get date")
         }
-        date = Int(dat.timeIntervalSince1970)
-        print("date: \(String(describing: date))")
+        
+        if queryDate == date {
+            print("Same date, no update")
+        } else {
+            queryDate = date
+            anyParamUpdate = true
+            print("date: \(queryDate)")
+        }
+    }
+    
+    fileprivate func getLocationAndStartQuery() {
+        locationController.requestLocation()
     }
     
     fileprivate func doYelpQuery() {
-        guard let currentCoordinate = coordinate,
-            let currentDate = date,
-            let currentCategory = yelpCategory else {
-                print("Not enough params, quit query")
-                return
-        }
-        if (previousCoordinate.latitude, previousCoordinate.longitude, previousDate, previousCategory) == (currentCoordinate.latitude, currentCoordinate.longitude, currentDate, currentCategory) {
-            print("Params no change, skip query")
-            return
+        if anyParamUpdate {
+            yelpQueryParams = YelpUrlQueryParameters(
+                latitude: queryLocation.coordinate.latitude,
+                longitude: queryLocation.coordinate.longitude,
+                category: queryCategory,
+                radius: 10000,
+                limit: 3,
+                openAt: Int(queryDate.timeIntervalSince1970),
+                sortBy: "rating"
+            )
+            
+            // Start Yelp search.
+            yelpQuery.queryString = yelpQueryParams?.queryString
+            yelpQuery.startQuery()
+            
+            anyParamUpdate = false
         } else {
-            (previousCoordinate.latitude, previousCoordinate.longitude, previousDate, previousCategory) = (currentCoordinate.latitude, currentCoordinate.longitude, currentDate, currentCategory)
+            print("Params no change, skip query")
         }
-        
-        yelpQueryParams = YelpUrlQueryParameters(latitude: coordinate?.latitude, longitude: coordinate?.longitude, category: yelpCategory, radius: 10000, limit: 3, openAt: date, sortBy: "rating")
-        
-        // Start Yelp search.
-        yelpQuery.queryString = yelpQueryParams?.queryString
-        yelpQuery.startQuery()
     }
 
-    fileprivate func updateHeader(_ category: String?) {
-        guard let value = category else {
-            return
-        }
-        if value == "restaurants" {
+    fileprivate func updateHeader(_ category: String) {
+        if category == "restaurants" {
             updateHeaderLabelText(toText: "What: all")
         } else {
-            updateHeaderLabelText(toText: value)
+            updateHeaderLabelText(toText: category)
         }
     }
 
