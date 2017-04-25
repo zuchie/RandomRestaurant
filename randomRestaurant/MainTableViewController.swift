@@ -20,7 +20,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     fileprivate var queryCategory = ""
     
-    fileprivate var locationController = LocationController()
+    fileprivate var locationManager = LocationController.sharedLocationManager
     fileprivate var queryLocation = CLLocation()
     
     fileprivate var queryDate = Date()
@@ -49,7 +49,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        locationController.delegate = self
+        locationManager.delegate = self
 
         getCategory(category: "restaurants")
         updateHeader(queryCategory)
@@ -296,7 +296,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     }
     
     fileprivate func getLocationAndStartQuery() {
-        locationController.requestLocation()
+        locationManager.requestLocation()
     }
     
     fileprivate func doYelpQuery() {

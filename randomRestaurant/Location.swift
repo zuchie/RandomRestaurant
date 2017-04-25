@@ -14,7 +14,10 @@ protocol LocationControllerDelegate {
     func updateLocationError(error: Error?)
 }
 
+// Singleton class
 class LocationController: NSObject, CLLocationManagerDelegate {
+    static let sharedLocationManager = LocationController()
+    
     fileprivate var locationManager = CLLocationManager()
     var delegate: LocationControllerDelegate?
     
