@@ -37,6 +37,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("MainTableViewController view did load")
+        
         // tableView Cell
         let cellNib = UINib(nibName: "MainTableViewCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "mainCell")
@@ -54,6 +56,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         getCategory(category: "restaurants")
         updateHeader(queryCategory)
         getDate()
+    }
+    
+    deinit {
+        print("MainTableViewController deinit")
+        yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
     }
     
     func updateLocation(location: CLLocation?) {
@@ -153,10 +160,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
-    }
-    
-    deinit {
-        yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
     }
     
     func showMap(cell: MainTableViewCell) {
