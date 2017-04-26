@@ -28,6 +28,7 @@ class LocationController: NSObject, CLLocationManagerDelegate {
     }
     
     func requestLocation() {
+        print("request location")
         if CLLocationManager.locationServicesEnabled() && CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             
             locationManager.requestLocation()
@@ -66,6 +67,7 @@ class LocationController: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
+        print("update location")
         self.delegate?.updateLocation(location: locations.last)
         //print("Location: \(String(describing: locations.last))")
     }

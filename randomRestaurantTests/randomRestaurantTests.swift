@@ -10,7 +10,7 @@ import XCTest
 import CoreLocation
 @testable import randomRestaurant
 
-class randomRestaurantTests: XCTestCase/*, LocationControllerDelegate*/ {
+class randomRestaurantTests: XCTestCase, LocationControllerDelegate {
     
     //var vc: MainTableViewController!
     //var locationManager: LocationController!
@@ -65,22 +65,32 @@ class randomRestaurantTests: XCTestCase/*, LocationControllerDelegate*/ {
         yelpQueryStr = nil
     }
     
-    /*
     /**
      * LocationController
      */
     func testLocation() {
+        let locationManager: LocationController! = LocationController.sharedLocationManager
+        locationManager.delegate = self
+
         locationManager.requestLocation()
     }
     
     func updateLocation(location: CLLocation?) {
+        print("Location updated")
         XCTAssertNotNil(location, "Location is nil")
+        
+        //locationManager.delegate = nil
+        //locationManager = nil
     }
     
     func updateLocationError(error: Error?) {
+        print("Location error")
         XCTAssertNil(error, "Error isn't nil")
+        
+        //locationManager.delegate = nil
+        //locationManager = nil
     }
-    */
+
     /*
     func testExample() {
         // This is an example of a functional test case.
