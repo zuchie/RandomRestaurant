@@ -28,9 +28,9 @@ class LocationController: NSObject, CLLocationManagerDelegate {
     }
     
     func requestLocation() {
-        print("request location")
         if CLLocationManager.locationServicesEnabled() && CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             
+            print("Requesting location...")
             locationManager.requestLocation()
         } else {
             let alert = Alert(title: "Location Services not available",
@@ -44,8 +44,10 @@ class LocationController: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
+            print("authorization not determined")
             locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse:
+            print("authorized when in use")
             locationManager.requestLocation()
         case .denied, .restricted:
             let alert = Alert(
@@ -61,13 +63,13 @@ class LocationController: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 
-        self.delegate?.updateLocationError(error: error)
         print("Location updating error: \(error.localizedDescription)")
+        self.delegate?.updateLocationError(error: error)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        print("update location")
+        print("Update location")
         self.delegate?.updateLocation(location: locations.last)
         //print("Location: \(String(describing: locations.last))")
     }

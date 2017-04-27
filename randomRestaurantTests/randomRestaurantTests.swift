@@ -12,33 +12,24 @@ import CoreLocation
 
 class randomRestaurantTests: XCTestCase, LocationControllerDelegate {
     
-    //var vc: MainTableViewController!
-    //var locationManager: LocationController!
+    //var mainViewController: MainTableViewController!
     
     override func setUp() {
         super.setUp()
-        
-        print("set up")
+        print("===Setup===")
         
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        //vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainVC") as! MainTableViewController
+        //mainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainVC") as! MainTableViewController
         
-        
-        //locationManager = LocationController.sharedLocationManager
-        //locationManager.delegate = self
+        //let _ = mainViewController.view
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        print("===Teardown===")
         
-        print("tear down")
-        
-        //vc = nil
-
-        //locationManager.delegate = nil
-        //locationManager = nil
-        
+        //mainViewController = nil
     }
     
     func testMainView() {
@@ -68,29 +59,39 @@ class randomRestaurantTests: XCTestCase, LocationControllerDelegate {
     /**
      * LocationController
      */
+    var expectation: XCTestExpectation!
+    
     func testLocation() {
-        let locationManager: LocationController! = LocationController.sharedLocationManager
+        var locationManager: LocationController! = LocationController.sharedLocationManager
+        
         locationManager.delegate = self
 
+        expectation = expectation(description: "Got location successfully")
+        
         locationManager.requestLocation()
+        
+        waitForExpectations(timeout: 1) { error in
+            XCTAssertNil(error, "Waiting for expectations timed out, error: \(String(describing: error))")
+            
+            locationManager.delegate = nil
+            locationManager = nil
+            
+            print("Locaton test done")
+        }
     }
     
     func updateLocation(location: CLLocation?) {
         print("Location updated")
         XCTAssertNotNil(location, "Location is nil")
         
-        //locationManager.delegate = nil
-        //locationManager = nil
+        expectation.fulfill()
     }
     
     func updateLocationError(error: Error?) {
         print("Location error")
         XCTAssertNil(error, "Error isn't nil")
-        
-        //locationManager.delegate = nil
-        //locationManager = nil
     }
-
+    
     /*
     func testExample() {
         // This is an example of a functional test case.
