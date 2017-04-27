@@ -9,17 +9,17 @@
 import Foundation
 import CoreLocation
 
-protocol LocationControllerDelegate {
+protocol LocationManagerDelegate {
     func updateLocation(location: CLLocation?)
     func updateLocationError(error: Error?)
 }
 
 // Singleton class
-class LocationController: NSObject, CLLocationManagerDelegate {
-    static let sharedLocationManager = LocationController()
+class LocationManager: NSObject, CLLocationManagerDelegate {
+    static let shared = LocationManager()
     
     fileprivate var locationManager = CLLocationManager()
-    var delegate: LocationControllerDelegate?
+    var delegate: LocationManagerDelegate?
     
     override init() {
         super.init()

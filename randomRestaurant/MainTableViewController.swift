@@ -12,7 +12,7 @@ import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationControllerDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationManagerDelegate {
     
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
@@ -20,7 +20,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     fileprivate var queryCategory = ""
     
-    fileprivate var locationManager = LocationController.sharedLocationManager
+    fileprivate var locationManager = LocationManager.shared
     fileprivate var queryLocation = CLLocation()
     
     fileprivate var queryDate = Date()

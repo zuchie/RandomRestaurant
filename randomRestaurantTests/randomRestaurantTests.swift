@@ -10,7 +10,7 @@ import XCTest
 import CoreLocation
 @testable import randomRestaurant
 
-class randomRestaurantTests: XCTestCase, LocationControllerDelegate {
+class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
     
     //var mainViewController: MainTableViewController!
     
@@ -62,7 +62,7 @@ class randomRestaurantTests: XCTestCase, LocationControllerDelegate {
     var expectation: XCTestExpectation!
     
     func testLocation() {
-        var locationManager: LocationController! = LocationController.sharedLocationManager
+        var locationManager: LocationManager! = LocationManager.shared
         
         locationManager.delegate = self
 
