@@ -50,6 +50,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             print("authorized when in use")
             locationManager.requestLocation()
         case .denied, .restricted:
+            print("authorization denied")
             let alert = Alert(
                 title: "Location Access Disabled",
                 message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",

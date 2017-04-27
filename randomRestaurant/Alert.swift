@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 class Alert: UIViewController {
     var controller: UIAlertController
     
@@ -40,6 +41,21 @@ class Alert: UIViewController {
     }
     
     func presentAlert() {
-        self.present(controller, animated: false, completion: nil)
+        UIApplication.topViewController()?.present(controller, animated: false, completion: nil)
+    }
+}
+
+extension UIApplication {
+    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let tabController = controller as? UITabBarController {
+            return topViewController(controller: tabController.selectedViewController)
+        }
+        if let navController = controller as? UINavigationController {
+            return topViewController(controller: navController.visibleViewController)
+        }
+        if let presented = controller?.presentedViewController {
+            return topViewController(controller: presented)
+        }
+        return controller
     }
 }

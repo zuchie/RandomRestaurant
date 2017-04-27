@@ -28,9 +28,19 @@ class randomRestaurantUITests: XCTestCase {
         super.tearDown()
     }
     
+    func testLocationAuthorizationDenied() {
+        XCUIApplication().alerts["Allow “randomRestaurant” to access your location while you use the app?"].buttons["Don’t Allow"].tap()
+        
+    }
+    
+    func testLocationAuthorizationWhenInUse() {
+        
+    }
+    
+    /*
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
-    
+    */
 }
