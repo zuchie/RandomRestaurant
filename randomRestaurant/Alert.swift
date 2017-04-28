@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class Alert: UIViewController {
+class Alert {
     var controller: UIAlertController
     
     enum Actions {
@@ -19,7 +19,6 @@ class Alert: UIViewController {
     
     init(title: String, message: String, actions: [Actions]) {
         controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        super.init(nibName: nil, bundle: nil)
         
         var alertAction: UIAlertAction
         for action in actions {
@@ -35,11 +34,7 @@ class Alert: UIViewController {
             controller.addAction(alertAction)
         }
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     func presentAlert() {
         UIApplication.topViewController()?.present(controller, animated: false, completion: nil)
     }

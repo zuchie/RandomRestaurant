@@ -72,7 +72,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         print("Update location")
         self.delegate?.updateLocation(location: locations.last)
-        //print("Location: \(String(describing: locations.last))")
     }
     
 }

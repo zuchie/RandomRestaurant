@@ -11,20 +11,21 @@ import Foundation
 class YelpUrlQueryParameters {
     
     // MARK: Properties
+    private var latitude: Double?
+    private var longitude: Double?
+    private var category: String?
+    private var radius: Int?
+    private var limit: Int?
+    private(set) var openAt: Int?
+    private var sortBy: String?
     
-    var latitude: Double?
-    var longitude: Double?
-    var category: String?
-    var radius: Int?
-    var limit: Int?
-    var openAt: Int?
-    var sortBy: String?
-    
-    fileprivate var queryStr = ""
     var queryString: String {
-        return queryStr
+        let parameters: [(Any?, String)] = [(latitude, "latitude"),  (longitude, "longitude"), (category, "categories"), (radius, "radius"), (limit, "limit"), (openAt, "open_at"), (sortBy, "sort_by")]
+        
+        return parameters.map(formatParameter).reduce("https://api.yelp.com/v3/businesses/search?", { $0 + $1 })
     }
     
+    // MARK: Initializers
     init(latitude: Double?, longitude: Double?, category: String?, radius: Int?, limit: Int?, openAt: Int?, sortBy: String?) {
         self.latitude = latitude
         self.longitude = longitude
@@ -33,21 +34,10 @@ class YelpUrlQueryParameters {
         self.limit = limit
         self.openAt = openAt
         self.sortBy = sortBy
-        
-        queryStr = buildQueryString()
     }
     
-}
-
-extension YelpUrlQueryParameters {
-    // Compose legit Yelp Url query string
-    func buildQueryString() -> String {
-        let parameters: [(Any?, String)] = [(latitude, "latitude"),  (longitude, "longitude"), (category, "categories"), (radius, "radius"), (limit, "limit"), (openAt, "open_at"), (sortBy, "sort_by")]
-        
-        return parameters.map(formatParameter).reduce("https://api.yelp.com/v3/businesses/search?", {$0 + $1})
-    }
-    
-    func formatParameter(parameter: (Any?, String)) -> String {
+    // MARK: Helper functions
+    private func formatParameter(parameter: (Any?, String)) -> String {
         let param = parameter
         guard var value = param.0 else {
             // If no category specified, cover all restaurants

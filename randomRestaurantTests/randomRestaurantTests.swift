@@ -32,6 +32,12 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
         //mainViewController = nil
     }
     
+    /**
+     * MainTableViewController test
+     * 
+     * Expectation: the view of MainTableViewController is not nil after app
+     * launches
+     */
     func testMainView() {
         // Setup
         var mainViewController: MainTableViewController! = UIApplication.topViewController() as! MainTableViewController
@@ -43,21 +49,44 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
         mainViewController = nil
     }
     
+    /**
+     * YelpUrlQueryParameters test
+     *
+     * Expectation: build legit Yelp query string from input parameters
+     */
     func testQueryStrFormatter() {
         // Setup
-        var yelpQueryStr: YelpUrlQueryParameters! = YelpUrlQueryParameters(latitude: nil, longitude: nil, category: nil, radius: nil, limit: nil, openAt: nil, sortBy: nil)
+        let latitude = 133.33
+        let longitude = -22.22
+        let category = "American"
+        let radius = 10000
+        let limit = 3
+        let openAt = 12345
+        let sortBy = "rating"
+        
+        var categoryAmerican: YelpUrlQueryParameters! = YelpUrlQueryParameters(latitude: latitude, longitude: longitude, category: category, radius: radius, limit: limit, openAt: openAt, sortBy: sortBy)
 
         // Test
-        let param = yelpQueryStr.formatParameter(parameter: ("American", "categories"))
-        
-        XCTAssert(param == "&categories=newamerican,tradamerican", "Failed")
+        let american = categoryAmerican.queryString
+        XCTAssert(american == "https://api.yelp.com/v3/businesses/search?" +
+            "&latitude=\(latitude)" +
+            "&longitude=\(longitude)" +
+            "&categories=newamerican,tradamerican" +
+            "&radius=\(radius)" +
+            "&limit=\(limit)" +
+            "&open_at=\(openAt)" +
+            "&sort_by=\(sortBy)", "Failed")
         
         // Teardown
-        yelpQueryStr = nil
+        categoryAmerican = nil
     }
     
     /**
-     * LocationController
+     * LocationManagerDelegate test
+     *
+     * Expectation: delegate can receive a non-nil location asynchronously.
+     *
+     * Prerequisite: location access is authorized.
      */
     var expectation: XCTestExpectation!
     
@@ -106,19 +135,4 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
         }
     }
     */
-}
-
-extension UIApplication {
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let tabController = controller as? UITabBarController {
-            return topViewController(controller: tabController.selectedViewController)
-        }
-        if let navController = controller as? UINavigationController {
-            return topViewController(controller: navController.visibleViewController)
-        }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
-    }
 }
