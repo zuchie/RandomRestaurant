@@ -29,7 +29,17 @@ class randomRestaurantUITests: XCTestCase {
     }
     
     func testLocationAuthorizationDenied() {
-        XCUIApplication().alerts["Allow “randomRestaurant” to access your location while you use the app?"].buttons["Don’t Allow"].tap()
+        //XCUIApplication().alerts["Allow “randomRestaurant” to access your location while you use the app?"].buttons["Don’t Allow"].tap()
+        
+        let app = XCUIApplication()
+        app.alerts["Allow “randomRestaurant” to access your location while you use the app?"].buttons["Don’t Allow"].tap()
+        app.alerts["Location Access Disabled"].buttons["Cancel"].tap()
+        
+        let tabBarsQuery = app.tabBars
+        tabBarsQuery.buttons["Favorites"].tap()
+        tabBarsQuery.buttons["Search"].tap()
+        app.tables["What: all"].staticTexts["What: all"].tap()
+        app.collectionViews.cells.otherElements.containing(.staticText, identifier:"Chinese").element.tap()
         
     }
     

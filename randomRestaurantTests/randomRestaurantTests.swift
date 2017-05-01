@@ -33,26 +33,88 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
     }
     
     /**
-     * MainTableViewController test
-     * 
-     * Expectation: the view of MainTableViewController is not nil after app
-     * launches
+     
+     MainTableViewController test
+     
+     - Expectations:
+     The view of MainTableViewController is not nil after app launches and 
+     location services is ready to use.
+     
      */
+    let readyToLocate = CLLocationManager.locationServicesEnabled() &&
+                            (CLLocationManager.authorizationStatus() ==
+                                .authorizedWhenInUse)
     func testMainView() {
         // Setup
-        var mainViewController: MainTableViewController! = UIApplication.topViewController() as! MainTableViewController
-        
-        // Test
-        XCTAssertNotNil(mainViewController.view, "Cannot find Main Tableview controller instance")
-        
-        // Teardown
-        mainViewController = nil
+        if readyToLocate {
+            var mainViewController: MainTableViewController! = UIApplication.topViewController() as! MainTableViewController
+            
+            // Test
+            XCTAssertNotNil(mainViewController.view, "Cannot find Main Tableview controller instance")
+            
+            // Teardown
+            mainViewController = nil
+        } else {
+            print("Location services not ready for use.")
+            return
+        }
     }
     
     /**
-     * YelpUrlQueryParameters test
-     *
-     * Expectation: build legit Yelp query string from input parameters
+     
+     LocationManagerDelegate test
+     
+     - Expectations: 
+     Delegate can receive a non-nil location asynchronously when location 
+     services is ready to use.
+     
+     */
+    var expectation: XCTestExpectation!
+    
+    func testLocation() {
+        
+        if readyToLocate {
+            var locationManager: LocationManager! = LocationManager.shared
+            
+            locationManager.delegate = self
+            
+            expectation = expectation(description: "Got location successfully")
+            
+            locationManager.requestLocation()
+            
+            waitForExpectations(timeout: 1) { error in
+                XCTAssertNil(error, "Waiting for expectations timed out, error: \(String(describing: error))")
+                
+                locationManager.delegate = nil
+                locationManager = nil
+                
+                print("Locaton test done")
+            }
+        } else {
+            print("Location services not ready for use.")
+            return
+        }
+    }
+    
+    func updateLocation(location: CLLocation?) {
+        print("Location updated")
+        XCTAssertNotNil(location, "Location is nil")
+        
+        expectation.fulfill()
+    }
+    
+    func updateLocationError(error: Error?) {
+        print("Location error")
+        XCTAssertNil(error, "Error isn't nil")
+    }
+
+    /**
+     
+     YelpUrlQueryParameters test
+     
+     - Expectations:
+     Build legit Yelp query string from input parameters.
+     
      */
     func testQueryStrFormatter() {
         // Setup
@@ -81,45 +143,6 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
         categoryAmerican = nil
     }
     
-    /**
-     * LocationManagerDelegate test
-     *
-     * Expectation: delegate can receive a non-nil location asynchronously.
-     *
-     * Prerequisite: location access is authorized.
-     */
-    var expectation: XCTestExpectation!
-    
-    func testLocation() {
-        var locationManager: LocationManager! = LocationManager.shared
-        
-        locationManager.delegate = self
-
-        expectation = expectation(description: "Got location successfully")
-        
-        locationManager.requestLocation()
-        
-        waitForExpectations(timeout: 1) { error in
-            XCTAssertNil(error, "Waiting for expectations timed out, error: \(String(describing: error))")
-            
-            locationManager.delegate = nil
-            locationManager = nil
-            
-            print("Locaton test done")
-        }
-    }
-    
-    func updateLocation(location: CLLocation?) {
-        print("Location updated")
-        XCTAssertNotNil(location, "Location is nil")
-        
-        expectation.fulfill()
-    }
-    
-    func updateLocationError(error: Error?) {
-        print("Location error")
-        XCTAssertNil(error, "Error isn't nil")
-    }
     
     /*
     func testExample() {

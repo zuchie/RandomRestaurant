@@ -41,6 +41,17 @@ class Alert {
 }
 
 extension UIApplication {
+    /**
+     
+     Get the top view controller from the view controller hierarchy of a base view controller.
+     
+     - parameters:
+        - controller: The base view controller, root view controller as default.
+     
+     - returns:
+     The top view controller.
+     
+     */
     class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let tabController = controller as? UITabBarController {
             return topViewController(controller: tabController.selectedViewController)
