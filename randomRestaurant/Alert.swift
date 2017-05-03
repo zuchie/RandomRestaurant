@@ -6,10 +6,10 @@
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import UIKit
 
-
+/*
 class Alert {
     var controller: UIAlertController
     
@@ -36,32 +36,50 @@ class Alert {
     }
 
     func presentAlert() {
-        UIApplication.topViewController()?.present(controller, animated: false, completion: nil)
+        print("Present alert")
+        guard let topViewController = UIApplication.topViewController() else {
+            fatalError("No existing view controllers.")
+        }
+        
+        print("Top view controller: \(topViewController)")
+        if topViewController is MainTableViewController {
+            topViewController.present(controller, animated: false, completion: nil)
+        }
+        
     }
 }
+*/
 
-extension UIApplication {
+extension UIAlertController {
+    enum Actions {
+        case ok, cancel, openSettings
+    }
+
     /**
-     
-     Get the top view controller from the view controller hierarchy of a base view controller.
+        
+     Make an Alert instance, and add actions to it.
      
      - parameters:
-        - controller: The base view controller, root view controller as default.
-     
-     - returns:
-     The top view controller.
+        - title: The title of the alert.
+        - message: The details of the alert.
+        - actions: The actions users can take.
      
      */
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let tabController = controller as? UITabBarController {
-            return topViewController(controller: tabController.selectedViewController)
+    convenience init(title: String, message: String, actions: [Actions]) {
+        self.init(title: title, message: message, preferredStyle: .alert)
+        
+        var alertAction: UIAlertAction
+        for action in actions {
+            switch action {
+            case .ok: alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            case .cancel: alertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            case .openSettings: alertAction = UIAlertAction(title: "Open Settings", style: .default, handler: { _ in
+                    if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                        UIApplication.shared.openURL(url)
+                    }
+                })
+            }
+            self.addAction(alertAction)
         }
-        if let navController = controller as? UINavigationController {
-            return topViewController(controller: navController.visibleViewController)
-        }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
     }
 }

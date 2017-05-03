@@ -20,6 +20,16 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("Food category view did load.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("Food category view will disappear")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        print("Food category view did disappear")
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,7 +85,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     */
     
     func getCategory() -> String? {
-        print("return category: \(String(describing: category))")
+        print("return category: \(String(describing: category))")        
         return category
     }
     

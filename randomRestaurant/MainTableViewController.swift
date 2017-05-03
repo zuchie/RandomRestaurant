@@ -65,11 +65,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     func updateLocation(location: CLLocation?) {
         guard let currentLocation = location else {
-            let alert = Alert(title: "Alert",
+            let alert = UIAlertController(title: "Alert",
                               message: "Couldn't get current location, make sure the device is connected to the network",
                               actions: [.ok]
             )
-            alert.presentAlert()
+            self.present(alert, animated: false)
             return
         }
         
@@ -85,16 +85,41 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     }
     
     func updateLocationError(error: Error?) {
+        print("==error: \(String(describing: error))")
         guard let err = error else {
-            return
+            fatalError("Couldn't get error.")
         }
 
-        let alert = Alert(title: "Error",
-                          message: "Error when getting current location: \(err)",
-            actions: [.ok]
-        )
-        alert.presentAlert()
-        return
+        let alert: UIAlertController
+
+        switch err._code {
+        case CLError.network.rawValue:
+            alert = UIAlertController(
+                title: "Location Services not available",
+                message: "Please make sure that your device is connected to the network",
+                actions: [.ok]
+            )
+        case CLError.denied.rawValue:
+            alert = UIAlertController(
+                title: "Location Access Disabled",
+                message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
+                actions: [.cancel, .openSettings]
+            )
+        case CLError.locationUnknown.rawValue:
+            alert = UIAlertController(
+                title: "Location unknown",
+                message: "Couldn't get location, please try again at a later time.",
+                actions: [.ok]
+            )
+        default:
+            alert = UIAlertController(
+                title: "Bad location services",
+                message: "Location services got issue, please try again at a later time.",
+                actions: [.ok]
+            )
+        }
+
+        self.present(alert, animated: false)
     }
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
@@ -173,7 +198,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         if cell.yelpUrl != "" {
             UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
         } else {
-            alert()
+            let alert = UIAlertController(title: "Alert",
+                              message: "Couldn't find a restaurant.",
+                              actions: [.ok]
+            )
+            self.present(alert, animated: false)
         }
     }
     
@@ -212,19 +241,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         }
     }
     
-    fileprivate func alert() {
-        // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
-        
-        // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
-            
-        }))
-        
-        // Show the alert.
-        self.present(alert, animated: false, completion: nil)
-    }
-    
     // Is the object with name in Saved?
     fileprivate func objectSaved(name: String) -> Bool {
         let request = NSFetchRequest<SavedMO>(entityName: "Saved")
@@ -251,7 +267,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     
     
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
-        
+        print("Unwind to main")
         restaurants.removeAll(keepingCapacity: false)
         
         let sourceVC = sender.source
@@ -487,7 +503,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             
             let destinationVC = segue.destination
             if cell.address == "" {
-                alert()
+                let alert = UIAlertController(title: "Alert",
+                                  message: "Couldn't find a restaurant.",
+                                  actions: [.ok]
+                )
+                self.present(alert, animated: false)
             } else {
                 if let mapVC = destinationVC as? GoogleMapViewController {
                     

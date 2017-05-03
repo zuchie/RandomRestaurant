@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 protocol LocationManagerDelegate {
     func updateLocation(location: CLLocation?)
@@ -28,17 +29,19 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func requestLocation() {
-        if CLLocationManager.locationServicesEnabled() && CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            
-            print("Requesting location...")
-            locationManager.requestLocation()
-        } else {
-            let alert = Alert(title: "Location Services not available",
-                              message: "Please make sure that your device is connected to the network",
-                              actions: [.ok]
-            )
-            alert.presentAlert()
-        }
+        print("Requesting location...")
+        locationManager.requestLocation()
+        
+        /*
+         let alert = UIAlertController(title: "Location Services not available",
+         message: "Please make sure that your device is connected to the network",
+         actions: [.ok]
+         )
+         guard let nav = UIApplication.topViewController()?.navigationController else {
+         fatalError("No nav controller")
+         }
+         nav.mainViewController()?.present(alert, animated: false)
+         */
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -48,15 +51,17 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse:
             print("authorized when in use")
-            locationManager.requestLocation()
+            self.requestLocation()
         case .denied, .restricted:
             print("authorization denied")
-            let alert = Alert(
+            /*
+            let alert = UIAlertController(
                 title: "Location Access Disabled",
                 message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
                 actions: [.cancel, .openSettings]
             )
-            alert.presentAlert()
+            UIApplication.topViewController()?.navigationController?.mainViewController()?.present(alert, animated: false)
+            */
         default:
             print("Access request error, status: \(status)")
         }
@@ -75,3 +80,54 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
 }
+/*
+extension UINavigationController {
+    
+    /**
+     
+     Get Main Table View Controler from the Navigation stack.
+     
+     - returns:
+     Main Table View Controller, or nil.
+ 
+     */
+    func mainViewController() -> MainTableViewController? {
+        for vc in self.viewControllers {
+            print("vc: \(vc)")
+            if vc is MainTableViewController {
+                print("Found main vc")
+                return (vc as! MainTableViewController)
+            }
+        }
+        return nil
+    }
+}
+*/
+/*
+extension UIApplication {
+    /**
+     
+     Get the top view controller from the view controller hierarchy of a base view controller.
+     
+     - parameters:
+     - controller: The base view controller, root view controller as default.
+     
+     - returns:
+     The top view controller.
+     
+     */
+    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let tabController = controller as? UITabBarController {
+            return topViewController(controller: tabController.selectedViewController)
+        }
+        if let navController = controller as? UINavigationController {
+            return topViewController(controller: navController.visibleViewController)
+        }
+        if let presented = controller?.presentedViewController {
+            return topViewController(controller: presented)
+        }
+        print("controller: \(String(describing: controller))")
+        return controller
+    }
+}
+*/
