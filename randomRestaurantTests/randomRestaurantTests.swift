@@ -10,7 +10,7 @@ import XCTest
 import CoreLocation
 @testable import randomRestaurant
 
-class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
+class randomRestaurantTests: XCTestCase {
     
     //var mainViewController: MainTableViewController!
     
@@ -32,6 +32,7 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
         //mainViewController = nil
     }
     
+    /*
     /**
      
      MainTableViewController test
@@ -59,7 +60,8 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
             return
         }
     }
-    
+    */
+    /*
     /**
      
      LocationManagerDelegate test
@@ -72,27 +74,21 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
     var expectation: XCTestExpectation!
     
     func testLocation() {
+        var locationManager: LocationManager! = LocationManager.shared
         
-        if readyToLocate {
-            var locationManager: LocationManager! = LocationManager.shared
+        locationManager.delegate = self
+        
+        expectation = expectation(description: "Got location successfully")
+        
+        locationManager.requestLocation()
+        
+        waitForExpectations(timeout: 1) { error in
+            XCTAssertNil(error, "Waiting for expectations timed out, error: \(String(describing: error))")
             
-            locationManager.delegate = self
+            locationManager.delegate = nil
+            locationManager = nil
             
-            expectation = expectation(description: "Got location successfully")
-            
-            locationManager.requestLocation()
-            
-            waitForExpectations(timeout: 1) { error in
-                XCTAssertNil(error, "Waiting for expectations timed out, error: \(String(describing: error))")
-                
-                locationManager.delegate = nil
-                locationManager = nil
-                
-                print("Locaton test done")
-            }
-        } else {
-            print("Location services not ready for use.")
-            return
+            print("Locaton test done")
         }
     }
     
@@ -105,9 +101,22 @@ class randomRestaurantTests: XCTestCase, LocationManagerDelegate {
     
     func updateLocationError(error: Error?) {
         print("Location error")
-        XCTAssertNil(error, "Error isn't nil")
-    }
+        guard let error = error else {
+            fatalError("Couldn't get error")
+        }
 
+        let authorization = CLLocationManager.authorizationStatus()
+        switch authorization {
+        case .denied:
+            XCTAssert(error._code == CLError.Code.denied.rawValue, "Authorization denied was not correctly reported.")
+        default:
+            print("Other error: \(error)")
+        }
+        
+        expectation.fulfill()
+    }
+    */
+    
     /**
      
      YelpUrlQueryParameters test

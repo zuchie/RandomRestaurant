@@ -33,6 +33,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestLocation()
     }
     
+    func stopUpdatingLocation() {
+        print("Stop updating location.")
+        locationManager.stopUpdatingLocation()
+    }
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
@@ -41,8 +46,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse:
             print("authorized when in use")
             self.requestLocation()
+        case .denied, .restricted:
+            print("authorization denied or restricted")
+            // Still updating location, propagating corresponding error to delegate method.
+            self.requestLocation()
         default:
-            print("Access not authorized, status: \(status)")
+            print("Access not authorized, status: \(status.rawValue)")
             break
         }
     }

@@ -105,9 +105,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
                 message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
                 actions: [.cancel, .openSettings]
             )
+            // Cancel location updating from requestLocation(), otherwise locationUnknown error will follow.
+            locationManager.stopUpdatingLocation()
         case CLError.locationUnknown.rawValue:
             alert = UIAlertController(
-                title: "Location unknown",
+                title: "Location Unknown",
                 message: "Couldn't get location, please try again at a later time.",
                 actions: [.ok]
             )
