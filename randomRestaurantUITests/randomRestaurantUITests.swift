@@ -53,16 +53,7 @@ class randomRestaurantUITests: XCTestCase {
         switch authorization {
         case .denied:
             print("authorization denied")
-            
-            let app = XCUIApplication()
-            app.alerts["Allow “randomRestaurant” to access your location while you use the app?"].buttons["Don’t Allow"].tap()
-            app.tables["What: all"].staticTexts["What: all"].tap()
-            app.collectionViews.cells.otherElements.containing(.staticText, identifier:"Italian").element.tap()
-            app.alerts["Location Access Disabled"].buttons["Open Settings"].tap()
-            XCUIDevice.shared().orientation = .portrait
-            XCUIDevice.shared().orientation = .portrait
-            app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.swipeUp()
-            
+                        
         case .authorizedWhenInUse:
             print("authorized when in use")
         default:

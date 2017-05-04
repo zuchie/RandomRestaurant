@@ -71,13 +71,18 @@ extension UIAlertController {
         var alertAction: UIAlertAction
         for action in actions {
             switch action {
-            case .ok: alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            case .cancel: alertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            case .openSettings: alertAction = UIAlertAction(title: "Open Settings", style: .default, handler: { _ in
+            case .ok:
+                alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            case .cancel:
+                alertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            case .openSettings:
+                alertAction = UIAlertAction(title: "Open Settings", style: .default) { _ in
                     if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.shared.openURL(url)
+                        DispatchQueue.main.async {
+                            UIApplication.shared.openURL(url)
+                        }
                     }
-                })
+                }
             }
             self.addAction(alertAction)
         }
