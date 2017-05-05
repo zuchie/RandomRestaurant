@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "randomRestaurant/MainTableViewController.swift"
-            timestampString = "515496643.75324"
+            timestampString = "515674236.317416"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "updateLocationError(error:)"
             landmarkType = "7">
          </BreakpointContent>

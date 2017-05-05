@@ -12,7 +12,7 @@ import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationManagerDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationManagerDelegate, YelpQueryDelegate {
     
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
@@ -28,7 +28,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
     fileprivate var anyParamUpdate = false
     
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
-    fileprivate var yelpQuery = YelpQuery()
+    fileprivate var yelpQuery: YelpQuery!
+    
     fileprivate var restaurants = [[String: Any]]()
     fileprivate var imageCache = [String: UIImage]()
     
@@ -47,20 +48,13 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
         header.addGestureRecognizer(tap)
         
-        yelpQuery.addObserver(self, forKeyPath: "queryDone", options: .new, context: &myContext)
-        
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         locationManager.delegate = self
-
+        
         getCategory(category: "restaurants")
         updateHeader(queryCategory)
         getDate()
-    }
-    
-    deinit {
-        print("MainTableViewController deinit")
-        yelpQuery.removeObserver(self, forKeyPath: "queryDone", context: &myContext)
     }
     
     func updateLocation(location: CLLocation?) {
@@ -124,6 +118,24 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         self.present(alert, animated: false)
     }
     
+    func getYelpQueryResults(results: [[String : Any]]?) {
+        print("url query done")
+        // Process results.
+        //restaurants.removeAll(keepingCapacity: false)
+        guard let results = results else {
+            fatalError("Didn't get expected results.")
+        }
+        restaurants = results
+        //tableView.reloadData()
+        
+        //refreshControl?.endRefreshing()
+        
+        imageCache.removeAll(keepingCapacity: false)
+        for (index, member) in restaurants.enumerated() {
+            loadImagesToCache(from: member["image_url"] as! String, index: index)
+        }
+    }
+    
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
             fatalError("Unexpected view: \(String(describing: sender.view))")
@@ -163,7 +175,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             
         }.resume()
     }
-
+    /*
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &myContext {
             if keyPath == "queryDone" && object is YelpQuery {
@@ -188,6 +200,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
+    */
     
     func showMap(cell: MainTableViewCell) {
         print("show map from main")
@@ -333,7 +346,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             )
             
             // Start Yelp search.
-            yelpQuery.queryString = yelpQueryParams?.queryString
+            guard let queryString = yelpQueryParams?.queryString else {
+                fatalError("Couldn't get Yelp query string.")
+            }
+            guard let query = YelpQuery(queryString: queryString) else {
+                fatalError("Yelp query is nil.")
+            }
+            yelpQuery = query
+            yelpQuery.delegate = self
             yelpQuery.startQuery()
             
             anyParamUpdate = false

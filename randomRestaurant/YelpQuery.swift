@@ -8,113 +8,68 @@
 
 import Foundation
 
-class YelpQuery: NSObject {
-    //fileprivate var nearbyBusinesses = GetNearbyBusinesses()
-    //fileprivate var restaurant = Restaurant()
-    //fileprivate var bizLocationObj: PickedBusinessLocation?
-    
+protocol YelpQueryDelegate {
+    func getYelpQueryResults(results: [[String: Any]]?)
+}
+
+class YelpQuery: HttpRequestDelegate {
     
     // Properties.
     fileprivate var queryResults: [[String: Any]]? = [[String: Any]]()
-    var results: [[String: Any]]? {
-        if queryResults == nil {
-            print("No query results")
-        }
-        return queryResults
-    }
     
-    fileprivate var queryStr: String?
-    var queryString: String? {
-        get {
-            return queryStr
-        }
-        set {
-            queryStr = newValue
-            if queryStr == nil {
-                print("No query parameters")
-            }
-        }
-    }
+    fileprivate var url: String
     
-    dynamic var queryDone: Bool = false
+    fileprivate var httpRequest: HttpRequest!
     
     fileprivate let access_token = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
     
-    fileprivate var url = String()
-    //fileprivate var businesses = [[String: Any]]()
+    var delegate: YelpQueryDelegate?
+    
+    init?(queryString: String) {
+        guard let query = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
+            print("Couldn't make query string from string: \(queryString)")
+            return nil
+        }
+        self.url = query
+    }
+    
+    func getHttpRequestAndResults(request: URLRequest?, data: Data?, response: URLResponse?, error: Error?) {
+        
+        // TODO: Handle errors.
+        jsonToDictionary(data)
+        
+        let cacheResponse = CachedURLResponse(response: response!, data: data!)
+        URLCache.shared.storeCachedResponse(cacheResponse, for: request!)
 
+    }
+    
+    func getCachedResponse(data: Data?, response: URLResponse?) {
+        
+        // TODO: Handle responses?
+        jsonToDictionary(data)
+        
+        print("Disk usage/capacity: \(URLCache.shared.currentDiskUsage)/\(URLCache.shared.diskCapacity), memory usage/capacity: \(URLCache.shared.currentMemoryUsage)/\(URLCache.shared.memoryCapacity)")
+    }
     
     // Methods.
     // Get businesses from Yelp API v3.
     func startQuery() {
-        queryDone = false
-        // Make query url.
-        makeQueryUrl()
-        // Make url request.
-        makeUrlRequest()
-    }
-    
-    fileprivate func makeQueryUrl() {
-        guard let queryString = queryStr else {
-            print("No query parameters.")
-            return
-        }
-        // Convert string to URL query allowed string to escape spaces.
-        url = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        print("Yelp query url: \(url)")
-    }
-
-    // Make own completionHandler function.
-    //typealias completion = (_ totalBiz: Int, _ randomNo: Int) -> Void
-    
-    fileprivate func makeUrlRequest() {
+        print("Start query")
+        httpRequest = HttpRequest(
+            url: url,
+            httpMethod: "GET",
+            httpHeaderValue: "Bearer \(access_token)",
+            httpHeaderField: "Authorization",
+            cachePolicy: .returnCacheDataElseLoad,
+            timeoutInterval: 120.0
+        )
+        httpRequest.delegate = self
         
-        let urlObj = URL(string: url)
-        var request = URLRequest(url: urlObj!)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(access_token)", forHTTPHeaderField: "Authorization")
-        request.cachePolicy = NSURLRequest.CachePolicy.returnCacheDataElseLoad
-        request.timeoutInterval = 120
-        
-        let cachedURLResponse = URLCache.shared.cachedResponse(for: request as URLRequest)
-        if cachedURLResponse == nil {
-            let task = URLSession.shared.dataTask(with: request, completionHandler: {
-                data, response, error in
-                
-                // Check for error
-                if error != nil
-                {
-                    print("error while retrieving URL response: \(String(describing: error))")
-                    return
-                }
-                
-                // Print out response string
-                //let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                //print("responseString = \(responseString)")
-                
-                let cacheResponse = CachedURLResponse(response: response!, data: data!)
-                URLCache.shared.storeCachedResponse(cacheResponse, for: request)
-                
-                print("non-cached response data")
-                print("current disk usage: \(URLCache.shared.currentDiskUsage), mem usage: \(URLCache.shared.currentMemoryUsage)")
-                //completionHanlder(self.totalSortedBiz, self.randomNo)
-                self.jsonToDictionary(data)
-                //self.filterByRating()
-                self.queryDone = true
-            })
-            task.resume()
-        } else {
-            //self.sortAndRandomlyPickBiz(cachedURLResponse?.data)
-            print("cached response data")
-            print("current disk usage: \(URLCache.shared.currentDiskUsage), mem usage: \(URLCache.shared.currentMemoryUsage)")
-            //completionHanlder(totalSortedBiz, randomNo)
-            self.jsonToDictionary(cachedURLResponse?.data)
-            //filterByRating()
-            self.queryDone = true
-        }
+        httpRequest.makeRequest()
     }
     
     fileprivate func jsonToDictionary(_ data: Data?) {
+        print("json to dict")
         // Convert server json response to NSDictionary
         var json: Any?
         do {
@@ -123,14 +78,19 @@ class YelpQuery: NSObject {
             print(error.localizedDescription)
         }
         
-        guard let item = json as? [String: Any],
-            let businesses = item["businesses"] as? [[String: Any]] else {
-                queryResults = nil
-                fatalError("Unexpected JSON: \(String(describing: json))")
+        let results: [[String: Any]]?
+        if let item = json as? [String: Any],
+            let businesses = item["businesses"] as? [[String: Any]] {
+            print("got businesses")
+            results = businesses
+        } else {
+            results = nil
         }
-        queryResults = businesses
+        print("Here")
+        self.delegate?.getYelpQueryResults(results: results)
         //print("businesses: \(self.businesses), total: \(total)")
     }
+    
     /*
     fileprivate func filterByRating() {
         queryResults = [[String: Any]]()
