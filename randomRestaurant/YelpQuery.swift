@@ -8,22 +8,26 @@
 
 import Foundation
 
+/*
 protocol YelpQueryDelegate {
     func getYelpQueryResults(results: [[String: Any]]?)
 }
+*/
 
-class YelpQuery: HttpRequestDelegate {
+class YelpQuery: HttpRequestResults {
     
     // Properties.
-    fileprivate var queryResults: [[String: Any]]? = [[String: Any]]()
+    //fileprivate var queryResults: [[String: Any]]? = [[String: Any]]()
+    
+    var businesses: (([[String: Any]]?) -> Void)?
     
     fileprivate var url: String
     
     fileprivate var httpRequest: HttpRequest!
     
-    fileprivate let access_token = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
+    fileprivate let accessToken = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
     
-    var delegate: YelpQueryDelegate?
+    //var delegate: YelpQueryDelegate?
     
     init?(queryString: String) {
         guard let query = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
@@ -32,25 +36,7 @@ class YelpQuery: HttpRequestDelegate {
         }
         self.url = query
     }
-    
-    func getHttpRequestAndResults(request: URLRequest?, data: Data?, response: URLResponse?, error: Error?) {
         
-        // TODO: Handle errors.
-        jsonToDictionary(data)
-        
-        let cacheResponse = CachedURLResponse(response: response!, data: data!)
-        URLCache.shared.storeCachedResponse(cacheResponse, for: request!)
-
-    }
-    
-    func getCachedResponse(data: Data?, response: URLResponse?) {
-        
-        // TODO: Handle responses?
-        jsonToDictionary(data)
-        
-        print("Disk usage/capacity: \(URLCache.shared.currentDiskUsage)/\(URLCache.shared.diskCapacity), memory usage/capacity: \(URLCache.shared.currentMemoryUsage)/\(URLCache.shared.memoryCapacity)")
-    }
-    
     // Methods.
     // Get businesses from Yelp API v3.
     func startQuery() {
@@ -58,7 +44,7 @@ class YelpQuery: HttpRequestDelegate {
         httpRequest = HttpRequest(
             url: url,
             httpMethod: "GET",
-            httpHeaderValue: "Bearer \(access_token)",
+            httpHeaderValue: "Bearer \(accessToken)",
             httpHeaderField: "Authorization",
             cachePolicy: .returnCacheDataElseLoad,
             timeoutInterval: 120.0
@@ -67,29 +53,12 @@ class YelpQuery: HttpRequestDelegate {
         
         httpRequest.makeRequest()
     }
-    
-    fileprivate func jsonToDictionary(_ data: Data?) {
-        print("json to dict")
-        // Convert server json response to NSDictionary
-        var json: Any?
-        do {
-            json = try JSONSerialization.jsonObject(with: data!, options: [])
-        } catch {
-            print(error.localizedDescription)
-        }
+    /*
+    func getBusinesses() {
+        businesses?(results["businesses"] as? [[String: Any]])
         
-        let results: [[String: Any]]?
-        if let item = json as? [String: Any],
-            let businesses = item["businesses"] as? [[String: Any]] {
-            print("got businesses")
-            results = businesses
-        } else {
-            results = nil
-        }
-        print("Here")
-        self.delegate?.getYelpQueryResults(results: results)
-        //print("businesses: \(self.businesses), total: \(total)")
     }
+    */
     
     /*
     fileprivate func filterByRating() {

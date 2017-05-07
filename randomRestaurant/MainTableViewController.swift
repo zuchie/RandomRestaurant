@@ -12,7 +12,7 @@ import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationManagerDelegate, YelpQueryDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationManagerDelegate {
     
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
@@ -117,11 +117,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
 
         self.present(alert, animated: false)
     }
-    
+    /*
     func getYelpQueryResults(results: [[String : Any]]?) {
         print("url query done")
         // Process results.
         //restaurants.removeAll(keepingCapacity: false)
+        
+        results["businesses"] as? [[String: Any]]
+        
         guard let results = results else {
             fatalError("Didn't get expected results.")
         }
@@ -135,7 +138,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             loadImagesToCache(from: member["image_url"] as! String, index: index)
         }
     }
-    
+    */
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
             fatalError("Unexpected view: \(String(describing: sender.view))")
@@ -353,7 +356,31 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
                 fatalError("Yelp query is nil.")
             }
             yelpQuery = query
-            yelpQuery.delegate = self
+            
+            // TOThink: Main hold reference to YelpQuery, YelpQuery hold reference to completion closure, completion closure hold reference to Main, does this make a Strong reference cycle? Do an experiment to test.
+            yelpQuery.completion = { results in
+                print("url query done")
+                // Process results.
+                //restaurants.removeAll(keepingCapacity: false)
+                guard let results = results else {
+                    fatalError("Didn't get expected results.")
+                }
+                
+                guard let businesses = results["businesses"] as? [[String: Any]] else {
+                    fatalError("Couldn't get businesses from results.")
+                }
+                
+                self.restaurants = businesses
+                //tableView.reloadData()
+                
+                //refreshControl?.endRefreshing()
+                
+                self.imageCache.removeAll(keepingCapacity: false)
+                for (index, member) in self.restaurants.enumerated() {
+                    self.loadImagesToCache(from: member["image_url"] as! String, index: index)
+                }
+            }
+            
             yelpQuery.startQuery()
             
             anyParamUpdate = false

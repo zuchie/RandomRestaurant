@@ -1,5 +1,5 @@
 //
-//  UrlRequest.swift
+//  HttpRequest.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 5/5/17.
