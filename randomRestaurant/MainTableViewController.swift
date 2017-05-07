@@ -117,28 +117,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
 
         self.present(alert, animated: false)
     }
-    /*
-    func getYelpQueryResults(results: [[String : Any]]?) {
-        print("url query done")
-        // Process results.
-        //restaurants.removeAll(keepingCapacity: false)
-        
-        results["businesses"] as? [[String: Any]]
-        
-        guard let results = results else {
-            fatalError("Didn't get expected results.")
-        }
-        restaurants = results
-        //tableView.reloadData()
-        
-        //refreshControl?.endRefreshing()
-        
-        imageCache.removeAll(keepingCapacity: false)
-        for (index, member) in restaurants.enumerated() {
-            loadImagesToCache(from: member["image_url"] as! String, index: index)
-        }
-    }
-    */
+    
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
             fatalError("Unexpected view: \(String(describing: sender.view))")
@@ -178,32 +157,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             
         }.resume()
     }
-    /*
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if context == &myContext {
-            if keyPath == "queryDone" && object is YelpQuery {
-                if let newValue = change?[.newKey] {
-                    if (newValue as! Bool) {
-                        print("url query done")
-                        // Process results.
-                        //restaurants.removeAll(keepingCapacity: false)
-                        restaurants = yelpQuery.results!
-                        //tableView.reloadData()
-                        
-                        //refreshControl?.endRefreshing()
-                        
-                        imageCache.removeAll(keepingCapacity: false)
-                        for (index, member) in restaurants.enumerated() {
-                            loadImagesToCache(from: member["image_url"] as! String, index: index)
-                        }
-                    }
-                }
-            }
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
-    */
     
     func showMap(cell: MainTableViewCell) {
         print("show map from main")
@@ -348,7 +301,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
                 sortBy: "rating"
             )
             
-            // Start Yelp search.
             guard let queryString = yelpQueryParams?.queryString else {
                 fatalError("Couldn't get Yelp query string.")
             }
@@ -357,11 +309,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             }
             yelpQuery = query
             
-            // TOThink: Main hold reference to YelpQuery, YelpQuery hold reference to completion closure, completion closure hold reference to Main, does this make a Strong reference cycle? Do an experiment to test.
             yelpQuery.completion = { results in
-                print("url query done")
-                // Process results.
-                //restaurants.removeAll(keepingCapacity: false)
                 guard let results = results else {
                     fatalError("Didn't get expected results.")
                 }
@@ -371,7 +319,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
                 }
                 
                 self.restaurants = businesses
-                //tableView.reloadData()
                 
                 //refreshControl?.endRefreshing()
                 

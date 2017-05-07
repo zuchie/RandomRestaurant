@@ -11,11 +11,6 @@ import Foundation
 class HttpRequestResults: HttpRequestDelegate {
     
     var completion: ((_ results: [String: Any]?) -> Void)?
-    fileprivate var results: [String: Any]? {
-        didSet {
-            completion?(results)
-        }
-    }
     
     // Delegate methods.
     func getHttpRequestAndResults(request: URLRequest?, data: Data?, response: URLResponse?, error: Error?) {
@@ -38,7 +33,6 @@ class HttpRequestResults: HttpRequestDelegate {
 
     // Helper functions.
     fileprivate func jsonToDictionary(_ data: Data) {
-        print("json to dict")
         // Convert server json response to NSDictionary
         var json: Any?
         do {
@@ -47,10 +41,9 @@ class HttpRequestResults: HttpRequestDelegate {
             print(error.localizedDescription)
         }
         
-        results = json as? [String: Any]
+        let results = json as? [String: Any]
         
-        //self.delegate?.getYelpQueryResults(results: results)
-        //print("businesses: \(self.businesses), total: \(total)")
+        completion?(results)
     }
 
 }

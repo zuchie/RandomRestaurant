@@ -8,17 +8,9 @@
 
 import Foundation
 
-/*
-protocol YelpQueryDelegate {
-    func getYelpQueryResults(results: [[String: Any]]?)
-}
-*/
-
 class YelpQuery: HttpRequestResults {
     
     // Properties.
-    //fileprivate var queryResults: [[String: Any]]? = [[String: Any]]()
-    
     var businesses: (([[String: Any]]?) -> Void)?
     
     fileprivate var url: String
@@ -26,8 +18,6 @@ class YelpQuery: HttpRequestResults {
     fileprivate var httpRequest: HttpRequest!
     
     fileprivate let accessToken = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
-    
-    //var delegate: YelpQueryDelegate?
     
     init?(queryString: String) {
         guard let query = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
@@ -53,12 +43,6 @@ class YelpQuery: HttpRequestResults {
         
         httpRequest.makeRequest()
     }
-    /*
-    func getBusinesses() {
-        businesses?(results["businesses"] as? [[String: Any]])
-        
-    }
-    */
     
     /*
     fileprivate func filterByRating() {
