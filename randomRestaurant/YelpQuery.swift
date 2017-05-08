@@ -51,6 +51,7 @@ class YelpQuery {
                 fatalError("Couldn't get businesses from results.")
             }
             
+            //print("businesses: \(businesses)")
             self.completion?(businesses)
         }
         

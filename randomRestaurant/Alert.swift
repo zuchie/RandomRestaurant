@@ -9,46 +9,10 @@
 //import Foundation
 import UIKit
 
-/*
-class Alert {
-    var controller: UIAlertController
-    
-    enum Actions {
-        case ok, cancel, openSettings
-    }
-    
-    init(title: String, message: String, actions: [Actions]) {
-        controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        var alertAction: UIAlertAction
-        for action in actions {
-            switch action {
-            case .ok: alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            case .cancel: alertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            case .openSettings: alertAction = UIAlertAction(title: "Open Settings", style: .default, handler: { _ in
-                    if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.shared.openURL(url)
-                    }
-                })
-            }
-            controller.addAction(alertAction)
-        }
-    }
-
-    func presentAlert() {
-        print("Present alert")
-        guard let topViewController = UIApplication.topViewController() else {
-            fatalError("No existing view controllers.")
-        }
-        
-        print("Top view controller: \(topViewController)")
-        if topViewController is MainTableViewController {
-            topViewController.present(controller, animated: false, completion: nil)
-        }
-        
-    }
+protocol AlertProtocol {
+    // Alerts can't be presented by themselves, must have a UIViewController to present them.
+    weak var alertPresentingVC: UIViewController? { get set }
 }
-*/
 
 extension UIAlertController {
     enum Actions {

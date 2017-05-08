@@ -12,7 +12,7 @@ import CoreLocation
 
 private var myContext = 0
 
-class MainTableViewController: UITableViewController, MainTableViewCellDelegate, LocationManagerDelegate {
+class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
@@ -50,72 +50,22 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        locationManager.delegate = self
+        locationManager.alertPresentingVC = self
+        locationManager.completion = { currentLocation in
+            let distance = currentLocation.distance(from: self.queryLocation)
+            if distance > 50.0 {
+                self.queryLocation = currentLocation
+                self.anyParamUpdate = true
+            } else {
+                print("Distance difference < 50m, no update")
+            }
+            // Start Yelp Query
+            self.doYelpQuery()
+        }
         
         getCategory(category: "restaurants")
         updateHeader(queryCategory)
         getDate()
-    }
-    
-    func updateLocation(location: CLLocation?) {
-        guard let currentLocation = location else {
-            let alert = UIAlertController(title: "Alert",
-                              message: "Couldn't get current location, make sure the device is connected to the network",
-                              actions: [.ok]
-            )
-            self.present(alert, animated: false)
-            return
-        }
-        
-        let distance = currentLocation.distance(from: queryLocation)
-        if distance > 50.0 {
-            queryLocation = currentLocation
-            anyParamUpdate = true
-        } else {
-            print("Distance difference < 50m, no update")
-        }
-        // Start Yelp Query
-        doYelpQuery()
-    }
-    
-    func updateLocationError(error: Error?) {
-        print("==error: \(String(describing: error))")
-        guard let err = error else {
-            fatalError("Couldn't get error.")
-        }
-
-        let alert: UIAlertController
-
-        switch err._code {
-        case CLError.network.rawValue:
-            alert = UIAlertController(
-                title: "Location Services not available",
-                message: "Please make sure that your device is connected to the network",
-                actions: [.ok]
-            )
-        case CLError.denied.rawValue:
-            alert = UIAlertController(
-                title: "Location Access Disabled",
-                message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
-                actions: [.cancel, .openSettings]
-            )
-            // Cancel location updating from requestLocation(), otherwise locationUnknown error will follow.
-            locationManager.stopUpdatingLocation()
-        case CLError.locationUnknown.rawValue:
-            alert = UIAlertController(
-                title: "Location Unknown",
-                message: "Couldn't get location, please try again at a later time.",
-                actions: [.ok]
-            )
-        default:
-            alert = UIAlertController(
-                title: "Bad location services",
-                message: "Location services got issue, please try again at a later time.",
-                actions: [.ok]
-            )
-        }
-
-        self.present(alert, animated: false)
     }
     
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {

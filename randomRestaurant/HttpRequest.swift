@@ -7,12 +7,7 @@
 //
 
 import Foundation
-/*
-protocol HttpRequestDelegate {
-    func getHttpRequestAndResults(request: URLRequest?, data: Data?, response: URLResponse?, error: Error?)
-    func getCachedResponse(data: Data?, response: URLResponse?)
-}
-*/
+
 class HttpRequest {
     
     // Properties.
