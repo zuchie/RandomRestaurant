@@ -7,12 +7,12 @@
 //
 
 import Foundation
-
+/*
 protocol HttpRequestDelegate {
     func getHttpRequestAndResults(request: URLRequest?, data: Data?, response: URLResponse?, error: Error?)
     func getCachedResponse(data: Data?, response: URLResponse?)
 }
-
+*/
 class HttpRequest {
     
     // Properties.
@@ -26,7 +26,10 @@ class HttpRequest {
     private var cachePolicy: NSURLRequest.CachePolicy
     private var timeoutInterval: Double
     
-    var delegate: HttpRequestDelegate?
+    private var results: [String: Any]?
+    
+    var completion: ((_ results: [String: Any]?) -> Void)?
+    //var delegate: HttpRequestDelegate?
     
     init(url: String, httpMethod: String, httpHeaderValue: String, httpHeaderField: String, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: Double) {
         
@@ -49,14 +52,41 @@ class HttpRequest {
         request.timeoutInterval = timeoutInterval
         
         if let cachedResponse = URLCache.shared.cachedResponse(for: request) {
-            print("Cached response.")            
-            delegate?.getCachedResponse(data: cachedResponse.data, response: cachedResponse.response)
+            print("Cached response.")
+            print("Disk usage/capacity: \(URLCache.shared.currentDiskUsage)/\(URLCache.shared.diskCapacity), memory usage/capacity: \(URLCache.shared.currentMemoryUsage)/\(URLCache.shared.memoryCapacity)")
+
+            // TODO: Handle responses?
+            results = jsonToDictionary(cachedResponse.data)
+            completion?(results)
+            
+            //delegate?.getCachedResponse(data: cachedResponse.data, response: cachedResponse.response)
         } else {
             print("Fresh response.")
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                self.delegate?.getHttpRequestAndResults(request: request, data: data, response: response, error: error)
+                
+                let cacheResponse = CachedURLResponse(response: response!, data: data!)
+                URLCache.shared.storeCachedResponse(cacheResponse, for: request)
+
+                // TODO: Handle errors.
+                self.results = self.jsonToDictionary(data!)
+                self.completion?(self.results)
+                
+                //self.delegate?.getHttpRequestAndResults(request: request, data: data, response: response, error: error)
             }
             task.resume()
         }
+    }
+    
+    // Helper functions.
+    fileprivate func jsonToDictionary(_ data: Data) -> [String: Any]? {
+        // Convert server json response to NSDictionary
+        var json: Any?
+        do {
+            json = try JSONSerialization.jsonObject(with: data, options: [])
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return json as? [String: Any]
     }
 }

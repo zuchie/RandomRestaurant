@@ -8,16 +8,18 @@
 
 import Foundation
 
-class YelpQuery: HttpRequestResults {
+class YelpQuery {
     
     // Properties.
-    var businesses: (([[String: Any]]?) -> Void)?
+    //var businesses: (([[String: Any]]?) -> Void)?
     
-    fileprivate var url: String
+    private var url: String
     
-    fileprivate var httpRequest: HttpRequest!
+    private var httpRequest: HttpRequest!
     
-    fileprivate let accessToken = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
+    private let accessToken = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
+    
+    var completion: ((_ results: [[String: Any]]) -> Void)?
     
     init?(queryString: String) {
         guard let query = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
@@ -39,7 +41,18 @@ class YelpQuery: HttpRequestResults {
             cachePolicy: .returnCacheDataElseLoad,
             timeoutInterval: 120.0
         )
-        httpRequest.delegate = self
+        //httpRequest.delegate = self
+        httpRequest.completion = { results in
+            guard let results = results else {
+                fatalError("Didn't get expected results.")
+            }
+            
+            guard let businesses = results["businesses"] as? [[String: Any]] else {
+                fatalError("Couldn't get businesses from results.")
+            }
+            
+            self.completion?(businesses)
+        }
         
         httpRequest.makeRequest()
     }

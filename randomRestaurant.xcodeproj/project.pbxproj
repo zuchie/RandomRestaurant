@@ -31,7 +31,6 @@
 		B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */; };
 		B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */; };
 		B9D4457A1EBC660700219D91 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D445791EBC660700219D91 /* HttpRequest.swift */; };
-		B9D4457C1EBE93FA00219D91 /* HttpRequestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4457B1EBE93FA00219D91 /* HttpRequestResults.swift */; };
 		B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
 /* End PBXBuildFile section */
@@ -86,7 +85,6 @@
 		B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewController.swift; sourceTree = "<group>"; };
 		B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		B9D445791EBC660700219D91 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
-		B9D4457B1EBE93FA00219D91 /* HttpRequestResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequestResults.swift; sourceTree = "<group>"; };
 		B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -245,7 +243,6 @@
 				B965C9671E5CEF4C0015E2AC /* YelpQuery.swift */,
 				B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */,
 				B9D445791EBC660700219D91 /* HttpRequest.swift */,
-				B9D4457B1EBE93FA00219D91 /* HttpRequestResults.swift */,
 			);
 			name = YelpQuery;
 			sourceTree = "<group>";
@@ -470,7 +467,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9D4457A1EBC660700219D91 /* HttpRequest.swift in Sources */,
-				B9D4457C1EBE93FA00219D91 /* HttpRequestResults.swift in Sources */,
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
 				B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */,
 				B93D33351EA6CAAE007EAD5A /* Location.swift in Sources */,

@@ -310,15 +310,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate,
             yelpQuery = query
             
             yelpQuery.completion = { results in
-                guard let results = results else {
-                    fatalError("Didn't get expected results.")
-                }
-                
-                guard let businesses = results["businesses"] as? [[String: Any]] else {
-                    fatalError("Couldn't get businesses from results.")
-                }
-                
-                self.restaurants = businesses
+                self.restaurants = results
                 
                 //refreshControl?.endRefreshing()
                 
