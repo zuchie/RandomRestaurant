@@ -81,8 +81,13 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("Main view will appear, reload table")
         // Reload visible cells to sync like button status with Saved.
         tableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("Main view will disappear.")
     }
     
     fileprivate func loadImagesToCache(from url: String, index: Int) {
@@ -188,7 +193,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
         print("Unwind to main")
-        restaurants.removeAll(keepingCapacity: false)
+        //restaurants.removeAll(keepingCapacity: false)
         
         let sourceVC = sender.source
         guard sender.identifier == "backFromWhat" else {
