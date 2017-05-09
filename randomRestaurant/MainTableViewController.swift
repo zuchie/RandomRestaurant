@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import CoreLocation
 
-private var myContext = 0
 
 class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
@@ -258,7 +257,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 fatalError("Yelp query is nil.")
             }
             yelpQuery = query
-            
+            yelpQuery.alertPresentingVC = self
             yelpQuery.completion = { results in
                 self.restaurants = results
                 
@@ -269,7 +268,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                     self.loadImagesToCache(from: member["image_url"] as! String, index: index)
                 }
             }
-            
+
             yelpQuery.startQuery()
             
             anyParamUpdate = false

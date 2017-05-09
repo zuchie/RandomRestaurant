@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import UIKit
 
-class HttpRequest {
+class HttpRequest: AlertProtocol {
     
     // Properties.
     private var url: String
@@ -23,8 +24,9 @@ class HttpRequest {
     
     private var results: [String: Any]?
     
+    weak var alertPresentingVC: UIViewController?
+    
     var completion: ((_ results: [String: Any]?) -> Void)?
-    //var delegate: HttpRequestDelegate?
     
     init(url: String, httpMethod: String, httpHeaderValue: String, httpHeaderField: String, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: Double) {
         
@@ -50,23 +52,34 @@ class HttpRequest {
             print("Cached response.")
             print("Disk usage/capacity: \(URLCache.shared.currentDiskUsage)/\(URLCache.shared.diskCapacity), memory usage/capacity: \(URLCache.shared.currentMemoryUsage)/\(URLCache.shared.memoryCapacity)")
 
-            // TODO: Handle responses?
             results = jsonToDictionary(cachedResponse.data)
             completion?(results)
             
-            //delegate?.getCachedResponse(data: cachedResponse.data, response: cachedResponse.response)
         } else {
             print("Fresh response.")
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 
-                let cacheResponse = CachedURLResponse(response: response!, data: data!)
+                if let err = error {
+                    let alert = UIAlertController(
+                        title: "Error: \(err.localizedDescription)",
+                        message: "Oops, looks like the server is not available now, please try again at a later time.",
+                        actions: [.ok]
+                    )
+                    self.alertPresentingVC?.present(alert, animated: false, completion: nil)
+                    
+                    return
+                }
+                
+                guard let data = data, let response = response else {
+                    fatalError("No data or response is received.")
+                }
+                
+                let cacheResponse = CachedURLResponse(response: response, data: data)
                 URLCache.shared.storeCachedResponse(cacheResponse, for: request)
 
-                // TODO: Handle errors.
-                self.results = self.jsonToDictionary(data!)
+                self.results = self.jsonToDictionary(data)
                 self.completion?(self.results)
                 
-                //self.delegate?.getHttpRequestAndResults(request: request, data: data, response: response, error: error)
             }
             task.resume()
         }

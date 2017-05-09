@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import UIKit
 
-class YelpQuery {
+class YelpQuery: AlertProtocol {
     
     // Properties.
-    //var businesses: (([[String: Any]]?) -> Void)?
+    weak var alertPresentingVC: UIViewController?
     
     private var url: String
     
@@ -41,7 +42,7 @@ class YelpQuery {
             cachePolicy: .returnCacheDataElseLoad,
             timeoutInterval: 120.0
         )
-        //httpRequest.delegate = self
+        httpRequest.alertPresentingVC = alertPresentingVC
         httpRequest.completion = { results in
             guard let results = results else {
                 fatalError("Didn't get expected results.")

@@ -48,7 +48,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, AlertProtocol {
             self.requestLocation()
         case .denied, .restricted:
             print("authorization denied or restricted")
-            // Still updating location, propagating corresponding error to delegate method.
+            // Still updating location, propagating corresponding error to locationManger(_:didFailWithError:) method to handle.
             self.requestLocation()
         default:
             print("Access not authorized, status: \(status.rawValue)")
