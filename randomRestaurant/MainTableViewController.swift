@@ -49,7 +49,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        locationManager.alertPresentingVC = self
         locationManager.completion = { currentLocation in
             let distance = currentLocation.distance(from: self.queryLocation)
             if distance > 50.0 {
@@ -262,7 +261,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 fatalError("Yelp query is nil.")
             }
             yelpQuery = query
-            yelpQuery.alertPresentingVC = self
             yelpQuery.completion = { results in
                 self.restaurants = results
                 

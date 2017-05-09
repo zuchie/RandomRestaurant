@@ -11,13 +11,10 @@ import CoreLocation
 import UIKit
 
 // Singleton class
-class LocationManager: NSObject, CLLocationManagerDelegate, AlertProtocol {
+class LocationManager: NSObject, CLLocationManagerDelegate {
     static let shared = LocationManager()
     
     fileprivate var locationManager = CLLocationManager()
-    
-    // Set to the UIViewController which will present the alerts.
-    weak var alertPresentingVC: UIViewController?
     
     var completion: ((_ location: CLLocation) -> Void)?
     
@@ -90,12 +87,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, AlertProtocol {
             )
         }
         
-        guard let vc = alertPresentingVC else {
-            fatalError("No View Controller to present alerts.")
-        }
-        
-        vc.present(alert, animated: false)
-
+        alert.show()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

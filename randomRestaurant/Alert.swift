@@ -9,10 +9,12 @@
 //import Foundation
 import UIKit
 
+/*
 protocol AlertProtocol {
     // Alerts can't be presented by themselves, must have a UIViewController to present them.
     weak var alertPresentingVC: UIViewController? { get set }
 }
+*/
 
 extension UIAlertController {
     enum Actions {
@@ -50,5 +52,18 @@ extension UIAlertController {
             }
             self.addAction(alertAction)
         }
+    }
+    
+    /**
+ 
+     Presenting alerts on a temporary UIViewController.
+     
+     */
+    func show() {
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = UIViewController()
+        window.windowLevel = UIWindowLevelAlert
+        window.makeKeyAndVisible()
+        window.rootViewController?.present(self, animated: false, completion: nil)
     }
 }

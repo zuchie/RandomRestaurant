@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class HttpRequest: AlertProtocol {
+class HttpRequest {
     
     // Properties.
     private var url: String
@@ -23,8 +23,6 @@ class HttpRequest: AlertProtocol {
     private var timeoutInterval: Double
     
     private var results: [String: Any]?
-    
-    weak var alertPresentingVC: UIViewController?
     
     var completion: ((_ results: [String: Any]?) -> Void)?
     
@@ -65,7 +63,7 @@ class HttpRequest: AlertProtocol {
                         message: "Oops, looks like the server is not available now, please try again at a later time.",
                         actions: [.ok]
                     )
-                    self.alertPresentingVC?.present(alert, animated: false, completion: nil)
+                    alert.show()
                     
                     return
                 }
