@@ -30,11 +30,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestLocation()
     }
     
-    func stopUpdatingLocation() {
-        print("Stop updating location.")
-        locationManager.stopUpdatingLocation()
-    }
-    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:

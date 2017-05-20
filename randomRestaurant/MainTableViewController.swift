@@ -17,14 +17,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     @IBOutlet weak var category: UILabel!
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
     
-    fileprivate var queryCategory = ""
+    //fileprivate var queryCategory = ""
     
     fileprivate var locationManager = LocationManager.shared
-    fileprivate var queryLocation = CLLocation()
+    //fileprivate var queryLocation = CLLocation()
     
-    fileprivate var queryDate = Date()
+    //fileprivate var queryDate = Date()
     
-    fileprivate var anyParamUpdate = false
+    //fileprivate var anyParamUpdate = false
     
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery: YelpQuery!
@@ -33,6 +33,21 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var imageCache = [String: UIImage]()
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
+    
+    struct QueryParams {
+        var hasChanged = false
+        var category = "" {
+            didSet { hasChanged = (category != oldValue) }
+        }
+        var date = Date() {
+            didSet { hasChanged = (date != oldValue) }
+        }
+        var location = CLLocation() {
+            didSet { hasChanged = (location != oldValue) }
+        }
+    }
+    
+    var queryParams = QueryParams()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,10 +65,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         locationManager.completion = { currentLocation in
-            let distance = currentLocation.distance(from: self.queryLocation)
+            let distance = currentLocation.distance(from: self.queryParams.location)
             if distance > 50.0 {
-                self.queryLocation = currentLocation
-                self.anyParamUpdate = true
+                self.queryParams.location = currentLocation
             } else {
                 print("Distance difference < 50m, no update")
             }
@@ -62,7 +76,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
         
         getCategory(category: "restaurants")
-        updateHeader(queryCategory)
+        updateHeader(queryParams.category)
         getDate()
     }
     
@@ -204,12 +218,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
         
         getCategory(category: category)
-        updateHeader(category)
+        updateHeader(queryParams.category)
         getDate()
         getLocationAndStartQuery()
     }
     
     fileprivate func getCategory(category: String) {
+        queryParams.category = category
+        /*
         if queryCategory == category {
             print("Same category, no update")
         } else {
@@ -217,6 +233,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             anyParamUpdate = true
             print("category: \(queryCategory)")
         }
+        */
     }
     
     fileprivate func getDate() {
@@ -229,6 +246,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             fatalError("Couldn't get date")
         }
         
+        queryParams.date = date
+        /*
         if queryDate == date {
             print("Same date, no update")
         } else {
@@ -236,6 +255,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             anyParamUpdate = true
             print("date: \(queryDate)")
         }
+        */
     }
     
     fileprivate func getLocationAndStartQuery() {
@@ -243,14 +263,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func doYelpQuery() {
-        if anyParamUpdate {
+        if queryParams.hasChanged {
             yelpQueryParams = YelpUrlQueryParameters(
-                latitude: queryLocation.coordinate.latitude,
-                longitude: queryLocation.coordinate.longitude,
-                category: queryCategory,
+                latitude: queryParams.location.coordinate.latitude,
+                longitude: queryParams.location.coordinate.longitude,
+                category: queryParams.category,
                 radius: 10000,
                 limit: 3,
-                openAt: Int(queryDate.timeIntervalSince1970),
+                openAt: Int(queryParams.date.timeIntervalSince1970),
                 sortBy: "rating"
             )
             
@@ -274,18 +294,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
             yelpQuery.startQuery()
             
-            anyParamUpdate = false
+            queryParams.hasChanged = false
+            //anyParamUpdate = false
         } else {
             print("Params no change, skip query")
         }
     }
 
     fileprivate func updateHeader(_ category: String) {
-        if category == "restaurants" {
-            updateHeaderLabelText(toText: "What: all")
-        } else {
-            updateHeaderLabelText(toText: category)
-        }
+        let header = (category == "restaurants" ? "What: all" : category)
+        updateHeaderLabelText(toText: header)
     }
 
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
