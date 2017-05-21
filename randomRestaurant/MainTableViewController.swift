@@ -16,21 +16,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
     static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
-    
-    //fileprivate var queryCategory = ""
-    
+
     fileprivate var locationManager = LocationManager.shared
-    //fileprivate var queryLocation = CLLocation()
-    
-    //fileprivate var queryDate = Date()
-    
-    //fileprivate var anyParamUpdate = false
-    
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery: YelpQuery!
     
     fileprivate var restaurants = [[String: Any]]()
-    fileprivate var imageCache = [String: UIImage]()
+    //fileprivate var imageCache = [String: UIImage]()
+    fileprivate var imgCache = Cache<String>()
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
     
@@ -75,8 +68,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             self.doYelpQuery()
         }
         
-        getCategory(category: "restaurants")
-        updateHeader(queryParams.category)
+        getCategoryAndUpdateHeader("restaurants")
         getDate()
     }
     
@@ -99,10 +91,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         tableView.reloadData()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        print("Main view will disappear.")
-    }
-    
     fileprivate func loadImagesToCache(from url: String, index: Int) {
         guard let urlString = URL(string: url) else {
             fatalError("Unexpected url string: \(url)")
@@ -112,7 +100,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 fatalError("error while getting url response: \(String(describing: error?.localizedDescription))")
             }
             if let image = UIImage(data: imageData) {
-                self.imageCache[url] = image
+                //self.imageCache[url] = image
+                self.imgCache.add(key: url, value: image)
             }
             // Reload tableView when first image is ready.
             // Don't need to reload every time.
@@ -217,23 +206,18 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             fatalError("Couldn't get category")
         }
         
-        getCategory(category: category)
-        updateHeader(queryParams.category)
+        getCategoryAndUpdateHeader(category)
         getDate()
         getLocationAndStartQuery()
     }
     
-    fileprivate func getCategory(category: String) {
+    fileprivate func getCategoryAndUpdateHeader(_ category: String) {
+        getCategory(category)
+        updateHeader(category)
+    }
+    
+    fileprivate func getCategory(_ category: String) {
         queryParams.category = category
-        /*
-        if queryCategory == category {
-            print("Same category, no update")
-        } else {
-            queryCategory = category
-            anyParamUpdate = true
-            print("category: \(queryCategory)")
-        }
-        */
     }
     
     fileprivate func getDate() {
@@ -286,7 +270,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 
                 //refreshControl?.endRefreshing()
                 
-                self.imageCache.removeAll(keepingCapacity: false)
+                //self.imageCache.removeAll(keepingCapacity: false)
+                self.imgCache.removeAll(keepingCapacity: false)
                 for (index, member) in self.restaurants.enumerated() {
                     self.loadImagesToCache(from: member["image_url"] as! String, index: index)
                 }
@@ -295,7 +280,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             yelpQuery.startQuery()
             
             queryParams.hasChanged = false
-            //anyParamUpdate = false
         } else {
             print("Params no change, skip query")
         }
@@ -320,11 +304,18 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
          image = imageCache[cell.imageUrl]
          }
          */
+        if let value = imgCache.get(by: cell.imageUrl) {
+            image = value as? UIImage
+        } else {
+            image = UIImage(named: "globe")
+        }
+        /*
         if let img = imageCache[cell.imageUrl] {
             image = img
         } else {
             image = UIImage(named: "globe")
         }
+        */
         DispatchQueue.main.async {
             cell.mainImage.image = image
         }

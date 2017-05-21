@@ -30,6 +30,7 @@
 		B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */; };
 		B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */; };
 		B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */; };
+		B9C1E3F41ED18A3C001B04CD /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C1E3F31ED18A3C001B04CD /* Cache.swift */; };
 		B9D4457A1EBC660700219D91 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D445791EBC660700219D91 /* HttpRequest.swift */; };
 		B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */; };
 		BD1DDF19347483F34E76FEB5 /* libPods-randomRestaurant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */; };
@@ -84,6 +85,7 @@
 		B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewController.swift; sourceTree = "<group>"; };
 		B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
+		B9C1E3F31ED18A3C001B04CD /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		B9D445791EBC660700219D91 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 		B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		BA55DAE3FD7017F1DFC412C5 /* libPods-randomRestaurant.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-randomRestaurant.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -195,6 +197,7 @@
 		B91AC8551D4EAC4600B0476E /* randomRestaurant */ = {
 			isa = PBXGroup;
 			children = (
+				B9C1E3F21ED18A1E001B04CD /* Cache */,
 				B93D33381EAAD1E8007EAD5A /* Alert */,
 				B93D33331EA6CA72007EAD5A /* Location */,
 				B965C9661E5CEF1B0015E2AC /* YelpQuery */,
@@ -245,6 +248,14 @@
 				B9D445791EBC660700219D91 /* HttpRequest.swift */,
 			);
 			name = YelpQuery;
+			sourceTree = "<group>";
+		};
+		B9C1E3F21ED18A1E001B04CD /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				B9C1E3F31ED18A3C001B04CD /* Cache.swift */,
+			);
+			name = Cache;
 			sourceTree = "<group>";
 		};
 		B9F984EA1E5A8A9900C6CA04 /* Main */ = {
@@ -476,6 +487,7 @@
 				B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */,
 				B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */,
 				B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */,
+				B9C1E3F41ED18A3C001B04CD /* Cache.swift in Sources */,
 				B96AE97E1D8E6EAD00257751 /* CoreDataTableViewController.swift in Sources */,
 				B937286B1E7D475900B911E5 /* SavedTableViewCell.swift in Sources */,
 				B906DBB21D863B7B0021B025 /* SavedTableViewController.swift in Sources */,
