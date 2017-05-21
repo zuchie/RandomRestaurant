@@ -28,15 +28,21 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
     
     struct QueryParams {
-        var hasChanged = false
+        var hasChanged: Bool {
+            return categoryChanged || dateChanged || locationChanged
+        }
+        var categoryChanged = false
+        var dateChanged = false
+        var locationChanged = false
+        
         var category = "" {
-            didSet { hasChanged = (category != oldValue) }
+            didSet { categoryChanged = (category != oldValue) }
         }
         var date = Date() {
-            didSet { hasChanged = (date != oldValue) }
+            didSet { dateChanged = (date != oldValue) }
         }
         var location = CLLocation() {
-            didSet { hasChanged = (location != oldValue) }
+            didSet { locationChanged = (location != oldValue) }
         }
     }
     
@@ -279,7 +285,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
             yelpQuery.startQuery()
             
-            queryParams.hasChanged = false
+            queryParams.categoryChanged = false
+            queryParams.dateChanged = false
+            queryParams.locationChanged = false
         } else {
             print("Params no change, skip query")
         }
