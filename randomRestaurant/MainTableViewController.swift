@@ -50,7 +50,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     var queryParams = QueryParams()
-    
+    var imageCount = 0
     
     // Methods
     
@@ -94,9 +94,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("Main view will appear, reload table")
+        //print("Main view will appear, reload table")
         // Reload visible cells to sync like button status with Saved.
-        tableView.reloadData()
+        //tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -121,6 +121,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             }
 
             self.imgCache.add(key: url, value: image)
+            self.imageCount -= 1
+            
+            // Reload table after the last image has been saved.
+            if self.imageCount == 0 {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
             
         }.resume()
     }
@@ -224,16 +232,25 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             yelpQuery = query
             yelpQuery.completion = { results in
                 self.restaurants = results
+                self.imgCache.removeAll(keepingCapacity: false)
+                self.imageCount = self.restaurants.count
                 
+                if self.imageCount == 0 {
+                    let alert = UIAlertController(
+                        title: "No results",
+                        message: "Sorry, couldn't find any restaurant.",
+                        actions: [.ok])
+                    
+                    alert.show()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                    return
+                }
                 //refreshControl?.endRefreshing()
                 
-                self.imgCache.removeAll(keepingCapacity: false)
                 for member in self.restaurants {
                     self.loadImagesToCache(from: member["image_url"] as! String)
-                }
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
                 }
             }
 
@@ -313,14 +330,17 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // Table view
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
+        print("configure cell")
         let content = restaurants[indexPath.row]
         // Image
         cell.imageUrl = process(dict: content, key: "image_url") as? String
         var image: UIImage?
         if let value = imgCache.get(by: cell.imageUrl) as? UIImage {
+            print("found image in cache")
             image = value
         } else {
             // TODO: Pick a globe image
+            print("use globe image")
             image = UIImage(named: "globe")
         }
         
