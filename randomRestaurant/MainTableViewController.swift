@@ -246,7 +246,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             print("Params no change, skip query")
         }
     }
-
+    /*
     enum Operation {
         case getValue(([String: Any], String) -> Any)
     }
@@ -277,14 +277,27 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             return address.composeAddress()
         })
     ]
-    
-    fileprivate func process(dict: [String: Any], key: String) -> Any {
-        guard let operation = operations[key] else {
-            fatalError("Couldn't get operation from: \(String(describing: operations[key]))")
-        }
-        switch operation {
-        case .getValue(let function):
-            return function(dict, key)
+    */
+    fileprivate func process(dict: [String: Any], key: String) -> Any? {
+        switch key {
+        case "image_url", "name", "price", "url", "rating", "review_count", "coordinates":
+            return dict[key]
+        case "categories":
+            guard let categories = dict[key] as? [[String: String]] else {
+                fatalError("Couldn't get categories from: \(String(describing: dict[key]))")
+            }
+            let categoriesString = categories.reduce("", { $0 + $1["title"]! }).characters.dropLast(2)
+            return String(categoriesString)
+        case "location":
+            guard let location = dict[key] as? [String: Any] else {
+                fatalError("Couldn't get location from: \(String(describing: dict[key]))")
+            }
+            guard let address = Address(of: location) else {
+                fatalError("Couldn't compose address from location: \(location)")
+            }
+            return address.composeAddress()
+        default:
+            fatalError("Key not expected: \(key)")
         }
     }
     
