@@ -29,10 +29,15 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
     }
     
+    fileprivate let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    fileprivate var moc: NSManagedObjectContext!
+    
     //fileprivate var shouldSegue: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        moc = appDelegate?.managedObjectContext
         
         navigationItem.rightBarButtonItem = editButtonItem
 
@@ -97,7 +102,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         let nameSort = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [nameSort]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: MainTableViewController.moc!, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
     }
  
     /*
@@ -141,7 +146,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
         request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
         
-        guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+        guard let object = try? moc.fetch(request).first else {
             fatalError("Error fetching from context")
         }
         
@@ -150,7 +155,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
             return
         }
         
-        MainTableViewController.moc?.delete(obj)
+        moc.delete(obj)
         print("Deleted from Saved entity")
         
         if let index = filteredRestaurants.index(of: obj) {
@@ -159,9 +164,9 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
             print("Deleted from filtered")
         }
         
-        if (MainTableViewController.moc?.hasChanges)! {
+        if moc.hasChanges {
             do {
-                try MainTableViewController.moc?.save()
+                try moc.save()
                 print("context saved")
             } catch {
                 fatalError("Failure to save context: \(error)")

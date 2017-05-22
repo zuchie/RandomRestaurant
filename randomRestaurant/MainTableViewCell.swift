@@ -31,7 +31,7 @@ class MainTableViewCell: UITableViewCell {
     var longitude: Double!
     var address: String!
     var rating: Float!
-    var reviewsTotal: Int!
+    //var reviewsTotal: Int!
     var imageUrl: String!
     
     var delegate: MainTableViewCellDelegate?
@@ -45,21 +45,15 @@ class MainTableViewCell: UITableViewCell {
     }
     
     @IBAction func handleMapButton(_ sender: UIButton) {
-        print("handle map button")
-        print("self: \(self)")
-        print("delegate: \(String(describing: self.delegate))")
         self.delegate?.showMap(cell: self)
     }
     
     @IBAction func handleYelpButton(_ sender: UIButton) {
-        print("handle yelp button")
         self.delegate?.linkToYelp(cell: self)
     }
     
     @IBAction func handleLikeButton(_ sender: UIButton) {
-        print("handle like button")
         sender.isSelected = sender.isSelected ? false : true
-
         self.delegate?.updateSaved(cell: self, button: sender)
     }
     

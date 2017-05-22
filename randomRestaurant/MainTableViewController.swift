@@ -13,16 +13,19 @@ import CoreLocation
 
 class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
+    // Properties
+    
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var category: UILabel!
-    static let moc = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext
+    
+    let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    var moc: NSManagedObjectContext!
 
     fileprivate var locationManager = LocationManager.shared
     fileprivate var yelpQueryParams: YelpUrlQueryParameters?
     fileprivate var yelpQuery: YelpQuery!
     
     fileprivate var restaurants = [[String: Any]]()
-    //fileprivate var imageCache = [String: UIImage]()
     fileprivate var imgCache = Cache<String>()
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
@@ -48,11 +51,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     var queryParams = QueryParams()
     
+    
+    // Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("MainTableViewController view did load")
         
+        moc = appDelegate?.managedObjectContext
+
         // tableView Cell
         let cellNib = UINib(nibName: "MainTableViewCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "mainCell")
@@ -63,6 +71,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
+        // Start query once location has been got
         locationManager.completion = { currentLocation in
             let distance = currentLocation.distance(from: self.queryParams.location)
             if distance > 50.0 {
@@ -78,13 +87,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         getDate()
     }
     
-    @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
-        guard (sender.view != nil) else {
-            fatalError("Unexpected view: \(String(describing: sender.view))")
-        }
-        performSegue(withIdentifier: "segueToCategories", sender: self)
-    }
-    
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         print("handle refresh")
         getDate()
@@ -97,61 +99,47 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         tableView.reloadData()
     }
     
-    fileprivate func loadImagesToCache(from url: String, index: Int) {
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // Cache
+    fileprivate func loadImagesToCache(from url: String) {
         guard let urlString = URL(string: url) else {
-            fatalError("Unexpected url string: \(url)")
+            fatalError("Unexpected url string while loading image: \(url)")
         }
         URLSession.shared.dataTask(with: urlString) { data, response, error in
             guard error == nil, let imageData = data else {
-                fatalError("error while getting url response: \(String(describing: error?.localizedDescription))")
+                print("Error while getting image url response: \(String(describing: error?.localizedDescription))")
+                return
             }
-            if let image = UIImage(data: imageData) {
-                //self.imageCache[url] = image
-                self.imgCache.add(key: url, value: image)
+            
+            guard let image = UIImage(data: imageData) else {
+                print("Couldn't create image from data: \(imageData)")
+                return
             }
-            // Reload tableView when first image is ready.
-            // Don't need to reload every time.
-            if index == 0 {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
+
+            self.imgCache.add(key: url, value: image)
             
         }.resume()
     }
     
-    func showMap(cell: MainTableViewCell) {
-        print("show map from main")
-        //shouldSegue = true
-        performSegue(withIdentifier: "segueToMap", sender: cell)
-    }
-    
-    func linkToYelp(cell: MainTableViewCell) {
-        print("show yelp from main")
-        if cell.yelpUrl != "" {
-            UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
-        } else {
-            let alert = UIAlertController(title: "Alert",
-                              message: "Couldn't find a restaurant.",
-                              actions: [.ok]
-            )
-            self.present(alert, animated: false)
-        }
-    }
-    
+    // Core Data
     func updateSaved(cell: MainTableViewCell, button: UIButton) {
         if button.isSelected {
             print("Save object")
-            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: MainTableViewController.moc!) as! SavedMO
+            let saved = NSEntityDescription.insertNewObject(forEntityName: "Saved", into: moc) as! SavedMO
             
             saved.name = cell.name.text
             saved.categories = cell.category.text
             saved.yelpUrl = cell.yelpUrl
         } else {
+            // TODO: Add url or address besides name for predicate
             let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
             request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
             
-            guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+            guard let object = try? moc.fetch(request).first else {
                 fatalError("Error fetching object in context")
             }
             
@@ -160,25 +148,19 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 return
             }
             
-            MainTableViewController.moc?.delete(obj)
+            moc.delete(obj)
             print("Deleted from Saved entity")
         }
         
-        if (MainTableViewController.moc?.hasChanges)! {
-            do {
-                try MainTableViewController.moc?.save()
-                print("context saved")
-            } catch {
-                fatalError("Failure to save context: \(error)")
-            }
-        }
+        appDelegate?.saveContext()
     }
     
     // Is the object with name in Saved?
     fileprivate func objectSaved(name: String) -> Bool {
+        // TODO: Add url or address besides name for predicate
         let request = NSFetchRequest<SavedMO>(entityName: "Saved")
         request.predicate = NSPredicate(format: "name == %@", name)
-        guard let object = try? MainTableViewController.moc?.fetch(request).first else {
+        guard let object = try? moc.fetch(request).first else {
             fatalError("Error fetching from context")
         }
         
@@ -189,34 +171,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         return true
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    fileprivate func updateHeaderLabelText(toText labelText: String) {
-        category.text = labelText
-    }
-    
-    
-    @IBAction func unwindToMain(sender: UIStoryboardSegue) {
-        print("Unwind to main")
-        //restaurants.removeAll(keepingCapacity: false)
-        
-        let sourceVC = sender.source
-        guard sender.identifier == "backFromWhat" else {
-            fatalError("Unexpeted id: \(String(describing: sender.identifier))")
-        }
-        
-        guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
-            fatalError("Couldn't get category")
-        }
-        
-        getCategoryAndUpdateHeader(category)
-        getDate()
-        getLocationAndStartQuery()
-    }
-    
+    // Prepare params and do query
     fileprivate func getCategoryAndUpdateHeader(_ category: String) {
         getCategory(category)
         updateHeader(category)
@@ -226,6 +181,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         queryParams.category = category
     }
     
+    fileprivate func updateHeader(_ category: String) {
+        let header = (category == "restaurants" ? "What: all" : category)
+        self.category.text = header
+    }
+
     fileprivate func getDate() {
         let calendar = Calendar.current
         let myDate = Date()
@@ -237,15 +197,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
         
         queryParams.date = date
-        /*
-        if queryDate == date {
-            print("Same date, no update")
-        } else {
-            queryDate = date
-            anyParamUpdate = true
-            print("date: \(queryDate)")
-        }
-        */
     }
     
     fileprivate func getLocationAndStartQuery() {
@@ -276,10 +227,13 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 
                 //refreshControl?.endRefreshing()
                 
-                //self.imageCache.removeAll(keepingCapacity: false)
                 self.imgCache.removeAll(keepingCapacity: false)
-                for (index, member) in self.restaurants.enumerated() {
-                    self.loadImagesToCache(from: member["image_url"] as! String, index: index)
+                for member in self.restaurants {
+                    self.loadImagesToCache(from: member["image_url"] as! String)
+                }
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
                 }
             }
 
@@ -293,58 +247,90 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
 
-    fileprivate func updateHeader(_ category: String) {
-        let header = (category == "restaurants" ? "What: all" : category)
-        updateHeaderLabelText(toText: header)
+    enum Operation {
+        case getValue(([String: Any], String) -> Any)
     }
-
+    
+    private var operations: [String: Operation] = [
+        "image_url": Operation.getValue({ $0[$1] as Any }),
+        "name": Operation.getValue({ $0[$1] as Any }),
+        "categories": Operation.getValue({
+            guard let categories = $0[$1] as? [[String: String]] else {
+                fatalError("Couldn't get categories from: \(String(describing: $0[$1]))")
+            }
+            let categoriesString = categories.reduce("", { $0 + $1["title"]! }).characters.dropLast(2)
+            return String(categoriesString)
+        }),
+        "rating": Operation.getValue({ $0[$1] as Any }),
+        "review_count": Operation.getValue({ (String($0[$1] as! Int) + " reviews") as Any }),
+        "price": Operation.getValue({ $0[$1] as Any }),
+        "url": Operation.getValue({ $0[$1] as Any }),
+        "coordinates": Operation.getValue({ $0[$1] as Any }),
+        "location": Operation.getValue({
+            guard let location = $0[$1] as? [String: Any] else {
+                fatalError("Couldn't get location from: \(String(describing: $0[$1]))")
+            }
+            guard let address = Address(of: location) else {
+                fatalError("Couldn't compose address from location: \(location)")
+            }
+            
+            return address.composeAddress()
+        })
+    ]
+    
+    fileprivate func process(dict: [String: Any], key: String) -> Any {
+        guard let operation = operations[key] else {
+            fatalError("Couldn't get operation from: \(String(describing: operations[key]))")
+        }
+        switch operation {
+        case .getValue(let function):
+            return function(dict, key)
+        }
+    }
+    
+    fileprivate func getRatingStar(from rating: Float) -> UIImage {
+        guard let name = yelpStars[rating] else {
+            fatalError("Couldn't get image name from rating: \(rating)")
+        }
+        guard let image = UIImage(named: name) else {
+            fatalError("Couldn't get image from name: \(name)")
+        }
+        return image
+    }
+    
+    // Table view
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
         let content = restaurants[indexPath.row]
-        cell.imageUrl = content["image_url"] as? String
-        //cell.mainImage.loadImage(from: (content["image_url"] as? String)!)
+        // Image
+        cell.imageUrl = process(dict: content, key: "image_url") as? String
         var image: UIImage?
-        /*
-         if indexPath.row >= imageCache.count {
-         //print("nil image indexPath: \(indexPath.row)")
-         image = UIImage(named: "globe")
-         } else {
-         //print("indexPath: \(indexPath.row)")
-         image = imageCache[cell.imageUrl]
-         }
-         */
-        if let value = imgCache.get(by: cell.imageUrl) {
-            image = value as? UIImage
+        if let value = imgCache.get(by: cell.imageUrl) as? UIImage {
+            image = value
         } else {
+            // TODO: Pick a globe image
             image = UIImage(named: "globe")
         }
-        /*
-        if let img = imageCache[cell.imageUrl] {
-            image = img
-        } else {
-            image = UIImage(named: "globe")
-        }
-        */
+        
         DispatchQueue.main.async {
             cell.mainImage.image = image
         }
-        cell.name.text = content["name"] as? String
-        var categories = String()
-        for category in (content["categories"] as? [[String: Any]])! {
-            categories += (category["title"] as! String) + ", "
-        }
-        let categoriesString = categories.characters.dropLast(2)
-        cell.category.text = String(categoriesString)
-        cell.rating = content["rating"] as? Float
-        cell.ratingImage.image = UIImage(named: yelpStars[content["rating"] as! Float]!)
-        cell.reviewsTotal = content["review_count"] as? Int
-        cell.reviewCount.text = String(content["review_count"] as! Int) + " Reviews"
-        cell.price.text = content["price"] as? String
-        cell.yelpUrl = content["url"] as? String
-        cell.latitude = (content["coordinates"] as? [String: Double])?["latitude"]
-        cell.longitude = (content["coordinates"] as? [String: Double])?["longitude"]
+        // Name
+        cell.name.text = process(dict: content, key: "name") as? String
+        // Categories
+        cell.category.text = process(dict: content, key: "categories") as? String
+        // Rating
+        cell.rating = process(dict: content, key: "rating") as? Float
+        cell.ratingImage.image = getRatingStar(from: cell.rating)
         
-        let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (content["location"] as? [String: Any])!)!
-        cell.address = location.getBizAddressString()
+        //cell.reviewsTotal = process(dict: content, key: "review_count") as? Int
+        cell.reviewCount.text = process(dict: content, key: "review_count") as? String
+        cell.price.text = process(dict: content, key: "price") as? String
+        cell.yelpUrl = process(dict: content, key: "url") as? String
+        cell.latitude = (process(dict: content, key: "coordinates") as? [String: Double])?["latitude"]
+        cell.longitude = (process(dict: content, key: "coordinates") as? [String: Double])?["longitude"]
+        
+        //let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (process(dict: content, key: "location") as? [String: Any])!)!
+        cell.address = process(dict: content, key: "location") as? String
         cell.likeButton.isSelected = objectSaved(name: cell.name.text!)
         cell.delegate = self
 
@@ -446,7 +432,41 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     */
 
     // MARK: - Navigation
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "segueToMap" && sender is MainTableViewCell {
+            return true
+        } else {
+            return false
+        }
+    }
 
+    // Segue to Category view controller
+    @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
+        guard (sender.view != nil) else {
+            fatalError("Unexpected view: \(String(describing: sender.view))")
+        }
+        performSegue(withIdentifier: "segueToCategories", sender: self)
+    }
+    
+    // Segue to Map view controller
+    func showMap(cell: MainTableViewCell) {
+        performSegue(withIdentifier: "segueToMap", sender: cell)
+    }
+    
+    // Link to Yelp app/website
+    func linkToYelp(cell: MainTableViewCell) {
+        if cell.yelpUrl != "" {
+            UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
+        } else {
+            let alert = UIAlertController(title: "Alert",
+                                          message: "Couldn't find a restaurant.",
+                                          actions: [.ok]
+            )
+            self.present(alert, animated: false)
+        }
+    }
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
@@ -478,17 +498,25 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == "segueToMap" && sender is MainTableViewCell {
-            return true
-        } else {
-            return false
+    @IBAction func unwindToMain(sender: UIStoryboardSegue) {
+        print("Unwind to main")
+        
+        let sourceVC = sender.source
+        guard sender.identifier == "backFromWhat" else {
+            fatalError("Unexpeted id: \(String(describing: sender.identifier))")
         }
+        
+        guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
+            fatalError("Couldn't get category")
+        }
+        
+        getCategoryAndUpdateHeader(category)
+        getDate()
+        getLocationAndStartQuery()
     }
-    
-
 }
 
+/*
 extension UIImageView {
     func loadImage(from urlString: String) {
         //print("load image from url")
@@ -506,3 +534,4 @@ extension UIImageView {
         }.resume()
     }
 }
+*/

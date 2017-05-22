@@ -10,7 +10,7 @@
 		B902484F1E84E40700212F12 /* randomRestaurantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902484E1E84E40700212F12 /* randomRestaurantTests.swift */; };
 		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
 		B906DBA31D727DCA0021B025 /* UrlQueryParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */; };
-		B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */; };
+		B906DBA81D756B820021B025 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* Address.swift */; };
 		B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */; };
 		B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBAB1D76BAF80021B025 /* GetDirection.swift */; };
 		B906DBB21D863B7B0021B025 /* SavedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBB11D863B7B0021B025 /* SavedTableViewController.swift */; };
@@ -61,7 +61,7 @@
 		B90248501E84E40700212F12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		B906DBA21D727DCA0021B025 /* UrlQueryParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlQueryParameters.swift; sourceTree = "<group>"; };
-		B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickedBusinessLocation.swift; sourceTree = "<group>"; };
+		B906DBA71D756B820021B025 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapViewController.swift; sourceTree = "<group>"; };
 		B906DBAB1D76BAF80021B025 /* GetDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDirection.swift; sourceTree = "<group>"; };
 		B906DBB11D863B7B0021B025 /* SavedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedTableViewController.swift; sourceTree = "<group>"; };
@@ -264,7 +264,7 @@
 				B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */,
 				B965C97E1E6777E80015E2AC /* MainTableViewCell.swift */,
 				B937286D1E82482500B911E5 /* MainTableViewCell.xib */,
-				B906DBA71D756B820021B025 /* PickedBusinessLocation.swift */,
+				B906DBA71D756B820021B025 /* Address.swift */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -494,7 +494,7 @@
 				B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */,
 				B965C9681E5CEF4C0015E2AC /* YelpQuery.swift in Sources */,
 				B965C9801E6777E80015E2AC /* MainTableViewCell.swift in Sources */,
-				B906DBA81D756B820021B025 /* PickedBusinessLocation.swift in Sources */,
+				B906DBA81D756B820021B025 /* Address.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
