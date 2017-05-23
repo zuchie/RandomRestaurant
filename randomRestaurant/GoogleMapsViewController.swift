@@ -41,6 +41,7 @@ class GoogleMapsViewController: UIViewController {
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
+        print("hello google map")
         isNavigationBarHidden = navigationController?.isNavigationBarHidden
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false

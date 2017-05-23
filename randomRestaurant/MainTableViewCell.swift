@@ -52,7 +52,7 @@ class MainTableViewCell: UITableViewCell {
     }
     
     @IBAction func handleLikeButton(_ sender: UIButton) {
-        sender.isSelected = sender.isSelected ? false : true
+        sender.isSelected = !sender.isSelected
         self.delegate?.updateSaved(cell: self, button: sender)
     }
     

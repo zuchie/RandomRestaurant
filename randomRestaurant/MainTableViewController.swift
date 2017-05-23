@@ -54,7 +54,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var indicator: UIActivityIndicatorView!
     fileprivate var indicatorContainer: UIView!
     
-    fileprivate var noResultImgView = UIImageView(image: UIImage(named: "globe"))
+    fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
     
     // Methods
     
@@ -86,7 +86,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
         
         makeIndicator()
-
         startIndicator()
         getCategoryAndUpdateHeader("restaurants")
         getDate()
@@ -95,13 +94,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         getDate()
         getLocationAndStartQuery()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        // TODO: How to sync like star status with like button status?
-        //print("Main view will appear, reload table")
-        // Reload visible cells to sync like button status with Saved.
-        //tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -122,7 +114,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func startIndicator() {
-        print("Start indicator")
         DispatchQueue.main.async {
             self.indicatorContainer.addSubview(self.indicator)
             self.view.addSubview(self.indicatorContainer)
@@ -132,11 +123,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func stopRefreshOrIndicator() {
         if refreshControl!.isRefreshing {
-            print("==End refresh")
             refreshControl!.endRefreshing()
         }
         if indicator.isAnimating {
-            print("==End indicator")
             indicator.stopAnimating()
             DispatchQueue.main.async {
                 self.indicator.removeFromSuperview()
@@ -243,26 +232,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         guard let date = calendar.date(bySettingHour: hour, minute: min, second: 0, of: myDate) else {
             fatalError("Couldn't get date")
         }
-        
         queryParams.date = date
     }
     
     fileprivate func getLocationAndStartQuery() {
         locationManager.requestLocation()
-    }
-    
-    fileprivate func addImgSubView(imgView: UIImageView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
-        imgView.frame = CGRect(x: x, y: y, width: width, height: height)
-        
-        DispatchQueue.main.async {
-            self.view.addSubview(imgView)
-        }
-    }
-    
-    fileprivate func removeImgSubView(imgView: UIImageView) {
-        DispatchQueue.main.async {
-            imgView.removeFromSuperview()
-        }
     }
     
     fileprivate func doYelpQuery() {
@@ -291,8 +265,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.imageCount = self.restaurants.count
                 
                 if self.restaurants.count == 0 {
-                    let height = self.tableView.tableHeaderView!.frame.height
-                    self.addImgSubView(imgView: self.noResultImgView, x: 0, y: height, width: self.view.frame.width, height: self.view.frame.height)
+                    let headerHeight = self.tableView.tableHeaderView!.frame.height
+                    let tabBarHeight = self.tabBarController!.tabBar.frame.height
+                    self.addImgSubView(imgView: self.noResultImgView, x: 0, y: headerHeight, width: self.view.frame.width, height: self.view.frame.height - headerHeight - tabBarHeight)
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -315,11 +290,21 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         } else {
             print("Params no change, skip query")
             stopRefreshOrIndicator()
-            /*
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-            */
+        }
+    }
+    
+    // Helpers
+    fileprivate func addImgSubView(imgView: UIImageView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
+        imgView.frame = CGRect(x: x, y: y, width: width, height: height)
+        
+        DispatchQueue.main.async {
+            self.view.addSubview(imgView)
+        }
+    }
+    
+    fileprivate func removeImgSubView(imgView: UIImageView) {
+        DispatchQueue.main.async {
+            imgView.removeFromSuperview()
         }
     }
 
@@ -528,10 +513,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        //print("==sender: \(sender)")
-        //print("==id: \(segue.identifier)")
+
         if segue.identifier == "segueToMap" && sender is MainTableViewCell {
             guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(String(describing: sender))")
@@ -547,7 +529,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 alert.show()
             } else {
                 if let mapVC = destinationVC as? GoogleMapsViewController {
-                    
                     mapVC.setBizLocation(cell.address)
                     mapVC.setBizCoordinate2D(CLLocationCoordinate2DMake(cell.latitude
                         , cell.longitude))

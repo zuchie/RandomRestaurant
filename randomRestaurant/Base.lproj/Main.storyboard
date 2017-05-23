@@ -73,7 +73,7 @@
         <!--Map-->
         <scene sceneID="ofu-rG-FBP">
             <objects>
-                <viewController id="dqH-Fl-zN4" customClass="GoogleMapViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dqH-Fl-zN4" customClass="GoogleMapsViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2EY-oo-6ZY"/>
                         <viewControllerLayoutGuide type="bottom" id="UM2-nY-uOj"/>

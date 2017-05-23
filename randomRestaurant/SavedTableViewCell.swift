@@ -12,7 +12,7 @@ class SavedTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var categories: UILabel!
 
-    var yelpUrl: String?
+    var yelpUrl: String!
     
     override func awakeFromNib() {
         super.awakeFromNib()

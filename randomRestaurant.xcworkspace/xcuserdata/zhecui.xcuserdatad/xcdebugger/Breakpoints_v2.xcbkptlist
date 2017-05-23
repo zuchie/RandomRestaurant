@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "randomRestaurant/MainTableViewController.swift"
-            timestampString = "517226230.451341"
+            timestampString = "517227838.273586"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
             landmarkName = "updateHeader(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "randomRestaurant/MainTableViewController.swift"
-            timestampString = "517226764.250545"
+            timestampString = "517227838.273586"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "301"
-            endingLineNumber = "301"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "doYelpQuery()"
             landmarkType = "7">
          </BreakpointContent>

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
+
 class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
     
     fileprivate var savedRestaurants = [SavedMO]()
@@ -31,8 +32,6 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
     
     fileprivate let appDelegate = UIApplication.shared.delegate as? AppDelegate
     fileprivate var moc: NSManagedObjectContext!
-    
-    //fileprivate var shouldSegue: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,7 +143,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
     fileprivate func updateSaved(cell: SavedTableViewCell) {
         
         let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
-        request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
+        request.predicate = NSPredicate(format: "yelpUrl == %@", cell.yelpUrl)
         
         guard let object = try? moc.fetch(request).first else {
             fatalError("Error fetching from context")
@@ -165,32 +164,25 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
         
         appDelegate?.saveContext()
-        /*
-        if moc.hasChanges {
-            do {
-                try moc.save()
-                print("context saved")
-            } catch {
-                fatalError("Failure to save context: \(error)")
+        
+        // Update Main table view controller cell like button status.
+        guard let nav = tabBarController?.viewControllers?[0] as? UINavigationController else {
+            fatalError("Couldn't get navigation controller from tab bar controller")
+        }
+        guard let vc = nav.viewControllers[0] as? MainTableViewController else {
+            fatalError("Couldn't get Main view controller from navigation controller")
+        }
+        for item in vc.tableView.visibleCells {
+            guard let mainCell = item as? MainTableViewCell else {
+                fatalError("Couldn't convert cell to Main table view cell.")
+            }
+            if (mainCell.yelpUrl == cell.yelpUrl) {
+                print("De-select like button")
+                mainCell.likeButton.isSelected = false
             }
         }
-        */
     }
     
-    /*
-    fileprivate func alert() {
-        // Create the alert.
-        let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
-        
-        // Add an action(button).
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
-            
-        }))
-        
-        // Show the alert.
-        self.present(alert, animated: false, completion: nil)
-    }
-    */
     // MARK: - Table view data source
     
     fileprivate func configureCell(_ cell: SavedTableViewCell, _ object: SavedMO) {
@@ -264,7 +256,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
         
         guard let url = cell.yelpUrl else {
-            fatalError("Unexpected url: \(String(describing: cell.yelpUrl))")
+            fatalError("Unexpected url: \(cell.yelpUrl)")
         }
         
         UIApplication.shared.openURL(URL(string: url)!)
