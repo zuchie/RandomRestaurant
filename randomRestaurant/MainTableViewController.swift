@@ -51,6 +51,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     var queryParams = QueryParams()
     var imageCount = 0
+    fileprivate var indicator: UIActivityIndicatorView!
+    fileprivate var indicatorContainer: UIView!
     
     // Methods
     
@@ -83,6 +85,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             self.doYelpQuery()
         }
         
+        makeIndicator()
+
+        startIndicator()
         getCategoryAndUpdateHeader("restaurants")
         getDate()
     }
@@ -102,6 +107,42 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    fileprivate func makeIndicator() {
+        indicator = UIActivityIndicatorView()
+        indicator.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .whiteLarge
+    }
+    
+    fileprivate func startIndicator() {
+        indicatorContainer = UIView()
+        indicatorContainer.frame = view.frame
+        indicatorContainer.center = view.center
+        indicatorContainer.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
+        
+        DispatchQueue.main.async {
+            self.indicatorContainer.addSubview(self.indicator)
+            self.view.addSubview(self.indicatorContainer)
+        }
+        indicator.startAnimating()
+    }
+    
+    fileprivate func stopRefreshOrIndicator() {
+        if refreshControl!.isRefreshing {
+            print("End refresh")
+            refreshControl!.endRefreshing()
+        }
+        if indicator.isAnimating {
+            print("End indicator")
+            indicator.stopAnimating()
+            DispatchQueue.main.async {
+                self.indicator.removeFromSuperview()
+                self.indicatorContainer.removeFromSuperview()
+            }
+        }
     }
     
     // Cache
@@ -128,6 +169,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
+                self.stopRefreshOrIndicator()
             }
             
         }.resume()
@@ -245,7 +287,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                     }
                     return
                 }
-                //refreshControl?.endRefreshing()
                 
                 for member in self.restaurants {
                     self.loadImagesToCache(from: member["image_url"] as! String)
@@ -259,6 +300,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             queryParams.locationChanged = false
         } else {
             print("Params no change, skip query")
+            stopRefreshOrIndicator()
         }
     }
 
@@ -499,6 +541,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
             fatalError("Couldn't get category")
         }
+        
+        startIndicator()
         
         getCategoryAndUpdateHeader(category)
         getDate()
