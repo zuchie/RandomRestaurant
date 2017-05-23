@@ -13,10 +13,9 @@ import UIKit
 // Singleton class
 class LocationManager: NSObject, CLLocationManagerDelegate {
     static let shared = LocationManager()
-    
     fileprivate var locationManager = CLLocationManager()
-    
     var completion: ((_ location: CLLocation) -> Void)?
+    var updateCount = 0
     
     override init() {
         super.init()
@@ -25,9 +24,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func requestLocation() {
-        print("Requesting location...)")
-        
-        locationManager.requestLocation()
+        print("Requesting location...")
+        updateCount = 0
+        //locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -83,16 +83,32 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         alert.show()
+        manager.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         print("Update location...")
-        guard let location = locations.last else {
-            fatalError("No locations updated.")
-        }
+        updateCount += 1
         
-        completion?(location)
+        // Only report the initial location fix.
+        if updateCount == 1 {
+            manager.stopUpdatingLocation()
+            guard let location = locations.last else {
+                fatalError("No locations updated.")
+            }
+            completion?(location)
+        }
+    }
+    /*
+    func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
+        print("did pause location updating")
+        updateCount = 0
     }
     
+    func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
+        print("did resume location updating")
+        updateCount = 0
+    }
+    */
 }

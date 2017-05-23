@@ -52,10 +52,14 @@ extension UIAlertController {
      
      */
     func show() {
+        print("Show alert")
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = UIViewController()
-        window.windowLevel = UIWindowLevelAlert
-        window.makeKeyAndVisible()
-        window.rootViewController?.present(self, animated: false, completion: nil)
+        window.windowLevel = UIWindowLevelAlert - 1
+        DispatchQueue.main.async {
+            window.makeKeyAndVisible()
+            //window.isHidden = false
+            window.rootViewController?.present(self, animated: false, completion: nil)
+        }
     }
 }

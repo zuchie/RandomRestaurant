@@ -54,6 +54,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var indicator: UIActivityIndicatorView!
     fileprivate var indicatorContainer: UIView!
     
+    fileprivate var noResultImgView = UIImageView(image: UIImage(named: "globe"))
+    
     // Methods
     
     override func viewDidLoad() {
@@ -73,13 +75,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
-        // Start query once location has been got
+        // Start query once location has been got.
         locationManager.completion = { currentLocation in
             let distance = currentLocation.distance(from: self.queryParams.location)
             if distance > 50.0 {
                 self.queryParams.location = currentLocation
-            } else {
-                print("Distance difference < 50m, no update")
             }
             // Start Yelp Query
             self.doYelpQuery()
@@ -93,12 +93,12 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
-        print("handle refresh")
         getDate()
         getLocationAndStartQuery()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        // TODO: How to sync like star status with like button status?
         //print("Main view will appear, reload table")
         // Reload visible cells to sync like button status with Saved.
         //tableView.reloadData()
@@ -113,16 +113,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         indicator = UIActivityIndicatorView()
         indicator.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         indicator.center = view.center
-        indicator.hidesWhenStopped = true
         indicator.activityIndicatorViewStyle = .whiteLarge
-    }
-    
-    fileprivate func startIndicator() {
+        
         indicatorContainer = UIView()
         indicatorContainer.frame = view.frame
         indicatorContainer.center = view.center
         indicatorContainer.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
-        
+    }
+    
+    fileprivate func startIndicator() {
+        print("Start indicator")
         DispatchQueue.main.async {
             self.indicatorContainer.addSubview(self.indicator)
             self.view.addSubview(self.indicatorContainer)
@@ -132,11 +132,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func stopRefreshOrIndicator() {
         if refreshControl!.isRefreshing {
-            print("End refresh")
+            print("==End refresh")
             refreshControl!.endRefreshing()
         }
         if indicator.isAnimating {
-            print("End indicator")
+            print("==End indicator")
             indicator.stopAnimating()
             DispatchQueue.main.async {
                 self.indicator.removeFromSuperview()
@@ -251,6 +251,20 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         locationManager.requestLocation()
     }
     
+    fileprivate func addImgSubView(imgView: UIImageView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
+        imgView.frame = CGRect(x: x, y: y, width: width, height: height)
+        
+        DispatchQueue.main.async {
+            self.view.addSubview(imgView)
+        }
+    }
+    
+    fileprivate func removeImgSubView(imgView: UIImageView) {
+        DispatchQueue.main.async {
+            imgView.removeFromSuperview()
+        }
+    }
+    
     fileprivate func doYelpQuery() {
         if queryParams.hasChanged {
             yelpQueryURL = YelpQueryURL(
@@ -271,21 +285,21 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             }
             yelpQuery = query
             yelpQuery.completion = { results in
+                print("Query completed")
                 self.restaurants = results
                 self.imgCache.removeAll(keepingCapacity: false)
                 self.imageCount = self.restaurants.count
                 
-                if self.imageCount == 0 {
-                    let alert = UIAlertController(
-                        title: "No results",
-                        message: "Sorry, couldn't find any restaurant.",
-                        actions: [.ok])
+                if self.restaurants.count == 0 {
+                    let height = self.tableView.tableHeaderView!.frame.height
+                    self.addImgSubView(imgView: self.noResultImgView, x: 0, y: height, width: self.view.frame.width, height: self.view.frame.height)
                     
-                    alert.show()
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-                    return
+                    self.stopRefreshOrIndicator()
+                } else {
+                    self.removeImgSubView(imgView: self.noResultImgView)
                 }
                 
                 for member in self.restaurants {
@@ -301,6 +315,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         } else {
             print("Params no change, skip query")
             stopRefreshOrIndicator()
+            /*
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            */
         }
     }
 
@@ -390,6 +409,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 380.0
     }
+    
+    /*
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Stop refreshing/activity indictor when first cell has been displayed.
+        if indexPath.row == 0 {
+            stopRefreshOrIndicator()
+        }
+    }
+    */
     /*
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
