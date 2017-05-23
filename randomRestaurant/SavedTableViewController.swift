@@ -174,7 +174,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
     }
     
-    
+    /*
     fileprivate func alert() {
         // Create the alert.
         let alert = UIAlertController(title: "Alert", message: "No restaurant has been found.", preferredStyle: UIAlertControllerStyle.alert)
@@ -187,7 +187,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         // Show the alert.
         self.present(alert, animated: false, completion: nil)
     }
-    
+    */
     // MARK: - Table view data source
     
     fileprivate func configureCell(_ cell: SavedTableViewCell, _ object: SavedMO) {

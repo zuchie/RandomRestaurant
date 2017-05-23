@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		B902484F1E84E40700212F12 /* randomRestaurantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902484E1E84E40700212F12 /* randomRestaurantTests.swift */; };
 		B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B906DB731D5D80170021B025 /* Default-568h@2x.png */; };
-		B906DBA31D727DCA0021B025 /* YelpURLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* YelpURLBuilder.swift */; };
+		B906DBA31D727DCA0021B025 /* YelpQueryURLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA21D727DCA0021B025 /* YelpQueryURLBuilder.swift */; };
 		B906DBA81D756B820021B025 /* AddressBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA71D756B820021B025 /* AddressBuilder.swift */; };
 		B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */; };
 		B906DBAC1D76BAF80021B025 /* GetDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B906DBAB1D76BAF80021B025 /* GetDirection.swift */; };
@@ -60,7 +60,7 @@
 		B902484E1E84E40700212F12 /* randomRestaurantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = randomRestaurantTests.swift; sourceTree = "<group>"; };
 		B90248501E84E40700212F12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B906DB731D5D80170021B025 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
-		B906DBA21D727DCA0021B025 /* YelpURLBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpURLBuilder.swift; sourceTree = "<group>"; };
+		B906DBA21D727DCA0021B025 /* YelpQueryURLBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpQueryURLBuilder.swift; sourceTree = "<group>"; };
 		B906DBA71D756B820021B025 /* AddressBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressBuilder.swift; sourceTree = "<group>"; };
 		B906DBA91D757CC00021B025 /* GoogleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapViewController.swift; sourceTree = "<group>"; };
 		B906DBAB1D76BAF80021B025 /* GetDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDirection.swift; sourceTree = "<group>"; };
@@ -226,7 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				B965C9671E5CEF4C0015E2AC /* YelpQueryMaker.swift */,
-				B906DBA21D727DCA0021B025 /* YelpURLBuilder.swift */,
+				B906DBA21D727DCA0021B025 /* YelpQueryURLBuilder.swift */,
 			);
 			name = YelpQuery;
 			sourceTree = "<group>";
@@ -468,7 +468,7 @@
 				B93D333A1EAAD202007EAD5A /* AlertMaker.swift in Sources */,
 				B965C9731E601F2E0015E2AC /* Saved.xcdatamodeld in Sources */,
 				B91AC8571D4EAC4600B0476E /* AppDelegate.swift in Sources */,
-				B906DBA31D727DCA0021B025 /* YelpURLBuilder.swift in Sources */,
+				B906DBA31D727DCA0021B025 /* YelpQueryURLBuilder.swift in Sources */,
 				B906DBAA1D757CC00021B025 /* GoogleMapViewController.swift in Sources */,
 				B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */,
 				B9C1E3F41ED18A3C001B04CD /* Cache.swift in Sources */,

@@ -6,8 +6,6 @@
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
-import Foundation
-
 
 struct Cache<T: Hashable> {
     private var cache = [T: Any]()

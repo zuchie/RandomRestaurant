@@ -22,7 +22,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     var moc: NSManagedObjectContext!
 
     fileprivate var locationManager = LocationManager.shared
-    fileprivate var yelpQueryParams: YelpUrlQueryParameters?
+    fileprivate var yelpQueryURL: YelpQueryURL?
     fileprivate var yelpQuery: YelpQuery!
     
     fileprivate var restaurants = [[String: Any]]()
@@ -143,9 +143,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             saved.categories = cell.category.text
             saved.yelpUrl = cell.yelpUrl
         } else {
-            // TODO: Add url or address besides name for predicate
             let request: NSFetchRequest<SavedMO> = NSFetchRequest(entityName: "Saved")
-            request.predicate = NSPredicate(format: "name == %@", cell.name.text!)
+            request.predicate = NSPredicate(format: "yelpUrl == %@", cell.yelpUrl)
             
             guard let object = try? moc.fetch(request).first else {
                 fatalError("Error fetching object in context")
@@ -164,10 +163,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     // Is the object with name in Saved?
-    fileprivate func objectSaved(name: String) -> Bool {
-        // TODO: Add url or address besides name for predicate
+    fileprivate func objectSaved(url: String) -> Bool {
         let request = NSFetchRequest<SavedMO>(entityName: "Saved")
-        request.predicate = NSPredicate(format: "name == %@", name)
+        request.predicate = NSPredicate(format: "yelpUrl == %@", url)
         guard let object = try? moc.fetch(request).first else {
             fatalError("Error fetching from context")
         }
@@ -213,7 +211,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func doYelpQuery() {
         if queryParams.hasChanged {
-            yelpQueryParams = YelpUrlQueryParameters(
+            yelpQueryURL = YelpQueryURL(
                 latitude: queryParams.location.coordinate.latitude,
                 longitude: queryParams.location.coordinate.longitude,
                 category: queryParams.category,
@@ -223,7 +221,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 sortBy: "rating"
             )
             
-            guard let queryString = yelpQueryParams?.queryString else {
+            guard let queryString = yelpQueryURL?.queryString else {
                 fatalError("Couldn't get Yelp query string.")
             }
             guard let query = YelpQuery(queryString) else {
@@ -321,7 +319,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         cell.latitude = (process(dict: content, key: "coordinates") as? [String: Double])?["latitude"]
         cell.longitude = (process(dict: content, key: "coordinates") as? [String: Double])?["longitude"]
         cell.address = process(dict: content, key: "location") as? String
-        cell.likeButton.isSelected = objectSaved(name: cell.name.text!)
+        cell.likeButton.isSelected = objectSaved(url: cell.yelpUrl)
         cell.delegate = self
 
     }

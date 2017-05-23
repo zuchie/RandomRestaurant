@@ -6,15 +6,7 @@
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
-//import Foundation
 import UIKit
-
-/*
-protocol AlertProtocol {
-    // Alerts can't be presented by themselves, must have a UIViewController to present them.
-    weak var alertPresentingVC: UIViewController? { get set }
-}
-*/
 
 extension UIAlertController {
     enum Actions {

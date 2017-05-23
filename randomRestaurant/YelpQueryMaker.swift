@@ -32,16 +32,6 @@ class YelpQuery {
     // Get businesses from Yelp API v3.
     func startQuery() {
         print("Start query")
-        /*
-        httpRequest = URLRequest(
-            url: url,
-            httpMethod: "GET",
-            httpHeaderValue: "Bearer \(accessToken)",
-            httpHeaderField: "Authorization",
-            cachePolicy: .returnCacheDataElseLoad,
-            timeoutInterval: 120.0
-        )
-        */
         guard let urlObj = URL(string: url) else {
             fatalError("Couldn't make an URL object from url string: \(url).")
         }
@@ -60,9 +50,7 @@ class YelpQuery {
             
             //print("businesses: \(businesses)")
             self.completion?(businesses)
-        }
-        
-        //httpRequest.makeRequest()
+        }        
     }
     
     /*

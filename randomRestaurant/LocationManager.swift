@@ -6,7 +6,7 @@
 //  Copyright © 2017 Zhe Cui. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import CoreLocation
 import UIKit
 

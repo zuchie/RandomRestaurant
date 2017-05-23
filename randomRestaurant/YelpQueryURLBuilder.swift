@@ -1,5 +1,5 @@
 //
-//  YelpURLBuilder.swift
+//  YelpQueryURLBuilder.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 8/27/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class YelpUrlQueryParameters {
+class YelpQueryURL {
     
     // MARK: Properties
     private var latitude: Double?
