@@ -310,8 +310,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
     fileprivate func process(dict: [String: Any], key: String) -> Any? {
         switch key {
-        case "image_url", "name", "price", "url", "rating", "review_count", "coordinates":
+        case "image_url", "name", "price", "url", "rating", "coordinates":
             return dict[key]
+        case "review_count":
+            return String(dict[key] as! Int) + " reviews"
         case "categories":
             guard let categories = dict[key] as? [[String: String]] else {
                 fatalError("Couldn't get categories from: \(String(describing: dict[key]))")
@@ -359,7 +361,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         cell.category.text = process(dict: content, key: "categories") as? String
         cell.rating = process(dict: content, key: "rating") as? Float
         cell.ratingImage.image = getRatingStar(from: cell.rating)
-        cell.reviewCount.text = String(process(dict: content, key: "review_count") as! Int)  + " reviews"
+        cell.reviewCount.text = process(dict: content, key: "review_count") as? String
         cell.price.text = process(dict: content, key: "price") as? String
         cell.yelpUrl = process(dict: content, key: "url") as? String
         cell.latitude = (process(dict: content, key: "coordinates") as? [String: Double])?["latitude"]
