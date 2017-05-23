@@ -1,5 +1,5 @@
 //
-//  Location.swift
+//  LocationManager.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 4/18/17.

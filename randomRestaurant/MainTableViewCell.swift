@@ -31,7 +31,6 @@ class MainTableViewCell: UITableViewCell {
     var longitude: Double!
     var address: String!
     var rating: Float!
-    //var reviewsTotal: Int!
     var imageUrl: String!
     
     var delegate: MainTableViewCellDelegate?

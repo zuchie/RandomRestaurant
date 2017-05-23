@@ -1,5 +1,5 @@
 //
-//  Address.swift
+//  AddressBuilder.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 8/30/16.

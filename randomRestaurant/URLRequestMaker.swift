@@ -1,5 +1,5 @@
 //
-//  HttpRequest.swift
+//  URLRequestMaker.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 5/5/17.
@@ -9,9 +9,10 @@
 import Foundation
 import UIKit
 
-class HttpRequest {
+extension URLRequest {
     
     // Properties.
+    /*
     private var url: String
     private var httpMethod: String
     private struct HttpHeader {
@@ -21,7 +22,8 @@ class HttpRequest {
     private var httpHeader: HttpHeader
     private var cachePolicy: NSURLRequest.CachePolicy
     private var timeoutInterval: Double
-    
+    */
+    /*
     private var results: [String: Any]?
     
     var completion: ((_ results: [String: Any]?) -> Void)?
@@ -34,9 +36,10 @@ class HttpRequest {
         self.cachePolicy = cachePolicy
         self.timeoutInterval = timeoutInterval
     }
-    
+    */
     // Methods.
-    func makeRequest() {
+    public func makeRequest(completion: @escaping (_ data: Data) -> Void) {
+        /*
         guard let urlObj = URL(string: url) else {
             fatalError("Couldn't make an URL object from url string: \(url).")
         }
@@ -45,17 +48,18 @@ class HttpRequest {
         request.addValue(httpHeader.value, forHTTPHeaderField: httpHeader.field)
         request.cachePolicy = cachePolicy
         request.timeoutInterval = timeoutInterval
+        */
         
-        if let cachedResponse = URLCache.shared.cachedResponse(for: request) {
+        if let cachedResponse = URLCache.shared.cachedResponse(for: self) {
             print("Cached response.")
             print("Disk usage/capacity: \(URLCache.shared.currentDiskUsage)/\(URLCache.shared.diskCapacity), memory usage/capacity: \(URLCache.shared.currentMemoryUsage)/\(URLCache.shared.memoryCapacity)")
 
-            results = jsonToDictionary(cachedResponse.data)
-            completion?(results)
+            //results = jsonToDictionary(cachedResponse.data)
+            completion(cachedResponse.data)
             
         } else {
             print("Fresh response.")
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            let task = URLSession.shared.dataTask(with: self) { data, response, error in
                 
                 if let err = error {
                     let alert = UIAlertController(
@@ -73,26 +77,12 @@ class HttpRequest {
                 }
                 
                 let cacheResponse = CachedURLResponse(response: response, data: data)
-                URLCache.shared.storeCachedResponse(cacheResponse, for: request)
+                URLCache.shared.storeCachedResponse(cacheResponse, for: self)
 
-                self.results = self.jsonToDictionary(data)
-                self.completion?(self.results)
-                
+                //self.results = self.jsonToDictionary(data)
+                completion(data)
             }
             task.resume()
         }
-    }
-    
-    // Helper functions.
-    fileprivate func jsonToDictionary(_ data: Data) -> [String: Any]? {
-        // Convert server json response to NSDictionary
-        var json: Any?
-        do {
-            json = try JSONSerialization.jsonObject(with: data, options: [])
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        return json as? [String: Any]
     }
 }

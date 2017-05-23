@@ -1,5 +1,5 @@
 //
-//  YelpUrlQueryParameters.swift
+//  YelpURLBuilder.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 8/27/16.
@@ -16,7 +16,7 @@ class YelpUrlQueryParameters {
     private var category: String?
     private var radius: Int?
     private var limit: Int?
-    private(set) var openAt: Int?
+    private var openAt: Int?
     private var sortBy: String?
     
     var queryString: String {

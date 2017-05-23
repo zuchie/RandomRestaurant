@@ -1,5 +1,5 @@
 //
-//  Alert.swift
+//  AlertMaker.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 4/21/17.

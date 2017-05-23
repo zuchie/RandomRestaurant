@@ -226,7 +226,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             guard let queryString = yelpQueryParams?.queryString else {
                 fatalError("Couldn't get Yelp query string.")
             }
-            guard let query = YelpQuery(queryString: queryString) else {
+            guard let query = YelpQuery(queryString) else {
                 fatalError("Yelp query is nil.")
             }
             yelpQuery = query
@@ -263,38 +263,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             print("Params no change, skip query")
         }
     }
-    /*
-    enum Operation {
-        case getValue(([String: Any], String) -> Any)
-    }
-    
-    private var operations: [String: Operation] = [
-        "image_url": Operation.getValue({ $0[$1] as Any }),
-        "name": Operation.getValue({ $0[$1] as Any }),
-        "categories": Operation.getValue({
-            guard let categories = $0[$1] as? [[String: String]] else {
-                fatalError("Couldn't get categories from: \(String(describing: $0[$1]))")
-            }
-            let categoriesString = categories.reduce("", { $0 + $1["title"]! }).characters.dropLast(2)
-            return String(categoriesString)
-        }),
-        "rating": Operation.getValue({ $0[$1] as Any }),
-        "review_count": Operation.getValue({ (String($0[$1] as! Int) + " reviews") as Any }),
-        "price": Operation.getValue({ $0[$1] as Any }),
-        "url": Operation.getValue({ $0[$1] as Any }),
-        "coordinates": Operation.getValue({ $0[$1] as Any }),
-        "location": Operation.getValue({
-            guard let location = $0[$1] as? [String: Any] else {
-                fatalError("Couldn't get location from: \(String(describing: $0[$1]))")
-            }
-            guard let address = Address(of: location) else {
-                fatalError("Couldn't compose address from location: \(location)")
-            }
-            
-            return address.composeAddress()
-        })
-    ]
-    */
+
     fileprivate func process(dict: [String: Any], key: String) -> Any? {
         switch key {
         case "image_url", "name", "price", "url", "rating", "review_count", "coordinates":
@@ -330,39 +299,27 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // Table view
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
-        print("configure cell")
         let content = restaurants[indexPath.row]
-        // Image
         cell.imageUrl = process(dict: content, key: "image_url") as? String
         var image: UIImage?
         if let value = imgCache.get(by: cell.imageUrl) as? UIImage {
-            print("found image in cache")
             image = value
         } else {
             // TODO: Pick a globe image
-            print("use globe image")
             image = UIImage(named: "globe")
         }
-        
         DispatchQueue.main.async {
             cell.mainImage.image = image
         }
-        // Name
         cell.name.text = process(dict: content, key: "name") as? String
-        // Categories
         cell.category.text = process(dict: content, key: "categories") as? String
-        // Rating
         cell.rating = process(dict: content, key: "rating") as? Float
         cell.ratingImage.image = getRatingStar(from: cell.rating)
-        
-        //cell.reviewsTotal = process(dict: content, key: "review_count") as? Int
         cell.reviewCount.text = process(dict: content, key: "review_count") as? String
         cell.price.text = process(dict: content, key: "price") as? String
         cell.yelpUrl = process(dict: content, key: "url") as? String
         cell.latitude = (process(dict: content, key: "coordinates") as? [String: Double])?["latitude"]
         cell.longitude = (process(dict: content, key: "coordinates") as? [String: Double])?["longitude"]
-        
-        //let location: PickedBusinessLocation = PickedBusinessLocation(businessObj: (process(dict: content, key: "location") as? [String: Any])!)!
         cell.address = process(dict: content, key: "location") as? String
         cell.likeButton.isSelected = objectSaved(name: cell.name.text!)
         cell.delegate = self
@@ -496,7 +453,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                                           message: "Couldn't find a restaurant.",
                                           actions: [.ok]
             )
-            self.present(alert, animated: false)
+            //self.present(alert, animated: false)
+            alert.show()
         }
     }
     
@@ -517,7 +475,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                                   message: "Couldn't find a restaurant.",
                                   actions: [.ok]
                 )
-                self.present(alert, animated: false)
+                //self.present(alert, animated: false)
+                alert.show()
             } else {
                 if let mapVC = destinationVC as? GoogleMapViewController {
                     
@@ -525,7 +484,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                     mapVC.setBizCoordinate2D(CLLocationCoordinate2DMake(cell.latitude
                         , cell.longitude))
                     mapVC.setBizName(cell.name.text!)
-                    mapVC.setDepartureTime(Int((yelpQueryParams?.openAt)!))
+                    mapVC.setDepartureTime(Int(queryParams.date.timeIntervalSince1970))
                 }
             }
         }
