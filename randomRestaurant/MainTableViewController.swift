@@ -316,7 +316,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             guard let categories = dict[key] as? [[String: String]] else {
                 fatalError("Couldn't get categories from: \(String(describing: dict[key]))")
             }
-            let categoriesString = categories.reduce("", { $0 + $1["title"]! }).characters.dropLast(2)
+            let categoriesString = categories.reduce("", { $0 + $1["title"]! + ", " }).characters.dropLast(2)
             return String(categoriesString)
         case "location":
             guard let location = dict[key] as? [String: Any] else {
@@ -359,7 +359,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         cell.category.text = process(dict: content, key: "categories") as? String
         cell.rating = process(dict: content, key: "rating") as? Float
         cell.ratingImage.image = getRatingStar(from: cell.rating)
-        cell.reviewCount.text = process(dict: content, key: "review_count") as? String
+        cell.reviewCount.text = String(process(dict: content, key: "review_count") as! Int)  + " reviews"
         cell.price.text = process(dict: content, key: "price") as? String
         cell.yelpUrl = process(dict: content, key: "url") as? String
         cell.latitude = (process(dict: content, key: "coordinates") as? [String: Double])?["latitude"]
