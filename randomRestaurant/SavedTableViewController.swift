@@ -164,6 +164,8 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
             print("Deleted from filtered")
         }
         
+        appDelegate?.saveContext()
+        /*
         if moc.hasChanges {
             do {
                 try moc.save()
@@ -172,6 +174,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
                 fatalError("Failure to save context: \(error)")
             }
         }
+        */
     }
     
     /*

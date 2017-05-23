@@ -1,5 +1,5 @@
 //
-//  GoogleMapViewController.swift
+//  GoogleMapsViewController.swift
 //  randomRestaurant
 //
 //  Created by Zhe Cui on 8/30/16.
@@ -9,13 +9,13 @@
 import UIKit
 import GoogleMaps
 
-class GoogleMapViewController: UIViewController {
+class GoogleMapsViewController: UIViewController {
     
     fileprivate var location: String?
     fileprivate var bizCoordinate2D: CLLocationCoordinate2D?
     fileprivate var bizName: String?
     fileprivate var departureTime: Int?
-    fileprivate var drawRoute = GetDirection()
+    fileprivate var drawRoute = GoogleMapsGetDirection()
     fileprivate var mapView: GMSMapView!
     fileprivate var isNavigationBarHidden: Bool?
 

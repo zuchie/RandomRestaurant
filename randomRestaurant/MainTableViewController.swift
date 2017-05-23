@@ -162,7 +162,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         appDelegate?.saveContext()
     }
     
-    // Is the object with name in Saved?
+    // Is the object already in Saved?
     fileprivate func objectSaved(url: String) -> Bool {
         let request = NSFetchRequest<SavedMO>(entityName: "Saved")
         request.predicate = NSPredicate(format: "yelpUrl == %@", url)
@@ -476,7 +476,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 //self.present(alert, animated: false)
                 alert.show()
             } else {
-                if let mapVC = destinationVC as? GoogleMapViewController {
+                if let mapVC = destinationVC as? GoogleMapsViewController {
                     
                     mapVC.setBizLocation(cell.address)
                     mapVC.setBizCoordinate2D(CLLocationCoordinate2DMake(cell.latitude
