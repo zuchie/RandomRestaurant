@@ -14,7 +14,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController clearsSelectionOnViewWillAppear="NO" id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -159,6 +159,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Map" id="NHC-FU-teD" userLabel="Map">
                             <connections>
                                 <action selector="handleMapTap:" destination="wH5-b3-TbF" id="hzq-YO-RVi"/>
+                                <segue destination="dqH-Fl-zN4" kind="show" identifier="mapButtonToMap" id="feE-3D-h9T"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -180,7 +181,7 @@
                 <navigationController title="SavedNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YiH-Zj-usg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -217,7 +218,7 @@
                 <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="fMY-P1-Xr7" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="search" id="FZh-3l-B0e"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="w0E-s0-UDt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="w0E-s0-UDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -231,4 +232,7 @@
             <point key="canvasLocation" x="2760.8000000000002" y="754.27286356821594"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="feE-3D-h9T"/>
+    </inferredMetricsTieBreakers>
 </document>

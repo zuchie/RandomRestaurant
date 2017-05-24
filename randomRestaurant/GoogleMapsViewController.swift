@@ -20,7 +20,14 @@ class GoogleMapsViewController: UIViewController {
     fileprivate var isNavigationBarHidden: Bool?
 
     fileprivate var label = UILabel()
-    //fileprivate var button = UIButton()
+    
+    var businesses = [MainTableViewController.DataSource()]
+    var markersOnly = false
+    
+    func getBusinesses(_ data: [MainTableViewController.DataSource]) {
+        markersOnly = true
+        businesses = data
+    }
     
     func setBizLocation(_ location: String) {
         self.location = location
@@ -41,13 +48,18 @@ class GoogleMapsViewController: UIViewController {
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
-        print("hello google map")
         isNavigationBarHidden = navigationController?.isNavigationBarHidden
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
         }
         
         tabBarController?.tabBar.isHidden = true
+        
+        if !markersOnly {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        } else {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
         
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
     }
@@ -60,50 +72,78 @@ class GoogleMapsViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
         //view.removeObserver(self, forKeyPath: "myLocation")
     }
-
-
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
-        //if keyPath == "myLocation" && ((object as AnyObject).isKind(of: GMSMapView())) {
         if keyPath == "myLocation" && object is GMSMapView {
             
-            // Draw route.
-            drawRoute.makeGoogleDirectionsUrl(
-                "https://maps.googleapis.com/maps/api/directions/json?",
-                origin: mapView.myLocation!.coordinate,
-                dest: bizCoordinate2D!,
-                depart: departureTime!,
-                key: "AIzaSyA-vPWnAEHdO3V4TwUbedRuJO1mDEgIjr0"
-            )
-            
-            drawRoute.makeUrlRequest() { routesPoints, distances, durationInTraffic, viewport in
-                
-                // Draw from returned polyline.
-                for points in routesPoints {
-                    //print("poly points: \(points)")
-                    DispatchQueue.main.async(execute: {
-                        let path = GMSMutablePath(fromEncodedPath: points)
-                        let polyline = GMSPolyline(path: path)
-                        polyline.strokeWidth = 3
-                        
-                        polyline.map = self.mapView
-                    })
+            if markersOnly {
+                var coordinates = [CLLocationCoordinate2D]()
+                for member in businesses {
+                    guard let location = member.location else {
+                        fatalError("Couldn't get location from businesses.")
+                    }
+                    coordinates.append(location)
                 }
                 
-                print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
+                guard let minLat = coordinates.map({ $0.latitude }).min(by: { Swift.abs($0) < Swift.abs($1) }),
+                let minLong = coordinates.map({ $0.longitude }).min(by: { Swift.abs($0) < Swift.abs($1) }),
+                let maxLat = coordinates.map({ $0.latitude }).max(by: { Swift.abs($0) < Swift.abs($1) }),
+                    let maxLong = coordinates.map({ $0.longitude }).max(by: { Swift.abs($0) < Swift.abs($1) }) else {
+                        fatalError("Could min, max coordinates.")
+                }
                 
-                DispatchQueue.main.async(execute: {
-                    
+                let northeast = CLLocationCoordinate2DMake(minLat, minLong)
+                let southwest = CLLocationCoordinate2DMake(maxLat, maxLong)
+                
+                DispatchQueue.main.async {
                     // Update camera to new bounds.
-                    let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
+                    let bounds = GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
                     let edges = UIEdgeInsetsMake(120, 40, 40, 40)
                     let camera = GMSCameraUpdate.fit(bounds, with: edges)
                     
-                    print("update camera")
+                    //print("update camera")
                     self.mapView.animate(with: camera)
+                }
+            } else {
+                // Draw route.
+                drawRoute.makeGoogleDirectionsUrl(
+                    "https://maps.googleapis.com/maps/api/directions/json?",
+                    origin: mapView.myLocation!.coordinate,
+                    dest: bizCoordinate2D!,
+                    depart: departureTime!,
+                    key: "AIzaSyA-vPWnAEHdO3V4TwUbedRuJO1mDEgIjr0"
+                )
+                
+                drawRoute.makeUrlRequest() { routesPoints, distances, durationInTraffic, viewport in
                     
-                    self.label.text = "\(distances.first!), \(durationInTraffic)"
-                })
+                    // Draw from returned polyline.
+                    for points in routesPoints {
+                        //print("poly points: \(points)")
+                        DispatchQueue.main.async(execute: {
+                            let path = GMSMutablePath(fromEncodedPath: points)
+                            let polyline = GMSPolyline(path: path)
+                            polyline.strokeWidth = 3
+                            
+                            polyline.map = self.mapView
+                        })
+                    }
+                    
+                    print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
+                    
+                    DispatchQueue.main.async(execute: {
+                        
+                        // Update camera to new bounds.
+                        let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
+                        let edges = UIEdgeInsetsMake(120, 40, 40, 40)
+                        let camera = GMSCameraUpdate.fit(bounds, with: edges)
+                        
+                        //print("update camera")
+                        self.mapView.animate(with: camera)
+                        
+                        self.label.text = "\(distances.first!), \(durationInTraffic)"
+                    })
+                }
             }
 
         }
@@ -116,40 +156,55 @@ class GoogleMapsViewController: UIViewController {
         
         // Create a GMSCameraPosition that tells the map to display the
         // business position at zoom level 12.
-        print("==loadview")
-        let camera = GMSCameraPosition.camera(withTarget: bizCoordinate2D!, zoom: 10.0)
+        //print("==loadview")
+        let target: CLLocationCoordinate2D
+        if markersOnly {
+            target = businesses[0].location!
+        } else {
+            target = bizCoordinate2D!
+        }
+        let camera = GMSCameraPosition.camera(withTarget: target, zoom: 10.0)
         mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        
-        //mapView = GMSMapView()
-
         mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
         
         view = mapView
         
-        // Creates a marker in the center of the map.
-        let marker = GMSMarker()
-        marker.position = bizCoordinate2D!
-        marker.title = bizName
-        marker.snippet = location
-        marker.map = mapView
+        if markersOnly {
+            for member in businesses {
+                let marker = GMSMarker()
+                marker.position = member.location!
+                marker.title = member.name
+                marker.snippet = member.address
+                marker.map = mapView
+            }
+        } else {
+            // Creates a marker in the center of the map.
+            let marker = GMSMarker()
+            marker.position = bizCoordinate2D!
+            marker.title = bizName
+            marker.snippet = location
+            marker.map = mapView
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Add label.
-        let screenBounds = UIScreen.main.bounds
-        let labelWidth: CGFloat = screenBounds.width * 0.5
-        let labelHeight: CGFloat = labelWidth / 9.0
-        
-        label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
-        label.backgroundColor = UIColor.lightGray
-        label.textAlignment = .center
-        label.textColor = UIColor.white
-        label.adjustsFontSizeToFitWidth = true
-        
-        view.addSubview(label)
+        if !markersOnly {
+            // Add label.
+            let screenBounds = UIScreen.main.bounds
+            let labelWidth: CGFloat = screenBounds.width * 0.5
+            let labelHeight: CGFloat = labelWidth / 9.0
+            
+            label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
+            label.backgroundColor = UIColor.lightGray
+            label.textAlignment = .center
+            label.textColor = UIColor.white
+            label.adjustsFontSizeToFitWidth = true
+            
+            view.addSubview(label)
+        }
     }
     
     // Open Google Maps app for navigation. Need to add "comgooglemaps", and "comgooglemaps-x-callback" into plist "LSApplicationQueriesSchemes" array.

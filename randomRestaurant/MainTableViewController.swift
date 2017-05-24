@@ -14,10 +14,6 @@ import CoreLocation
 class MainTableViewController: UITableViewController, MainTableViewCellDelegate {
     
     // Properties
-    
-    //@IBOutlet weak var header: UIView!
-    //@IBOutlet weak var category: UILabel!
-    
     var titleVC = NavItemTitleViewController()
     
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -29,6 +25,21 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate var restaurants = [[String: Any]]()
     fileprivate var imgCache = Cache<String>()
+    
+    struct DataSource {
+        var imageUrl: String?
+        var name: String?
+        var category: String?
+        var rating: Float?
+        var reviewCount: String?
+        var price: String?
+        var yelpUrl: String?
+        var location: CLLocationCoordinate2D?
+        var address: String?
+        
+    }
+    
+    var dataSource = [DataSource]()
     
     fileprivate let yelpStars: [Float: String] = [0.0: "regular_0", 1.0: "regular_1", 1.5: "regular_1_half", 2.0: "regular_2", 2.5: "regular_2_half", 3.0: "regular_3", 3.5: "regular_3_half", 4.0: "regular_4", 4.5: "regular_4_half", 5.0: "regular_5"]
     
@@ -54,10 +65,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     var queryParams = QueryParams()
     var imageCount = 0
     fileprivate var indicator: IndicatorWithContainer!
-    //fileprivate var indicatorContainer: UIView!
     
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
     
+
     // Methods
     
     override func viewDidLoad() {
@@ -271,6 +282,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.restaurants = results
                 self.imgCache.removeAll(keepingCapacity: false)
                 self.imageCount = self.restaurants.count
+                self.getDataSource()
                 
                 if self.restaurants.count == 0 {
                     let headerHeight = self.tableView.tableHeaderView!.frame.height
@@ -318,8 +330,17 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
     fileprivate func process(dict: [String: Any], key: String) -> Any? {
         switch key {
-        case "image_url", "name", "price", "url", "rating", "coordinates":
+        case "image_url", "name", "price", "url", "rating":
             return dict[key]
+        case "coordinates":
+            guard let coordinate = dict[key] as? [String: Double] else {
+                fatalError("Couldn't get coordinate.")
+            }
+            guard let lat = coordinate["latitude"],
+                let long = coordinate["longitude"] else {
+                    fatalError("Couldnt' get latitude and longitude.")
+            }
+            return CLLocationCoordinate2DMake(lat, long)
         case "review_count":
             return String(dict[key] as! Int) + " reviews"
         case "categories":
@@ -341,6 +362,24 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
     
+    fileprivate func getDataSource() {
+        dataSource.removeAll(keepingCapacity: false)
+        for member in restaurants {
+            let data = DataSource(
+                imageUrl: process(dict: member, key: "image_url") as? String,
+                name: process(dict: member, key: "name") as? String,
+                category: process(dict: member, key: "categories") as? String,
+                rating: process(dict: member, key: "rating") as? Float,
+                reviewCount: process(dict: member, key: "review_count") as? String,
+                price: process(dict: member, key: "price") as? String,
+                yelpUrl: process(dict: member, key: "url") as? String,
+                location: process(dict: member, key: "coordinates") as? CLLocationCoordinate2D,
+                address: process(dict: member, key: "location") as? String
+            )
+            dataSource.append(data)
+        }
+    }
+    
     fileprivate func getRatingStar(from rating: Float) -> UIImage {
         guard let name = yelpStars[rating] else {
             fatalError("Couldn't get image name from rating: \(rating)")
@@ -353,8 +392,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // Table view
     fileprivate func configureCell(_ cell: MainTableViewCell, _ indexPath: IndexPath) {
-        let content = restaurants[indexPath.row]
-        cell.imageUrl = process(dict: content, key: "image_url") as? String
+        let data = dataSource[indexPath.row]
+        cell.imageUrl = data.imageUrl
         var image: UIImage?
         if let value = imgCache.get(by: cell.imageUrl) as? UIImage {
             image = value
@@ -365,16 +404,16 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         DispatchQueue.main.async {
             cell.mainImage.image = image
         }
-        cell.name.text = process(dict: content, key: "name") as? String
-        cell.category.text = process(dict: content, key: "categories") as? String
-        cell.rating = process(dict: content, key: "rating") as? Float
+        cell.name.text = data.name
+        cell.category.text = data.category
+        cell.rating = data.rating
         cell.ratingImage.image = getRatingStar(from: cell.rating)
-        cell.reviewCount.text = process(dict: content, key: "review_count") as? String
-        cell.price.text = process(dict: content, key: "price") as? String
-        cell.yelpUrl = process(dict: content, key: "url") as? String
-        cell.latitude = (process(dict: content, key: "coordinates") as? [String: Double])?["latitude"]
-        cell.longitude = (process(dict: content, key: "coordinates") as? [String: Double])?["longitude"]
-        cell.address = process(dict: content, key: "location") as? String
+        cell.reviewCount.text = data.reviewCount
+        cell.price.text = data.price
+        cell.yelpUrl = data.yelpUrl
+        cell.latitude = data.location?.latitude
+        cell.longitude = data.location?.longitude
+        cell.address = data.address
         cell.likeButton.isSelected = objectSaved(url: cell.yelpUrl)
         cell.delegate = self
 
@@ -487,7 +526,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == "segueToMap" && sender is MainTableViewCell {
+        if (identifier == "segueToMap" || identifier == "mapButtonToMap"), ((sender is MainTableViewCell) || (sender is UIBarButtonItem)) {
             return true
         } else {
             return false
@@ -495,17 +534,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
 
     @IBAction func handleMapTap(_ sender: UIBarButtonItem) {
-        
+        performSegue(withIdentifier: "mapButtonToMap", sender: sender)
     }
-    /*
-    // Segue to Category view controller
-    @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
-        guard (sender.view != nil) else {
-            fatalError("Unexpected view: \(String(describing: sender.view))")
-        }
-        performSegue(withIdentifier: "segueToCategories", sender: self)
-    }
-    */
+
     // Segue to Map view controller
     func showMap(cell: MainTableViewCell) {
         performSegue(withIdentifier: "segueToMap", sender: cell)
@@ -527,8 +558,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if segue.identifier == "segueToMap" && sender is MainTableViewCell {
+        if segue.identifier == "segueToMap", sender is MainTableViewCell {
             guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(String(describing: sender))")
             }
@@ -550,6 +580,13 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                     mapVC.setDepartureTime(Int(queryParams.date.timeIntervalSince1970))
                 }
             }
+        }
+        if segue.identifier == "mapButtonToMap", sender is UIBarButtonItem {
+            guard let vc = segue.destination as? GoogleMapsViewController else {
+                print("Couldn't show Google Maps VC.")
+                return
+            }
+            vc.getBusinesses(dataSource)
         }
     }
     
