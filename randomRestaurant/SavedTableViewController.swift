@@ -251,7 +251,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
     }
     */
     func didDismissSearchController(_ searchController: UISearchController) {
-        navigationItem.rightBarButtonItem = editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     /*

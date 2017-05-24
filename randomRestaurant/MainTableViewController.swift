@@ -76,6 +76,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         print("MainTableViewController view did load")
         
+        barButtonItem = navigationItem.rightBarButtonItem
         addViewToNavBar()
 
         titleVC.completion = {
@@ -283,18 +284,18 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.imgCache.removeAll(keepingCapacity: false)
                 self.imageCount = self.restaurants.count
                 self.getDataSource()
+                self.removeImgSubView(imgView: self.noResultImgView)
                 
                 if self.restaurants.count == 0 {
                     let navBarHeight = self.navigationController!.navigationBar.frame.height
                     let tabBarHeight = self.tabBarController!.tabBar.frame.height
                     self.addImgSubView(imgView: self.noResultImgView, x: 0, y: navBarHeight, width: self.view.frame.width, height: self.view.frame.height - navBarHeight - tabBarHeight)
-                    
+                    /*
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
+                    */
                     self.stopRefreshOrIndicator()
-                } else {
-                    self.removeImgSubView(imgView: self.noResultImgView)
                 }
                 
                 for member in self.restaurants {
@@ -408,8 +409,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
         DispatchQueue.main.async {
             if self.dataSource.count == 0 {
-                self.barButtonItem = self.navigationItem.rightBarButtonItem
-                self.navigationItem.rightBarButtonItem = nil
+                if self.navigationItem.rightBarButtonItem != nil {
+                    self.navigationItem.rightBarButtonItem = nil
+                }
             } else {
                 if self.navigationItem.rightBarButtonItem == nil {
                     self.navigationItem.rightBarButtonItem = self.barButtonItem
