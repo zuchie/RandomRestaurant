@@ -11,28 +11,29 @@ import UIKit
 
 extension URLRequest {
     
-    public func makeRequest(completion: @escaping (_ data: Data) -> Void) {
+    public func makeRequest(completion: @escaping (_ error: Error?, _ data: Data?) -> Void) {
         if let cachedResponse = URLCache.shared.cachedResponse(for: self) {
             print("Cached response.")
             print("Disk usage/capacity: \(URLCache.shared.currentDiskUsage)/\(URLCache.shared.diskCapacity), memory usage/capacity: \(URLCache.shared.currentMemoryUsage)/\(URLCache.shared.memoryCapacity)")
 
-            completion(cachedResponse.data)
+            completion(nil, cachedResponse.data)
             
         } else {
             print("Fresh response.")
             let task = URLSession.shared.dataTask(with: self) { data, response, error in
                 
                 if let err = error {
+                    /*
                     let alert = UIAlertController(
                         title: "Error: \(err.localizedDescription)",
                         message: "Oops, looks like the server is not available now, please try again at a later time.",
                         actions: [.ok]
                     )
                     alert.show()
-                    
+                    */
+                    completion(err, nil)
                     return
                 }
-                
                 guard let data = data, let response = response else {
                     fatalError("No data or response is received.")
                 }
@@ -40,7 +41,7 @@ extension URLRequest {
                 let cacheResponse = CachedURLResponse(response: response, data: data)
                 URLCache.shared.storeCachedResponse(cacheResponse, for: self)
 
-                completion(data)
+                completion(nil, data)
             }
             task.resume()
         }

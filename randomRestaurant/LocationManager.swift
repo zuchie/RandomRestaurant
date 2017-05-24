@@ -15,6 +15,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     static let shared = LocationManager()
     fileprivate var locationManager = CLLocationManager()
     var completion: ((_ location: CLLocation) -> Void)?
+    var completionWithError: ((_ error: Error) -> Void)?
     var updateCount = 0
     
     override init() {
@@ -51,39 +52,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location updating error: \(error.localizedDescription)")
         
-        let alert: UIAlertController
-        
-        switch error._code {
-        case CLError.network.rawValue:
-            alert = UIAlertController(
-                title: "Location Services not available",
-                message: "Please make sure that your device is connected to the network",
-                actions: [.ok]
-            )
-        case CLError.denied.rawValue:
-            alert = UIAlertController(
-                title: "Location Access Disabled",
-                message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
-                actions: [.cancel, .openSettings]
-            )
-            // Cancel location updating from requestLocation(), otherwise locationUnknown error will follow.
-            locationManager.stopUpdatingLocation()
-        case CLError.locationUnknown.rawValue:
-            alert = UIAlertController(
-                title: "Location Unknown",
-                message: "Couldn't get location, please try again at a later time.",
-                actions: [.ok]
-            )
-        default:
-            alert = UIAlertController(
-                title: "Bad location services",
-                message: "Location services got issue, please try again at a later time.",
-                actions: [.ok]
-            )
-        }
-        
-        alert.show()
         manager.stopUpdatingLocation()
+        completionWithError?(error)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

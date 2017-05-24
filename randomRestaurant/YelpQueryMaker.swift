@@ -19,6 +19,7 @@ class YelpQuery {
     private let accessToken = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
     
     var completion: ((_ results: [[String: Any]]) -> Void)?
+    var completionWithError: ((_ error: Error) -> Void)?
     
     init?(_ queryString: String) {
         guard let query = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
@@ -39,8 +40,14 @@ class YelpQuery {
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
-        request.makeRequest { data in
-            guard let results = data.jsonToDictionary() else {
+        request.makeRequest { error, data in
+            if let err = error {
+                self.completionWithError?(err)
+                return
+            }
+            
+            guard let dat = data,
+                let results = dat.jsonToDictionary() else {
                 fatalError("Didn't get expected results.")
             }
             

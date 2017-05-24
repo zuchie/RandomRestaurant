@@ -23,6 +23,7 @@ class GoogleMapsGetDirection {
     }
     
     fileprivate var viewport = Bounds()
+    var completionWithError: ((_ error: Error?) -> Void)?
     
     // MARK: Helper functions.
     
@@ -85,8 +86,14 @@ class GoogleMapsGetDirection {
         request.httpMethod = "GET"
         request.timeoutInterval = 120
 
-        request.makeRequest { data in
-            guard let convertedJsonIntoDict = data.jsonToDictionary() else {
+        request.makeRequest { error, data in
+            
+            if error != nil {
+                self.completionWithError?(error!)
+                return
+            }
+            
+            guard let convertedJsonIntoDict = data?.jsonToDictionary() else {
                 fatalError("Couldn't process data.")
             }
             

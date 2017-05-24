@@ -47,6 +47,36 @@ class GoogleMapsViewController: UIViewController {
         self.departureTime = time - NSTimeZone.local.secondsFromGMT()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        drawRoute.completionWithError = { error in
+            let alert = UIAlertController(
+                title: "Error: \(String(describing: error?.localizedDescription))",
+                message: "Oops, looks like the Google Maps server is not available now, please try again at a later time.",
+                actions: [.ok]
+            )
+            DispatchQueue.main.async {
+                self.present(alert, animated: false, completion: { return })
+            }
+        }
+        
+        if !markersOnly {
+            // Add label.
+            let screenBounds = UIScreen.main.bounds
+            let labelWidth: CGFloat = screenBounds.width * 0.5
+            let labelHeight: CGFloat = labelWidth / 9.0
+            
+            label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
+            label.backgroundColor = UIColor.lightGray
+            label.textAlignment = .center
+            label.textColor = UIColor.white
+            label.adjustsFontSizeToFitWidth = true
+            
+            view.addSubview(label)
+        }
+    }
+    
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
         isNavigationBarHidden = navigationController?.isNavigationBarHidden
@@ -189,25 +219,6 @@ class GoogleMapsViewController: UIViewController {
             marker.title = bizName
             marker.snippet = location
             marker.map = mapView
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        if !markersOnly {
-            // Add label.
-            let screenBounds = UIScreen.main.bounds
-            let labelWidth: CGFloat = screenBounds.width * 0.5
-            let labelHeight: CGFloat = labelWidth / 9.0
-            
-            label.frame = CGRect(x: screenBounds.width / 2.0 - labelWidth / 2.0, y: screenBounds.height - labelHeight , width: labelWidth, height: labelHeight)
-            label.backgroundColor = UIColor.lightGray
-            label.textAlignment = .center
-            label.textColor = UIColor.white
-            label.adjustsFontSizeToFitWidth = true
-            
-            view.addSubview(label)
         }
     }
     

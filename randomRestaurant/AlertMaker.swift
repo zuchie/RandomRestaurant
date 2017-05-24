@@ -51,6 +51,7 @@ extension UIAlertController {
      Presenting alerts on a temporary UIViewController.
      
      */
+    /*
     func show() {
         print("Show alert")
         let window = UIWindow(frame: UIScreen.main.bounds)
@@ -62,4 +63,5 @@ extension UIAlertController {
             window.rootViewController?.present(self, animated: false, completion: nil)
         }
     }
+    */
 }

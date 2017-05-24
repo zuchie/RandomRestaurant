@@ -101,6 +101,38 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             self.doYelpQuery()
         }
         
+        locationManager.completionWithError = { error in
+            let alert: UIAlertController
+            
+            switch error._code {
+            case CLError.network.rawValue:
+                alert = UIAlertController(
+                    title: "Location Services not available",
+                    message: "Please make sure that your device is connected to the network",
+                    actions: [.ok]
+                )
+            case CLError.denied.rawValue:
+                alert = UIAlertController(
+                    title: "Location Access Disabled",
+                    message: "In order to get your current location, please open Settings and set location access of this App to 'While Using the App'.",
+                    actions: [.cancel, .openSettings]
+                )
+            case CLError.locationUnknown.rawValue:
+                alert = UIAlertController(
+                    title: "Location Unknown",
+                    message: "Couldn't get location, please try again at a later time.",
+                    actions: [.ok]
+                )
+            default:
+                alert = UIAlertController(
+                    title: "Bad location services",
+                    message: "Location services got issue, please try again at a later time.",
+                    actions: [.ok]
+                )
+            }
+            self.present(alert, animated: false, completion: { self.stopRefreshOrIndicator() })
+        }
+        
         indicator = IndicatorWithContainer(
             indicatorframe: CGRect(x: 0, y: 0,  width: 40, height: 40),
             center: view.center,
@@ -278,6 +310,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 fatalError("Yelp query is nil.")
             }
             yelpQuery = query
+            yelpQuery.completionWithError = { error in
+                let alert = UIAlertController(
+                    title: "Error: \(error.localizedDescription)",
+                    message: "Oops, looks like the server is not available now, please try again at a later time.",
+                    actions: [.ok]
+                )
+                self.present(alert, animated: false, completion: { self.stopRefreshOrIndicator(); return })
+            }
             yelpQuery.completion = { results in
                 print("Query completed")
                 self.restaurants = results
@@ -591,8 +631,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                                           message: "Couldn't find a restaurant.",
                                           actions: [.ok]
             )
-            //self.present(alert, animated: false)
-            alert.show()
+            self.present(alert, animated: false, completion: { return })
         }
     }
     
@@ -609,8 +648,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                                   message: "Couldn't find a restaurant.",
                                   actions: [.ok]
                 )
-                //self.present(alert, animated: false)
-                alert.show()
+                self.present(alert, animated: false, completion: { return })
             } else {
                 if let mapVC = destinationVC as? GoogleMapsViewController {
                     mapVC.setBizLocation(cell.address)
