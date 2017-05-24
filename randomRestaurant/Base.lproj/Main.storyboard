@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,7 +14,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController clearsSelectionOnViewWillAppear="NO" id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -137,37 +136,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="xVk-Gw-N5K">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="What" translatesAutoresizingMaskIntoConstraints="NO" id="B8y-Uf-MmS">
-                                    <rect key="frame" x="8" y="0.0" width="44" height="44"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" secondItem="B8y-Uf-MmS" secondAttribute="height" multiplier="1:1" id="ZtI-oH-0sM"/>
-                                    </constraints>
-                                </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mmS-rv-ZHK">
-                                    <rect key="frame" x="57" y="0.0" width="310" height="44"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstItem="mmS-rv-ZHK" firstAttribute="leading" secondItem="B8y-Uf-MmS" secondAttribute="trailing" constant="5" id="BMT-Z9-WtY"/>
-                                <constraint firstAttribute="bottom" secondItem="B8y-Uf-MmS" secondAttribute="bottom" id="PlD-25-hYf"/>
-                                <constraint firstItem="mmS-rv-ZHK" firstAttribute="top" secondItem="xVk-Gw-N5K" secondAttribute="top" id="bhF-yh-tyD"/>
-                                <constraint firstItem="B8y-Uf-MmS" firstAttribute="top" secondItem="xVk-Gw-N5K" secondAttribute="top" id="f9O-vI-Jvn"/>
-                                <constraint firstAttribute="trailingMargin" secondItem="mmS-rv-ZHK" secondAttribute="trailing" id="pjh-Fr-vq4"/>
-                                <constraint firstAttribute="bottom" secondItem="mmS-rv-ZHK" secondAttribute="bottom" id="uC3-Oa-s1Y"/>
-                                <constraint firstItem="B8y-Uf-MmS" firstAttribute="leading" secondItem="xVk-Gw-N5K" secondAttribute="leadingMargin" id="yag-32-Wt8"/>
-                            </constraints>
-                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="mainCell" rowHeight="44" id="c7P-ll-Ld1" customClass="MainTableViewCell" customModule="randomRestaurant" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c7P-ll-Ld1" id="uzd-V5-ivn">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -185,14 +156,17 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Main" id="gcO-Ox-xEb">
                         <barButtonItem key="backBarButtonItem" title="Back" id="aVD-fr-j4H"/>
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="NHC-FU-teD" userLabel="Map">
+                            <connections>
+                                <action selector="handleMapTap:" destination="wH5-b3-TbF" id="hzq-YO-RVi"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="z0z-3k-j3V">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                     <connections>
-                        <outlet property="category" destination="mmS-rv-ZHK" id="cjb-yj-Iq7"/>
-                        <outlet property="header" destination="xVk-Gw-N5K" id="pB6-aG-S99"/>
                         <segue destination="0l4-Wv-HR4" kind="presentation" identifier="segueToCategories" id="TTp-UT-Q2J"/>
                     </connections>
                 </tableViewController>
@@ -206,7 +180,7 @@
                 <navigationController title="SavedNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YiH-Zj-usg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -240,10 +214,10 @@
         <!--ExploreNavigationController-->
         <scene sceneID="Tru-Jo-M7d">
             <objects>
-                <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="fMY-P1-Xr7" sceneMemberID="viewController">
+                <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="fMY-P1-Xr7" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="search" id="FZh-3l-B0e"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="w0E-s0-UDt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="w0E-s0-UDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -257,7 +231,4 @@
             <point key="canvasLocation" x="2760.8000000000002" y="754.27286356821594"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="What" width="275" height="183"/>
-    </resources>
 </document>

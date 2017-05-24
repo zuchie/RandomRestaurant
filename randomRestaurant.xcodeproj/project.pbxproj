@@ -31,6 +31,8 @@
 		B9A7605C1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */; };
 		B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */; };
 		B9BA66081ED4F92B0081647B /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA66071ED4F92B0081647B /* ActivityIndicator.swift */; };
+		B9BA660F1ED522C90081647B /* NavItemTitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA660D1ED522C90081647B /* NavItemTitleViewController.swift */; };
+		B9BA66101ED522C90081647B /* NavItemTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9BA660E1ED522C90081647B /* NavItemTitleViewController.xib */; };
 		B9C1E3F41ED18A3C001B04CD /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C1E3F31ED18A3C001B04CD /* Cache.swift */; };
 		B9D4457A1EBC660700219D91 /* URLRequestMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D445791EBC660700219D91 /* URLRequestMaker.swift */; };
 		B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */; };
@@ -87,6 +89,8 @@
 		B9A7605B1DEE56BE005BBA2A /* FoodCategoriesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewController.swift; sourceTree = "<group>"; };
 		B9A7605D1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		B9BA66071ED4F92B0081647B /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		B9BA660D1ED522C90081647B /* NavItemTitleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavItemTitleViewController.swift; sourceTree = "<group>"; };
+		B9BA660E1ED522C90081647B /* NavItemTitleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NavItemTitleViewController.xib; sourceTree = "<group>"; };
 		B9C1E3F31ED18A3C001B04CD /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		B9D445791EBC660700219D91 /* URLRequestMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestMaker.swift; sourceTree = "<group>"; };
 		B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
@@ -139,10 +143,11 @@
 		B906DB751D5D80B10021B025 /* Saved */ = {
 			isa = PBXGroup;
 			children = (
-				B906DBDD1D8B32EF0021B025 /* Core Data */,
+				B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */,
 				B906DBB11D863B7B0021B025 /* SavedTableViewController.swift */,
 				B93728691E7D475900B911E5 /* SavedTableViewCell.swift */,
 				B937286A1E7D475900B911E5 /* SavedTableViewCell.xib */,
+				B906DBDD1D8B32EF0021B025 /* Core Data */,
 			);
 			name = Saved;
 			sourceTree = "<group>";
@@ -168,7 +173,6 @@
 		B906DBDD1D8B32EF0021B025 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				B96AE97D1D8E6EAD00257751 /* CoreDataTableViewController.swift */,
 				B965C9711E601F2E0015E2AC /* Saved.xcdatamodeld */,
 			);
 			name = "Core Data";
@@ -241,6 +245,7 @@
 				B93D33341EA6CAAE007EAD5A /* LocationManager.swift */,
 				B9D445791EBC660700219D91 /* URLRequestMaker.swift */,
 				B9BA66071ED4F92B0081647B /* ActivityIndicator.swift */,
+				B906DBA71D756B820021B025 /* AddressBuilder.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -251,7 +256,8 @@
 				B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */,
 				B965C97E1E6777E80015E2AC /* MainTableViewCell.swift */,
 				B937286D1E82482500B911E5 /* MainTableViewCell.xib */,
-				B906DBA71D756B820021B025 /* AddressBuilder.swift */,
+				B9BA660D1ED522C90081647B /* NavItemTitleViewController.swift */,
+				B9BA660E1ED522C90081647B /* NavItemTitleViewController.xib */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -388,6 +394,7 @@
 				B937286E1E82482500B911E5 /* MainTableViewCell.xib in Resources */,
 				B91AC8611D4EAC4600B0476E /* LaunchScreen.storyboard in Resources */,
 				B906DB741D5D80170021B025 /* Default-568h@2x.png in Resources */,
+				B9BA66101ED522C90081647B /* NavItemTitleViewController.xib in Resources */,
 				B937286C1E7D475900B911E5 /* SavedTableViewCell.xib in Resources */,
 				B91AC85E1D4EAC4600B0476E /* Assets.xcassets in Resources */,
 				B91AC85C1D4EAC4600B0476E /* Main.storyboard in Resources */,
@@ -464,6 +471,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9BA660F1ED522C90081647B /* NavItemTitleViewController.swift in Sources */,
 				B9D4457A1EBC660700219D91 /* URLRequestMaker.swift in Sources */,
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
 				B9BA66081ED4F92B0081647B /* ActivityIndicator.swift in Sources */,

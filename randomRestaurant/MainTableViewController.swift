@@ -15,8 +15,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // Properties
     
-    @IBOutlet weak var header: UIView!
-    @IBOutlet weak var category: UILabel!
+    //@IBOutlet weak var header: UIView!
+    //@IBOutlet weak var category: UILabel!
+    
+    var titleVC = NavItemTitleViewController()
     
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     var moc: NSManagedObjectContext!
@@ -63,15 +65,17 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         print("MainTableViewController view did load")
         
+        addViewToNavBar()
+
+        titleVC.completion = {
+            self.performSegue(withIdentifier: "segueToCategories", sender: self)
+        }
+        
         moc = appDelegate?.managedObjectContext
 
         // tableView Cell
         let cellNib = UINib(nibName: "MainTableViewCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "mainCell")
-        
-        // Header
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
-        header.addGestureRecognizer(tap)
         
         refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
@@ -94,7 +98,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         startIndicator()
         
-        getCategoryAndUpdateHeader("restaurants")
+        getCategoryAndUpdateTitleView("restaurants")
         getDate()
     }
     
@@ -125,6 +129,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.indicator.container.removeFromSuperview()
             }
         }
+    }
+    
+    fileprivate func addViewToNavBar() {
+        titleVC.view.frame = CGRect(x: 0, y: 0, width: navigationController!.navigationBar.frame.width, height: navigationController!.navigationBar.frame.height)
+        navigationItem.titleView = titleVC.view
     }
     
     // Cache
@@ -202,18 +211,24 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     // Prepare params and do query
-    fileprivate func getCategoryAndUpdateHeader(_ category: String) {
+    fileprivate func getCategoryAndUpdateTitleView(_ category: String) {
         getCategory(category)
-        updateHeader(category)
+        updateTitleView(category)
     }
     
     fileprivate func getCategory(_ category: String) {
         queryParams.category = category
     }
     
-    fileprivate func updateHeader(_ category: String) {
-        let header = (category == "restaurants" ? "What: all" : category)
-        self.category.text = header
+    fileprivate func updateTitleView(_ category: String) {
+        let title = (category == "restaurants" ? "What: all" : category)
+        guard let stackView = titleVC.view.subviews[0] as? UIStackView else {
+            fatalError("Couldn't get stack view from view.")
+        }
+        guard let label = stackView.arrangedSubviews[1] as? UILabel else {
+            fatalError("Couldn't get label from stack view.")
+        }
+        label.text = title
     }
 
     fileprivate func getDate() {
@@ -479,6 +494,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
 
+    @IBAction func handleMapTap(_ sender: UIBarButtonItem) {
+        
+    }
+    /*
     // Segue to Category view controller
     @objc fileprivate func handleHeaderTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
@@ -486,7 +505,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
         performSegue(withIdentifier: "segueToCategories", sender: self)
     }
-    
+    */
     // Segue to Map view controller
     func showMap(cell: MainTableViewCell) {
         performSegue(withIdentifier: "segueToMap", sender: cell)
@@ -548,7 +567,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         startIndicator()
         
-        getCategoryAndUpdateHeader(category)
+        getCategoryAndUpdateTitleView(category)
         getDate()
         getLocationAndStartQuery()
     }
