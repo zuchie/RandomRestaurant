@@ -51,8 +51,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     var queryParams = QueryParams()
     var imageCount = 0
-    fileprivate var indicator: UIActivityIndicatorView!
-    fileprivate var indicatorContainer: UIView!
+    fileprivate var indicator: IndicatorWithContainer!
+    //fileprivate var indicatorContainer: UIView!
     
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
     
@@ -85,8 +85,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             self.doYelpQuery()
         }
         
-        makeIndicator()
+        indicator = IndicatorWithContainer(
+            indicatorframe: CGRect(x: 0, y: 0,  width: 40, height: 40),
+            center: view.center,
+            style: .whiteLarge,
+            containerFrame: view.frame,
+            color: UIColor.gray.withAlphaComponent(0.8))
+        
         startIndicator()
+        
         getCategoryAndUpdateHeader("restaurants")
         getDate()
     }
@@ -100,36 +107,22 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    fileprivate func makeIndicator() {
-        indicator = UIActivityIndicatorView()
-        indicator.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        indicator.center = view.center
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        
-        indicatorContainer = UIView()
-        indicatorContainer.frame = view.frame
-        indicatorContainer.center = view.center
-        indicatorContainer.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
-    }
-    
+
     fileprivate func startIndicator() {
         DispatchQueue.main.async {
-            self.indicatorContainer.addSubview(self.indicator)
-            self.view.addSubview(self.indicatorContainer)
+            self.view.addSubview(self.indicator.container)
+            self.indicator.start()
         }
-        indicator.startAnimating()
     }
     
     fileprivate func stopRefreshOrIndicator() {
-        if refreshControl!.isRefreshing {
-            refreshControl!.endRefreshing()
-        }
-        if indicator.isAnimating {
-            indicator.stopAnimating()
-            DispatchQueue.main.async {
-                self.indicator.removeFromSuperview()
-                self.indicatorContainer.removeFromSuperview()
+        DispatchQueue.main.async {
+            if self.refreshControl!.isRefreshing {
+                self.refreshControl!.endRefreshing()
+            }
+            if self.indicator.isAnimating {
+                self.indicator.stop()
+                self.indicator.container.removeFromSuperview()
             }
         }
     }
