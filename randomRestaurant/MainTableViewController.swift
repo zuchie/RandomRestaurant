@@ -285,9 +285,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.getDataSource()
                 
                 if self.restaurants.count == 0 {
-                    let headerHeight = self.tableView.tableHeaderView!.frame.height
+                    let navBarHeight = self.navigationController!.navigationBar.frame.height
                     let tabBarHeight = self.tabBarController!.tabBar.frame.height
-                    self.addImgSubView(imgView: self.noResultImgView, x: 0, y: headerHeight, width: self.view.frame.width, height: self.view.frame.height - headerHeight - tabBarHeight)
+                    self.addImgSubView(imgView: self.noResultImgView, x: 0, y: navBarHeight, width: self.view.frame.width, height: self.view.frame.height - navBarHeight - tabBarHeight)
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -377,6 +377,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 address: process(dict: member, key: "location") as? String
             )
             dataSource.append(data)
+        }
+
+        DispatchQueue.main.async {
+            if self.dataSource.count == 0 {
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
+            } else {
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+            }
         }
     }
     
