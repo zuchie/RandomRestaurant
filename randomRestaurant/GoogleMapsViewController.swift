@@ -23,6 +23,7 @@ class GoogleMapsViewController: UIViewController {
     
     var businesses = [MainTableViewController.DataSource()]
     var markersOnly = false
+    private var barButtonItem: UIBarButtonItem!
     
     func getBusinesses(_ data: [MainTableViewController.DataSource]) {
         markersOnly = true
@@ -53,12 +54,11 @@ class GoogleMapsViewController: UIViewController {
             navigationController?.isNavigationBarHidden = false
         }
         
-        tabBarController?.tabBar.isHidden = true
+        //tabBarController?.tabBar.isHidden = true
         
-        if !markersOnly {
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        } else {
-            navigationItem.rightBarButtonItem?.isEnabled = false
+        if markersOnly {
+            barButtonItem = navigationItem.rightBarButtonItem
+            navigationItem.rightBarButtonItem = nil
         }
         
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
@@ -69,7 +69,11 @@ class GoogleMapsViewController: UIViewController {
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = true
         }
-        tabBarController?.tabBar.isHidden = false
+        
+        if markersOnly {
+            navigationItem.rightBarButtonItem = barButtonItem
+        }
+        //tabBarController?.tabBar.isHidden = false
         //view.removeObserver(self, forKeyPath: "myLocation")
     }
     

@@ -67,7 +67,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var indicator: IndicatorWithContainer!
     
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
-    
+    private var barButtonItem: UIBarButtonItem?
 
     // Methods
     
@@ -265,7 +265,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 longitude: queryParams.location.coordinate.longitude,
                 category: queryParams.category,
                 radius: 10000,
-                limit: 3,
+                limit: 5,
                 openAt: Int(queryParams.date.timeIntervalSince1970),
                 sortBy: "rating"
             )
@@ -327,7 +327,34 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             imgView.removeFromSuperview()
         }
     }
-
+    
+    // Scroll view
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if Swift.abs(velocity.y) > 1.0 {
+            let isHidden = scrollView.panGestureRecognizer.translation(in: view).y > 0 ? true : false
+            moveTabBar(hide: isHidden, animate: true)()
+        }
+    }
+    
+    private func moveTabBar(hide: Bool, animate: Bool) -> () -> Void {
+        guard let bar = tabBarController?.tabBar else {
+            fatalError("Couldn't get tab bar.")
+        }
+        func hideBar() {
+            if bar.isHidden { return }
+            UIView.animate(withDuration: animate ? 0.3 : 0,
+                           animations: { bar.center.y += bar.frame.height },
+                           completion: { if $0 { bar.isHidden = true } })
+        }
+        func showBar() {
+            if !bar.isHidden { return }
+            UIView.animate(withDuration: animate ? 0.3 : 0,
+                           animations: { bar.isHidden = false; bar.center.y -= bar.frame.height },
+                           completion: nil)
+        }
+        return hide ? hideBar : showBar
+    }
+    
     fileprivate func process(dict: [String: Any], key: String) -> Any? {
         switch key {
         case "image_url", "name", "price", "url", "rating":
@@ -381,9 +408,12 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
         DispatchQueue.main.async {
             if self.dataSource.count == 0 {
-                self.navigationItem.rightBarButtonItem?.isEnabled = false
+                self.barButtonItem = self.navigationItem.rightBarButtonItem
+                self.navigationItem.rightBarButtonItem = nil
             } else {
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
+                if self.navigationItem.rightBarButtonItem == nil {
+                    self.navigationItem.rightBarButtonItem = self.barButtonItem
+                }
             }
         }
     }

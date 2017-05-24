@@ -22,10 +22,18 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
     fileprivate var rowCount = 0 {
         willSet {
             if newValue == 0 {
-                setEditing(false, animated: false)
-                editButtonItem.isEnabled = false
+                //setEditing(false, animated: false)
+                //editButtonItem.isEnabled = false
+                navigationItem.rightBarButtonItem = nil
+                navigationItem.titleView = nil
             } else {
-                editButtonItem.isEnabled = true
+                //editButtonItem.isEnabled = true
+                if navigationItem.rightBarButtonItem == nil {
+                    navigationItem.rightBarButtonItem = editButtonItem
+                }
+                if navigationItem.titleView == nil {
+                    navigationItem.titleView = searchController?.searchBar
+                }
             }
         }
     }
@@ -46,19 +54,19 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         tableView.register(nib, forCellReuseIdentifier: "savedCell")
         
         searchResultsVC = UITableViewController(style: .plain)
-        //searchResultsVC = CoreDataTableViewController()
         searchResultsVC.tableView.register(nib, forCellReuseIdentifier: "savedCell")
         searchResultsVC.tableView.dataSource = self
         searchResultsVC.tableView.delegate = self
         
         searchController = UISearchController(searchResultsController: searchResultsVC)
         searchController.searchResultsUpdater = self
-        tableView.tableHeaderView = searchController?.searchBar
+        //tableView.tableHeaderView = searchController?.searchBar
+        navigationItem.titleView = searchController?.searchBar
         definesPresentationContext = true
         
         searchController.delegate = self
         
-        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.searchBarStyle = .default
         searchController.searchBar.sizeToFit()
@@ -73,28 +81,6 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
         */
     }
-    /*
-    override func viewWillAppear(_ animated: Bool) {
-        shouldSegue = false
-    }
-    */
-    /*
-    // Fetch data from DB and reload table view.
-    fileprivate func initializeFetchedResultsController() {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorite")
-        let categorySort = NSSortDescriptor(key: "category", ascending: true)
-        let nameSort = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [categorySort, nameSort]
-        
-        let moc = DataBase.managedObjectContext!
-        fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: moc,
-            sectionNameKeyPath: "category",
-            cacheName: nil
-        )
-    }
-    */
     
     fileprivate func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Saved")
@@ -103,42 +89,6 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
     }
- 
-    /*
-    func updateDB(button: HistoryCellButton) {
-        let restaurant = Restaurant()
-        
-        restaurant.name = (button.restaurant?.name)!
-        restaurant.price = (button.restaurant?.price)!
-        restaurant.address = (button.restaurant?.address)!
-        restaurant.rating = (button.restaurant?.rating)!
-        restaurant.reviewCount = (button.restaurant?.reviewCount)!
-        restaurant.category = (button.restaurant?.category)!
-        restaurant.latitude = (button.restaurant?.latitude)!
-        restaurant.longitude = (button.restaurant?.longitude)!
-        restaurant.url = (button.restaurant?.url)!
-        
-        if button.isSelected {
-            DataBase.add(restaurant, to: "favorite")
-        } else {
-            DataBase.delete(restaurant, in: "favorite")
-        }
-    }
-    */
-    /*
-    fileprivate func removeFromSaved(name: String) {
-        let restaurant = Restaurant()
-        restaurant.name = name
-        
-        DataBase.delete(restaurant, in: "favorite")
-        DataBase.updateInstanceState(restaurant, in: "history")
-    }
-    */
-    /*
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return shouldSegue
-    }
-    */
     
     fileprivate func updateSaved(cell: SavedTableViewCell) {
         
@@ -182,7 +132,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
             }
         }
     }
-    
+        
     // MARK: - Table view data source
     
     fileprivate func configureCell(_ cell: SavedTableViewCell, _ object: SavedMO) {
@@ -208,24 +158,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
             return filteredRestaurants.count
         }
     }
-    /*
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView == self.tableView {
-            return 0
-        } else {
-            return 40
-        }
-    }
-    */
-    /*
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView == self.tableView {
-            return fetchedResultsController?.sections?[section].name.uppercased()
-        } else {
-            return "Restaurants found"
-        }
-    }
-    */
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let restaurant: SavedMO
         
@@ -245,11 +178,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         
         return cell
     }
-    /*
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 380.0
-    }
-    */
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? SavedTableViewCell else {
             fatalError("Unexpected indexPath: \(indexPath)")
@@ -297,38 +226,34 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
             let inputText = searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
             filteredRestaurants = savedRestaurants.filter {
-                
                 guard let name = $0.name,
                     let categories = $0.categories else {
                     print("No restaurant found")
                     return false
                 }
-                
-                //print("rest: \($0)")
                 return (name.lowercased().contains(inputText.lowercased()) || categories.lowercased().contains(inputText.lowercased()))
- 
-                //return ($0.name?.lowercased().contains(inputText.lowercased()))!
-            }
-            //print("filtered: \(filteredRestaurants)")
+             }
         }
         searchResultsVC.tableView.reloadData()
-        //searchResultsVC?.filteredRestaurants = filteredRestaurants
     }
     
-    // Notifications to hide/show navigation bar & segmented titles.
+    // Notifications to remove/add bar button item.
     func willPresentSearchController(_ searchController: UISearchController) {
         savedRestaurants.removeAll()
         for obj in (fetchedResultsController?.fetchedObjects)! {
             savedRestaurants.append(obj as! SavedMO)
         }
-        //searchResultsVC?.favorites = savedRestaurants
-        //navigationController?.isNavigationBarHidden = true
+        navigationItem.rightBarButtonItem = nil
     }
     /*
     func willDismissSearchController(_ searchController: UISearchController) {
-        //navigationController?.isNavigationBarHidden = false
+        navigationItem.rightBarButtonItem = editButtonItem
     }
     */
+    func didDismissSearchController(_ searchController: UISearchController) {
+        navigationItem.rightBarButtonItem = editButtonItem
+    }
+    
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap" {

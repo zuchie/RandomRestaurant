@@ -72,7 +72,7 @@
         <!--Map-->
         <scene sceneID="ofu-rG-FBP">
             <objects>
-                <viewController id="dqH-Fl-zN4" customClass="GoogleMapsViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="dqH-Fl-zN4" customClass="GoogleMapsViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2EY-oo-6ZY"/>
                         <viewControllerLayoutGuide type="bottom" id="UM2-nY-uOj"/>
@@ -119,7 +119,7 @@
                             <outlet property="delegate" destination="9Ww-aC-vSP" id="5Bt-Yt-rKU"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Saved" id="VxF-vu-zcL">
+                    <navigationItem key="navigationItem" id="VxF-vu-zcL">
                         <barButtonItem key="backBarButtonItem" title="Back" id="8cW-bj-kgw"/>
                     </navigationItem>
                 </tableViewController>
@@ -186,6 +186,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="XL2-RF-dH1">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="9Ww-aC-vSP" kind="relationship" relationship="rootViewController" id="zZl-uY-MBO"/>
                     </connections>
@@ -215,7 +219,7 @@
         <!--ExploreNavigationController-->
         <scene sceneID="Tru-Jo-M7d">
             <objects>
-                <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="fMY-P1-Xr7" sceneMemberID="viewController">
+                <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" hidesBarsOnSwipe="YES" id="fMY-P1-Xr7" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="search" id="FZh-3l-B0e"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="w0E-s0-UDt">
@@ -233,6 +237,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="feE-3D-h9T"/>
+        <segue reference="ins-Ya-Y6D"/>
     </inferredMetricsTieBreakers>
 </document>
