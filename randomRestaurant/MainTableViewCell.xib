@@ -62,28 +62,28 @@
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="247" horizontalCompressionResistancePriority="747" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wLo-lL-OnH">
-                                        <rect key="frame" x="148.5" y="0.0" width="123.5" height="50"/>
+                                        <rect key="frame" x="148.5" y="0.0" width="107.5" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="LZL-RA-2yI">
-                                        <rect key="frame" x="274" y="0.0" width="85" height="50"/>
+                                        <rect key="frame" x="258" y="0.0" width="101" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GGI-Ot-grO">
-                                                <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="48" height="50"/>
                                                 <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <state key="normal" title="Yelp"/>
                                                 <connections>
                                                     <action selector="handleYelpButton:" destination="B3s-fF-4IS" eventType="touchUpInside" id="5FN-NR-Ppu"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NF9-wW-5fo">
-                                                <rect key="frame" x="45" y="0.0" width="40" height="50"/>
+                                                <rect key="frame" x="53" y="0.0" width="48" height="50"/>
                                                 <color key="backgroundColor" red="0.90085078529999996" green="0.053155081110000002" blue="0.033352433889999998" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Map"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <state key="normal" title="Route"/>
                                                 <connections>
                                                     <action selector="handleMapButton:" destination="B3s-fF-4IS" eventType="touchUpInside" id="gn7-q4-w5o"/>
                                                 </connections>

@@ -90,6 +90,8 @@ class GoogleMapsViewController: UIViewController {
         if markersOnly {
             barButtonItem = navigationItem.rightBarButtonItem
             navigationItem.rightBarButtonItem = nil
+        } else {
+            navigationItem.title = "Route"
         }
         
         view.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
@@ -121,6 +123,19 @@ class GoogleMapsViewController: UIViewController {
                     }
                     coordinates.append(location)
                 }
+                if let myCoordinate = mapView.myLocation?.coordinate {
+                    coordinates.append(myCoordinate)
+                } else {
+                    print("Couldn't get my location.")
+                    let alert = UIAlertController(
+                        title: "Missing your location",
+                        message: "The Google Maps can't get your location, please try again at a later time.",
+                        actions: [.ok]
+                    )
+                    DispatchQueue.main.async {
+                        self.present(alert, animated: false, completion: nil)
+                    }
+                }
                 
                 guard let minLat = coordinates.map({ $0.latitude }).min(by: { Swift.abs($0) < Swift.abs($1) }),
                 let minLong = coordinates.map({ $0.longitude }).min(by: { Swift.abs($0) < Swift.abs($1) }),
@@ -135,7 +150,7 @@ class GoogleMapsViewController: UIViewController {
                 DispatchQueue.main.async {
                     // Update camera to new bounds.
                     let bounds = GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
-                    let edges = UIEdgeInsetsMake(120, 40, 40, 40)
+                    let edges = UIEdgeInsetsMake(120, 40, 70, 40)
                     let camera = GMSCameraUpdate.fit(bounds, with: edges)
                     
                     //print("update camera")
@@ -165,13 +180,13 @@ class GoogleMapsViewController: UIViewController {
                         })
                     }
                     
-                    print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
+                    //print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
                     
                     DispatchQueue.main.async(execute: {
                         
                         // Update camera to new bounds.
                         let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
-                        let edges = UIEdgeInsetsMake(120, 40, 40, 40)
+                        let edges = UIEdgeInsetsMake(120, 40, 70, 40)
                         let camera = GMSCameraUpdate.fit(bounds, with: edges)
                         
                         //print("update camera")

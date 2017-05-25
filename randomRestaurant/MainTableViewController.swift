@@ -684,7 +684,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     // Link to Yelp app/website
     func linkToYelp(cell: MainTableViewCell) {
         if cell.yelpUrl != "" {
-            UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
+            let succeeded = UIApplication.shared.openURL(URL(string: cell.yelpUrl)!)
+            if !succeeded {
+                print("Open Yelp URL failed.")
+            }
         } else {
             let alert = UIAlertController(title: "Alert",
                                           message: "Couldn't find a restaurant.",
