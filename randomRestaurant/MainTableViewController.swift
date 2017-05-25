@@ -141,7 +141,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             center: view.center,
             style: .whiteLarge,
             containerFrame: view.frame,
-            color: UIColor.gray.withAlphaComponent(0.8))
+            color: UIColor.gray.withAlphaComponent(0.8)
+        )
         
         startIndicator()
         
@@ -343,10 +344,36 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.dataSource = self.processDataSource(from: self.restaurants)
                 self.loadImagesToCache(from: self.dataSource) { cache in
                     self.imgCache = cache
+                    
                     DispatchQueue.main.async {
+                        
                         self.tableView.reloadData()
+                        
+                        if self.dataSource.count == 0 {
+                            if self.noResultImgView.superview == nil {
+                                self.view.addSubview(self.noResultImgView)
+                                
+                            }
+                            if self.navigationItem.rightBarButtonItem != nil {
+                                self.navigationItem.rightBarButtonItem = nil
+                            }
+                            
+                        } else {
+                            if self.noResultImgView.superview != nil {
+                                
+                                self.noResultImgView.removeFromSuperview()
+                                
+                            }
+                            if self.navigationItem.rightBarButtonItem == nil {
+                                self.navigationItem.rightBarButtonItem = self.barButtonItem
+                            }
+                        }
                     }
+                    
+                    self.stopRefreshOrIndicator()
+                    
                 }
+                    
                 //self.imgCache.removeAll(keepingCapacity: false)
                 //self.imageCount = self.restaurants.count
                 /*
@@ -524,35 +551,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        stopRefreshOrIndicator()
-        
-        if everQueried {
-            if dataSource.count == 0 {
-                if self.noResultImgView.superview == nil {
-                    DispatchQueue.main.async {
-                        self.view.addSubview(self.noResultImgView)
-                    }
-                }
-                if navigationItem.rightBarButtonItem != nil {
-                    navigationItem.rightBarButtonItem = nil
-                }
-                return 0
-                
-            } else {
-                if self.noResultImgView.superview != nil {
-                    DispatchQueue.main.async {
-                        self.noResultImgView.removeFromSuperview()
-                    }
-                }
-                if navigationItem.rightBarButtonItem == nil {
-                    navigationItem.rightBarButtonItem = barButtonItem
-                }
-                return 1
-            }
-        }
-
-        return 0
-        //return dataSource.count == 0 ? 0 : 1
+        return dataSource.count == 0 ? 0 : 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -568,8 +567,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //return dataSource.count == 0 ? 0 : 380.0
-        return 380.0
+        return dataSource.count == 0 ? 0 : 380.0
+        //return 380.0
     }
     
     /*
