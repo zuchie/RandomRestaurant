@@ -68,6 +68,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
     private var barButtonItem: UIBarButtonItem?
+    private var everQueried = false
 
     // Methods
     
@@ -147,7 +148,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         getCategoryAndUpdateTitleView("restaurants")
         getDate()
     }
-    
+    /*
+    override func viewWillAppear(_ animated: Bool) {
+        print("==main view will appear")
+        if navigationController!.isNavigationBarHidden {
+            print("==nav bar is hidden")
+            navigationController?.navigationBar.isHidden = false
+        }
+    }
+    */
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         getDate()
         getLocationAndStartQuery()
@@ -307,6 +316,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func doYelpQuery() {
+        everQueried = true
+        
         if queryParams.hasChanged {
             yelpQuery = YelpQuery(
                 latitude: queryParams.location.coordinate.latitude,
@@ -389,6 +400,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
     */
+    /*
     // Scroll view
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if Swift.abs(velocity.y) > 1.0 {
@@ -415,7 +427,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
         return hide ? hideBar : showBar
     }
-    
+    */
     fileprivate func process(dict: [String: Any], key: String) -> Any? {
         switch key {
         case "image_url", "name", "price", "url", "rating":
@@ -514,29 +526,32 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     override func numberOfSections(in tableView: UITableView) -> Int {
         stopRefreshOrIndicator()
         
-        if dataSource.count == 0 {
-            if self.noResultImgView.superview == nil {
-                DispatchQueue.main.async {
-                    self.view.addSubview(self.noResultImgView)
+        if everQueried {
+            if dataSource.count == 0 {
+                if self.noResultImgView.superview == nil {
+                    DispatchQueue.main.async {
+                        self.view.addSubview(self.noResultImgView)
+                    }
                 }
-            }
-            if navigationItem.rightBarButtonItem != nil {
-                navigationItem.rightBarButtonItem = nil
-            }
-            return 0
-            
-        } else {
-            if self.noResultImgView.superview != nil {
-                DispatchQueue.main.async {
-                    self.noResultImgView.removeFromSuperview()
+                if navigationItem.rightBarButtonItem != nil {
+                    navigationItem.rightBarButtonItem = nil
                 }
+                return 0
+                
+            } else {
+                if self.noResultImgView.superview != nil {
+                    DispatchQueue.main.async {
+                        self.noResultImgView.removeFromSuperview()
+                    }
+                }
+                if navigationItem.rightBarButtonItem == nil {
+                    navigationItem.rightBarButtonItem = barButtonItem
+                }
+                return 1
             }
-            if navigationItem.rightBarButtonItem == nil {
-                navigationItem.rightBarButtonItem = barButtonItem
-            }
-            return 1
         }
 
+        return 0
         //return dataSource.count == 0 ? 0 : 1
     }
 
@@ -553,7 +568,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return dataSource.count == 0 ? 0 : 380.0
+        //return dataSource.count == 0 ? 0 : 380.0
+        return 380.0
     }
     
     /*
@@ -713,8 +729,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
-        print("Unwind to main")
-        
         let sourceVC = sender.source
         guard sender.identifier == "backFromWhat" else {
             fatalError("Unexpeted id: \(String(describing: sender.identifier))")

@@ -20,18 +20,21 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //print("Food category view did load.")
     }
-    
+    /*
+    override func viewWillAppear(_ animated: Bool) {
+        if !navigationController!.isNavigationBarHidden {
+            navigationController?.navigationBar.isHidden = true
+        }
+    }
+    */
+    /*
     override func viewWillDisappear(_ animated: Bool) {
-        //print("Food category view will disappear")
+        if navigationController!.isNavigationBarHidden {
+            navigationController?.navigationBar.isHidden = false
+        }
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        //print("Food category view did disappear")
-    }
-
+    */
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -101,6 +104,11 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
         
         /* 
          Set unwind segue from collection cell to Exit, it'll segue before collection view finish doing didSelectItemAt so category will be nil. Changed to segue from view controller instead of from cell to Exit, and manually trigger segue here to make it work.
+        */
+        /*
+        if navigationController!.isNavigationBarHidden {
+            navigationController?.navigationBar.isHidden = false
+        }
         */
         performSegue(withIdentifier: "backFromWhat", sender: self)
     }

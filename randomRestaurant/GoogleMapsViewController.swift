@@ -79,11 +79,12 @@ class GoogleMapsViewController: UIViewController {
     
     // KVO - Key Value Observer, to observe changes of mapView.myLocation.
     override func viewWillAppear(_ animated: Bool) {
+        /*
         isNavigationBarHidden = navigationController?.isNavigationBarHidden
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = false
         }
-        
+        */
         //tabBarController?.tabBar.isHidden = true
         
         if markersOnly {
@@ -96,10 +97,11 @@ class GoogleMapsViewController: UIViewController {
 
     // Restore navigation bar status.
     override func viewWillDisappear(_ animated: Bool) {
+        /*
         if isNavigationBarHidden! {
             navigationController?.isNavigationBarHidden = true
         }
-        
+        */
         if markersOnly {
             navigationItem.rightBarButtonItem = barButtonItem
         }
