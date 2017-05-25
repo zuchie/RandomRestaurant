@@ -7,12 +7,12 @@
 //
 
 
-struct Cache<T: Hashable> {
-    private var cache = [T: Any]()
+struct Cache<T: Hashable, U: Any> {
+    private var cache = [T: U]()
     var count: Int { return cache.count }
     var isEmpty: Bool { return cache.isEmpty }
     
-    mutating func add(key: T, value: Any) {
+    mutating func add(key: T, value: U) {
         cache[key] = value
     }
     
@@ -24,7 +24,7 @@ struct Cache<T: Hashable> {
         cache.removeAll(keepingCapacity: keepingCapacity)
     }
     
-    func get(by key: T) -> Any? {
+    func get(by key: T) -> U? {
         return cache[key]
     }
 }

@@ -13,14 +13,20 @@ class YelpQuery {
     
     // Properties.
     private var url: String
-    
-    private var httpRequest: URLRequest!
-    
+    //private var httpRequest: URLRequest!
     private let accessToken = "BYJYCVjjgIOuchrzOPICryariCWPw8OMD9aZqE1BsYTsah8NX1TQbv5O-kVbMWEmQUxFHegLlZPPR5Vi38fUH0MXV74MhDVhzTgSm6PM7e3IA-VE46HkB126lFmJWHYx"
     
     var completion: ((_ results: [[String: Any]]) -> Void)?
     var completionWithError: ((_ error: Error) -> Void)?
     
+    private var queryURL: YelpQueryURL!
+    
+    init(latitude: Double?, longitude: Double?, category: String?, radius: Int?, limit: Int?, openAt: Int?, sortBy: String?) {
+        
+        queryURL = YelpQueryURL(latitude: latitude, longitude: longitude, category: category, radius: radius, limit: limit, openAt: openAt, sortBy: sortBy)
+        url = queryURL.queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
+    }
+    /*
     init?(_ queryString: String) {
         guard let query = queryString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             print("Couldn't make query string from string: \(queryString)")
@@ -28,7 +34,7 @@ class YelpQuery {
         }
         self.url = query
     }
-        
+    */
     // Methods.
     // Get businesses from Yelp API v3.
     func startQuery() {

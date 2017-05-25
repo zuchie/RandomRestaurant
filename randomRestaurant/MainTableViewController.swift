@@ -24,7 +24,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var yelpQuery: YelpQuery!
     
     fileprivate var restaurants = [[String: Any]]()
-    fileprivate var imgCache = Cache<String>()
+    fileprivate var imgCache = Cache<String, UIImage>()
     
     struct DataSource {
         var imageUrl: String?
@@ -63,7 +63,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     var queryParams = QueryParams()
-    var imageCount = 0
+    //var imageCount = 0
     fileprivate var indicator: IndicatorWithContainer!
     
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
@@ -79,6 +79,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         barButtonItem = navigationItem.rightBarButtonItem
         addViewToNavBar()
 
+        noResultImgView.frame = view.frame
+        
         titleVC.completion = {
             self.performSegue(withIdentifier: "segueToCategories", sender: self)
         }
@@ -181,33 +183,46 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     // Cache
-    fileprivate func loadImagesToCache(from url: String) {
-        guard let urlString = URL(string: url) else {
-            fatalError("Unexpected url string while loading image: \(url)")
-        }
-        URLSession.shared.dataTask(with: urlString) { data, response, error in
-            guard error == nil, let imageData = data else {
-                print("Error while getting image url response: \(String(describing: error?.localizedDescription))")
-                return
+    fileprivate func loadImagesToCache(from dataSource: [DataSource], completion: @escaping (_ cache: Cache<String, UIImage>) -> Void) {
+        var cache = Cache<String, UIImage>()
+        
+        if dataSource.count == 0 { completion(cache) }
+        
+        for member in dataSource {
+            guard let imgUrl = member.imageUrl,
+                let urlString = URL(string: imgUrl) else {
+                    fatalError("Unexpected url string while loading image: \(String(describing: member.imageUrl))")
             }
             
-            guard let image = UIImage(data: imageData) else {
-                print("Couldn't create image from data: \(imageData)")
-                return
-            }
-
-            self.imgCache.add(key: url, value: image)
-            self.imageCount -= 1
-            
-            // Reload table after the last image has been saved.
-            if self.imageCount == 0 {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+            URLSession.shared.dataTask(with: urlString) { data, response, error in
+                guard error == nil, let imageData = data else {
+                    print("Error while getting image url response: \(String(describing: error?.localizedDescription))")
+                    return
                 }
-                self.stopRefreshOrIndicator()
-            }
-            
-        }.resume()
+                
+                guard let image = UIImage(data: imageData) else {
+                    print("Couldn't create image from data: \(imageData)")
+                    return
+                }
+                
+                cache.add(key: imgUrl, value: image)
+                if cache.count == dataSource.count {
+                    completion(cache)
+                }
+                /*
+                self.imageCount -= 1
+                
+                // Reload table after the last image has been saved.
+                if self.imageCount == 0 {
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                    self.stopRefreshOrIndicator()
+                }
+                */
+            }.resume()
+        }
+
     }
     
     // Core Data
@@ -293,7 +308,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func doYelpQuery() {
         if queryParams.hasChanged {
-            yelpQueryURL = YelpQueryURL(
+            yelpQuery = YelpQuery(
                 latitude: queryParams.location.coordinate.latitude,
                 longitude: queryParams.location.coordinate.longitude,
                 category: queryParams.category,
@@ -303,13 +318,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 sortBy: "rating"
             )
             
-            guard let queryString = yelpQueryURL?.queryString else {
-                fatalError("Couldn't get Yelp query string.")
-            }
-            guard let query = YelpQuery(queryString) else {
-                fatalError("Yelp query is nil.")
-            }
-            yelpQuery = query
             yelpQuery.completionWithError = { error in
                 let alert = UIAlertController(
                     title: "Error: \(error.localizedDescription)",
@@ -321,26 +329,37 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             yelpQuery.completion = { results in
                 print("Query completed")
                 self.restaurants = results
-                self.imgCache.removeAll(keepingCapacity: false)
-                self.imageCount = self.restaurants.count
-                self.getDataSource()
-                self.removeImgSubView(imgView: self.noResultImgView)
-                
-                if self.restaurants.count == 0 {
-                    let navBarHeight = self.navigationController!.navigationBar.frame.height
-                    let tabBarHeight = self.tabBarController!.tabBar.frame.height
-                    self.addImgSubView(imgView: self.noResultImgView, x: 0, y: navBarHeight, width: self.view.frame.width, height: self.view.frame.height - navBarHeight - tabBarHeight)
-                    /*
+                self.dataSource = self.processDataSource(from: self.restaurants)
+                self.loadImagesToCache(from: self.dataSource) { cache in
+                    self.imgCache = cache
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-                    */
+                }
+                //self.imgCache.removeAll(keepingCapacity: false)
+                //self.imageCount = self.restaurants.count
+                /*
+                if self.restaurants.count == 0 {
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                     self.stopRefreshOrIndicator()
+                    if self.noResultImgView.superview == nil {
+                        DispatchQueue.main.async {
+                            self.view.addSubview(self.noResultImgView)
+                        }
+                    }
+                } else {
+                    if self.noResultImgView.superview != nil {
+                        DispatchQueue.main.async {
+                            self.noResultImgView.removeFromSuperview()
+                        }
+                    }
+                    for member in self.restaurants {
+                        self.loadImagesToCache(from: member["image_url"] as! String)
+                    }
                 }
-                
-                for member in self.restaurants {
-                    self.loadImagesToCache(from: member["image_url"] as! String)
-                }
+                */
             }
 
             yelpQuery.startQuery()
@@ -355,6 +374,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     // Helpers
+    /*
     fileprivate func addImgSubView(imgView: UIImageView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
         imgView.frame = CGRect(x: x, y: y, width: width, height: height)
         
@@ -368,7 +388,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             imgView.removeFromSuperview()
         }
     }
-    
+    */
     // Scroll view
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if Swift.abs(velocity.y) > 1.0 {
@@ -430,9 +450,10 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
     
-    fileprivate func getDataSource() {
-        dataSource.removeAll(keepingCapacity: false)
-        for member in restaurants {
+    fileprivate func processDataSource(from data: [[String: Any]]) -> [DataSource] {
+        //dataSource.removeAll(keepingCapacity: false)
+        var processedData = [DataSource]()
+        for member in data {
             let data = DataSource(
                 imageUrl: process(dict: member, key: "image_url") as? String,
                 name: process(dict: member, key: "name") as? String,
@@ -444,20 +465,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 location: process(dict: member, key: "coordinates") as? CLLocationCoordinate2D,
                 address: process(dict: member, key: "location") as? String
             )
-            dataSource.append(data)
+            processedData.append(data)
         }
-
-        DispatchQueue.main.async {
-            if self.dataSource.count == 0 {
-                if self.navigationItem.rightBarButtonItem != nil {
-                    self.navigationItem.rightBarButtonItem = nil
-                }
-            } else {
-                if self.navigationItem.rightBarButtonItem == nil {
-                    self.navigationItem.rightBarButtonItem = self.barButtonItem
-                }
-            }
-        }
+        return processedData
     }
     
     fileprivate func getRatingStar(from rating: Float) -> UIImage {
@@ -475,7 +485,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         let data = dataSource[indexPath.row]
         cell.imageUrl = data.imageUrl
         var image: UIImage?
-        if let value = imgCache.get(by: cell.imageUrl) as? UIImage {
+        if let value = imgCache.get(by: cell.imageUrl) {
             image = value
         } else {
             // TODO: Pick a globe image
@@ -502,17 +512,39 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+        stopRefreshOrIndicator()
+        
+        if dataSource.count == 0 {
+            if self.noResultImgView.superview == nil {
+                DispatchQueue.main.async {
+                    self.view.addSubview(self.noResultImgView)
+                }
+            }
+            if navigationItem.rightBarButtonItem != nil {
+                navigationItem.rightBarButtonItem = nil
+            }
+            return 0
+            
+        } else {
+            if self.noResultImgView.superview != nil {
+                DispatchQueue.main.async {
+                    self.noResultImgView.removeFromSuperview()
+                }
+            }
+            if navigationItem.rightBarButtonItem == nil {
+                navigationItem.rightBarButtonItem = barButtonItem
+            }
+            return 1
+        }
+
+        //return dataSource.count == 0 ? 0 : 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return restaurants.count
+        return dataSource.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Configure the cell...
         let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath) as! MainTableViewCell
         
         configureCell(cell, indexPath)
@@ -521,15 +553,27 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 380.0
+        return dataSource.count == 0 ? 0 : 380.0
     }
     
     /*
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Stop refreshing/activity indictor when first cell has been displayed.
-        if indexPath.row == 0 {
-            stopRefreshOrIndicator()
+        stopRefreshOrIndicator()
+        
+        if dataSource.count == 0 {
+            if self.noResultImgView.superview == nil {
+                DispatchQueue.main.async {
+                    self.view.addSubview(self.noResultImgView)
+                }
+            }
+        } else {
+            if self.noResultImgView.superview != nil {
+                DispatchQueue.main.async {
+                    self.noResultImgView.removeFromSuperview()
+                }
+            }
         }
+        
     }
     */
     /*
