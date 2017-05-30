@@ -7,11 +7,13 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NavItemTitleViewController" customModule="randomRestaurant" customModuleProvider="target">
             <connections>
+                <outlet property="chooseCategory" destination="gbt-5F-3o4" id="4JH-Cc-f0j"/>
                 <outlet property="view" destination="eeV-1J-WMx" id="UWW-TK-5c6"/>
             </connections>
         </placeholder>
@@ -20,8 +22,18 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzK-ou-hc2">
+                    <rect key="frame" x="8" y="8" width="84" height="84"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="fzK-ou-hc2" secondAttribute="height" multiplier="1:1" id="lgK-zt-Do5"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <connections>
+                        <action selector="chooseRadius:" destination="-1" eventType="touchUpInside" id="ZUh-as-3bG"/>
+                    </connections>
+                </button>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="gbt-5F-3o4">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                    <rect key="frame" x="100" y="0.0" width="275" height="100"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="What" translatesAutoresizingMaskIntoConstraints="NO" id="LBt-YQ-HFK">
                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
@@ -30,7 +42,7 @@
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s5Z-L1-YUY">
-                            <rect key="frame" x="105" y="0.0" width="270" height="100"/>
+                            <rect key="frame" x="105" y="0.0" width="170" height="100"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -40,10 +52,13 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="gbt-5F-3o4" firstAttribute="leading" secondItem="eeV-1J-WMx" secondAttribute="leading" id="HNz-5t-5n7"/>
                 <constraint firstItem="gbt-5F-3o4" firstAttribute="top" secondItem="eeV-1J-WMx" secondAttribute="top" id="HrT-Jb-YDH"/>
+                <constraint firstItem="fzK-ou-hc2" firstAttribute="top" secondItem="eeV-1J-WMx" secondAttribute="topMargin" id="IZy-Bw-rW6"/>
+                <constraint firstItem="gbt-5F-3o4" firstAttribute="leading" secondItem="fzK-ou-hc2" secondAttribute="trailing" constant="8" symbolic="YES" id="d7v-wx-iMb"/>
                 <constraint firstAttribute="bottom" secondItem="gbt-5F-3o4" secondAttribute="bottom" id="dId-xQ-kEC"/>
+                <constraint firstItem="fzK-ou-hc2" firstAttribute="leading" secondItem="eeV-1J-WMx" secondAttribute="leadingMargin" id="eYD-sP-4Ok"/>
                 <constraint firstAttribute="trailing" secondItem="gbt-5F-3o4" secondAttribute="trailing" id="hWV-KS-ReI"/>
+                <constraint firstAttribute="bottomMargin" secondItem="fzK-ou-hc2" secondAttribute="bottom" id="mxu-PK-jeH"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>

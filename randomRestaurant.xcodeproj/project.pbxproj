@@ -33,6 +33,7 @@
 		B9BA66081ED4F92B0081647B /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA66071ED4F92B0081647B /* ActivityIndicator.swift */; };
 		B9BA660F1ED522C90081647B /* NavItemTitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA660D1ED522C90081647B /* NavItemTitleViewController.swift */; };
 		B9BA66101ED522C90081647B /* NavItemTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9BA660E1ED522C90081647B /* NavItemTitleViewController.xib */; };
+		B9BA66131EDD52890081647B /* RadiusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA66121EDD52890081647B /* RadiusViewController.swift */; };
 		B9C1E3F41ED18A3C001B04CD /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C1E3F31ED18A3C001B04CD /* Cache.swift */; };
 		B9D4457A1EBC660700219D91 /* URLRequestMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D445791EBC660700219D91 /* URLRequestMaker.swift */; };
 		B9F984E81E5A7F6700C6CA04 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */; };
@@ -91,6 +92,7 @@
 		B9BA66071ED4F92B0081647B /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		B9BA660D1ED522C90081647B /* NavItemTitleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavItemTitleViewController.swift; sourceTree = "<group>"; };
 		B9BA660E1ED522C90081647B /* NavItemTitleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NavItemTitleViewController.xib; sourceTree = "<group>"; };
+		B9BA66121EDD52890081647B /* RadiusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusViewController.swift; sourceTree = "<group>"; };
 		B9C1E3F31ED18A3C001B04CD /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		B9D445791EBC660700219D91 /* URLRequestMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestMaker.swift; sourceTree = "<group>"; };
 		B9F984E71E5A7F6700C6CA04 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		B91AC8551D4EAC4600B0476E /* randomRestaurant */ = {
 			isa = PBXGroup;
 			children = (
+				B9BA66111EDD52510081647B /* Radius */,
 				B9C1E3F51ED3B1B0001B04CD /* Helper */,
 				B965C9661E5CEF1B0015E2AC /* YelpQuery */,
 				B9F984EA1E5A8A9900C6CA04 /* Main */,
@@ -235,6 +238,14 @@
 				B906DBA21D727DCA0021B025 /* YelpQueryURLBuilder.swift */,
 			);
 			name = YelpQuery;
+			sourceTree = "<group>";
+		};
+		B9BA66111EDD52510081647B /* Radius */ = {
+			isa = PBXGroup;
+			children = (
+				B9BA66121EDD52890081647B /* RadiusViewController.swift */,
+			);
+			name = Radius;
 			sourceTree = "<group>";
 		};
 		B9C1E3F51ED3B1B0001B04CD /* Helper */ = {
@@ -472,6 +483,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9BA660F1ED522C90081647B /* NavItemTitleViewController.swift in Sources */,
+				B9BA66131EDD52890081647B /* RadiusViewController.swift in Sources */,
 				B9D4457A1EBC660700219D91 /* URLRequestMaker.swift in Sources */,
 				B9A7605E1DEE59D2005BBA2A /* FoodCategoriesCollectionViewCell.swift in Sources */,
 				B9BA66081ED4F92B0081647B /* ActivityIndicator.swift in Sources */,

@@ -45,11 +45,12 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     struct QueryParams {
         var hasChanged: Bool {
-            return categoryChanged || dateChanged || locationChanged
+            return categoryChanged || dateChanged || locationChanged || radiusChanged
         }
         var categoryChanged = false
         var dateChanged = false
         var locationChanged = false
+        var radiusChanged = false
         
         var category = "" {
             didSet { categoryChanged = (category != oldValue) }
@@ -60,6 +61,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         var location = CLLocation() {
             didSet { locationChanged = (location != oldValue) }
         }
+        var radius = 1600 {
+            didSet { radiusChanged = (radius != oldValue) }
+        }
     }
     
     var queryParams = QueryParams()
@@ -69,6 +73,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
     private var barButtonItem: UIBarButtonItem?
     private var everQueried = false
+    private var selectedRadiusButton: Int?
 
     // Methods
     
@@ -82,8 +87,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
         noResultImgView.frame = view.frame
         
-        titleVC.completion = {
+        titleVC.completionForCategoryChoose = {
             self.performSegue(withIdentifier: "segueToCategories", sender: self)
+        }
+        titleVC.completionForRadiusChoose = {
+            self.performSegue(withIdentifier: "segueToRadius", sender: self)
         }
         
         moc = appDelegate?.managedObjectContext
@@ -291,7 +299,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func updateTitleView(_ category: String) {
         let title = (category == "restaurants" ? "What: all" : category)
-        guard let stackView = titleVC.view.subviews[0] as? UIStackView else {
+        guard let stackView = titleVC.view.subviews[1] as? UIStackView else {
             fatalError("Couldn't get stack view from view.")
         }
         guard let label = stackView.arrangedSubviews[1] as? UILabel else {
@@ -318,13 +326,12 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     fileprivate func doYelpQuery() {
         everQueried = true
-        
         if queryParams.hasChanged {
             yelpQuery = YelpQuery(
                 latitude: queryParams.location.coordinate.latitude,
                 longitude: queryParams.location.coordinate.longitude,
                 category: queryParams.category,
-                radius: 10000,
+                radius: queryParams.radius,
                 limit: 5,
                 openAt: Int(queryParams.date.timeIntervalSince1970),
                 sortBy: "rating"
@@ -728,23 +735,42 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             }
             vc.getBusinesses(dataSource)
         }
+        if segue.identifier == "segueToRadius", sender is MainTableViewController {
+            guard let vc = segue.destination as? RadiusViewController else {
+                fatalError("Couldn't show Radius VC.")
+            }
+            vc.getSelectedButtonIndex(selectedRadiusButton)
+        }
     }
     
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
         let sourceVC = sender.source
-        guard sender.identifier == "backFromWhat" else {
-            fatalError("Unexpeted id: \(String(describing: sender.identifier))")
+        switch sender.identifier! {
+        case "backFromWhat":
+                guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
+                    fatalError("Couldn't get category.")
+                }
+                
+                startIndicator()
+                
+                getCategoryAndUpdateTitleView(category)
+                getDate()
+                getLocationAndStartQuery()
+        case "unwindFromHalfMile", "unwindFromOneMile":
+            guard let radiusVC = sourceVC as? RadiusViewController else {
+                fatalError("Couldn't get radiusVC.")
+            }
+            selectedRadiusButton = radiusVC.selectedButtonIndex
+            queryParams.radius = radiusVC.radius!
+            print("==radius, index = \(queryParams.radius), \(String(describing: selectedRadiusButton))")
+            
+            startIndicator()
+            
+            getDate()
+            getLocationAndStartQuery()
+        default:
+            break
         }
-        
-        guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
-            fatalError("Couldn't get category")
-        }
-        
-        startIndicator()
-        
-        getCategoryAndUpdateTitleView(category)
-        getDate()
-        getLocationAndStartQuery()
     }
 }
 

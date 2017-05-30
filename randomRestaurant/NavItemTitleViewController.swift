@@ -10,13 +10,15 @@ import UIKit
 
 class NavItemTitleViewController: UIViewController {
 
-    var completion: (() -> Void)!
+    @IBOutlet weak var chooseCategory: UIStackView!
+    var completionForCategoryChoose: (() -> Void)!
+    var completionForRadiusChoose: (() -> Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleStackTap(_:)))
-        view.addGestureRecognizer(tap)
+        chooseCategory.addGestureRecognizer(tap)
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,9 +30,12 @@ class NavItemTitleViewController: UIViewController {
         guard (sender.view != nil) else {
             fatalError("Unexpected view: \(String(describing: sender.view))")
         }
-        completion()
+        completionForCategoryChoose()
     }
     
+    @IBAction func chooseRadius(_ sender: UIButton) {
+        completionForRadiusChoose()
+    }
     
     /*
     // MARK: - Navigation
