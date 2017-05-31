@@ -52,7 +52,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         var locationChanged = false
         var radiusChanged = false
         
-        var category = "" {
+        var category = "restaurants" {
             didSet { categoryChanged = (category != oldValue) }
         }
         var date = Date() {
@@ -67,16 +67,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     var queryParams = QueryParams()
-    //var imageCount = 0
     fileprivate var indicator: IndicatorWithContainer!
     
     fileprivate var noResultImgView = UIImageView(image: UIImage(named: "nothing_found"))
     private var barButtonItem: UIBarButtonItem?
     private var everQueried = false
-    private var selectedRadiusButton: Int?
+    
+    private let metersToMiles: [Int: String] = [800: "0.5 mi", 1600: "1 mi", 8000: "5 mi", 16000: "10 mi", 32000: "20 mi"]
 
     // Methods
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -154,18 +153,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         startIndicator()
         
-        getCategoryAndUpdateTitleView("restaurants")
+        getRadiusAndUpdateTitleView(queryParams.radius)
+        getCategoryAndUpdateTitleView(queryParams.category)
         getDate()
     }
-    /*
-    override func viewWillAppear(_ animated: Bool) {
-        print("==main view will appear")
-        if navigationController!.isNavigationBarHidden {
-            print("==nav bar is hidden")
-            navigationController?.navigationBar.isHidden = false
-        }
-    }
-    */
+
     @objc fileprivate func handleRefresh(_ sender: UIRefreshControl) {
         getDate()
         getLocationAndStartQuery()
@@ -227,17 +219,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 if cache.count == dataSource.count {
                     completion(cache)
                 }
-                /*
-                self.imageCount -= 1
-                
-                // Reload table after the last image has been saved.
-                if self.imageCount == 0 {
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                    self.stopRefreshOrIndicator()
-                }
-                */
             }.resume()
         }
 
@@ -290,24 +271,49 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     // Prepare params and do query
     fileprivate func getCategoryAndUpdateTitleView(_ category: String) {
         getCategory(category)
-        updateTitleView(category)
+        updateTitleViewCategoryLabel(category)
     }
     
     fileprivate func getCategory(_ category: String) {
         queryParams.category = category
     }
     
-    fileprivate func updateTitleView(_ category: String) {
-        let title = (category == "restaurants" ? "What: all" : category)
-        guard let stackView = titleVC.view.subviews[1] as? UIStackView else {
+    fileprivate func getRadiusAndUpdateTitleView(_ radius: Int) {
+        getRadius(radius)
+        updateTitleViewRadiusLabel(radius)
+    }
+    
+    fileprivate func getRadius(_ radius: Int) {
+        queryParams.radius = radius
+    }
+    
+    fileprivate func updateTitleViewCategoryLabel(_ category: String) {
+        let title = (category == "restaurants" ? "All" : category)
+        guard let stackView = titleVC.view.subviews[0] as? UIStackView else {
             fatalError("Couldn't get stack view from view.")
         }
-        guard let label = stackView.arrangedSubviews[1] as? UILabel else {
+        guard let chooseCategoryStackView = stackView.arrangedSubviews[1] as? UIStackView else {
+            fatalError("Couldn't get category stack view from stack view.")
+        }
+        guard let label = chooseCategoryStackView.arrangedSubviews[1] as? UILabel else {
             fatalError("Couldn't get label from stack view.")
         }
         label.text = title
     }
 
+    fileprivate func updateTitleViewRadiusLabel(_ radius: Int) {
+        guard let stackView = titleVC.view.subviews[0] as? UIStackView else {
+            fatalError("Couldn't get stack view from view.")
+        }
+        guard let chooseRadiusStackView = stackView.arrangedSubviews[0] as? UIStackView else {
+            fatalError("Couldn't get radius stack view from stack view.")
+        }
+        guard let label = chooseRadiusStackView.arrangedSubviews[1] as? UILabel else {
+            fatalError("Couldn't get label from stack view.")
+        }
+        label.text = metersToMiles[radius]
+    }
+    
     fileprivate func getDate() {
         let calendar = Calendar.current
         let myDate = Date()
@@ -351,11 +357,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 self.dataSource = self.processDataSource(from: self.restaurants)
                 self.loadImagesToCache(from: self.dataSource) { cache in
                     self.imgCache = cache
-                    
                     DispatchQueue.main.async {
-                        
                         self.tableView.reloadData()
-                        
                         if self.dataSource.count == 0 {
                             if self.noResultImgView.superview == nil {
                                 self.view.addSubview(self.noResultImgView)
@@ -376,35 +379,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                             }
                         }
                     }
-                    
                     self.stopRefreshOrIndicator()
-                    
                 }
-                    
-                //self.imgCache.removeAll(keepingCapacity: false)
-                //self.imageCount = self.restaurants.count
-                /*
-                if self.restaurants.count == 0 {
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                    self.stopRefreshOrIndicator()
-                    if self.noResultImgView.superview == nil {
-                        DispatchQueue.main.async {
-                            self.view.addSubview(self.noResultImgView)
-                        }
-                    }
-                } else {
-                    if self.noResultImgView.superview != nil {
-                        DispatchQueue.main.async {
-                            self.noResultImgView.removeFromSuperview()
-                        }
-                    }
-                    for member in self.restaurants {
-                        self.loadImagesToCache(from: member["image_url"] as! String)
-                    }
-                }
-                */
             }
 
             yelpQuery.startQuery()
@@ -412,56 +388,13 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             queryParams.categoryChanged = false
             queryParams.dateChanged = false
             queryParams.locationChanged = false
+            queryParams.radiusChanged = false
         } else {
             print("Params no change, skip query")
             stopRefreshOrIndicator()
         }
     }
     
-    // Helpers
-    /*
-    fileprivate func addImgSubView(imgView: UIImageView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
-        imgView.frame = CGRect(x: x, y: y, width: width, height: height)
-        
-        DispatchQueue.main.async {
-            self.view.addSubview(imgView)
-        }
-    }
-    
-    fileprivate func removeImgSubView(imgView: UIImageView) {
-        DispatchQueue.main.async {
-            imgView.removeFromSuperview()
-        }
-    }
-    */
-    /*
-    // Scroll view
-    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if Swift.abs(velocity.y) > 1.0 {
-            let isHidden = scrollView.panGestureRecognizer.translation(in: view).y > 0 ? true : false
-            moveTabBar(hide: isHidden, animate: true)()
-        }
-    }
-    
-    private func moveTabBar(hide: Bool, animate: Bool) -> () -> Void {
-        guard let bar = tabBarController?.tabBar else {
-            fatalError("Couldn't get tab bar.")
-        }
-        func hideBar() {
-            if bar.isHidden { return }
-            UIView.animate(withDuration: animate ? 0.3 : 0,
-                           animations: { bar.center.y += bar.frame.height },
-                           completion: { if $0 { bar.isHidden = true } })
-        }
-        func showBar() {
-            if !bar.isHidden { return }
-            UIView.animate(withDuration: animate ? 0.3 : 0,
-                           animations: { bar.isHidden = false; bar.center.y -= bar.frame.height },
-                           completion: nil)
-        }
-        return hide ? hideBar : showBar
-    }
-    */
     fileprivate func process(dict: [String: Any], key: String) -> Any? {
         switch key {
         case "image_url", "name", "price", "url", "rating":
@@ -497,7 +430,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func processDataSource(from data: [[String: Any]]) -> [DataSource] {
-        //dataSource.removeAll(keepingCapacity: false)
         var processedData = [DataSource]()
         for member in data {
             let data = DataSource(
@@ -556,7 +488,6 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count == 0 ? 0 : 1
     }
@@ -575,102 +506,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return dataSource.count == 0 ? 0 : 380.0
-        //return 380.0
     }
     
-    /*
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        stopRefreshOrIndicator()
-        
-        if dataSource.count == 0 {
-            if self.noResultImgView.superview == nil {
-                DispatchQueue.main.async {
-                    self.view.addSubview(self.noResultImgView)
-                }
-            }
-        } else {
-            if self.noResultImgView.superview != nil {
-                DispatchQueue.main.async {
-                    self.noResultImgView.removeFromSuperview()
-                }
-            }
-        }
-        
-    }
-    */
-    /*
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        return section < 4 ? headerHeight: 20.0
-    }
-    */
-    /*
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section < 4 {
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MainTableViewSectionHeaderView
-
-            let tap = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
-            header.addGestureRecognizer(tap)
-            
-            header.stackViewHeight.constant = headerHeight
-            header.imageView.image = UIImage(named: headers[section].img)
-            header.label.text = headers[section].txt
-            header.headerName = headers[section].img
-         
-            return header
-        } else {
-            return nil
-        }
-    }
-    */
-    /*
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        shouldSegue = false
-    }
-    */
-    /*
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section < 4 ? nil : "Restaurants: \(restaurants.count)"
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     // MARK: - Navigation
-    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if (identifier == "segueToMap" || identifier == "mapButtonToMap"), ((sender is MainTableViewCell) || (sender is UIBarButtonItem)) {
             return true
@@ -739,7 +577,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
             guard let vc = segue.destination as? RadiusViewController else {
                 fatalError("Couldn't show Radius VC.")
             }
-            vc.getSelectedButtonIndex(selectedRadiusButton)
+            vc.getRadius(radius: queryParams.radius)
         }
     }
     
@@ -756,16 +594,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 getCategoryAndUpdateTitleView(category)
                 getDate()
                 getLocationAndStartQuery()
-        case "unwindFromHalfMile", "unwindFromOneMile":
-            guard let radiusVC = sourceVC as? RadiusViewController else {
+        case "unwindFromRadius":
+            guard let radius = (sourceVC as! RadiusViewController).radius else {
                 fatalError("Couldn't get radiusVC.")
             }
-            selectedRadiusButton = radiusVC.selectedButtonIndex
-            queryParams.radius = radiusVC.radius!
-            print("==radius, index = \(queryParams.radius), \(String(describing: selectedRadiusButton))")
             
             startIndicator()
             
+            getRadiusAndUpdateTitleView(radius)
             getDate()
             getLocationAndStartQuery()
         default:
@@ -773,23 +609,3 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         }
     }
 }
-
-/*
-extension UIImageView {
-    func loadImage(from urlString: String) {
-        //print("load image from url")
-        guard let url = URL(string: urlString) else {
-            fatalError("Unexpected url string: \(urlString)")
-        }
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard error == nil, let imageData = data else {
-                fatalError("error while getting url response: \(String(describing: error?.localizedDescription))")
-            }
-            let image = UIImage(data: imageData)
-            DispatchQueue.main.async {
-                self.image = image
-            }
-        }.resume()
-    }
-}
-*/

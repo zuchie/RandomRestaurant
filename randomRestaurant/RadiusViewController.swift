@@ -8,25 +8,17 @@
 
 import UIKit
 
-
 class RadiusViewController: UIViewController {
     
-    private(set) var radius: Int? = 0
-    private(set) var selectedButtonIndex: Int?
-    lazy var buttons: [UIButton] = {
-        return self.view.subviews.filter({ $0 is UIButton }) as! [UIButton]
-    }()
+    private(set) var radius: Int? = 1600
+    private let radiusImgDict = [800: "globe", 1600: "chinese", 8000: "american", 16000: "japanese", 32000: "mexican"]
+    @IBOutlet weak var radiuses: UIImageView!
     
-    //private(set) var firstSelectedButtonIndex: Int?
-    /*
-    private var numberOfButtons: Int {
-        return view.subviews.count
-    }
-    */
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setButtonsStatus(selectedButtonIndex: selectedButtonIndex, buttons: buttons)
+    
+        radiuses.image = UIImage(named: radiusImgDict[radius!]!)
+        radiuses.layer.cornerRadius = radiuses.frame.width / 2
     }
     
     override func didReceiveMemoryWarning() {
@@ -34,57 +26,43 @@ class RadiusViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func halfMile(_ sender: UIButton) {
-        radius = 800
-        selectedButtonIndex = 1
-        setButtonsStatus(selectedButtonIndex: selectedButtonIndex, buttons: buttons)
+    @IBAction func tap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .recognized {
+            let location = sender.location(in: radiuses)
+            guard let rad = getRadiusByLocation(location) else {
+                fatalError("Couldn't get radius by location.")
+            }
+            radius = rad
+            guard let name = radiusImgDict[radius!] else {
+                fatalError("Couldn't find an img from given distance.")
+            }
+            radiuses.image = UIImage(named: name)
+        }
+    }
+    
+    private func getRadiusByLocation(_ location: CGPoint) -> Int? {
+        let center = CGPoint(x: radiuses.frame.width / 2, y: radiuses.frame.height / 2)
+        let distance = hypot(location.x - center.x, location.y - center.y)
+        switch distance {
+        case 0..<25:
+            return 800
+        case 25..<49:
+            return 1600
+        case 49..<73:
+            return 8000
+        case 73..<97:
+            return 16000
+        case 97..<121:
+            return 32000
+        default:
+            return nil
+        }
+    }
+    
+    func getRadius(radius: Int?) {
+        self.radius = radius
     }
 
-    @IBAction func oneMile(_ sender: UIButton) {
-        radius = 3200
-        selectedButtonIndex = 0
-        setButtonsStatus(selectedButtonIndex: selectedButtonIndex, buttons: buttons)
-    }
-    
-    func getSelectedButtonIndex(_ index: Int?) {
-        selectedButtonIndex = index
-    }
-    
-    private func setButtonsStatus(selectedButtonIndex: Int?, buttons: [UIButton]) {
-        if let selectedIndex = selectedButtonIndex {
-            for (index, button) in buttons.enumerated() {
-                if index == selectedIndex {
-                    button.isSelected = true
-                    button.backgroundColor = UIColor.gray
-                } else {
-                    button.isSelected = false
-                    button.backgroundColor = UIColor.clear
-                }
-            }
-        } else {
-            for button in buttons {
-                button.isSelected = false
-                button.backgroundColor = UIColor.clear
-            }
-        }
-    }
-    
-    /*
-    func getSelectedButtonIndices(from firstSelectedIndex: Int?) -> [Int]? {
-        var indices: [Int]?
-        
-        
-    }
-    
-    func getFirstSelectedButtonIndex(buttons: [UIButton]) -> Int? {
-        for (index, button) in buttons.enumerated() {
-            if button.isSelected {
-                return index
-            }
-        }
-        return nil
-    }
-    */
     /*
     // MARK: - Navigation
 
@@ -96,28 +74,3 @@ class RadiusViewController: UIViewController {
     */
 
 }
-
-extension CALayer {
-    var borderUIColor: UIColor {
-        get {
-            return UIColor(cgColor: borderColor!)
-        }
-        set {
-            borderColor = newValue.cgColor
-        }
-    }
-}
-
-/*
-extension UIView {
-    @IBInspectable var cornerRadius: CGFloat {
-        get {
-            return layer.cornerRadius
-        }
-        set {
-            layer.cornerRadius = newValue
-            layer.masksToBounds = newValue > 0
-        }
-    }
-}
-*/

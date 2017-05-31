@@ -10,6 +10,7 @@ import UIKit
 
 class NavItemTitleViewController: UIViewController {
 
+    @IBOutlet weak var chooseRadius: UIStackView!
     @IBOutlet weak var chooseCategory: UIStackView!
     var completionForCategoryChoose: (() -> Void)!
     var completionForRadiusChoose: (() -> Void)!
@@ -17,8 +18,11 @@ class NavItemTitleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleStackTap(_:)))
-        chooseCategory.addGestureRecognizer(tap)
+        let tapChooseRadius = UITapGestureRecognizer(target: self, action: #selector(handleChooseRadiusTap(_:)))
+        chooseRadius.addGestureRecognizer(tapChooseRadius)
+        
+        let tapChooseCategory = UITapGestureRecognizer(target: self, action: #selector(handleChooseCategoryTap(_:)))
+        chooseCategory.addGestureRecognizer(tapChooseCategory)
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,14 +30,17 @@ class NavItemTitleViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @objc private func handleStackTap(_ sender: UITapGestureRecognizer) {
+    @objc private func handleChooseCategoryTap(_ sender: UITapGestureRecognizer) {
         guard (sender.view != nil) else {
             fatalError("Unexpected view: \(String(describing: sender.view))")
         }
         completionForCategoryChoose()
     }
-    
-    @IBAction func chooseRadius(_ sender: UIButton) {
+
+    @objc private func handleChooseRadiusTap(_ sender: UITapGestureRecognizer) {
+        guard (sender.view != nil) else {
+            fatalError("Unexpected view: \(String(describing: sender.view))")
+        }
         completionForRadiusChoose()
     }
     

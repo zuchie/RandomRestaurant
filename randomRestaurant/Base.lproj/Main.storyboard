@@ -14,7 +14,7 @@
         <scene sceneID="I0C-bA-gge">
             <objects>
                 <collectionViewController hidesBottomBarWhenPushed="YES" clearsSelectionOnViewWillAppear="NO" id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -81,62 +81,54 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iD8-Tm-pp1">
-                                <rect key="frame" x="147" y="293" width="80" height="80"/>
+                            <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7C0-c1-bTa">
+                                <rect key="frame" x="67" y="213" width="240" height="240"/>
+                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="iD8-Tm-pp1" secondAttribute="height" multiplier="1:1" id="MQY-sD-7VU"/>
-                                    <constraint firstAttribute="width" constant="80" id="V4b-tR-4rU"/>
+                                    <constraint firstAttribute="width" constant="240" id="TMJ-rO-fNB"/>
+                                    <constraint firstAttribute="width" secondItem="7C0-c1-bTa" secondAttribute="height" multiplier="1:1" id="ff0-bS-VBK"/>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="40"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
-                                        <color key="value" red="0.76424870466321249" green="0.76424870466321249" blue="0.76424870466321249" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="oneMile:" destination="3fG-Dl-puw" eventType="touchUpInside" id="23B-LK-b4l"/>
-                                    <segue destination="beY-Ir-uTc" kind="unwind" identifier="unwindFromOneMile" unwindAction="unwindToMainWithSender:" id="0S9-YX-WJN"/>
+                                    <outletCollection property="gestureRecognizers" destination="Az8-7Y-Ft2" appends="YES" id="Pmf-rH-CHf"/>
                                 </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87S-Zq-G04">
-                                <rect key="frame" x="167" y="313" width="40" height="40"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4vB-jy-OVs">
+                                <rect key="frame" x="164" y="573" width="46" height="46"/>
+                                <color key="backgroundColor" red="0.58259579890000002" green="0.87031659029999997" blue="0.83559545160000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="9Lf-pK-4yc"/>
-                                    <constraint firstAttribute="width" secondItem="87S-Zq-G04" secondAttribute="height" multiplier="1:1" id="hxM-lY-ago"/>
+                                    <constraint firstAttribute="width" constant="46" id="DJP-HI-Fw8"/>
+                                    <constraint firstAttribute="width" secondItem="4vB-jy-OVs" secondAttribute="height" multiplier="1:1" id="Doi-Bs-z4L"/>
                                 </constraints>
+                                <state key="normal" title="OK"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="20"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
-                                        <color key="value" red="0.67766497461928932" green="0.67766497461928932" blue="0.67766497461928932" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="23"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="halfMile:" destination="3fG-Dl-puw" eventType="touchUpInside" id="xRs-np-Cid"/>
-                                    <segue destination="beY-Ir-uTc" kind="unwind" identifier="unwindFromHalfMile" unwindAction="unwindToMainWithSender:" id="L6D-jP-yrs"/>
+                                    <segue destination="beY-Ir-uTc" kind="unwind" identifier="unwindFromRadius" unwindAction="unwindToMainWithSender:" id="bN8-b7-oJz"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="iD8-Tm-pp1" firstAttribute="centerX" secondItem="0Wa-PP-UdQ" secondAttribute="centerX" id="1K1-Jk-utn"/>
-                            <constraint firstItem="87S-Zq-G04" firstAttribute="centerX" secondItem="0Wa-PP-UdQ" secondAttribute="centerX" id="TwX-SH-bJl"/>
-                            <constraint firstItem="87S-Zq-G04" firstAttribute="centerY" secondItem="0Wa-PP-UdQ" secondAttribute="centerY" id="apL-gV-pGx"/>
-                            <constraint firstItem="iD8-Tm-pp1" firstAttribute="centerY" secondItem="0Wa-PP-UdQ" secondAttribute="centerY" id="rbQ-nc-w5U"/>
+                            <constraint firstItem="4vB-jy-OVs" firstAttribute="centerX" secondItem="0Wa-PP-UdQ" secondAttribute="centerX" id="GiN-kC-oRd"/>
+                            <constraint firstItem="7C0-c1-bTa" firstAttribute="centerY" secondItem="0Wa-PP-UdQ" secondAttribute="centerY" id="HiU-TF-Dvh"/>
+                            <constraint firstItem="7C0-c1-bTa" firstAttribute="centerX" secondItem="0Wa-PP-UdQ" secondAttribute="centerX" id="hmS-pJ-X19"/>
+                            <constraint firstItem="Mbg-9x-M2c" firstAttribute="top" secondItem="4vB-jy-OVs" secondAttribute="bottom" constant="48" id="te4-av-fhh"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="radiuses" destination="7C0-c1-bTa" id="KjQ-YX-WGP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aw6-G7-AvQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="beY-Ir-uTc" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="Az8-7Y-Ft2">
+                    <connections>
+                        <action selector="tap:" destination="3fG-Dl-puw" id="JT5-3i-arI"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="5344.8000000000002" y="755.17241379310349"/>
         </scene>
@@ -240,7 +232,7 @@
                     </refreshControl>
                     <connections>
                         <segue destination="0l4-Wv-HR4" kind="presentation" identifier="segueToCategories" modalPresentationStyle="fullScreen" id="TTp-UT-Q2J"/>
-                        <segue destination="3fG-Dl-puw" kind="show" identifier="segueToRadius" id="2xj-lo-4Jz"/>
+                        <segue destination="3fG-Dl-puw" kind="presentation" identifier="segueToRadius" modalPresentationStyle="fullScreen" id="2xj-lo-4Jz"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dAG-yp-WnP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -253,7 +245,7 @@
                 <navigationController title="SavedNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YiH-Zj-usg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -294,7 +286,7 @@
                 <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="fMY-P1-Xr7" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="search" id="FZh-3l-B0e"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="w0E-s0-UDt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="w0E-s0-UDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

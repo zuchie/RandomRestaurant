@@ -19,18 +19,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="qab-Yt-DM5">
-                        <rect key="frame" x="8" y="8" width="304" height="27.5"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qab-Yt-DM5">
+                        <rect key="frame" x="8" y="2" width="304" height="39.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="TCP-Xd-y5C">
-                                <rect key="frame" x="0.0" y="0.0" width="304" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <rect key="frame" x="0.0" y="0.0" width="304" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="94b-dw-NbL">
-                                <rect key="frame" x="0.0" y="19" width="304" height="8.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="94b-dw-NbL">
+                                <rect key="frame" x="0.0" y="21.5" width="304" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -38,9 +38,9 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="qab-Yt-DM5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="3Zp-oP-iPS"/>
+                    <constraint firstItem="qab-Yt-DM5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="3Zp-oP-iPS"/>
                     <constraint firstItem="qab-Yt-DM5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Phn-8H-ceY"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="qab-Yt-DM5" secondAttribute="bottom" id="lua-7P-Boe"/>
+                    <constraint firstAttribute="bottom" secondItem="qab-Yt-DM5" secondAttribute="bottom" constant="2" id="lua-7P-Boe"/>
                     <constraint firstAttribute="trailingMargin" secondItem="qab-Yt-DM5" secondAttribute="trailing" id="q4N-d9-H3y"/>
                 </constraints>
             </tableViewCellContentView>
