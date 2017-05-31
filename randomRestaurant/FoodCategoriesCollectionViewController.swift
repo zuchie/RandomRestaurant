@@ -11,8 +11,8 @@ import UIKit
 class FoodCategoriesCollectionViewController: UICollectionViewController {
     
     // MARK: - Properties
-    fileprivate let sectionInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
-    fileprivate let itemsPerRow = 3
+    //fileprivate let sectionInsets = UIEdgeInsets(top: 20.0, left: 5.0, bottom: 10.0, right: 5.0)
+    //fileprivate let itemsPerRow = 3
     
     fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
     
@@ -21,20 +21,15 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    /*
-    override func viewWillAppear(_ animated: Bool) {
-        if !navigationController!.isNavigationBarHidden {
-            navigationController?.navigationBar.isHidden = true
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("view will transition")
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+            fatalError("Couldn't get layout.")
         }
+        layout.invalidateLayout()
     }
-    */
-    /*
-    override func viewWillDisappear(_ animated: Bool) {
-        if navigationController!.isNavigationBarHidden {
-            navigationController?.navigationBar.isHidden = false
-        }
-    }
-    */
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -155,22 +150,40 @@ extension FoodCategoriesCollectionViewController: UICollectionViewDelegateFlowLa
     
     // Calculate Cell size.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding = sectionInsets.left * CGFloat(itemsPerRow + 1)
+        var itemsPerRow: Int
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+            itemsPerRow = 3
+        } else {
+            itemsPerRow = 5
+        }
+
+        let myLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        let padding = myLayout.sectionInset.left + myLayout.sectionInset.right + myLayout.minimumInteritemSpacing * CGFloat(itemsPerRow - 1)
         let availableWidth = view.frame.width - padding
         let itemWidth = availableWidth / CGFloat(itemsPerRow)
         
-        return CGSize(width: itemWidth, height: itemWidth * 1.5)
+        return CGSize(width: itemWidth, height: itemWidth)
     }
     
-    /*
-    // Space between cells.
+    // Section insets.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
+        var insets: UIEdgeInsets
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+            insets = UIEdgeInsets(top: 20.0, left: 5.0, bottom: 10.0, right: 5.0)
+        } else {
+            insets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+        }
+        return insets
+            
     }
- 
+    
+    // Space between cells.
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5.0
+    }
+    
     // Space between each line.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
+        return 5.0
     }
-    */
 }
