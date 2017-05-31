@@ -585,15 +585,15 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         let sourceVC = sender.source
         switch sender.identifier! {
         case "backFromWhat":
-                guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
-                    fatalError("Couldn't get category.")
-                }
-                
-                startIndicator()
-                
-                getCategoryAndUpdateTitleView(category)
-                getDate()
-                getLocationAndStartQuery()
+            guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
+                fatalError("Couldn't get category.")
+            }
+            
+            startIndicator()
+            
+            getCategoryAndUpdateTitleView(category)
+            getDate()
+            getLocationAndStartQuery()
         case "unwindFromRadius":
             guard let radius = (sourceVC as! RadiusViewController).radius else {
                 fatalError("Couldn't get radiusVC.")

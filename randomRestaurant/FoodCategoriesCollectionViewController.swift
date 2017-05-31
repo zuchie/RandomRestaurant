@@ -23,7 +23,6 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("view will transition")
         guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
             fatalError("Couldn't get layout.")
         }
