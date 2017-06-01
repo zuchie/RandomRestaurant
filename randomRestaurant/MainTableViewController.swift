@@ -168,6 +168,25 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         // Dispose of any resources that can be recreated.
     }
 
+    /*
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("main view will transition")
+        //if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+        //navigationItem.titleView?.frame = navigationController!.navigationBar.frame
+        //}
+        print("nav bar frame: \(navigationController?.navigationBar.frame)")
+        //navigationItem.titleView = nil
+        //addViewToNavBar()
+    }
+    */
+    
+    // Adjust titleView frame when device rotating.
+    override func viewDidLayoutSubviews() {
+        //print("view did layout subviews")
+        //print("nav bar frame: \(navigationController?.navigationBar.frame)")
+        navigationItem.titleView?.frame = navigationController!.navigationBar.frame
+    }
+    
     fileprivate func startIndicator() {
         DispatchQueue.main.async {
             // Scroll to top, otherwise the activity indicator may be shown outside the top of the screen.
@@ -190,7 +209,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func addViewToNavBar() {
-        titleVC.view.frame = CGRect(x: 0, y: 0, width: navigationController!.navigationBar.frame.width, height: navigationController!.navigationBar.frame.height)
+        titleVC.view.frame = navigationController!.navigationBar.frame
         navigationItem.titleView = titleVC.view
     }
     
