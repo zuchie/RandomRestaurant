@@ -247,9 +247,7 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.17, execute: {
-            self.navigationItem.rightBarButtonItem = self.editButtonItem
-        })
+        navigationItem.rightBarButtonItem = editButtonItem
     }
  
     /*
