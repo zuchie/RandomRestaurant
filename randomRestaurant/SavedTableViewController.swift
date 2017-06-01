@@ -245,15 +245,18 @@ class SavedTableViewController: CoreDataTableViewController, UISearchResultsUpda
         }
         navigationItem.rightBarButtonItem = nil
     }
-    /*
+    
     func willDismissSearchController(_ searchController: UISearchController) {
-        navigationItem.rightBarButtonItem = editButtonItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.17, execute: {
+            self.navigationItem.rightBarButtonItem = self.editButtonItem
+        })
     }
-    */
+ 
+    /*
     func didDismissSearchController(_ searchController: UISearchController) {
         self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-    
+    */
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap" {
