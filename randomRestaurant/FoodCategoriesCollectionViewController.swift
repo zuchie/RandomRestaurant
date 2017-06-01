@@ -14,7 +14,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
     //fileprivate let sectionInsets = UIEdgeInsets(top: 20.0, left: 5.0, bottom: 10.0, right: 5.0)
     //fileprivate let itemsPerRow = 3
     
-    fileprivate var foodCategoriesName = ["Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
+    fileprivate var foodCategoriesName = ["All", "Chinese", "Mexican", "Italian", "American", "Japanese", "French", "Korean", "Indian", "Mediterranean"]
     
     fileprivate var category: String?
     

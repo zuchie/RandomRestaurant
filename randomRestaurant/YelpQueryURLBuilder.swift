@@ -47,6 +47,9 @@ class YelpQueryURL {
             return ""
         }
         // Use Yelp required strings for special cases
+        if value as? String == "All" {
+            value = "restaurants"
+        }
         if value as? String == "American" {
             value = "newamerican,tradamerican"
         }

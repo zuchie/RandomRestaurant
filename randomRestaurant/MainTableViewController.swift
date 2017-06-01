@@ -52,7 +52,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         var locationChanged = false
         var radiusChanged = false
         
-        var category = "restaurants" {
+        var category = "All" {
             didSet { categoryChanged = (category != oldValue) }
         }
         var date = Date() {
@@ -300,7 +300,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func updateTitleViewCategoryLabel(_ category: String) {
-        let title = (category == "restaurants" ? "All" : category)
+        //let title = (category == "All" ? "All" : category)
         guard let stackView = titleVC.view.subviews[0] as? UIStackView else {
             fatalError("Couldn't get stack view from view.")
         }
@@ -310,7 +310,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         guard let label = chooseCategoryStackView.arrangedSubviews[1] as? UILabel else {
             fatalError("Couldn't get label from stack view.")
         }
-        label.text = title
+        label.text = category
     }
 
     fileprivate func updateTitleViewRadiusLabel(_ radius: Int) {
