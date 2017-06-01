@@ -104,7 +104,7 @@ class FoodCategoriesCollectionViewController: UICollectionViewController {
             navigationController?.navigationBar.isHidden = false
         }
         */
-        performSegue(withIdentifier: "backFromWhat", sender: self)
+        performSegue(withIdentifier: "unwindFromCategories", sender: self)
     }
     
     // Clear highlight.

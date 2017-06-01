@@ -10,11 +10,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--What to eat?-->
+        <!--Food Categories-->
         <scene sceneID="I0C-bA-gge">
             <objects>
-                <collectionViewController hidesBottomBarWhenPushed="YES" clearsSelectionOnViewWillAppear="NO" id="0l4-Wv-HR4" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="RQy-ol-beq">
+                <collectionViewController hidesBottomBarWhenPushed="YES" clearsSelectionOnViewWillAppear="NO" id="0l4-Wv-HR4" userLabel="Food Categories" customClass="FoodCategoriesCollectionViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RQy-ol-beq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -59,9 +59,9 @@
                             <outlet property="delegate" destination="0l4-Wv-HR4" id="MVL-yW-hss"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="What to eat?" id="7jJ-GT-84H"/>
+                    <navigationItem key="navigationItem" id="7jJ-GT-84H"/>
                     <connections>
-                        <segue destination="pFX-W1-tKf" kind="unwind" identifier="backFromWhat" unwindAction="unwindToMainWithSender:" id="Skq-FR-zDM"/>
+                        <segue destination="pFX-W1-tKf" kind="unwind" identifier="unwindFromCategories" unwindAction="unwindToMainWithSender:" id="Skq-FR-zDM"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f5h-yq-hNL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -194,7 +194,7 @@
         <scene sceneID="xW4-OC-QZQ">
             <objects>
                 <tableViewController storyboardIdentifier="MainVC" title="Main" clearsSelectionOnViewWillAppear="NO" id="wH5-b3-TbF" customClass="MainTableViewController" customModule="randomRestaurant" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="344" sectionHeaderHeight="28" sectionFooterHeight="28" id="hmm-af-qgW">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="344" sectionHeaderHeight="28" sectionFooterHeight="28" id="hmm-af-qgW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -208,7 +208,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="dqH-Fl-zN4" kind="show" identifier="segueToMap" id="ins-Ya-Y6D"/>
+                                    <segue destination="dqH-Fl-zN4" kind="show" identifier="segueToRoute" id="ins-Ya-Y6D"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -222,7 +222,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Map" id="NHC-FU-teD" userLabel="Map">
                             <connections>
                                 <action selector="handleMapTap:" destination="wH5-b3-TbF" id="hzq-YO-RVi"/>
-                                <segue destination="dqH-Fl-zN4" kind="show" identifier="mapButtonToMap" id="feE-3D-h9T"/>
+                                <segue destination="dqH-Fl-zN4" kind="show" identifier="segueToMap" id="feE-3D-h9T"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -245,7 +245,7 @@
                 <navigationController title="SavedNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="pVw-sx-tf2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="CvL-NJ-BRl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YiH-Zj-usg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YiH-Zj-usg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -286,7 +286,7 @@
                 <navigationController title="ExploreNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="fMY-P1-Xr7" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="search" id="FZh-3l-B0e"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="w0E-s0-UDt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="w0E-s0-UDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

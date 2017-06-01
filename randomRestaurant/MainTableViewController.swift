@@ -170,6 +170,8 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
 
     fileprivate func startIndicator() {
         DispatchQueue.main.async {
+            // Scroll to top, otherwise the activity indicator may be shown outside the top of the screen.
+            self.tableView.setContentOffset(CGPoint(x: 0, y: -self.tableView.contentInset.top), animated: true)
             self.view.addSubview(self.indicator.container)
             self.indicator.start()
         }
@@ -510,7 +512,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // MARK: - Navigation
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if (identifier == "segueToMap" || identifier == "mapButtonToMap"), ((sender is MainTableViewCell) || (sender is UIBarButtonItem)) {
+        if (identifier == "segueToMap" || identifier == "segueToRoute"), ((sender is MainTableViewCell) || (sender is UIBarButtonItem)) {
             return true
         } else {
             return false
@@ -518,12 +520,12 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
 
     @IBAction func handleMapTap(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "mapButtonToMap", sender: sender)
+        performSegue(withIdentifier: "segueToMap", sender: sender)
     }
 
     // Segue to Map view controller
     func showMap(cell: MainTableViewCell) {
-        performSegue(withIdentifier: "segueToMap", sender: cell)
+        performSegue(withIdentifier: "segueToRoute", sender: cell)
     }
     
     // Link to Yelp app/website
@@ -544,7 +546,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "segueToMap", sender is MainTableViewCell {
+        if segue.identifier == "segueToRoute", sender is MainTableViewCell {
             guard let cell = sender as? MainTableViewCell else {
                 fatalError("Unexpected sender: \(String(describing: sender))")
             }
@@ -566,7 +568,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
                 }
             }
         }
-        if segue.identifier == "mapButtonToMap", sender is UIBarButtonItem {
+        if segue.identifier == "segueToMap", sender is UIBarButtonItem {
             guard let vc = segue.destination as? GoogleMapsViewController else {
                 print("Couldn't show Google Maps VC.")
                 return
@@ -584,7 +586,7 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     @IBAction func unwindToMain(sender: UIStoryboardSegue) {
         let sourceVC = sender.source
         switch sender.identifier! {
-        case "backFromWhat":
+        case "unwindFromCategories":
             guard let category = (sourceVC as! FoodCategoriesCollectionViewController).getCategory() else {
                 fatalError("Couldn't get category.")
             }
