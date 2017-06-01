@@ -167,25 +167,14 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         // Dispose of any resources that can be recreated.
     }
 
-    /*
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("main view will transition")
-        //if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-        //navigationItem.titleView?.frame = navigationController!.navigationBar.frame
-        //}
-        print("nav bar frame: \(navigationController?.navigationBar.frame)")
-        //navigationItem.titleView = nil
-        //addViewToNavBar()
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        coordinator.animate(alongsideTransition: nil, completion: { _ in
+            self.navigationItem.titleView?.frame = self.navigationController!.navigationBar.frame
+        })
     }
-    */
-    
-    // Adjust titleView frame when device rotating.
-    override func viewDidLayoutSubviews() {
-        //print("view did layout subviews")
-        //print("nav bar frame: \(navigationController?.navigationBar.frame)")
-        navigationItem.titleView?.frame = navigationController!.navigationBar.frame
-    }
-    
+
     fileprivate func startIndicator() {
         // Center and frame might change from portrait to landscape.
         indicator.center = CGPoint(x: view.center.x, y: view.center.y - tabBarController!.tabBar.frame.height)
