@@ -145,12 +145,11 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
         
         indicator = IndicatorWithContainer(
             indicatorframe: CGRect(x: 0, y: 0,  width: 40, height: 40),
-            center: view.center,
+            center: CGPoint(x: view.center.x, y: view.center.y - tabBarController!.tabBar.frame.height),
             style: .whiteLarge,
             containerFrame: view.frame,
             color: UIColor.gray.withAlphaComponent(0.8)
         )
-        
         startIndicator()
         
         getRadiusAndUpdateTitleView(queryParams.radius)
@@ -188,6 +187,9 @@ class MainTableViewController: UITableViewController, MainTableViewCellDelegate 
     }
     
     fileprivate func startIndicator() {
+        // Center and frame might change from portrait to landscape.
+        indicator.center = CGPoint(x: view.center.x, y: view.center.y - tabBarController!.tabBar.frame.height)
+        indicator.container.frame = view.frame
         DispatchQueue.main.async {
             // Scroll to top, otherwise the activity indicator may be shown outside the top of the screen.
             self.tableView.setContentOffset(CGPoint(x: 0, y: -self.tableView.contentInset.top), animated: true)
