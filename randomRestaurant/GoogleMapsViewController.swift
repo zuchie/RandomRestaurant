@@ -25,6 +25,10 @@ class GoogleMapsViewController: UIViewController {
     var markersOnly = false
     private var barButtonItem: UIBarButtonItem!
     
+    private let edges = UIEdgeInsetsMake(120, 40, 70, 40)
+    private var bounds: GMSCoordinateBounds!
+
+    
     func getBusinesses(_ data: [MainTableViewController.DataSource]) {
         markersOnly = true
         businesses = data
@@ -111,6 +115,16 @@ class GoogleMapsViewController: UIViewController {
         //view.removeObserver(self, forKeyPath: "myLocation")
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        DispatchQueue.main.async {
+            // Update camera to new bounds.
+            let camera = GMSCameraUpdate.fit(self.bounds, with: self.edges)
+            self.mapView.animate(with: camera)
+        }
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if keyPath == "myLocation" && object is GMSMapView {
@@ -149,9 +163,8 @@ class GoogleMapsViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     // Update camera to new bounds.
-                    let bounds = GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
-                    let edges = UIEdgeInsetsMake(120, 40, 70, 40)
-                    let camera = GMSCameraUpdate.fit(bounds, with: edges)
+                    self.bounds = GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
+                    let camera = GMSCameraUpdate.fit(self.bounds, with: self.edges)
                     
                     //print("update camera")
                     self.mapView.animate(with: camera)
@@ -167,7 +180,6 @@ class GoogleMapsViewController: UIViewController {
                 )
                 
                 drawRoute.makeUrlRequest() { routesPoints, distances, durationInTraffic, viewport in
-                    
                     // Draw from returned polyline.
                     for points in routesPoints {
                         //print("poly points: \(points)")
@@ -180,16 +192,11 @@ class GoogleMapsViewController: UIViewController {
                         })
                     }
                     
-                    //print("distance: \(distances.first!), duration in traffic: \(durationInTraffic), viewport: \(viewport.northeast!), \(viewport.southwest!)")
-                    
                     DispatchQueue.main.async(execute: {
-                        
                         // Update camera to new bounds.
-                        let bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
-                        let edges = UIEdgeInsetsMake(120, 40, 70, 40)
-                        let camera = GMSCameraUpdate.fit(bounds, with: edges)
+                        self.bounds = GMSCoordinateBounds(coordinate: viewport.northeast!, coordinate: viewport.southwest!)
+                        let camera = GMSCameraUpdate.fit(self.bounds, with: self.edges)
                         
-                        //print("update camera")
                         self.mapView.animate(with: camera)
                         
                         self.label.text = "\(distances.first!), \(durationInTraffic)"
